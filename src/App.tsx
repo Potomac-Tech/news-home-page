@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Source from "./pages/Source";
 import Nexus from "./pages/Nexus";
 import Team from "./pages/Team";
+import News from "./pages/News";
 import { useEffect } from "react";
 
 // Component to handle scrolling to top on route change
@@ -35,6 +36,7 @@ const App: React.FC = () => {
                     <Route path="/source" element={<Source />} />
                     <Route path="/nexus" element={<Nexus />} />
                     <Route path="/team" element={<Team />} />
+                    <Route path="/news" element={<News />} />
                 </Routes>
                 <Footer />
             </div>
