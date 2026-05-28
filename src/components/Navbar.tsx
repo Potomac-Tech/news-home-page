@@ -35,6 +35,8 @@ const Navbar: React.FC = () => {
                                 ? "NEXUS"
                                 : location.pathname === "/team"
                                 ? "TEAM"
+                                : location.pathname === "/news"
+                                ? "NEWS"
                                 : ""}
                         </span>
                     </h1>
@@ -51,6 +53,9 @@ const Navbar: React.FC = () => {
                 </Link>
                 <Link to="/team" className={getLinkClass("/team")}>
                     Team
+                </Link>
+                <Link to="/news" className={getLinkClass("/news")}>
+                    News
                 </Link>
 
                 {/* Auth Button */}
