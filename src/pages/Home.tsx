@@ -19,16 +19,22 @@ const Home: React.FC = () => {
             <div className="pt-32 pb-8 px-4 md:px-8 relative">
                 <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
                 <div className="max-w-6xl mx-auto text-center space-y-6">
-                    <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif text-white tracking-widest text-glow leading-tight">
+                    <h2 className="text-4xl sm:text-5xl md:text-7xl font-serif text-white tracking-widest text-glow leading-tight">
+                        POTOMAC{" "}
+                        <span className="text-potomac-gold italic">
+                            DATABASE SYSTEMS
+                        </span>
+                    </h2>
+                    <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
                         Billion-dollar lunar proposal teams are competing with
                         commodity data.{" "}
                         <span className="text-potomac-gold italic">
                             Potomac gives them the proprietary intelligence
-                            needed to win.
+                            needed to win, land, and build.
                         </span>
-                    </h2>
+                    </p>
                     <p className="text-xl text-gray-300 font-light max-w-4xl mx-auto uppercase tracking-widest border-t border-b border-white/10 py-3 inline-block">
-                        The Lunar Data Company
+                        Proposal Intelligence for the Moon
                     </p>
                     <p className="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
                         We allow customers to buy existing data instantly,
