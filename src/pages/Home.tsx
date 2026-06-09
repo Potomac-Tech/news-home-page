@@ -19,7 +19,7 @@ const Home: React.FC = () => {
             <div className="pt-32 pb-8 px-4 md:px-8 relative">
                 <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
                 <div className="max-w-6xl mx-auto text-center space-y-6">
-                    <h2 className="text-4xl sm:text-5xl md:text-7xl font-serif text-white tracking-widest text-glow leading-tight">
+                    <h2 className="text-xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-white tracking-wide sm:tracking-widest text-glow leading-tight whitespace-nowrap">
                         POTOMAC{" "}
                         <span className="text-potomac-gold italic">
                             DATABASE SYSTEMS
