@@ -19,9 +19,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, context }) => {
     let buttonLabel = "Initiate Sequence";
 
     if (context === "source_interest") {
-        title = "MISSION INTEREST";
+        title = "HARDWARE INTEREST";
         subtitle = "Register for Lunar Surface Data";
-        subject = "New Hardware Interest - Source VAPORS";
+        subject = "New Hardware Interest - Potomac Hardware";
         buttonLabel = "Confirm Interest";
     } else if (context === "nexus_beta") {
         title = "BETA ACCESS";

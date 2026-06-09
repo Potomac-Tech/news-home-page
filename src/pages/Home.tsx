@@ -1,29 +1,47 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+const offerings = [
+    {
+        title: "Exclusive Buy",
+        body: "Customers choose where and what data they want. Potomac handles collection, operations, and delivery of proprietary lunar site intelligence.",
+    },
+    {
+        title: "Nexus Subscription",
+        body: "Teams access lunar datasets, analysis-ready layers, and collaborative proposal workflows through the Nexus web platform.",
+    },
+];
+
 const Home: React.FC = () => {
     return (
         <>
             {/* HERO SECTION */}
-            <div className="pt-32 pb-6 px-4 md:px-8 relative">
+            <div className="pt-32 pb-8 px-4 md:px-8 relative">
                 <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
                 <div className="max-w-6xl mx-auto text-center space-y-6">
-                    <h2 className="text-4xl sm:text-5xl md:text-6xl font-serif text-white tracking-widest text-glow leading-tight">
-                        POTOMAC{" "}
+                    <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif text-white tracking-widest text-glow leading-tight">
+                        Billion-dollar lunar proposal teams are competing with
+                        commodity data.{" "}
                         <span className="text-potomac-gold italic">
-                            DATABASE SYSTEMS
+                            Potomac gives them the proprietary intelligence
+                            needed to win.
                         </span>
                     </h2>
-                    <p className="text-xl text-gray-300 font-light max-w-3xl mx-auto uppercase tracking-widest border-t border-b border-white/10 py-2 inline-block">
+                    <p className="text-xl text-gray-300 font-light max-w-4xl mx-auto uppercase tracking-widest border-t border-b border-white/10 py-3 inline-block">
                         The Lunar Data Company
+                    </p>
+                    <p className="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
+                        We allow customers to buy existing data instantly,
+                        eliminating the risk and complexity of end-to-end
+                        mission design.
                     </p>
                 </div>
             </div>
 
-            {/* MAIN CONTENT (Grid Layout) */}
+            {/* MAIN CONTENT */}
             <main className="px-4 md:px-8 pb-8 relative z-10">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* 1. PROBLEM (Full Width) */}
+                    {/* VALUE PROPOSITION */}
                     <div className="glass-card p-6 md:p-10 rounded-lg md:col-span-2 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition">
                             <svg
@@ -36,52 +54,56 @@ const Home: React.FC = () => {
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth="1"
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                                 ></path>
                             </svg>
                         </div>
                         <h3 className="text-2xl font-serif text-potomac-gold tracking-widest mb-6">
-                            THE PROBLEM
+                            PROPRIETARY SITE INTELLIGENCE
                         </h3>
                         <div className="space-y-4 text-gray-300 leading-relaxed font-light text-lg">
                             <p>
-                                The emerging lunar economy faces a critical data
-                                bottleneck. Today, lunar surface data collection
-                                is defined by impermanence; solar-powered assets
-                                operate for only 14 days before freezing
-                                permanently during the -170°C lunar night.
-                            </p>
-                            <p>
-                                Consequently, data is scarce, fragmented, and
-                                prohibitively expensive (exceeding{" "}
-                                <strong>$2 million per gigabyte</strong>).
+                                Potomac gives lunar proposal teams proprietary
+                                site intelligence to identify the highest-value
+                                places, win billion-dollar proposals, and stick
+                                the landing.
                             </p>
                             <p className="border-l-2 border-potomac-gold pl-4 italic text-white/90">
-                                We need terabytes or petabytes of data to enable
-                                resource utilization and persistent human
-                                habitation, but no one is focused on making the
-                                data affordable. Until now - Potomac is a
-                                dedicated <strong>lunar data company</strong>.
+                                Instead of designing a dedicated end-to-end
+                                mission for every dataset, customers can buy
+                                the data they need and receive it through a
+                                web-based delivery platform.
                             </p>
                         </div>
                     </div>
 
-                    {/* NOTE: The Video section was commented out in your HTML. 
-             I have removed it here to match the provided file. 
-             If you need it back, uncomment the block below.
-          */}
-                    {/* <div className="md:col-span-2 w-full rounded-lg overflow-hidden border border-potomac-gold/20 shadow-2xl relative group"> ... </div> */}
+                    {/* BUSINESS MODEL */}
+                    {offerings.map((offering) => (
+                        <div
+                            key={offering.title}
+                            className="glass-card p-6 md:p-8 rounded-lg"
+                        >
+                            <p className="text-potomac-gold text-xs font-bold uppercase tracking-[0.3em] mb-3">
+                                Business Model
+                            </p>
+                            <h3 className="text-2xl font-serif text-white tracking-widest mb-4">
+                                {offering.title}
+                            </h3>
+                            <p className="text-gray-400 leading-relaxed">
+                                {offering.body}
+                            </p>
+                        </div>
+                    ))}
 
-                    {/* 2. SOURCE */}
+                    {/* HARDWARE */}
                     <Link
-                        to="/source"
+                        to="/hardware"
                         className="glass-card p-0 rounded-lg flex flex-col relative group overflow-hidden cursor-pointer"
                     >
-                        {/* Image Background */}
                         <div className="absolute inset-0 z-0">
                             <img
-                                src="/Source Rendering.png"
-                                alt="Source Hardware"
+                                src="/hardware-compass-05122026.png"
+                                alt="Compass lunar plume reconnaissance system"
                                 loading="lazy"
                                 decoding="async"
                                 className="w-full h-full object-cover opacity-20 group-hover:opacity-30 transition duration-500"
@@ -106,31 +128,29 @@ const Home: React.FC = () => {
                                 </svg>
                             </div>
                             <h3 className="text-2xl font-serif text-white tracking-widest mb-4 group-hover:text-potomac-gold transition">
-                                SOURCE
+                                HARDWARE
                             </h3>
                             <p className="text-gray-400 leading-relaxed flex-1">
-                                A persistent sensor node and proprietary thermal
-                                packaging to survive the lunar night. Source
-                                operates for years, turning lunar understanding
-                                from brief snapshots into a continuous, dynamic
-                                picture.
+                                Compass, Pathfinder, and Source form a
+                                progressive data collection roadmap from
+                                low-cost reconnaissance to persistent lunar
+                                surface intelligence.
                             </p>
                             <span className="mt-6 text-xs font-bold text-potomac-gold uppercase tracking-widest border-b border-potomac-gold/30 pb-1 self-start hover:border-potomac-gold transition">
-                                View Hardware Specs
+                                View Hardware Systems
                             </span>
                         </div>
                     </Link>
 
-                    {/* 3. NEXUS */}
+                    {/* NEXUS */}
                     <Link
                         to="/nexus"
                         className="glass-card p-0 rounded-lg flex flex-col relative group overflow-hidden cursor-pointer"
                     >
-                        {/* Image Background */}
                         <div className="absolute inset-0 z-0">
                             <img
                                 src="/Nexus Screenshot.png"
-                                alt="Nexus Platform Interface"
+                                alt="Nexus platform interface"
                                 loading="lazy"
                                 decoding="async"
                                 className="w-full h-full object-cover opacity-20 group-hover:opacity-30 transition duration-500"
@@ -158,29 +178,28 @@ const Home: React.FC = () => {
                                 NEXUS
                             </h3>
                             <p className="text-gray-400 leading-relaxed flex-1">
-                                A unified analytics platform that aggregates
-                                existing public data with the exclusive,
-                                high-value data streams collected by Source.
+                                A unified analytics platform for proposal
+                                teams to access, analyze, and collaborate on
+                                lunar datasets.
                             </p>
                             <span className="mt-6 text-xs font-bold text-potomac-gold uppercase tracking-widest border-b border-potomac-gold/30 pb-1 self-start hover:border-potomac-gold transition">
-                                See more Nexus
+                                Explore Nexus
                             </span>
                         </div>
                     </Link>
 
-                    {/* 4. IMPACT (Full Width) */}
+                    {/* IMPACT */}
                     <div className="glass-card p-6 md:p-10 rounded-lg md:col-span-2 bg-gradient-to-r from-potomac-gold/5 to-transparent border-potomac-gold/20">
                         <h3 className="text-2xl font-serif text-potomac-gold tracking-widest mb-4">
                             IMPACT
                         </h3>
                         <p className="text-gray-300 leading-relaxed text-lg">
-                            By reducing the cost of lunar surface data by{" "}
-                            <strong>90%</strong>, and demonstrating the first
-                            systemic, persistent operations on the Moon, we
-                            provide the data needed to de-risk future
-                            investments in lunar science, domain awareness,
-                            resource utilization and landing/habitation site
-                            characterization.
+                            Potomac sells decision advantage. By turning scarce
+                            lunar surface observations into repeatable,
+                            commercial data products, we help teams de-risk
+                            landing reliability, mobility planning, power
+                            siting, resource prospecting, and long-duration
+                            operations.
                         </p>
                     </div>
                 </div>
