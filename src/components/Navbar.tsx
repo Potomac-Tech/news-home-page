@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
                 {/* Auth Button */}
                 <div className="h-8 w-px bg-white/10 mx-2"></div>
                 <a
-                    href="https://www.potomacdb.com/"
+                    href="https://nexus-explore.potomacdb.com/0auth"
                     className="px-5 py-2 border border-potomac-gold text-potomac-gold text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-potomac-gold hover:text-potomac-primary transition duration-300"
                 >
                     Sign in / Sign Up

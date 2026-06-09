@@ -188,7 +188,7 @@ const MobileNavBar: React.FC = () => {
                 <div className="h-px bg-white/10 my-4 mx-8" />
 
                 <a
-                    href="https://www.potomacdb.com/"
+                    href="https://nexus-explore.potomacdb.com/0auth"
                     className="block text-center mx-8 px-5 py-3 border border-potomac-gold text-potomac-gold text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-potomac-gold hover:text-potomac-primary transition duration-300"
                 >
                     Sign in / Sign Up
