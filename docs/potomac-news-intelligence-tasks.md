@@ -374,23 +374,39 @@ Blocked reason:
   - Verification:
   - Blocked reason:
 
-- [ ] Task 046: Add automated tests for auth, RBAC, article gating, billing, and RLS
+- [ ] Task 046: Create member-to-member chat schema, RLS, moderation, and audit model
+  - Priority: P1
+  - Goal: Define the data model and access rules for safe direct chat between approved members.
+  - Acceptance criteria: Schema supports conversations, participants, messages, read receipts, muted/blocked participants, report/moderation records, audit events, and RLS that limits access to approved participants and authorized staff.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 047: Build member-to-member chat UI and notification surfaces
+  - Priority: P1
+  - Goal: Let approved Members, Scout users, and Command users start and continue member-to-member conversations.
+  - Acceptance criteria: Member dashboard includes chat inbox, conversation detail, compose/reply flow, unread indicators, privacy-constrained member discovery, report/block controls, and graceful empty/error states.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 048: Add automated tests for auth, RBAC, article gating, billing, member chat, and RLS
   - Priority: P0
   - Goal: Cover critical security and access-control behavior with tests.
-  - Acceptance criteria: Automated tests exercise login/session behavior, membership gating, role restrictions, billing entitlement updates, and RLS expectations.
+  - Acceptance criteria: Automated tests exercise login/session behavior, membership gating, role restrictions, billing entitlement updates, member chat access/privacy/moderation rules, and RLS expectations.
   - Non-technical summary:
   - Verification:
   - Blocked reason:
 
-- [ ] Task 047: Add end-to-end tests for public teaser, Member article unlock, Scout dashboard, and Command admin flows
+- [ ] Task 049: Add end-to-end tests for public teaser, Member article unlock, Scout dashboard, member chat, and Command admin flows
   - Priority: P1
   - Goal: Validate the main user journeys from browser-level behavior.
-  - Acceptance criteria: E2E tests cover public article teaser, Member full article access, Scout dashboard access, and Command/admin workflows.
+  - Acceptance criteria: E2E tests cover public article teaser, Member full article access, Scout dashboard access, member chat inbox/conversation flows, and Command/admin workflows.
   - Non-technical summary:
   - Verification:
   - Blocked reason:
 
-- [ ] Task 048: Run build, lint, tests, and document remaining gaps
+- [ ] Task 050: Run build, lint, tests, and document remaining gaps
   - Priority: P0
   - Goal: Verify the implementation and capture any remaining gaps.
   - Acceptance criteria: Build, lint, and available tests are run; results are recorded; remaining gaps or skipped checks are documented clearly.

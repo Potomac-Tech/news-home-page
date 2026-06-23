@@ -53,6 +53,13 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 
 - Public pages should expose SEO/AEO-rich summaries, snippets, citations, and metadata.
 - Full article bodies require approved free Member access or higher.
+- Approved Members should have access to member-to-member chat with role-aware discovery, organization/privacy boundaries, reporting and blocking controls, moderation/audit trails, and notification support.
 - Scout membership is self-serve through Stripe at `$25k/user/year`.
 - Command membership is organization-level and handled through manual sales/admin approval.
 - The visual system should preserve Potomac's dark gray, gold, cream, and lunar command-center brand language.
+
+## Requirements Matrix Additions
+
+| ID | Area | Requirement | Access | Priority |
+| --- | --- | --- | --- | --- |
+| R-MSG-001 | Member chat | Approved Members can start and continue member-to-member conversations, with role-aware discovery, organization-aware privacy controls, read/unread state, reporting/blocking, moderation review, audit logging, and future notification hooks. | Member+ | P1 |
