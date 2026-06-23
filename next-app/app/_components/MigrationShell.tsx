@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { potomacBrand } from "../_data/brand";
 
 const navItems = [
+    { href: "/member", label: "Member" },
     { href: "/nexus", label: "Nexus" },
     { href: "/hardware", label: "Hardware" },
     { href: "/team", label: "Team" },
@@ -36,7 +37,7 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                             </Link>
                         ))}
                         <a
-                            href="https://nexus-explore.potomacdb.com/0auth"
+                            href="/auth/login"
                             className="rounded border border-potomac-gold px-5 py-2 text-xs font-bold uppercase tracking-[0.2em] text-potomac-gold transition hover:bg-potomac-gold hover:text-potomac-primary"
                         >
                             Sign in

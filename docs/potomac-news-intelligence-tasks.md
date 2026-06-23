@@ -54,13 +54,13 @@ Blocked reason:
   - Verification: Installed current Supabase SSR/client packages; added browser, server, and proxy client helpers; documented environment variables and secret-key handling; confirmed `npm run build:next` and `npm run build` pass; ran a hidden-file search for project refs and secret exposure patterns. Authenticated Supabase calls were not run because no publishable key was available in this session.
   - Blocked reason: None.
 
-- [ ] Task 006: Add Supabase Auth login, logout, session handling, and protected routes
+- [x] Task 006: Add Supabase Auth login, logout, session handling, and protected routes
   - Priority: P0
   - Goal: Let users sign in and route them based on authentication status.
   - Acceptance criteria: Login, logout, session refresh, protected route handling, and unauthenticated redirects work in the app.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The scaffold now has sign-in, sign-out, session refresh, and a protected member area ready for Supabase credentials.
+  - Verification: Added login, callback, logout, and protected member routes; protected routes use server-side `getClaims()` and redirect signed-out users to login; confirmed `npm run build:next` and `npm run build` pass. Live login/logout could not be exercised because no Supabase publishable key was available in this session.
+  - Blocked reason: None.
 
 - [ ] Task 007: Create member profile, application, organization, role, and entitlement schema
   - Priority: P0
