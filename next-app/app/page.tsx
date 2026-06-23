@@ -309,7 +309,17 @@ export default async function HomePage() {
                 </div>
 
                 <aside>
-                    <h2 className="font-serif text-2xl text-white">Event Teasers</h2>
+                    <div className="flex items-center justify-between gap-4">
+                        <h2 className="font-serif text-2xl text-white">
+                            Event Teasers
+                        </h2>
+                        <Link
+                            href="/events"
+                            className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold hover:text-potomac-cream"
+                        >
+                            Calendar
+                        </Link>
+                    </div>
                     <div className="mt-5 space-y-4">
                         {eventTeasers.map((event) => (
                             <article key={event.name} className="glass-card rounded p-5">

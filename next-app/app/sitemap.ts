@@ -5,6 +5,7 @@ import { fallbackArticles } from "./news/_data/articles";
 const publicRoutes = [
     { path: "/", changeFrequency: "daily", priority: 1 },
     { path: "/news", changeFrequency: "daily", priority: 0.9 },
+    { path: "/events", changeFrequency: "weekly", priority: 0.8 },
     { path: "/apply", changeFrequency: "monthly", priority: 0.7 },
     { path: "/command", changeFrequency: "monthly", priority: 0.7 },
     { path: "/hardware", changeFrequency: "monthly", priority: 0.6 },

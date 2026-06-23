@@ -174,13 +174,13 @@ Blocked reason:
   - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. Search and existing-code review found a verified Potomac LinkedIn company URL but no reliable public Potomac Substack, podcast, or X URL, so those configurable channel entries intentionally render as launch-pending placeholders rather than invented links. Local HTML checks confirmed the homepage and article page render all four channel labels, include the verified LinkedIn URL, and add the live channel to organization `sameAs` structured data.
   - Blocked reason: None.
 
-- [ ] Task 021: Build public/member event calendar with teaser-gated access
+- [x] Task 021: Build public/member event calendar with teaser-gated access
   - Priority: P1
   - Goal: Promote major space conferences, summits, and workshops while reserving details for Members.
   - Acceptance criteria: Public users see event teasers; approved Members see full event details; event data is editable by authorized staff.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The site now has a public event calendar with conference and workshop teasers, member-only detail gates, and a staff editor for maintaining event data.
+  - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --cached --check` passed. Browser QA on `http://127.0.0.1:3002/events` confirmed the page title, event cards, public teaser labels, member-gated detail panels, no public leak of fallback member detail text, no console errors, and CTA navigation to `/apply`. Desktop `1280x720` and mobile `390x844` screenshots were captured with bundled Playwright after the in-app Browser screenshot API timed out with `Page.captureScreenshot`; both viewports rendered without horizontal overflow. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live remote schema/RLS checks were not run because authenticated Supabase database tooling was not exposed.
+  - Blocked reason: None.
 
 - [ ] Task 022: Build Potomac internal summit tracker and past-event summary view
   - Priority: P1

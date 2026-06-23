@@ -30,6 +30,11 @@ export const currentRoutes = [
         note: "Future CMS-backed feed route.",
     },
     {
+        href: "/events",
+        source: "next-app/app/events/page.tsx",
+        note: "Public event calendar with teaser fields and member-gated event details.",
+    },
+    {
         href: "/news/vipc-grant-winner",
         source: "src/pages/VipcGrantWinner.tsx",
         note: "Existing story route reserved for article migration.",

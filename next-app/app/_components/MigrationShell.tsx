@@ -13,6 +13,7 @@ const navItems = [
     { href: "/hardware", label: "Hardware" },
     { href: "/team", label: "Team" },
     { href: "/news", label: "News" },
+    { href: "/events", label: "Events" },
 ];
 
 export function MigrationShell({ children }: { children: ReactNode }) {
