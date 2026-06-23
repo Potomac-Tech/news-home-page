@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase/server";
+import { ScoutCheckoutButton } from "./ScoutCheckoutButton";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +56,7 @@ export default async function MemberPage() {
                             Sign out
                         </Link>
                     </div>
+                    <ScoutCheckoutButton />
                 </div>
             </div>
         </section>

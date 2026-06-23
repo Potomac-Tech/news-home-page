@@ -94,13 +94,13 @@ Blocked reason:
   - Verification: Added the protected `/admin/applications` route, admin role guard, approve/reject server actions, member profile/role updates for linked users, audit-event inserts, and workflow documentation; confirmed `npm run build:next` and `npm run build` pass. Live approval/rejection could not be exercised because no Supabase publishable key was available and the schema migration was not applied to a reachable database.
   - Blocked reason: None.
 
-- [ ] Task 011: Add Stripe Scout checkout at `$25k/user/year`
+- [x] Task 011: Add Stripe Scout checkout at `$25k/user/year`
   - Priority: P0
   - Goal: Support self-serve annual Scout upgrades for approved Members.
   - Acceptance criteria: Stripe product/price or documented configuration supports `$25k/user/year`; checkout starts only for eligible users; payment status is captured.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Approved Members now have a server-side Stripe Checkout path for the annual Scout upgrade.
+  - Verification: Installed the current Stripe SDK; documented the `$25k/user/year` recurring Price configuration; added the server-only checkout route and member upgrade button; confirmed `npm run build:next` and `npm run build` pass. Live Stripe checkout was not run because no Stripe secret key, Price ID, or authenticated Supabase session was available.
+  - Blocked reason: None.
 
 - [ ] Task 012: Add Scout entitlement activation after successful payment
   - Priority: P0
