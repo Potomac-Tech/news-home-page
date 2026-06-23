@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { potomacBrand } from "./_data/brand";
 import { currentRoutes } from "./_data/currentRoutes";
 
 export default function HomePage() {
@@ -33,6 +34,11 @@ export default function HomePage() {
                     </div>
                 </div>
                 <div className="glass-card rounded p-6">
+                    <img
+                        src={potomacBrand.assets.newsLogo}
+                        alt="Potomac News"
+                        className="mb-6 h-12 w-auto"
+                    />
                     <h2 className="font-serif text-2xl text-white">
                         Route Inventory
                     </h2>

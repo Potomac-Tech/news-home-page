@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { potomacBrand } from "../_data/brand";
 
 const navItems = [
     { href: "/nexus", label: "Nexus" },
@@ -14,9 +15,11 @@ export function MigrationShell({ children }: { children: ReactNode }) {
             <header className="border-b border-potomac-gold/30 bg-potomac-primary">
                 <div className="mx-auto flex min-h-20 w-full max-w-7xl items-center justify-between gap-6 px-4 py-4 md:px-8">
                     <Link href="/" className="flex items-center gap-4">
-                        <span className="flex h-12 w-12 items-center justify-center rounded-full border border-potomac-gold/50 font-serif text-xl text-potomac-gold">
-                            P
-                        </span>
+                        <img
+                            src={potomacBrand.assets.logo}
+                            alt="Potomac"
+                            className="h-12 w-auto"
+                        />
                         <span className="font-serif text-lg tracking-[0.22em] text-white md:text-xl">
                             POTOMAC{" "}
                             <span className="text-potomac-gold">NEWS</span>

@@ -38,13 +38,13 @@ Blocked reason:
   - Verification: `npm run build:next` passed for the `next-app` scaffold and generated the preserved route set; `npm run build` passed for the existing Vite app. Both builds reported the existing Browserslist data warning. Installing Next reported 20 npm audit findings that were not changed because dependency remediation is outside this scaffold task.
   - Blocked reason: None.
 
-- [ ] Task 004: Preserve Potomac brand tokens, typography, colors, and assets
+- [x] Task 004: Preserve Potomac brand tokens, typography, colors, and assets
   - Priority: P0
   - Goal: Carry the current Potomac visual identity into the new platform foundation.
   - Acceptance criteria: Brand colors, typography choices, logo assets, and lunar command-center styling are available to new pages/components without regressions.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The Next.js scaffold now has Potomac brand colors, fonts, styling utilities, and synced logo/media assets ready for new pages.
+  - Verification: Added a Next brand module, documented the token and asset workflow, synced `public/` assets into `next-app/public/`, and confirmed `npm run build:next` and `npm run build` pass after the brand updates.
+  - Blocked reason: None.
 
 - [ ] Task 005: Add Supabase client/server integration
   - Priority: P0

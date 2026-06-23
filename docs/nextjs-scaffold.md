@@ -26,11 +26,12 @@ The Next.js dev server uses port `3001` so it does not collide with the existing
 
 ## Asset Handling
 
-The scaffold reuses the existing `public/` directory. That keeps Potomac logos, team images, hardware imagery, Nexus imagery, the press release PDF, favicon, manifest, and CNAME available to both Vite and Next.js during the migration.
+The scaffold syncs the existing `public/` directory into `next-app/public/` before Next dev, build, and start commands. That keeps Potomac logos, team images, hardware imagery, Nexus imagery, the press release PDF, favicon, manifest, and CNAME available to both Vite and Next.js during the migration without duplicating large binary assets in Git.
 
 ## Notes
 
 - `next.config.mjs` currently keeps the default Next runtime with React strict mode enabled.
 - `next-app/app/layout.tsx` imports `next-app/app/globals.css`, which mirrors the current Potomac Tailwind tokens and global utilities for the scaffold.
+- `docs/potomac-brand-foundation.md` documents the shared colors, fonts, asset paths, and asset-sync workflow.
 - Existing `react-router-dom` components are not imported into the Next.js scaffold. Route content is intentionally separated until each page is ported.
 - Supabase integration is not part of this task; it starts in Task 005 after the scaffold and brand foundation are in place.
