@@ -86,13 +86,13 @@ Blocked reason:
   - Verification: Added the `/apply` form route, pending application insert logic, confirmation messaging, and documentation; confirmed `npm run build:next` and `npm run build` pass. Live insert verification was not possible because no Supabase publishable key was available and the schema migration was not applied to a reachable database.
   - Blocked reason: None.
 
-- [ ] Task 010: Build admin approval workflow for free Members
+- [x] Task 010: Build admin approval workflow for free Members
   - Priority: P0
   - Goal: Let authorized admins review, approve, or reject membership applications.
   - Acceptance criteria: Admin workflow lists pending applications, records decisions, updates member status, and keeps an audit trail.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Admins now have a protected review workflow for approving or rejecting free Member applications.
+  - Verification: Added the protected `/admin/applications` route, admin role guard, approve/reject server actions, member profile/role updates for linked users, audit-event inserts, and workflow documentation; confirmed `npm run build:next` and `npm run build` pass. Live approval/rejection could not be exercised because no Supabase publishable key was available and the schema migration was not applied to a reachable database.
+  - Blocked reason: None.
 
 - [ ] Task 011: Add Stripe Scout checkout at `$25k/user/year`
   - Priority: P0
