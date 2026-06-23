@@ -78,13 +78,13 @@ Blocked reason:
   - Verification: Added private-schema authorization helpers, explicit grants, and RLS policies for the member access tables; static search confirmed helper functions, grants, policies, and required role names are present. Local or remote SQL execution was not possible because no local Supabase database was running and authenticated Supabase MCP/CLI database access was unavailable.
   - Blocked reason: None.
 
-- [ ] Task 009: Build free Member application flow with manual approval state
+- [x] Task 009: Build free Member application flow with manual approval state
   - Priority: P0
   - Goal: Let public visitors apply for free membership and enter a pending review state.
   - Acceptance criteria: Application form captures required fields, creates a pending application, shows confirmation, and does not grant full access before approval.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Public visitors can now submit a free Member application that stays pending until an admin reviews it.
+  - Verification: Added the `/apply` form route, pending application insert logic, confirmation messaging, and documentation; confirmed `npm run build:next` and `npm run build` pass. Live insert verification was not possible because no Supabase publishable key was available and the schema migration was not applied to a reachable database.
+  - Blocked reason: None.
 
 - [ ] Task 010: Build admin approval workflow for free Members
   - Priority: P0
