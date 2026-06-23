@@ -62,13 +62,13 @@ Blocked reason:
   - Verification: Added login, callback, logout, and protected member routes; protected routes use server-side `getClaims()` and redirect signed-out users to login; confirmed `npm run build:next` and `npm run build` pass. Live login/logout could not be exercised because no Supabase publishable key was available in this session.
   - Blocked reason: None.
 
-- [ ] Task 007: Create member profile, application, organization, role, and entitlement schema
+- [x] Task 007: Create member profile, application, organization, role, and entitlement schema
   - Priority: P0
   - Goal: Define the core data model for members, organizations, approvals, roles, and paid access.
   - Acceptance criteria: Schema supports pending applicants, approved Members, Scout users, Command organizations, org admins, and entitlement records.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The initial database model now defines member applications, profiles, organizations, roles, org admins, and paid-access entitlements.
+  - Verification: Created a Supabase migration with the CLI for the workspace and documented the schema coverage; static search confirmed the required tables, roles, entitlements, and RLS enablement are present. `supabase migration list --local` could not run because no local Supabase Postgres was listening on `127.0.0.1:54322`. Remote application was not run because authenticated Supabase MCP tools were unavailable and no database credentials were available.
+  - Blocked reason: None.
 
 - [ ] Task 008: Add RLS policies for public, pending applicant, Member, Scout, Command, org admin, editor, analyst, and admin access
   - Priority: P0
