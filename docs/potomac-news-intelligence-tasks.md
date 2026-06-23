@@ -126,13 +126,13 @@ Blocked reason:
   - Verification: Added `/organization`, an organization-admin auth helper, scoped Supabase reads, navigation, and documentation; confirmed `npm run build:next` and `npm run build` pass. Live database reads could not be exercised because Supabase keys were unavailable and the schema migration was not applied to a reachable database.
   - Blocked reason: None.
 
-- [ ] Task 015: Create editorial CMS schema for articles, authors, tags, versions, citations, and SEO metadata
+- [x] Task 015: Create editorial CMS schema for articles, authors, tags, versions, citations, and SEO metadata
   - Priority: P0
   - Goal: Store editorial content with public teaser and gated full-body support.
   - Acceptance criteria: CMS schema supports articles, authors, tags, versions, citations, SEO/AEO fields, teaser content, gated body, and publish states.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Editorial content now has a CMS-ready database design for public teasers, protected full stories, authors, tags, source citations, version history, and search metadata.
+  - Verification: Added the editorial CMS migration and schema documentation, including public article rows, separate gated bodies, authors, tags, versions, citations, SEO/AEO fields, publish states, indexes, grants, and RLS policies; confirmed `npm run build:next` and `npm run build` pass. Live migration execution could not be run because Supabase keys were unavailable and no local database was reachable.
+  - Blocked reason: None.
 
 - [ ] Task 016: Build editor workflow for draft, preview, publish, and gated body content
   - Priority: P0
