@@ -182,13 +182,13 @@ Blocked reason:
   - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --cached --check` passed. Browser QA on `http://127.0.0.1:3002/events` confirmed the page title, event cards, public teaser labels, member-gated detail panels, no public leak of fallback member detail text, no console errors, and CTA navigation to `/apply`. Desktop `1280x720` and mobile `390x844` screenshots were captured with bundled Playwright after the in-app Browser screenshot API timed out with `Page.captureScreenshot`; both viewports rendered without horizontal overflow. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live remote schema/RLS checks were not run because authenticated Supabase database tooling was not exposed.
   - Blocked reason: None.
 
-- [ ] Task 022: Build Potomac internal summit tracker and past-event summary view
+- [x] Task 022: Build Potomac internal summit tracker and past-event summary view
   - Priority: P1
   - Goal: Track Potomac's upcoming internal summits and summarize major news from past events.
   - Acceptance criteria: Member-gated tracker shows upcoming internal summits and past-event summaries with dates, status, and editable content.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Approved members now have a dedicated internal summit tracker for upcoming summit plans and past-event summaries, with a staff editor for maintaining the content.
+  - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --cached --check` passed. Browser QA on `http://127.0.0.1:3002/member/summits` confirmed the safe no-env member gate, no internal fallback summit content exposure, no console errors, and CTA navigation to `/apply`. Desktop `1280x720` and mobile `390x844` screenshots were captured with bundled Playwright after the in-app Browser screenshot API timed out with `Page.captureScreenshot`; both viewports rendered without horizontal overflow. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live approved-member tracker reads, staff edits, and remote RLS checks were not run because authenticated Supabase database tooling and a signed-in test member were unavailable.
+  - Blocked reason: None.
 
 - [ ] Task 023: Add sponsor and ad placement schema/admin controls
   - Priority: P1

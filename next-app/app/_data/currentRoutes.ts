@@ -35,6 +35,11 @@ export const currentRoutes = [
         note: "Public event calendar with teaser fields and member-gated event details.",
     },
     {
+        href: "/member/summits",
+        source: "next-app/app/member/summits/page.tsx",
+        note: "Member-gated internal summit tracker with upcoming summit and past-event summary views.",
+    },
+    {
         href: "/news/vipc-grant-winner",
         source: "src/pages/VipcGrantWinner.tsx",
         note: "Existing story route reserved for article migration.",
