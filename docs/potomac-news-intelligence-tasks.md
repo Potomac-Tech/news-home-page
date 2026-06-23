@@ -14,13 +14,13 @@ Verification:
 Blocked reason:
 ```
 
-- [ ] Task 001: Confirm Supabase MCP target uses `xlpkdoeldtlhearqajat`
+- [x] Task 001: Confirm Supabase MCP target uses `xlpkdoeldtlhearqajat`
   - Priority: P0
   - Goal: Ensure Codex and any Supabase tooling target the correct Potomac Supabase project.
   - Acceptance criteria: MCP configuration points to project ref `xlpkdoeldtlhearqajat`; any reference to `nwoluvjdojzayozyzlob` is removed or clearly marked as wrong; authentication status is documented.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Supabase tooling is now documented and project-scoped to the correct Potomac backend.
+  - Verification: Confirmed local Codex config uses `https://mcp.supabase.com/mcp?project_ref=xlpkdoeldtlhearqajat`; added matching project `.mcp.json`; confirmed the Supabase MCP endpoint is reachable with the expected unauthenticated HTTP `401` response; authenticated tool access could not be verified because Supabase MCP tools were not exposed in this session.
+  - Blocked reason: None.
 
 - [ ] Task 002: Add project documentation for the Next.js + Supabase migration
   - Priority: P0
