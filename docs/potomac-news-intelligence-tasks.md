@@ -142,13 +142,13 @@ Blocked reason:
   - Verification: Added `/admin/editorial`, editorial staff auth, draft/create/update/publish server actions, inline public and gated previews, version snapshot writes, and workflow documentation; confirmed `npm run build:next` and `npm run build` pass. Live editor actions could not be exercised because Supabase keys were unavailable and the editorial schema was not applied to a reachable database.
   - Blocked reason: None.
 
-- [ ] Task 017: Build public news-first homepage with headline feed, snippets, event teasers, tickers, and sponsor slots
+- [x] Task 017: Build public news-first homepage with headline feed, snippets, event teasers, tickers, and sponsor slots
   - Priority: P0
   - Goal: Make the homepage function as the public front door for the news/intelligence site.
   - Acceptance criteria: Homepage displays featured and latest stories, short snippets, event teasers, market modules, sponsor slots, and membership CTAs.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The public homepage now works as a news-first front door with a lead brief, latest-story snippets, event previews, market/ticker modules, sponsor placements, and Member/Command access calls to action.
+  - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. Browser QA on `http://127.0.0.1:3001/` confirmed the homepage title, lead story, ticker, event teasers, market modules, sponsor slots, and CTA navigation to `/apply`. The Browser screenshot API timed out with `Page.captureScreenshot`, so desktop `1280x720` and mobile `390x844` screenshot evidence was captured with bundled Playwright using local Microsoft Edge; both viewports rendered without horizontal overflow. Live Supabase CMS feed reads could not be exercised because no Supabase public key was available, so QA covered the safe fallback path and the code still rejects any non-`xlpkdoeldtlhearqajat` Supabase URL.
+  - Blocked reason: None.
 
 - [ ] Task 018: Build article page with rich public teaser and gated full story
   - Priority: P0

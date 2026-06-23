@@ -30,3 +30,17 @@ export function getSupabasePublicConfig() {
         projectRef: POTOMAC_SUPABASE_PROJECT_REF,
     };
 }
+
+export function hasPotomacSupabasePublicConfig() {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabasePublishableKey =
+        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+
+    if (!supabaseUrl || !supabasePublishableKey) {
+        return false;
+    }
+
+    assertPotomacSupabaseUrl(supabaseUrl);
+
+    return true;
+}

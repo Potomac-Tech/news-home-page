@@ -2,7 +2,7 @@ export const currentRoutes = [
     {
         href: "/",
         source: "src/pages/Home.tsx",
-        note: "Public front door, ready to evolve into the news-first homepage.",
+        note: "Public news-first homepage with headlines, snippets, events, market modules, sponsor slots, and membership CTAs.",
     },
     {
         href: "/hardware",
