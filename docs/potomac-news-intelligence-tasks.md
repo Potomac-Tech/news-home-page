@@ -110,13 +110,13 @@ Blocked reason:
   - Verification: Added a webhook idempotency migration, server-only Supabase service client, shared Stripe server helper, webhook route for successful checkout/subscription updates/deletions/payment failures, role/entitlement updates, and audit-event writes; confirmed `npm run build:next` and `npm run build` pass. Live webhook delivery was not exercised because Stripe secrets, a Supabase service secret, and an applied reachable schema were unavailable.
   - Blocked reason: None.
 
-- [ ] Task 013: Add Command interest form and manual sales/admin workflow
+- [x] Task 013: Add Command interest form and manual sales/admin workflow
   - Priority: P0
   - Goal: Capture enterprise Command interest without self-serve purchase.
   - Acceptance criteria: Command interest form stores requests, notifies/admin-surfaces leads, and supports manual entitlement grants after offline approval.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Enterprise Command interest can now be captured publicly and reviewed by admins for manual organization-level access grants.
+  - Verification: Added Command interest schema/RLS, public `/command` form, protected `/admin/command` workflow, manual Command organization/entitlement grant action, audit-event writes, and documentation; confirmed `npm run build:next` and `npm run build` pass. Live database inserts and grants could not be exercised because Supabase keys were unavailable and the schema migration was not applied to a reachable database.
+  - Blocked reason: None.
 
 - [ ] Task 014: Build organization admin portal for seats, members, entitlements, and billing contacts
   - Priority: P0
