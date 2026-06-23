@@ -22,13 +22,13 @@ Blocked reason:
   - Verification: Confirmed local Codex config uses `https://mcp.supabase.com/mcp?project_ref=xlpkdoeldtlhearqajat`; added matching project `.mcp.json`; confirmed the Supabase MCP endpoint is reachable with the expected unauthenticated HTTP `401` response; authenticated tool access could not be verified because Supabase MCP tools were not exposed in this session.
   - Blocked reason: None.
 
-- [ ] Task 002: Add project documentation for the Next.js + Supabase migration
+- [x] Task 002: Add project documentation for the Next.js + Supabase migration
   - Priority: P0
   - Goal: Document the intended migration from the current Vite site to a Next.js + Supabase architecture.
   - Acceptance criteria: Documentation explains the migration rationale, target stack, key risks, Supabase ownership boundaries, and expected developer workflow.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The migration path is now documented so the team can move from the current site to the future news and member platform with clearer guardrails.
+  - Verification: Reviewed the current Vite routes, public assets, Tailwind brand tokens, and package setup; added migration documentation covering rationale, stack, risks, ownership boundaries, and developer workflow. No build was run because this was a documentation-only task.
+  - Blocked reason: None.
 
 - [ ] Task 003: Create initial Next.js app structure or migration scaffold
   - Priority: P0
