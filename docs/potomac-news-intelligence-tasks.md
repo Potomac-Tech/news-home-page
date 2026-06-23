@@ -70,13 +70,13 @@ Blocked reason:
   - Verification: Created a Supabase migration with the CLI for the workspace and documented the schema coverage; static search confirmed the required tables, roles, entitlements, and RLS enablement are present. `supabase migration list --local` could not run because no local Supabase Postgres was listening on `127.0.0.1:54322`. Remote application was not run because authenticated Supabase MCP tools were unavailable and no database credentials were available.
   - Blocked reason: None.
 
-- [ ] Task 008: Add RLS policies for public, pending applicant, Member, Scout, Command, org admin, editor, analyst, and admin access
+- [x] Task 008: Add RLS policies for public, pending applicant, Member, Scout, Command, org admin, editor, analyst, and admin access
   - Priority: P0
   - Goal: Protect Supabase data according to the membership and staff access model.
   - Acceptance criteria: RLS policies exist for relevant tables; each role can access only the expected rows/actions; policies avoid user-editable metadata for authorization.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The member access tables now have a documented RLS policy migration for public applications, members, paid tiers, organization admins, staff, and admins.
+  - Verification: Added private-schema authorization helpers, explicit grants, and RLS policies for the member access tables; static search confirmed helper functions, grants, policies, and required role names are present. Local or remote SQL execution was not possible because no local Supabase database was running and authenticated Supabase MCP/CLI database access was unavailable.
+  - Blocked reason: None.
 
 - [ ] Task 009: Build free Member application flow with manual approval state
   - Priority: P0
