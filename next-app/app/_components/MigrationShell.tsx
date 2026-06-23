@@ -4,6 +4,7 @@ import { potomacBrand } from "../_data/brand";
 
 const navItems = [
     { href: "/member", label: "Member" },
+    { href: "/organization", label: "Organization" },
     { href: "/apply", label: "Apply" },
     { href: "/command", label: "Command" },
     { href: "/admin/applications", label: "Admin" },

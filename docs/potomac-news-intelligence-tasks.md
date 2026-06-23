@@ -118,13 +118,13 @@ Blocked reason:
   - Verification: Added Command interest schema/RLS, public `/command` form, protected `/admin/command` workflow, manual Command organization/entitlement grant action, audit-event writes, and documentation; confirmed `npm run build:next` and `npm run build` pass. Live database inserts and grants could not be exercised because Supabase keys were unavailable and the schema migration was not applied to a reachable database.
   - Blocked reason: None.
 
-- [ ] Task 014: Build organization admin portal for seats, members, entitlements, and billing contacts
+- [x] Task 014: Build organization admin portal for seats, members, entitlements, and billing contacts
   - Priority: P0
   - Goal: Give organization admins a place to manage their organization.
   - Acceptance criteria: Org admins can view organization details, members, seats, entitlements, and billing contacts within their permitted scope.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Organization admins now have a protected workspace to review their permitted organizations, seats, members, billing contact, and active entitlements.
+  - Verification: Added `/organization`, an organization-admin auth helper, scoped Supabase reads, navigation, and documentation; confirmed `npm run build:next` and `npm run build` pass. Live database reads could not be exercised because Supabase keys were unavailable and the schema migration was not applied to a reachable database.
+  - Blocked reason: None.
 
 - [ ] Task 015: Create editorial CMS schema for articles, authors, tags, versions, citations, and SEO metadata
   - Priority: P0
