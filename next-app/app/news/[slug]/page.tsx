@@ -7,6 +7,12 @@ import {
     findFallbackArticle,
     fallbackArticles,
 } from "../_data/articles";
+import {
+    absoluteSiteUrl,
+    jsonLdScript,
+    organizationJsonLd,
+    siteConfig,
+} from "../../_data/site";
 import { createClient } from "../../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../../lib/supabase/config";
 import {
@@ -251,10 +257,30 @@ export async function generateMetadata({
 }: ArticlePageProps): Promise<Metadata> {
     const { slug } = await params;
     const fallbackArticle = findFallbackArticle(slug);
+    const canonicalPath = `/news/${slug}`;
 
     return {
         title: fallbackArticle?.title ?? "Article",
         description: fallbackArticle?.summary,
+        alternates: {
+            canonical: canonicalPath,
+        },
+        openGraph: {
+            title: fallbackArticle?.title ?? "Potomac Article",
+            description: fallbackArticle?.summary ?? siteConfig.description,
+            url: absoluteSiteUrl(canonicalPath),
+            siteName: siteConfig.name,
+            type: "article",
+            publishedTime: fallbackArticle?.publishedAt,
+            images: fallbackArticle
+                ? [
+                      {
+                          url: absoluteSiteUrl(fallbackArticle.heroImageUrl),
+                          alt: fallbackArticle.heroImageAlt,
+                      },
+                  ]
+                : undefined,
+        },
     };
 }
 
@@ -272,7 +298,7 @@ function GatePanel({
     const tierLabel = accessTierLabel(tier);
 
     return (
-        <section className="glass-card rounded p-6">
+        <section className="member-gated-content glass-card rounded p-6">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
                 {tierLabel}+ full story
             </p>
@@ -322,9 +348,39 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     const keyPoints = article.keyPoints.length
         ? article.keyPoints
         : [article.summary, article.teaser].filter(Boolean);
+    const canonicalUrl = absoluteSiteUrl(`/news/${article.slug}`);
+    const articleJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        headline: article.title,
+        description: article.summary,
+        image: [absoluteSiteUrl(article.heroImageUrl)],
+        datePublished: new Date(article.publishedAt).toISOString(),
+        dateModified: new Date(article.publishedAt).toISOString(),
+        author: organizationJsonLd(),
+        publisher: organizationJsonLd(),
+        mainEntityOfPage: canonicalUrl,
+        isAccessibleForFree: false,
+        keywords: keyPoints,
+        abstract: article.teaser || article.summary,
+        citation: article.citations.map((citation) =>
+            citation.url ? absoluteSiteUrl(citation.url) : citation.title
+        ),
+        hasPart: {
+            "@type": "WebPageElement",
+            isAccessibleForFree: false,
+            cssSelector: ".member-gated-content",
+        },
+    };
 
     return (
         <article className="bg-grid-pattern">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: jsonLdScript(articleJsonLd),
+                }}
+            />
             <header className="border-b border-white/10">
                 <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-12 md:px-8 lg:grid-cols-[1.08fr_0.92fr] lg:py-16">
                     <div>
@@ -397,7 +453,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     </section>
 
                     {fullBody ? (
-                        <section className="glass-card rounded p-6">
+                        <section className="member-gated-content glass-card rounded p-6">
                             <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
                                 Member full story
                             </p>

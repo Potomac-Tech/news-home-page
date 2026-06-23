@@ -9,15 +9,29 @@ import {
     type HomeStory,
 } from "./_data/homepage";
 import { potomacBrand } from "./_data/brand";
+import {
+    absoluteSiteUrl,
+    jsonLdScript,
+    organizationJsonLd,
+    siteConfig,
+} from "./_data/site";
 import { createClient } from "../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../lib/supabase/config";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-    title: "Potomac News & Intelligence",
-    description:
-        "Public lunar news, market signals, event previews, sponsor placements, and member access for Potomac News & Intelligence.",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    alternates: {
+        canonical: "/",
+    },
+    openGraph: {
+        title: siteConfig.name,
+        description: siteConfig.description,
+        url: absoluteSiteUrl("/"),
+        type: "website",
+    },
 };
 
 type EditorialArticleRow = {
@@ -171,9 +185,41 @@ export default async function HomePage() {
     const stories = await getHomepageStories();
     const featuredStory = stories[0] ?? fallbackStories[0];
     const latestStories = stories.slice(1).length ? stories.slice(1) : fallbackStories.slice(1);
+    const headlineItemListJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: "Potomac public headline feed",
+        itemListElement: stories.slice(0, 6).map((story, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            url: absoluteSiteUrl(story.href),
+            name: story.title,
+            description: story.summary,
+        })),
+    };
+    const websiteJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: siteConfig.name,
+        url: siteConfig.url,
+        description: siteConfig.description,
+        publisher: organizationJsonLd(),
+    };
 
     return (
         <div className="bg-grid-pattern">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: jsonLdScript(websiteJsonLd),
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: jsonLdScript(headlineItemListJsonLd),
+                }}
+            />
             <section className="border-b border-white/10">
                 <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-12 md:px-8 lg:grid-cols-[1.18fr_0.82fr] lg:py-16">
                     <div>

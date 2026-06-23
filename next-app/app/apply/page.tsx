@@ -3,6 +3,11 @@ import { ApplicationForm } from "./ApplicationForm";
 
 export const metadata: Metadata = {
     title: "Apply",
+    description:
+        "Apply for free Potomac Member access to read full public-story bodies after approval.",
+    alternates: {
+        canonical: "/apply",
+    },
 };
 
 export default function ApplyPage() {

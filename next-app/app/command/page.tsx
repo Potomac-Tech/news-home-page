@@ -3,6 +3,11 @@ import { CommandInterestForm } from "./CommandInterestForm";
 
 export const metadata: Metadata = {
     title: "Command",
+    description:
+        "Register Command interest for organization-level Potomac lunar intelligence access.",
+    alternates: {
+        canonical: "/command",
+    },
 };
 
 export default function CommandPage() {

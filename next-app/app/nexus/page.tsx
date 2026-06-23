@@ -3,6 +3,11 @@ import { RouteScaffold } from "../_components/RouteScaffold";
 
 export const metadata: Metadata = {
     title: "Nexus",
+    description:
+        "Potomac Nexus route for future member dashboard access status and deep links.",
+    alternates: {
+        canonical: "/nexus",
+    },
 };
 
 export default function NexusPage() {

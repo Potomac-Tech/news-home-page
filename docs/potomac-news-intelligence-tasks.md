@@ -158,13 +158,13 @@ Blocked reason:
   - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. Browser QA on `http://127.0.0.1:3001/news/vipc-grant-winner` confirmed the headline, public summary, intro, source citations, gated full-story panel, and sign-in CTA navigation. Desktop `1280x720` and mobile `390x844` screenshot evidence was captured with bundled Playwright using local Microsoft Edge; both viewports rendered without horizontal overflow. Live approved-member unlock could not be exercised because no Supabase public key, signed-in test member, or applied remote schema was available; the implementation uses normalized role assignments and the existing RLS-protected body table for the live path.
   - Blocked reason: None.
 
-- [ ] Task 019: Add schema.org metadata, canonical URLs, sitemap, and robots configuration
+- [x] Task 019: Add schema.org metadata, canonical URLs, sitemap, and robots configuration
   - Priority: P0
   - Goal: Improve search and answer-engine discoverability for public pages.
   - Acceptance criteria: Public routes include relevant structured data, canonical URLs, sitemap coverage, and robots configuration that does not expose gated content improperly.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Public pages now publish canonical URLs, structured data, sitemap entries, and robots rules that expose public teaser content while keeping protected areas out of crawler paths.
+  - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. Local checks confirmed `/robots.txt` disallows `/admin/`, `/api/`, `/auth/`, `/member`, and `/organization`; `/sitemap.xml` lists public routes and the public article teaser URL only; the homepage HTML includes canonical, WebSite, and ItemList JSON-LD; the VIPC article HTML includes canonical, NewsArticle JSON-LD, a gated-content selector, and does not include the member-only fallback body in public markup. Implementation was checked against current official Next.js metadata-file/JSON-LD docs and schema.org NewsArticle guidance.
+  - Blocked reason: None.
 
 - [ ] Task 020: Add Substack, podcast, LinkedIn, and X link modules
   - Priority: P1
@@ -382,7 +382,7 @@ Blocked reason:
   - Verification:
   - Blocked reason:
 
-- [ ] Task 047: Build member-to-member chat UI and notification surfaces
+- [ ] Task 047: Build direct member-to-member chat UI and notification surfaces
   - Priority: P1
   - Goal: Let approved Members, Scout users, and Command users start and continue member-to-member conversations.
   - Acceptance criteria: Member dashboard includes chat inbox, conversation detail, compose/reply flow, unread indicators, privacy-constrained member discovery, report/block controls, and graceful empty/error states.
@@ -390,23 +390,223 @@ Blocked reason:
   - Verification:
   - Blocked reason:
 
-- [ ] Task 048: Add automated tests for auth, RBAC, article gating, billing, member chat, and RLS
+- [ ] Task 048: Add moderated member forum schema, RLS, and audit model
+  - Priority: P1
+  - Goal: Define the data model and access controls for member forums.
+  - Acceptance criteria: Schema supports forums, topics, posts, replies, reactions or bookmarks, reports, moderation actions, retained audit events, and RLS for Explorer, Scout, Command, moderator, analyst, editor, and admin access.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 049: Build moderated member forum UI
+  - Priority: P1
+  - Goal: Let approved members discuss lunar markets, missions, datasets, procurement, regulatory issues, and events.
+  - Acceptance criteria: Member dashboard includes forum index, topic list, topic detail, compose/reply flow, reporting controls, moderator states, empty/error states, and clear access messaging for public or unapproved users.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 050: Add RFQ schema, RLS, response workflow, moderation, and audit model
+  - Priority: P1
+  - Goal: Define the data model for Scout and Command RFQ workflows.
+  - Acceptance criteria: Schema supports RFQ posts, organization attribution, categories, due dates, attachments or external links, response submissions, visibility controls, status changes, reports, moderation actions, and audit logs.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 051: Build Scout/Command RFQ posting, browsing, and response UI
+  - Priority: P1
+  - Goal: Let Scout and Command members post, browse, and respond to lunar industry RFQs.
+  - Acceptance criteria: Dashboard includes RFQ list, filters, detail page, post form, response form, organization-aware permissions, moderation/report actions, and graceful states for members without access.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 052: Document Explorer, Scout, and Command tier packaging and gates
+  - Priority: P0
+  - Goal: Align the product model with Explorer as the free approved base membership, Scout as the professional paid tier, and Command as the enterprise tier.
+  - Acceptance criteria: Documentation and access-control notes define tier names, pricing/approval model, limits, included features, upgrade paths, and legacy Member terminology handling.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 053: Build Explorer/Scout/Command pricing and upgrade entry points
+  - Priority: P1
+  - Goal: Make tier differences and upgrade paths clear to prospects and approved members.
+  - Acceptance criteria: Public pricing or membership page explains Explorer, Scout, and Command; member dashboard surfaces relevant upgrade CTAs; Scout checkout and Command interest paths remain connected.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 054: Build lunar industry terminal navigation and dashboard shell
+  - Priority: P0
+  - Goal: Organize the platform as a lunar industry terminal rather than a generic space site.
+  - Acceptance criteria: Navigation and dashboard shell expose lunar news, launches, spacecraft/landers, procurement, regulatory, companies, economy, datasets, marketplace, events, calculators, alerts, and account areas with responsive behavior.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 055: Add lunar launch, spacecraft, lander, payload, and satellite tracker schema
+  - Priority: P1
+  - Goal: Store lunar mission object tracking data with source-backed status.
+  - Acceptance criteria: Schema supports lunar launches, spacecraft, landers, payloads, lunar satellites, operators, mission phases, launch windows, landing sites, instruments, status, timestamps, freshness, and source citations.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 056: Build lunar launch, spacecraft, lander, and satellite tracker modules
+  - Priority: P1
+  - Goal: Let members track lunar missions and objects in the terminal.
+  - Acceptance criteria: Dashboard modules show upcoming launches, active spacecraft/landers/satellites, mission status, source freshness, filters, detail pages, and gated detail levels by tier.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 057: Add lunar procurement and regulatory intelligence schema
+  - Priority: P1
+  - Goal: Store lunar-relevant procurement and regulatory records.
+  - Acceptance criteria: Schema supports procurements, awards, SBIR/STTR items, regulatory filings, comment periods, policy milestones, compliance notes, agencies, due dates, source URLs, confidence labels, and analyst review state.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 058: Build lunar procurement and regulatory hub UI
+  - Priority: P1
+  - Goal: Give Scout and Command members a practical hub for lunar opportunities and policy risk.
+  - Acceptance criteria: Hub includes searchable/filterable procurement and regulatory lists, detail pages, due-date/status indicators, citations, watchlist hooks, and upgrade prompts for users without access.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 059: Create lunar company profile and comparison schema
+  - Priority: P1
+  - Goal: Store profiles for companies participating in the lunar industry.
+  - Acceptance criteria: Schema supports company sectors, programs, contracts, facilities, leadership, public financials or licensed financial fields, news links, relationships, source citations, and comparison attributes.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 060: Build lunar company directory, profile, and comparison UI
+  - Priority: P1
+  - Goal: Let members discover, inspect, and compare lunar companies.
+  - Acceptance criteria: UI includes searchable directory, company profile pages, comparison table, source/freshness labels, public teaser behavior, and Scout/Command detail gates where appropriate.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 061: Add lunar mission calculator framework
+  - Priority: P1
+  - Goal: Establish a reusable structure for lunar mission planning calculators.
+  - Acceptance criteria: Framework supports named calculators, assumptions, formulas, source citations, units, confidence notes, version history, input validation, saved runs, and tier-based access.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 062: Build initial lunar mission calculators
+  - Priority: P1
+  - Goal: Provide practical calculators for lunar mission planning workflows.
+  - Acceptance criteria: Initial calculators cover lunar mission cost, launch window assumptions, RF link budget, thermal budget, radiation exposure, and power budget with clear limitations and citations.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 063: Add global search, command palette, and related intelligence index
+  - Priority: P0
+  - Goal: Let members quickly find content and jump across the terminal.
+  - Acceptance criteria: Search/index model covers articles, events, companies, lunar missions, datasets, data requests/offers, jobs, procurements, regulatory records, methodology sources, and dashboard modules; command palette supports keyboard navigation and admin-pinned results.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 064: Build global search and command palette UI
+  - Priority: P1
+  - Goal: Make search and fast navigation usable from public and member surfaces.
+  - Acceptance criteria: UI includes search page, scoped filters, result snippets, source/tier labels, no-result states, keyboard-accessible command palette, and entitlement-aware result visibility.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 065: Add watchlists, saved searches, reading list, and preference schema
+  - Priority: P1
+  - Goal: Store user-specific monitoring and saved-work preferences.
+  - Acceptance criteria: Schema supports watched companies, missions, procurements, regulatory records, events, datasets, marketplace records, saved searches, reading-list items, notification preferences, dashboard defaults, and audit-safe ownership.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 066: Build watchlists, saved searches, reading list, and preference UI
+  - Priority: P1
+  - Goal: Let Scout and Command members personalize what they monitor.
+  - Acceptance criteria: Dashboard includes watchlist controls, saved search creation, reading-list save/remove actions, notification settings, dashboard defaults, and graceful states for unsupported objects or lower tiers.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 067: Add alerts center, email notifications, in-app notifications, and freshness indicators
+  - Priority: P1
+  - Goal: Notify members about changes to watched lunar intelligence and important platform events.
+  - Acceptance criteria: System supports alert rules, alert feed, unread badges, email delivery hooks, notification preferences, stale-data indicators, delivery audit logs, and tier-aware limits for Explorer, Scout, and Command.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 068: Add data source registry, license review, freshness, and quality scoring
+  - Priority: P0
+  - Goal: Build the trust layer for source-backed lunar intelligence.
+  - Acceptance criteria: Schema/admin workflow tracks source owner, URL, license/terms review, refresh frequency, parser/job, health, freshness, citation requirements, quality score, confidence label, and analyst review state.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 069: Add reusable table, chart, and export framework for intelligence modules
+  - Priority: P0
+  - Goal: Standardize how data-heavy modules display, cite, filter, and export information.
+  - Acceptance criteria: Framework supports filtering, sorting, pagination, column picker, source columns, freshness labels, confidence labels, chart tooltips, data-table fallback, CSV/PDF export where entitled, and responsive behavior.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 070: Add Scout/Command API, exports, webhooks, and developer portal scaffold
+  - Priority: P1
+  - Goal: Provide paid workflow infrastructure for Scout and Command users.
+  - Acceptance criteria: Scaffold includes API key model, endpoint catalog, quota fields, usage logs, webhook subscriptions, export jobs, developer documentation route, and tier-aware access controls.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 071: Add legal, trust, account lifecycle, and consent surfaces
+  - Priority: P0
+  - Goal: Support membership, ads, analytics, uploads, and paid tiers with baseline public trust pages and controls.
+  - Acceptance criteria: Public/member surfaces include Terms, Privacy, Cookies, Accessibility, Data Safety, account deletion request flow, cookie preference controls, and clear support/contact paths.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 072: Add security, accessibility, analytics, observability, and performance baseline
+  - Priority: P0
+  - Goal: Define and verify non-functional requirements for a production-ready intelligence platform.
+  - Acceptance criteria: Implementation includes security headers, rate limiting or documented controls, input validation, CSRF/session protections where applicable, accessibility checks, analytics events, logs/metrics/traces hooks, performance budgets, and documented error/empty/stale/offline states.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason:
+
+- [ ] Task 073: Add automated tests for auth, RBAC, article gating, billing, member chat, forums, RFQs, lunar terminal modules, and RLS
   - Priority: P0
   - Goal: Cover critical security and access-control behavior with tests.
-  - Acceptance criteria: Automated tests exercise login/session behavior, membership gating, role restrictions, billing entitlement updates, member chat access/privacy/moderation rules, and RLS expectations.
+  - Acceptance criteria: Automated tests exercise login/session behavior, membership gating, role restrictions, billing entitlement updates, direct chat/forum/RFQ access and moderation rules, lunar terminal module gates, exports/API gates, and RLS expectations.
   - Non-technical summary:
   - Verification:
   - Blocked reason:
 
-- [ ] Task 049: Add end-to-end tests for public teaser, Member article unlock, Scout dashboard, member chat, and Command admin flows
+- [ ] Task 074: Add end-to-end tests for public teaser, Explorer article unlock, Scout dashboard, chat/forums/RFQs, and Command admin flows
   - Priority: P1
   - Goal: Validate the main user journeys from browser-level behavior.
-  - Acceptance criteria: E2E tests cover public article teaser, Member full article access, Scout dashboard access, member chat inbox/conversation flows, and Command/admin workflows.
+  - Acceptance criteria: E2E tests cover public article teaser, Explorer full article access, Scout dashboard access, direct chat inbox/conversation flows, forum posting, RFQ browsing/responding, lunar terminal navigation, and Command/admin workflows.
   - Non-technical summary:
   - Verification:
   - Blocked reason:
 
-- [ ] Task 050: Run build, lint, tests, and document remaining gaps
+- [ ] Task 075: Run build, lint, tests, and document remaining gaps
   - Priority: P0
   - Goal: Verify the implementation and capture any remaining gaps.
   - Acceptance criteria: Build, lint, and available tests are run; results are recorded; remaining gaps or skipped checks are documented clearly.

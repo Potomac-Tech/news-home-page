@@ -3,6 +3,11 @@ import { RouteScaffold } from "../_components/RouteScaffold";
 
 export const metadata: Metadata = {
     title: "Team",
+    description:
+        "Public Potomac team route for the lunar intelligence platform.",
+    alternates: {
+        canonical: "/team",
+    },
 };
 
 export default function TeamPage() {

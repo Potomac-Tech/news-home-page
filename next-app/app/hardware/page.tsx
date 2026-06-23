@@ -3,6 +3,11 @@ import { RouteScaffold } from "../_components/RouteScaffold";
 
 export const metadata: Metadata = {
     title: "Hardware",
+    description:
+        "Potomac hardware systems for low-cost lunar surface data collection and intelligence.",
+    alternates: {
+        canonical: "/hardware",
+    },
 };
 
 export default function HardwarePage() {

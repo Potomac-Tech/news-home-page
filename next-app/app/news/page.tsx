@@ -1,22 +1,53 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { fallbackArticles } from "./_data/articles";
+import { absoluteSiteUrl, jsonLdScript, siteConfig } from "../_data/site";
 
 export const metadata: Metadata = {
     title: "News",
+    description:
+        "Public Potomac news and article teasers for lunar intelligence readers.",
+    alternates: {
+        canonical: "/news",
+    },
+    openGraph: {
+        title: "News | Potomac",
+        description:
+            "Public Potomac news and article teasers for lunar intelligence readers.",
+        url: absoluteSiteUrl("/news"),
+        siteName: siteConfig.name,
+        type: "website",
+    },
 };
 
-const articles = [
-    {
-        href: "/news/vipc-grant-winner",
-        title: "Potomac named VIPC grant winner",
-        summary:
-            "Existing static story route reserved for CMS-backed article migration.",
-    },
-];
+const articles = fallbackArticles.map((article) => ({
+    href: `/news/${article.slug}`,
+    title: article.title,
+    summary: article.summary,
+}));
 
 export default function NewsPage() {
+    const newsItemListJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: "Potomac public news feed",
+        itemListElement: articles.map((article, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            url: absoluteSiteUrl(article.href),
+            name: article.title,
+            description: article.summary,
+        })),
+    };
+
     return (
         <section className="bg-grid-pattern">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: jsonLdScript(newsItemListJsonLd),
+                }}
+            />
             <div className="mx-auto min-h-[calc(100vh-9rem)] w-full max-w-7xl px-4 py-20 md:px-8">
                 <div className="max-w-3xl">
                     <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-potomac-gold">

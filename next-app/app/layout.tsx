@@ -1,14 +1,22 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { MigrationShell } from "./_components/MigrationShell";
+import { siteConfig } from "./_data/site";
 
 export const metadata: Metadata = {
+    metadataBase: new URL(siteConfig.url),
     title: {
-        default: "Potomac News & Intelligence",
+        default: siteConfig.name,
         template: "%s | Potomac",
     },
-    description:
-        "Potomac's migration foundation for a news-first lunar intelligence platform.",
+    description: siteConfig.description,
+    openGraph: {
+        title: siteConfig.name,
+        description: siteConfig.description,
+        url: siteConfig.url,
+        siteName: siteConfig.name,
+        type: "website",
+    },
 };
 
 export default function RootLayout({
