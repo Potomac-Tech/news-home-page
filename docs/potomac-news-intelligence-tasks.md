@@ -134,13 +134,13 @@ Blocked reason:
   - Verification: Added the editorial CMS migration and schema documentation, including public article rows, separate gated bodies, authors, tags, versions, citations, SEO/AEO fields, publish states, indexes, grants, and RLS policies; confirmed `npm run build:next` and `npm run build` pass. Live migration execution could not be run because Supabase keys were unavailable and no local database was reachable.
   - Blocked reason: None.
 
-- [ ] Task 016: Build editor workflow for draft, preview, publish, and gated body content
+- [x] Task 016: Build editor workflow for draft, preview, publish, and gated body content
   - Priority: P0
   - Goal: Let editors manage news stories without code changes.
   - Acceptance criteria: Editors can create drafts, preview public/gated content, publish stories, and update gated bodies safely.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Editors now have a protected workspace for creating drafts, previewing public and member-only story content, saving versions, and publishing articles.
+  - Verification: Added `/admin/editorial`, editorial staff auth, draft/create/update/publish server actions, inline public and gated previews, version snapshot writes, and workflow documentation; confirmed `npm run build:next` and `npm run build` pass. Live editor actions could not be exercised because Supabase keys were unavailable and the editorial schema was not applied to a reachable database.
+  - Blocked reason: None.
 
 - [ ] Task 017: Build public news-first homepage with headline feed, snippets, event teasers, tickers, and sponsor slots
   - Priority: P0
