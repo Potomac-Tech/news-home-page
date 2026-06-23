@@ -1,9 +1,6 @@
-import React, { useState } from "react";
-import Modal from "../components/Modal";
+import React from "react";
 
 const Nexus: React.FC = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
     return (
         <>
             <div className="pt-32 pb-6 px-4 md:px-8 relative bg-potomac-primary">
@@ -153,21 +150,15 @@ const Nexus: React.FC = () => {
                         <h3 className="text-3xl font-serif text-white mb-8">
                             Nexus: Coming Spring 2026
                         </h3>
-                        <button
-                            onClick={() => setIsModalOpen(true)}
+                        <a
+                            href="https://nexus-explore.potomacdb.com/"
                             className="px-8 py-4 bg-potomac-gold text-potomac-primary font-bold uppercase tracking-widest hover:bg-white transition duration-300 shadow-[0_0_20px_rgba(212,175,55,0.4)]"
                         >
                             Register for Beta Access
-                        </button>
+                        </a>
                     </div>
                 </div>
             </main>
-
-            <Modal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                context="nexus_beta"
-            />
         </>
     );
 };

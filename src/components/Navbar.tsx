@@ -4,9 +4,11 @@ import MobileNavBar from "./mobile/MobileNavBar";
 
 const Navbar: React.FC = () => {
     const location = useLocation();
+    const isHardware =
+        location.pathname === "/hardware" || location.pathname === "/source";
+    const isNews = location.pathname.startsWith("/news");
 
-    const getLinkClass = (path: string) => {
-        const isActive = location.pathname === path;
+    const getLinkClass = (isActive: boolean) => {
         return `text-sm font-semibold tracking-widest transition uppercase ${
             isActive
                 ? "text-potomac-gold border-b border-potomac-gold"
@@ -29,13 +31,13 @@ const Navbar: React.FC = () => {
                     <h1 className="text-base md:text-xl font-serif text-white tracking-widest md:tracking-[0.2em] leading-none whitespace-nowrap">
                         POTOMAC{" "}
                         <span className="text-potomac-gold">
-                            {location.pathname === "/source"
-                                ? "SOURCE"
+                            {isHardware
+                                ? "HARDWARE"
                                 : location.pathname === "/nexus"
                                 ? "NEXUS"
                                 : location.pathname === "/team"
                                 ? "TEAM"
-                                : location.pathname === "/news"
+                                : isNews
                                 ? "NEWS"
                                 : ""}
                         </span>
@@ -45,23 +47,29 @@ const Navbar: React.FC = () => {
 
             {/* Desktop Menu Links */}
             <div className="hidden md:flex items-center gap-4">
-                <Link to="/nexus" className={getLinkClass("/nexus")}>
+                <Link
+                    to="/nexus"
+                    className={getLinkClass(location.pathname === "/nexus")}
+                >
                     Nexus
                 </Link>
-                <Link to="/source" className={getLinkClass("/source")}>
-                    Source
+                <Link to="/hardware" className={getLinkClass(isHardware)}>
+                    Hardware
                 </Link>
-                <Link to="/team" className={getLinkClass("/team")}>
+                <Link
+                    to="/team"
+                    className={getLinkClass(location.pathname === "/team")}
+                >
                     Team
                 </Link>
-                <Link to="/news" className={getLinkClass("/news")}>
+                <Link to="/news" className={getLinkClass(isNews)}>
                     News
                 </Link>
 
                 {/* Auth Button */}
                 <div className="h-8 w-px bg-white/10 mx-2"></div>
                 <a
-                    href="https://www.potomacdb.com/"
+                    href="https://nexus-explore.potomacdb.com/0auth"
                     className="px-5 py-2 border border-potomac-gold text-potomac-gold text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-potomac-gold hover:text-potomac-primary transition duration-300"
                 >
                     Sign in / Sign Up

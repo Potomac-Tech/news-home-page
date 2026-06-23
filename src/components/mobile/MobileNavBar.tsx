@@ -9,6 +9,9 @@ const MobileNavBar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const drawerRef = useRef<HTMLElement>(null);
     const previouslyFocusedRef = useRef<HTMLElement | null>(null);
+    const isHardware =
+        location.pathname === "/hardware" || location.pathname === "/source";
+    const isNews = location.pathname.startsWith("/news");
 
     useEffect(() => {
         setIsOpen(false);
@@ -76,8 +79,7 @@ const MobileNavBar: React.FC = () => {
         }
     };
 
-    const getDrawerLinkClass = (path: string) => {
-        const isActive = location.pathname === path;
+    const getDrawerLinkClass = (isActive: boolean) => {
         return `py-4 pl-4 border-l-2 text-base font-semibold tracking-widest uppercase transition ${
             isActive
                 ? "text-potomac-gold border-potomac-gold"
@@ -156,19 +158,29 @@ const MobileNavBar: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col gap-2 px-8 pt-4">
-                    <Link to="/nexus" className={getDrawerLinkClass("/nexus")}>
+                    <Link
+                        to="/nexus"
+                        className={getDrawerLinkClass(
+                            location.pathname === "/nexus"
+                        )}
+                    >
                         Nexus
                     </Link>
                     <Link
-                        to="/source"
-                        className={getDrawerLinkClass("/source")}
+                        to="/hardware"
+                        className={getDrawerLinkClass(isHardware)}
                     >
-                        Source
+                        Hardware
                     </Link>
-                    <Link to="/team" className={getDrawerLinkClass("/team")}>
+                    <Link
+                        to="/team"
+                        className={getDrawerLinkClass(
+                            location.pathname === "/team"
+                        )}
+                    >
                         Team
                     </Link>
-                    <Link to="/news" className={getDrawerLinkClass("/news")}>
+                    <Link to="/news" className={getDrawerLinkClass(isNews)}>
                         News
                     </Link>
                 </div>
@@ -176,7 +188,7 @@ const MobileNavBar: React.FC = () => {
                 <div className="h-px bg-white/10 my-4 mx-8" />
 
                 <a
-                    href="https://www.potomacdb.com/"
+                    href="https://nexus-explore.potomacdb.com/0auth"
                     className="block text-center mx-8 px-5 py-3 border border-potomac-gold text-potomac-gold text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-potomac-gold hover:text-potomac-primary transition duration-300"
                 >
                     Sign in / Sign Up
