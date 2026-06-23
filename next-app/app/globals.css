@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&family=Cinzel:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .text-glow {
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+    }
+}
+
+.glass-card {
+    @apply bg-white/5 border border-potomac-gold/10 backdrop-blur-md transition-all duration-300 ease-out;
+}
+
+.glass-card:hover {
+    @apply border-potomac-gold/40 bg-white/10 -translate-y-0.5;
+}
+
+body {
+    @apply bg-potomac-secondary text-potomac-cream;
+    margin: 0;
+    padding: 0;
+}

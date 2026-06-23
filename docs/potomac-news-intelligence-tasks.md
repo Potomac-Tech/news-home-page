@@ -30,13 +30,13 @@ Blocked reason:
   - Verification: Reviewed the current Vite routes, public assets, Tailwind brand tokens, and package setup; added migration documentation covering rationale, stack, risks, ownership boundaries, and developer workflow. No build was run because this was a documentation-only task.
   - Blocked reason: None.
 
-- [ ] Task 003: Create initial Next.js app structure or migration scaffold
+- [x] Task 003: Create initial Next.js app structure or migration scaffold
   - Priority: P0
   - Goal: Establish the first usable Next.js structure for the future site.
   - Acceptance criteria: Project contains a working Next.js scaffold or migration-compatible structure; existing Potomac routes/assets are accounted for; build instructions are documented.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: A separate Next.js scaffold now exists so the future platform can be built without disrupting the current live Vite site.
+  - Verification: `npm run build:next` passed for the `next-app` scaffold and generated the preserved route set; `npm run build` passed for the existing Vite app. Both builds reported the existing Browserslist data warning. Installing Next reported 20 npm audit findings that were not changed because dependency remediation is outside this scaffold task.
+  - Blocked reason: None.
 
 - [ ] Task 004: Preserve Potomac brand tokens, typography, colors, and assets
   - Priority: P0
