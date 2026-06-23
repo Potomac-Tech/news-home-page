@@ -46,13 +46,13 @@ Blocked reason:
   - Verification: Added a Next brand module, documented the token and asset workflow, synced `public/` assets into `next-app/public/`, and confirmed `npm run build:next` and `npm run build` pass after the brand updates.
   - Blocked reason: None.
 
-- [ ] Task 005: Add Supabase client/server integration
+- [x] Task 005: Add Supabase client/server integration
   - Priority: P0
   - Goal: Connect the app to Supabase safely from browser and server contexts.
   - Acceptance criteria: Supabase clients are configured with the correct project ref, environment variable documentation exists, and no secret keys are exposed to the browser.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The Next.js scaffold now has safe Supabase browser and server connection helpers pointed at the correct Potomac project.
+  - Verification: Installed current Supabase SSR/client packages; added browser, server, and proxy client helpers; documented environment variables and secret-key handling; confirmed `npm run build:next` and `npm run build` pass; ran a hidden-file search for project refs and secret exposure patterns. Authenticated Supabase calls were not run because no publishable key was available in this session.
+  - Blocked reason: None.
 
 - [ ] Task 006: Add Supabase Auth login, logout, session handling, and protected routes
   - Priority: P0
