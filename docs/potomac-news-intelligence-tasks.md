@@ -166,13 +166,13 @@ Blocked reason:
   - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. Local checks confirmed `/robots.txt` disallows `/admin/`, `/api/`, `/auth/`, `/member`, and `/organization`; `/sitemap.xml` lists public routes and the public article teaser URL only; the homepage HTML includes canonical, WebSite, and ItemList JSON-LD; the VIPC article HTML includes canonical, NewsArticle JSON-LD, a gated-content selector, and does not include the member-only fallback body in public markup. Implementation was checked against current official Next.js metadata-file/JSON-LD docs and schema.org NewsArticle guidance.
   - Blocked reason: None.
 
-- [ ] Task 020: Add Substack, podcast, LinkedIn, and X link modules
+- [x] Task 020: Add Substack, podcast, LinkedIn, and X link modules
   - Priority: P1
   - Goal: Make Potomac's external channels easy to find.
   - Acceptance criteria: Header, footer, or content modules include configurable links for Substack, podcast, LinkedIn, and X.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The site footer now has a reusable external-channel module for Substack, podcast, LinkedIn, and X, with LinkedIn live and the other channels clearly marked as launch pending until public URLs exist.
+  - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. Search and existing-code review found a verified Potomac LinkedIn company URL but no reliable public Potomac Substack, podcast, or X URL, so those configurable channel entries intentionally render as launch-pending placeholders rather than invented links. Local HTML checks confirmed the homepage and article page render all four channel labels, include the verified LinkedIn URL, and add the live channel to organization `sameAs` structured data.
+  - Blocked reason: None.
 
 - [ ] Task 021: Build public/member event calendar with teaser-gated access
   - Priority: P1

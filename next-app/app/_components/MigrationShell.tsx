@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { potomacBrand } from "../_data/brand";
+import { externalChannels } from "../_data/channels";
 
 const navItems = [
     { href: "/member", label: "Member" },
@@ -50,10 +51,61 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                 </div>
             </header>
             <main>{children}</main>
-            <footer className="border-t border-white/5 bg-potomac-primary py-8 text-center">
-                <p className="text-[10px] uppercase tracking-widest text-gray-500">
-                    Potomac News & Intelligence migration scaffold
-                </p>
+            <footer className="border-t border-white/5 bg-potomac-primary">
+                <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 md:px-8 lg:grid-cols-[0.9fr_1.1fr]">
+                    <div>
+                        <p className="font-serif text-lg tracking-[0.2em] text-white">
+                            POTOMAC{" "}
+                            <span className="text-potomac-gold">NEWS</span>
+                        </p>
+                        <p className="mt-3 max-w-md text-sm leading-6 text-potomac-cream/60">
+                            Public lunar reporting and member intelligence
+                            channels for the cislunar economy.
+                        </p>
+                    </div>
+                    <nav
+                        aria-label="External channels"
+                        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+                    >
+                        {externalChannels.map((channel) =>
+                            channel.href ? (
+                                <a
+                                    key={channel.id}
+                                    href={channel.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="rounded border border-potomac-gold/35 p-4 transition hover:border-potomac-gold hover:bg-white/5"
+                                >
+                                    <span className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
+                                        {channel.label}
+                                    </span>
+                                    <span className="mt-2 block text-xs uppercase tracking-[0.12em] text-potomac-cream/45">
+                                        {channel.status}
+                                    </span>
+                                    <span className="mt-3 block text-sm leading-5 text-potomac-cream/70">
+                                        {channel.description}
+                                    </span>
+                                </a>
+                            ) : (
+                                <span
+                                    key={channel.id}
+                                    aria-disabled="true"
+                                    className="rounded border border-white/10 p-4"
+                                >
+                                    <span className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
+                                        {channel.label}
+                                    </span>
+                                    <span className="mt-2 block text-xs uppercase tracking-[0.12em] text-potomac-cream/45">
+                                        {channel.status}
+                                    </span>
+                                    <span className="mt-3 block text-sm leading-5 text-potomac-cream/60">
+                                        {channel.description}
+                                    </span>
+                                </span>
+                            )
+                        )}
+                    </nav>
+                </div>
             </footer>
         </div>
     );
