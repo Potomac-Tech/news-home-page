@@ -1,31 +1,11 @@
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
 import { createClient } from "../../../../lib/supabase/server";
+import {
+    createStripeClient,
+    getScoutPriceId,
+} from "../../../../lib/stripe/server";
 
 const SCOUT_ANNUAL_PRICE_USD = 25000;
-const stripeApiVersion = "2026-05-27.dahlia";
-
-function getStripeClient() {
-    const secretKey = process.env.STRIPE_SECRET_KEY;
-
-    if (!secretKey) {
-        throw new Error("Missing STRIPE_SECRET_KEY.");
-    }
-
-    return new Stripe(secretKey, {
-        apiVersion: stripeApiVersion,
-    });
-}
-
-function getConfiguredPriceId() {
-    const priceId = process.env.STRIPE_SCOUT_PRICE_ID;
-
-    if (!priceId) {
-        throw new Error("Missing STRIPE_SCOUT_PRICE_ID.");
-    }
-
-    return priceId;
-}
 
 export async function POST(request: Request) {
     const supabase = await createClient();
@@ -80,8 +60,8 @@ export async function POST(request: Request) {
         );
     }
 
-    const stripe = getStripeClient();
-    const priceId = getConfiguredPriceId();
+    const stripe = createStripeClient();
+    const priceId = getScoutPriceId();
     const origin = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(request.url).origin;
     const claimsEmail = claimsData.claims.email;
     const customerEmail =

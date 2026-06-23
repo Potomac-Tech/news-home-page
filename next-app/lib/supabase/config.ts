@@ -1,5 +1,13 @@
-const POTOMAC_SUPABASE_PROJECT_REF = "xlpkdoeldtlhearqajat";
-const POTOMAC_SUPABASE_URL = `https://${POTOMAC_SUPABASE_PROJECT_REF}.supabase.co`;
+export const POTOMAC_SUPABASE_PROJECT_REF = "xlpkdoeldtlhearqajat";
+export const POTOMAC_SUPABASE_URL = `https://${POTOMAC_SUPABASE_PROJECT_REF}.supabase.co`;
+
+export function assertPotomacSupabaseUrl(supabaseUrl: string) {
+    if (supabaseUrl !== POTOMAC_SUPABASE_URL) {
+        throw new Error(
+            `Supabase URL must target ${POTOMAC_SUPABASE_PROJECT_REF}.`
+        );
+    }
+}
 
 export function getSupabasePublicConfig() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -14,11 +22,7 @@ export function getSupabasePublicConfig() {
         throw new Error("Missing NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.");
     }
 
-    if (supabaseUrl !== POTOMAC_SUPABASE_URL) {
-        throw new Error(
-            `Supabase URL must target ${POTOMAC_SUPABASE_PROJECT_REF}.`
-        );
-    }
+    assertPotomacSupabaseUrl(supabaseUrl);
 
     return {
         supabaseUrl,

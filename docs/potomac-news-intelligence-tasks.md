@@ -102,13 +102,13 @@ Blocked reason:
   - Verification: Installed the current Stripe SDK; documented the `$25k/user/year` recurring Price configuration; added the server-only checkout route and member upgrade button; confirmed `npm run build:next` and `npm run build` pass. Live Stripe checkout was not run because no Stripe secret key, Price ID, or authenticated Supabase session was available.
   - Blocked reason: None.
 
-- [ ] Task 012: Add Scout entitlement activation after successful payment
+- [x] Task 012: Add Scout entitlement activation after successful payment
   - Priority: P0
   - Goal: Grant Scout access after successful Stripe payment or subscription activation.
   - Acceptance criteria: Stripe webhook or equivalent process updates entitlements, handles failures/idempotency, and records audit history.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Stripe webhook handling now activates Scout entitlements after payment and records duplicate-safe audit history.
+  - Verification: Added a webhook idempotency migration, server-only Supabase service client, shared Stripe server helper, webhook route for successful checkout/subscription updates/deletions/payment failures, role/entitlement updates, and audit-event writes; confirmed `npm run build:next` and `npm run build` pass. Live webhook delivery was not exercised because Stripe secrets, a Supabase service secret, and an applied reachable schema were unavailable.
+  - Blocked reason: None.
 
 - [ ] Task 013: Add Command interest form and manual sales/admin workflow
   - Priority: P0
