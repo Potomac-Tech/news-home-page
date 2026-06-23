@@ -150,13 +150,13 @@ Blocked reason:
   - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. Browser QA on `http://127.0.0.1:3001/` confirmed the homepage title, lead story, ticker, event teasers, market modules, sponsor slots, and CTA navigation to `/apply`. The Browser screenshot API timed out with `Page.captureScreenshot`, so desktop `1280x720` and mobile `390x844` screenshot evidence was captured with bundled Playwright using local Microsoft Edge; both viewports rendered without horizontal overflow. Live Supabase CMS feed reads could not be exercised because no Supabase public key was available, so QA covered the safe fallback path and the code still rejects any non-`xlpkdoeldtlhearqajat` Supabase URL.
   - Blocked reason: None.
 
-- [ ] Task 018: Build article page with rich public teaser and gated full story
+- [x] Task 018: Build article page with rich public teaser and gated full story
   - Priority: P0
   - Goal: Balance SEO/AEO visibility with membership gating.
   - Acceptance criteria: Public visitors see headline, summary, key bullets, intro, citations, and signup prompts; approved Members can read the full article.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Article pages now show rich public teasers with key points, intro text, citations, and access prompts, while full bodies are requested only for signed-in users with an approved Member-or-higher role.
+  - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. Browser QA on `http://127.0.0.1:3001/news/vipc-grant-winner` confirmed the headline, public summary, intro, source citations, gated full-story panel, and sign-in CTA navigation. Desktop `1280x720` and mobile `390x844` screenshot evidence was captured with bundled Playwright using local Microsoft Edge; both viewports rendered without horizontal overflow. Live approved-member unlock could not be exercised because no Supabase public key, signed-in test member, or applied remote schema was available; the implementation uses normalized role assignments and the existing RLS-protected body table for the live path.
+  - Blocked reason: None.
 
 - [ ] Task 019: Add schema.org metadata, canonical URLs, sitemap, and robots configuration
   - Priority: P0
