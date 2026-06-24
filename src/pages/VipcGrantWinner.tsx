@@ -1,64 +1,174 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import SponsorUnit from "../components/SponsorUnit";
+import { accessHref, sponsorUnits } from "../data/newsIntelligence";
+
+const keyPoints = [
+    "VIPC support advances Potomac's low-cost lunar data infrastructure roadmap.",
+    "The public milestone supports member-ready intelligence products.",
+    "Members will receive fuller context, source notes, and analyst assumptions.",
+];
+
+const citations = [
+    {
+        label: "Company source",
+        title: "Potomac VIPC Launch Grant update",
+        publisher: "Potomac",
+        href: "https://www.linkedin.com/feed/update/urn:li:activity:7443340367858425877",
+        summary:
+            "Public company update announcing the VIPC Launch Grant milestone.",
+    },
+    {
+        label: "Press coverage",
+        title: "Potomac Database Systems Unveils Plans to Amass Lunar Data",
+        publisher: "Payload",
+        href: "https://payloadspace.com/potomac-database-systems-unveils-plans-to-amass-lunar-data/",
+        summary:
+            "External coverage of Potomac's lunar data collection roadmap.",
+    },
+];
 
 const VipcGrantWinner: React.FC = () => {
     return (
-        <>
-            <div className="pt-32 pb-6 px-4 md:px-8 relative bg-potomac-primary">
-                <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
-                <div className="relative z-10 text-center space-y-6 max-w-5xl mx-auto">
-                    <h2 className="text-3xl sm:text-4xl md:text-6xl font-serif text-white tracking-widest text-glow leading-tight">
-                        VIPC GRANT WINNER
-                    </h2>
-                    <p className="text-lg text-gray-300 max-w-3xl mx-auto pt-4 leading-relaxed border-t border-white/10">
-                        Potomac is applying for pre-seed follow-on funding to
-                        advance low-cost lunar data infrastructure.
-                    </p>
-                </div>
-            </div>
-
-            <main className="flex-1 px-4 md:px-8 py-2 relative z-10 bg-potomac-secondary">
-                <article className="max-w-4xl mx-auto glass-card p-8 md:p-10 rounded-lg space-y-6">
-                    <p className="text-potomac-gold text-xs font-bold uppercase tracking-[0.3em]">
-                        Grant Award - 2026
-                    </p>
-                    <h3 className="text-3xl md:text-4xl font-serif text-white tracking-wider leading-tight">
-                        Potomac selected as VIPC Launch Grant winner
-                    </h3>
-                    <p className="text-gray-300 text-lg leading-relaxed">
-                        Potomac Database Systems was selected as a VIPC Grant
-                        Winner and is applying for pre-seed follow-on funding.
-                        The support advances Potomac's roadmap for proprietary
-                        lunar site intelligence, including Compass, Pathfinder,
-                        Source, and Nexus.
-                    </p>
-                    <p className="text-gray-300 leading-relaxed">
-                        Potomac is building the data layer for the lunar
-                        economy. Our systems are designed to reduce the risk,
-                        cost, and complexity of lunar surface data collection so
-                        proposal teams can buy the intelligence they need to win
-                        major programs and land safely.
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-potomac-gold/20">
+        <article className="bg-grid-pattern pt-20">
+            <header className="border-b border-white/10">
+                <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-12 md:px-8 lg:grid-cols-[1.08fr_0.92fr] lg:py-16">
+                    <div>
                         <Link
                             to="/news"
-                            className="inline-block px-6 py-3 border border-potomac-gold text-potomac-gold text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-potomac-gold hover:text-potomac-primary transition duration-300 text-center"
+                            className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold hover:text-potomac-cream"
                         >
-                            Back to News
+                            Back to news
                         </Link>
-                        <a
-                            href="https://www.linkedin.com/feed/update/urn:li:activity:7443340367858425877"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-block px-6 py-3 bg-potomac-gold text-potomac-primary text-xs font-bold tracking-[0.2em] uppercase rounded hover:bg-white transition duration-300 text-center"
-                        >
-                            View LinkedIn Update
-                        </a>
+                        <h1 className="mt-6 font-serif text-4xl leading-tight text-white md:text-6xl">
+                            Potomac selected as VIPC Launch Grant winner
+                        </h1>
+                        <p className="mt-6 max-w-3xl text-lg leading-8 text-potomac-cream/80">
+                            The award supports Potomac's low-cost lunar data
+                            infrastructure roadmap and its transition toward
+                            member-ready intelligence products.
+                        </p>
+                        <div className="mt-6 flex flex-wrap gap-3 text-xs font-bold uppercase tracking-[0.14em] text-potomac-cream/50">
+                            <time dateTime="2026-05-18">May 18, 2026</time>
+                            <span>Member+ full story</span>
+                        </div>
                     </div>
-                </article>
-            </main>
-        </>
+                    <figure className="glass-card rounded p-5">
+                        <img
+                            src="/Source Rendering.png"
+                            alt="Potomac lunar intelligence rendering"
+                            className="h-72 w-full rounded object-cover"
+                        />
+                        <figcaption className="mt-4 text-sm leading-6 text-potomac-cream/60">
+                            Potomac Database Systems was selected as a VIPC
+                            Grant Winner and is applying for pre-seed follow-on
+                            funding.
+                        </figcaption>
+                    </figure>
+                </div>
+            </header>
+
+            <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-12 md:px-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
+                <main className="space-y-8">
+                    <section className="glass-card rounded p-6">
+                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                            Public summary
+                        </p>
+                        <p className="mt-4 text-xl leading-8 text-white">
+                            Potomac is building a news and intelligence layer
+                            for lunar markets, mission data, and member-only
+                            analysis.
+                        </p>
+                        <div className="mt-6 grid gap-4 md:grid-cols-3">
+                            {keyPoints.map((point) => (
+                                <div
+                                    key={point}
+                                    className="border-l border-potomac-gold/45 pl-4"
+                                >
+                                    <p className="text-sm leading-6 text-potomac-cream/75">
+                                        {point}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="glass-card rounded p-6">
+                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                            Public intro
+                        </p>
+                        <div className="mt-4 space-y-4 text-base leading-7 text-potomac-cream/75">
+                            <p>
+                                Potomac Database Systems is using the VIPC Launch
+                                Grant milestone to accelerate its roadmap for
+                                low-cost lunar data infrastructure.
+                            </p>
+                            <p>
+                                Public readers can review the company milestone,
+                                public context, and citations. Approved members
+                                unlock the fuller analysis, assumptions, and
+                                source notes.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section className="member-gated-content glass-card rounded p-6">
+                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                            Member full story
+                        </p>
+                        <h2 className="mt-4 font-serif text-3xl leading-tight text-white">
+                            Full analysis is reserved for approved members.
+                        </h2>
+                        <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
+                            The preview keeps SEO-visible context public while
+                            reserving full bodies, model assumptions, and
+                            member-only source notes for approved access.
+                        </p>
+                        <a
+                            href={accessHref}
+                            className="mt-6 inline-flex rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
+                        >
+                            Apply for access
+                        </a>
+                    </section>
+                </main>
+
+                <aside className="space-y-6">
+                    <SponsorUnit unit={sponsorUnits.articleSidebar} />
+                    <section className="glass-card rounded p-6">
+                        <h2 className="font-serif text-2xl text-white">
+                            Source Citations
+                        </h2>
+                        <div className="mt-5 space-y-5">
+                            {citations.map((citation) => (
+                                <div
+                                    key={citation.title}
+                                    className="border-b border-white/10 pb-5 last:border-0 last:pb-0"
+                                >
+                                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
+                                        {citation.label}
+                                    </p>
+                                    <a
+                                        href={citation.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="mt-2 block font-semibold leading-6 text-white transition hover:text-potomac-gold"
+                                    >
+                                        {citation.title}
+                                    </a>
+                                    <p className="mt-1 text-xs uppercase tracking-[0.12em] text-potomac-cream/45">
+                                        {citation.publisher}
+                                    </p>
+                                    <p className="mt-3 text-sm leading-6 text-potomac-cream/65">
+                                        {citation.summary}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                </aside>
+            </div>
+        </article>
     );
 };
 

@@ -14,6 +14,7 @@ import Nexus from "./pages/Nexus";
 import Team from "./pages/Team";
 import News from "./pages/News";
 import VipcGrantWinner from "./pages/VipcGrantWinner";
+import Events from "./pages/Events";
 import { useEffect } from "react";
 
 // Component to handle scrolling to top on route change
@@ -43,6 +44,7 @@ const App: React.FC = () => {
                     <Route path="/nexus" element={<Nexus />} />
                     <Route path="/team" element={<Team />} />
                     <Route path="/news" element={<News />} />
+                    <Route path="/events" element={<Events />} />
                     <Route
                         path="/news/vipc-grant-winner"
                         element={<VipcGrantWinner />}

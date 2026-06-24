@@ -1,216 +1,265 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import SponsorUnit from "../components/SponsorUnit";
+import {
+    accessHref,
+    eventTeasers,
+    marketModules,
+    sponsorUnits,
+    stories,
+    tickerItems,
+    type HomeStory,
+} from "../data/newsIntelligence";
 
-const offerings = [
-    {
-        title: "Exclusive Buy",
-        body: "Customers choose where and what data they want. Potomac handles collection, operations, and delivery of proprietary lunar site intelligence.",
-    },
-    {
-        title: "Nexus Subscription",
-        body: "Teams access lunar datasets, analysis-ready layers, and collaborative proposal workflows through the Nexus web platform.",
-    },
-];
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "2-digit",
+});
+
+const formatDate = (value: string) => {
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return "Recently";
+    }
+
+    return dateFormatter.format(date);
+};
+
+const StoryMeta = ({ story }: { story: HomeStory }) => (
+    <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.14em] text-potomac-cream/50">
+        <span className="text-potomac-gold">{story.sourceLabel}</span>
+        <time dateTime={story.publishedAt}>{formatDate(story.publishedAt)}</time>
+        <span>{story.accessTier}+ full brief</span>
+    </div>
+);
+
+const StoryCard = ({ story }: { story: HomeStory }) => (
+    <article className="glass-card rounded p-5">
+        <StoryMeta story={story} />
+        <h3 className="mt-4 font-serif text-2xl leading-snug text-white">
+            {story.title}
+        </h3>
+        <p className="mt-3 text-sm leading-6 text-potomac-cream/75">
+            {story.summary}
+        </p>
+        <p className="mt-4 border-l border-potomac-gold/40 pl-4 text-sm leading-6 text-potomac-cream/60">
+            {story.snippet}
+        </p>
+        <Link
+            to={story.href}
+            className="mt-6 inline-flex rounded border border-potomac-gold/45 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+        >
+            Read brief
+        </Link>
+    </article>
+);
+
+const SectionHeading = ({
+    title,
+    description,
+}: {
+    title: string;
+    description: string;
+}) => (
+    <div className="max-w-3xl">
+        <h2 className="font-serif text-3xl leading-tight text-white md:text-4xl">
+            {title}
+        </h2>
+        <p className="mt-4 text-base leading-7 text-potomac-cream/75">
+            {description}
+        </p>
+    </div>
+);
 
 const Home: React.FC = () => {
+    const featuredStory = stories[0];
+    const latestStories = stories.slice(1);
+
     return (
-        <>
-            {/* HERO SECTION */}
-            <div className="pt-32 pb-8 px-4 md:px-8 relative">
-                <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
-                <div className="max-w-6xl mx-auto text-center space-y-6">
-                    <h2 className="text-xl sm:text-4xl md:text-5xl lg:text-6xl font-serif text-white tracking-wide sm:tracking-widest text-glow leading-tight whitespace-nowrap">
-                        POTOMAC{" "}
-                        <span className="text-potomac-gold italic">
-                            DATABASE SYSTEMS
-                        </span>
-                    </h2>
-                    <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed max-w-4xl mx-auto">
-                        Billion-dollar lunar proposal teams are competing with
-                        commodity data.{" "}
-                        <span className="text-potomac-gold italic">
-                            Potomac gives them the proprietary intelligence
-                            needed to win, land, and build.
-                        </span>
-                    </p>
-                    <p className="text-xl text-gray-300 font-light max-w-4xl mx-auto uppercase tracking-widest border-t border-b border-white/10 py-3 inline-block">
-                        Proposal Intelligence for the Moon
-                    </p>
-                    <p className="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
-                        We allow customers to buy existing data instantly,
-                        eliminating the risk and complexity of end-to-end
-                        mission design.
-                    </p>
-                </div>
-            </div>
-
-            {/* MAIN CONTENT */}
-            <main className="px-4 md:px-8 pb-8 relative z-10">
-                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* VALUE PROPOSITION */}
-                    <div className="glass-card p-6 md:p-10 rounded-lg md:col-span-2 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition">
-                            <svg
-                                className="w-32 h-32 text-potomac-gold"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="1"
-                                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                ></path>
-                            </svg>
-                        </div>
-                        <h3 className="text-2xl font-serif text-potomac-gold tracking-widest mb-6">
-                            PROPRIETARY SITE INTELLIGENCE
-                        </h3>
-                        <div className="space-y-4 text-gray-300 leading-relaxed font-light text-lg">
-                            <p>
-                                Potomac gives lunar proposal teams proprietary
-                                site intelligence to identify the highest-value
-                                places, win billion-dollar proposals, and stick
-                                the landing.
-                            </p>
-                            <p className="border-l-2 border-potomac-gold pl-4 italic text-white/90">
-                                Instead of designing a dedicated end-to-end
-                                mission for every dataset, customers can buy
-                                the data they need and receive it through a
-                                web-based delivery platform.
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* BUSINESS MODEL */}
-                    {offerings.map((offering) => (
-                        <div
-                            key={offering.title}
-                            className="glass-card p-6 md:p-8 rounded-lg"
-                        >
-                            <p className="text-potomac-gold text-xs font-bold uppercase tracking-[0.3em] mb-3">
-                                Business Model
-                            </p>
-                            <h3 className="text-2xl font-serif text-white tracking-widest mb-4">
-                                {offering.title}
-                            </h3>
-                            <p className="text-gray-400 leading-relaxed">
-                                {offering.body}
-                            </p>
-                        </div>
-                    ))}
-
-                    {/* HARDWARE */}
-                    <Link
-                        to="/hardware"
-                        className="glass-card p-0 rounded-lg flex flex-col relative group overflow-hidden cursor-pointer"
-                    >
-                        <div className="absolute inset-0 z-0">
-                            <img
-                                src="/hardware-compass-05122026.png"
-                                alt="Compass lunar plume reconnaissance system"
-                                loading="lazy"
-                                decoding="async"
-                                className="w-full h-full object-cover opacity-20 group-hover:opacity-30 transition duration-500"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-potomac-secondary via-potomac-secondary/80 to-transparent"></div>
-                        </div>
-
-                        <div className="p-6 md:p-10 relative z-10 flex flex-col h-full">
-                            <div className="absolute top-6 right-6 p-2 bg-potomac-gold/10 rounded-full">
-                                <svg
-                                    className="w-6 h-6 text-potomac-gold"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
-                                    ></path>
-                                </svg>
-                            </div>
-                            <h3 className="text-2xl font-serif text-white tracking-widest mb-4 group-hover:text-potomac-gold transition">
-                                HARDWARE
-                            </h3>
-                            <p className="text-gray-400 leading-relaxed flex-1">
-                                Compass, Pathfinder, and Source form a
-                                progressive data collection roadmap from
-                                low-cost reconnaissance to persistent lunar
-                                surface intelligence.
-                            </p>
-                            <span className="mt-6 text-xs font-bold text-potomac-gold uppercase tracking-widest border-b border-potomac-gold/30 pb-1 self-start hover:border-potomac-gold transition">
-                                View Hardware Systems
-                            </span>
-                        </div>
-                    </Link>
-
-                    {/* NEXUS */}
-                    <Link
-                        to="/nexus"
-                        className="glass-card p-0 rounded-lg flex flex-col relative group overflow-hidden cursor-pointer"
-                    >
-                        <div className="absolute inset-0 z-0">
-                            <img
-                                src="/Nexus Screenshot.png"
-                                alt="Nexus platform interface"
-                                loading="lazy"
-                                decoding="async"
-                                className="w-full h-full object-cover opacity-20 group-hover:opacity-30 transition duration-500"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-potomac-secondary via-potomac-secondary/80 to-transparent"></div>
-                        </div>
-
-                        <div className="p-6 md:p-10 relative z-10 flex flex-col h-full">
-                            <div className="absolute top-6 right-6 p-2 bg-potomac-gold/10 rounded-full">
-                                <svg
-                                    className="w-6 h-6 text-potomac-gold"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                                    ></path>
-                                </svg>
-                            </div>
-                            <h3 className="text-2xl font-serif text-white tracking-widest mb-4 group-hover:text-potomac-gold transition">
-                                NEXUS
-                            </h3>
-                            <p className="text-gray-400 leading-relaxed flex-1">
-                                A unified analytics platform for proposal
-                                teams to access, analyze, and collaborate on
-                                lunar datasets.
-                            </p>
-                            <span className="mt-6 text-xs font-bold text-potomac-gold uppercase tracking-widest border-b border-potomac-gold/30 pb-1 self-start hover:border-potomac-gold transition">
-                                Explore Nexus
-                            </span>
-                        </div>
-                    </Link>
-
-                    {/* IMPACT */}
-                    <div className="glass-card p-6 md:p-10 rounded-lg md:col-span-2 bg-gradient-to-r from-potomac-gold/5 to-transparent border-potomac-gold/20">
-                        <h3 className="text-2xl font-serif text-potomac-gold tracking-widest mb-4">
-                            IMPACT
-                        </h3>
-                        <p className="text-gray-300 leading-relaxed text-lg">
-                            Potomac sells decision advantage. By turning scarce
-                            lunar surface observations into repeatable,
-                            commercial data products, we help teams de-risk
-                            landing reliability, mobility planning, power
-                            siting, resource prospecting, and long-duration
-                            operations.
+        <div className="bg-grid-pattern pt-20">
+            <section className="border-b border-white/10">
+                <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-12 md:px-8 lg:grid-cols-[1.18fr_0.82fr] lg:py-16">
+                    <div>
+                        <h1 className="font-serif text-4xl leading-tight text-white md:text-6xl">
+                            Potomac News & Intelligence
+                        </h1>
+                        <p className="mt-5 max-w-3xl text-lg leading-8 text-potomac-cream/80">
+                            Public lunar market reporting, member-only analysis,
+                            and command-level intelligence for organizations
+                            working across the cislunar economy.
                         </p>
+
+                        <article className="mt-9 border-l border-potomac-gold pl-5">
+                            <StoryMeta story={featuredStory} />
+                            <h2 className="mt-4 max-w-4xl font-serif text-3xl leading-tight text-white md:text-5xl">
+                                {featuredStory.title}
+                            </h2>
+                            <p className="mt-5 max-w-3xl text-base leading-7 text-potomac-cream/75 md:text-lg">
+                                {featuredStory.summary}
+                            </p>
+                            <div className="mt-8 flex flex-wrap gap-4">
+                                <Link
+                                    to={featuredStory.href}
+                                    className="rounded bg-potomac-gold px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
+                                >
+                                    Lead brief
+                                </Link>
+                                <a
+                                    href={accessHref}
+                                    className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+                                >
+                                    Apply for access
+                                </a>
+                            </div>
+                        </article>
+                    </div>
+
+                    <aside className="glass-card rounded p-5">
+                        <img
+                            src="/Source Rendering.png"
+                            alt="Potomac lunar source rendering"
+                            className="h-48 w-full rounded object-cover"
+                        />
+                        <div className="mt-6 border-b border-white/10 pb-4">
+                            <h2 className="font-serif text-2xl text-white">
+                                Briefing ticker
+                            </h2>
+                            <p className="mt-1 text-sm text-potomac-cream/60">
+                                Public signals feeding the member desk.
+                            </p>
+                        </div>
+                        <div className="mt-5 space-y-3">
+                            {tickerItems.map((item) => (
+                                <div
+                                    key={item.symbol}
+                                    className="grid grid-cols-[4rem_1fr_auto] items-center gap-3 border-b border-white/10 pb-3 last:border-0 last:pb-0"
+                                >
+                                    <span className="font-mono text-sm font-bold text-potomac-gold">
+                                        {item.symbol}
+                                    </span>
+                                    <span className="text-sm text-potomac-cream/75">
+                                        {item.label}
+                                    </span>
+                                    <span className="text-right text-xs font-bold uppercase tracking-[0.12em] text-white">
+                                        {item.value}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </aside>
+                </div>
+            </section>
+
+            <section className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-14 md:px-8 lg:grid-cols-[1fr_22rem]">
+                <div>
+                    <SectionHeading
+                        title="Latest Intelligence"
+                        description="Public snippets keep the market surface visible while approved members unlock full bodies, citations, source tables, and analyst notes."
+                    />
+                    <div className="mt-8 grid gap-5 md:grid-cols-2">
+                        {latestStories.map((story) => (
+                            <StoryCard key={story.title} story={story} />
+                        ))}
                     </div>
                 </div>
-            </main>
-        </>
+
+                <aside>
+                    <div className="flex items-center justify-between gap-4">
+                        <h2 className="font-serif text-2xl text-white">
+                            Event Teasers
+                        </h2>
+                        <Link
+                            to="/events"
+                            className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold hover:text-potomac-cream"
+                        >
+                            Calendar
+                        </Link>
+                    </div>
+                    <div className="mt-5 space-y-4">
+                        {eventTeasers.map((event) => (
+                            <article key={event.name} className="glass-card rounded p-5">
+                                <div className="flex items-start justify-between gap-4">
+                                    <h3 className="font-semibold leading-6 text-white">
+                                        {event.name}
+                                    </h3>
+                                    <span className="rounded border border-potomac-gold/35 px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-potomac-gold">
+                                        {event.date}
+                                    </span>
+                                </div>
+                                <p className="mt-2 text-xs uppercase tracking-[0.14em] text-potomac-cream/45">
+                                    {event.location}
+                                </p>
+                                <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
+                                    {event.publicNote}
+                                </p>
+                                <p className="mt-3 border-l border-white/15 pl-3 text-sm leading-6 text-potomac-cream/55">
+                                    {event.memberNote}
+                                </p>
+                            </article>
+                        ))}
+                    </div>
+                </aside>
+            </section>
+
+            <section className="border-y border-white/10 bg-potomac-primary/70">
+                <div className="mx-auto w-full max-w-7xl px-4 py-14 md:px-8">
+                    <SectionHeading
+                        title="Markets And Models"
+                        description="The public surface shows which intelligence modules are active without exposing paid methodology, model assumptions, or member-only source detail."
+                    />
+                    <div className="mt-8 grid gap-5 md:grid-cols-3">
+                        {marketModules.map((module) => (
+                            <article key={module.label} className="glass-card rounded p-5">
+                                <p className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
+                                    {module.cadence}
+                                </p>
+                                <h3 className="mt-4 font-serif text-2xl text-white">
+                                    {module.value}
+                                </h3>
+                                <p className="mt-2 text-sm font-semibold uppercase tracking-[0.12em] text-potomac-cream/55">
+                                    {module.label}
+                                </p>
+                                <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
+                                    {module.detail}
+                                </p>
+                            </article>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-14 md:px-8 lg:grid-cols-[0.78fr_1.22fr]">
+                <div>
+                    <SectionHeading
+                        title="Member Access"
+                        description="Free Members read full public-story bodies after approval. Scout users unlock deeper dashboards. Command organizations receive manual sales-led access and analyst support."
+                    />
+                    <div className="mt-8 flex flex-wrap gap-4">
+                        <a
+                            href={accessHref}
+                            className="rounded bg-potomac-gold px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
+                        >
+                            Member application
+                        </a>
+                        <a
+                            href={accessHref}
+                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+                        >
+                            Command interest
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 className="font-serif text-2xl text-white">Sponsor Slots</h2>
+                    <div className="mt-5 grid gap-5 md:grid-cols-2">
+                        <SponsorUnit unit={sponsorUnits.homepageLeadRail} />
+                        <SponsorUnit unit={sponsorUnits.marketModuleBand} />
+                    </div>
+                </div>
+            </section>
+        </div>
     );
 };
 

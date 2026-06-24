@@ -12,6 +12,7 @@ const MobileNavBar: React.FC = () => {
     const isHardware =
         location.pathname === "/hardware" || location.pathname === "/source";
     const isNews = location.pathname.startsWith("/news");
+    const isEvents = location.pathname.startsWith("/events");
 
     useEffect(() => {
         setIsOpen(false);
@@ -182,6 +183,9 @@ const MobileNavBar: React.FC = () => {
                     </Link>
                     <Link to="/news" className={getDrawerLinkClass(isNews)}>
                         News
+                    </Link>
+                    <Link to="/events" className={getDrawerLinkClass(isEvents)}>
+                        Events
                     </Link>
                 </div>
 
