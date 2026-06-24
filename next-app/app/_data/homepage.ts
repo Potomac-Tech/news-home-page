@@ -23,13 +23,6 @@ export type MarketModule = {
     cadence: string;
 };
 
-export type SponsorSlot = {
-    name: string;
-    placement: string;
-    status: string;
-    note: string;
-};
-
 export type TickerItem = {
     symbol: string;
     label: string;
@@ -125,27 +118,6 @@ export const marketModules: MarketModule[] = [
         value: "Versioned",
         detail: "Public headline estimate with member-only methodology depth.",
         cadence: "Daily output",
-    },
-];
-
-export const sponsorSlots: SponsorSlot[] = [
-    {
-        name: "Briefing sponsor",
-        placement: "Homepage lead rail",
-        status: "Direct-sold",
-        note: "Premium placement beside the public headline feed.",
-    },
-    {
-        name: "Market module sponsor",
-        placement: "Ticker and markets band",
-        status: "Reserved",
-        note: "Designed for lunar finance, infrastructure, and mission services.",
-    },
-    {
-        name: "Programmatic fallback",
-        placement: "Public article surfaces",
-        status: "Documented",
-        note: "Fallback slot keeps layout stable when direct inventory is empty.",
     },
 ];
 

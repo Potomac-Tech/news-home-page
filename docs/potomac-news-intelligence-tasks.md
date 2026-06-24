@@ -198,13 +198,13 @@ Blocked reason:
   - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live sponsor create/edit flows were not exercised because authenticated Supabase database tooling, applied schema, and signed-in editor/admin test users were unavailable.
   - Blocked reason: None.
 
-- [ ] Task 024: Implement hybrid direct-sold/programmatic ad placement surfaces
+- [x] Task 024: Implement hybrid direct-sold/programmatic ad placement surfaces
   - Priority: P1
   - Goal: Display sponsor inventory and allow programmatic fallback where appropriate.
   - Acceptance criteria: Public pages can render direct-sold sponsor units and documented fallback slots without breaking layout or gated content.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Public pages now render sponsor units from live direct-sold campaign data when available, with stable Potomac-branded fallback slots when no campaign is active.
+  - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. Browser QA on `http://127.0.0.1:3002/`, `/news/vipc-grant-winner`, and `/events` confirmed homepage, article, and event sponsor units render; the old static programmatic placeholder card is gone; no console errors were reported; article sponsor rendering did not expose the gated member body; and the events page had no horizontal overflow. Desktop homepage sponsor-section and article screenshots plus a mobile events screenshot were captured with bundled Playwright. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live direct-sold campaign rendering from Supabase could not be exercised because the schema is not applied to a reachable authenticated project in this session.
+  - Blocked reason: None.
 
 - [ ] Task 025: Create public company universe and dynamic top-20 space company ranking
   - Priority: P1

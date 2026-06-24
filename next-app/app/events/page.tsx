@@ -20,6 +20,11 @@ import {
     getEventAccessContext,
     type EventAccessContext,
 } from "../../lib/auth/event-access";
+import { SponsorUnit } from "../_components/SponsorUnit";
+import {
+    loadSponsorUnits,
+    sponsorPlacementKeys,
+} from "../_data/sponsorAds";
 
 export const dynamic = "force-dynamic";
 
@@ -390,7 +395,11 @@ function MemberDetails({ details }: { details: EventCalendarDetails }) {
 }
 
 export default async function EventsPage() {
-    const { events, access } = await loadEvents();
+    const [{ events, access }, sponsorUnits] = await Promise.all([
+        loadEvents(),
+        loadSponsorUnits([sponsorPlacementKeys.eventSidebar]),
+    ]);
+    const eventSponsorUnit = sponsorUnits.get(sponsorPlacementKeys.eventSidebar)!;
     const eventItemListJsonLd = {
         "@context": "https://schema.org",
         "@type": "ItemList",
@@ -444,22 +453,25 @@ export default async function EventsPage() {
                             preparation packets.
                         </p>
                     </div>
-                    <aside className="glass-card rounded p-6">
-                        <h2 className="font-serif text-2xl text-white">
-                            Access Model
-                        </h2>
-                        <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                            Event titles, timing, locations, and teaser agendas
-                            stay public. Detailed logistics and analyst prep
-                            notes are requested from a separate RLS-protected
-                            details table for approved roles only.
-                        </p>
-                        <Link
-                            href="/apply"
-                            className="mt-6 inline-flex rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
-                        >
-                            Apply for Member access
-                        </Link>
+                    <aside className="space-y-6">
+                        <SponsorUnit unit={eventSponsorUnit} />
+                        <section className="glass-card rounded p-6">
+                            <h2 className="font-serif text-2xl text-white">
+                                Access Model
+                            </h2>
+                            <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
+                                Event titles, timing, locations, and teaser agendas
+                                stay public. Detailed logistics and analyst prep
+                                notes are requested from a separate RLS-protected
+                                details table for approved roles only.
+                            </p>
+                            <Link
+                                href="/apply"
+                                className="mt-6 inline-flex rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
+                            >
+                                Apply for Member access
+                            </Link>
+                        </section>
                     </aside>
                 </div>
 

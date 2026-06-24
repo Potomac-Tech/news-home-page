@@ -4,10 +4,14 @@ import {
     eventTeasers,
     fallbackStories,
     marketModules,
-    sponsorSlots,
     tickerItems,
     type HomeStory,
 } from "./_data/homepage";
+import { SponsorUnit } from "./_components/SponsorUnit";
+import {
+    loadSponsorUnits,
+    sponsorPlacementKeys,
+} from "./_data/sponsorAds";
 import { potomacBrand } from "./_data/brand";
 import {
     absoluteSiteUrl,
@@ -182,9 +186,19 @@ function StoryCard({ story }: { story: HomeStory }) {
 }
 
 export default async function HomePage() {
-    const stories = await getHomepageStories();
+    const [stories, sponsorUnits] = await Promise.all([
+        getHomepageStories(),
+        loadSponsorUnits([
+            sponsorPlacementKeys.homepageLeadRail,
+            sponsorPlacementKeys.marketModuleBand,
+        ]),
+    ]);
     const featuredStory = stories[0] ?? fallbackStories[0];
     const latestStories = stories.slice(1).length ? stories.slice(1) : fallbackStories.slice(1);
+    const homepageSponsorUnits = [
+        sponsorUnits.get(sponsorPlacementKeys.homepageLeadRail)!,
+        sponsorUnits.get(sponsorPlacementKeys.marketModuleBand)!,
+    ];
     const headlineItemListJsonLd = {
         "@context": "https://schema.org",
         "@type": "ItemList",
@@ -397,22 +411,9 @@ export default async function HomePage() {
 
                 <div>
                     <h2 className="font-serif text-2xl text-white">Sponsor Slots</h2>
-                    <div className="mt-5 grid gap-5 md:grid-cols-3">
-                        {sponsorSlots.map((slot) => (
-                            <article key={slot.name} className="glass-card rounded p-5">
-                                <p className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
-                                    {slot.status}
-                                </p>
-                                <h3 className="mt-4 font-serif text-xl leading-snug text-white">
-                                    {slot.name}
-                                </h3>
-                                <p className="mt-2 text-xs uppercase tracking-[0.12em] text-potomac-cream/45">
-                                    {slot.placement}
-                                </p>
-                                <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                                    {slot.note}
-                                </p>
-                            </article>
+                    <div className="mt-5 grid gap-5 md:grid-cols-2">
+                        {homepageSponsorUnits.map((unit) => (
+                            <SponsorUnit key={unit.placementKey} unit={unit} />
                         ))}
                     </div>
                 </div>
