@@ -1,2 +1,6 @@
 **/node_modules
 **/dist
+**/.next
+next-app/public/*
+!next-app/public/.gitkeep
+supabase/.temp/

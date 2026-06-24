@@ -5,14 +5,27 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
+        "dev:vite": "vite",
+        "sync:next-public": "node scripts/sync-next-public-assets.mjs",
+        "predev:next": "npm run sync:next-public",
+        "dev:next": "next dev next-app -p 3001",
         "build": "tsc && vite build && node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\"",
+        "build:vite": "tsc && vite build && node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\"",
+        "prebuild:next": "npm run sync:next-public",
+        "build:next": "next build next-app",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "prestart:next": "npm run sync:next-public",
+        "start:next": "next start next-app -p 3001"
     },
     "dependencies": {
+        "@supabase/ssr": "^0.12.0",
+        "@supabase/supabase-js": "^2.108.2",
+        "next": "^16.2.9",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-router-dom": "^6.20.0"
+        "react-router-dom": "^6.20.0",
+        "stripe": "^22.2.3"
     },
     "devDependencies": {
         "@types/node": "^25.0.3",
