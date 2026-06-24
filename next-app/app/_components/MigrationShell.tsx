@@ -9,6 +9,7 @@ const navItems = [
     { href: "/apply", label: "Apply" },
     { href: "/command", label: "Command" },
     { href: "/admin/applications", label: "Admin" },
+    { href: "/admin/sponsors", label: "Sponsors" },
     { href: "/nexus", label: "Nexus" },
     { href: "/hardware", label: "Hardware" },
     { href: "/team", label: "Team" },

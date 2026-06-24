@@ -40,6 +40,11 @@ export const currentRoutes = [
         note: "Member-gated internal summit tracker with upcoming summit and past-event summary views.",
     },
     {
+        href: "/admin/sponsors",
+        source: "next-app/app/admin/sponsors/page.tsx",
+        note: "Staff-only sponsor, placement, campaign, discount, and reporting workflow.",
+    },
+    {
         href: "/news/vipc-grant-winner",
         source: "src/pages/VipcGrantWinner.tsx",
         note: "Existing story route reserved for article migration.",

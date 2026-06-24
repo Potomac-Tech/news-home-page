@@ -190,13 +190,13 @@ Blocked reason:
   - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --cached --check` passed. Browser QA on `http://127.0.0.1:3002/member/summits` confirmed the safe no-env member gate, no internal fallback summit content exposure, no console errors, and CTA navigation to `/apply`. Desktop `1280x720` and mobile `390x844` screenshots were captured with bundled Playwright after the in-app Browser screenshot API timed out with `Page.captureScreenshot`; both viewports rendered without horizontal overflow. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live approved-member tracker reads, staff edits, and remote RLS checks were not run because authenticated Supabase database tooling and a signed-in test member were unavailable.
   - Blocked reason: None.
 
-- [ ] Task 023: Add sponsor and ad placement schema/admin controls
+- [x] Task 023: Add sponsor and ad placement schema/admin controls
   - Priority: P1
   - Goal: Store and manage direct-sold sponsorship and ad inventory.
   - Acceptance criteria: Schema and admin controls support sponsors, placements, campaign dates, discounts, status, and reporting fields.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Staff can now manage sponsor accounts, sellable ad placements, campaign date windows, discount terms, and delivery reporting fields from a protected admin workflow.
+  - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live sponsor create/edit flows were not exercised because authenticated Supabase database tooling, applied schema, and signed-in editor/admin test users were unavailable.
+  - Blocked reason: None.
 
 - [ ] Task 024: Implement hybrid direct-sold/programmatic ad placement surfaces
   - Priority: P1
