@@ -222,13 +222,13 @@ Blocked reason:
   - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. A local `next start` smoke test on `http://127.0.0.1:3004/` confirmed the public homepage renders the safe quote-feed fallback when no displayable Supabase quote rows are available. Added the delayed quote schema/RLS migration, quote maintenance controls in `/admin/companies`, a shared quote-backed ticker loader, public homepage ticker rendering, member workspace ticker rendering, and workflow documentation. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live quote insertion/RLS verification was not run because authenticated Supabase database tooling and an applied reachable schema were unavailable.
   - Blocked reason: None.
 
-- [ ] Task 027: Create commodity asset and proxy-pricing model schema
+- [x] Task 027: Create commodity asset and proxy-pricing model schema
   - Priority: P1
   - Goal: Store lunar-resource commodity prices and proxy assumptions.
   - Acceptance criteria: Schema supports commodities, units, proxy formulas, source citations, confidence labels, and update cadence.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Lunar-resource commodity pricing now has a database foundation for assets, proxy formulas, source-backed observations, citations, confidence labels, and update cadence.
+  - Verification: `git diff --check` passed. Added a Supabase migration for commodities, proxy-pricing models, price observations, source citations, explicit grants, RLS policies, confidence labels, update cadence fields, and workflow documentation. App builds were not rerun because this task only changed SQL and docs. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live migration/RLS verification was not run because authenticated Supabase database tooling and an applied reachable schema were unavailable.
+  - Blocked reason: None.
 
 - [ ] Task 028: Add 20 lunar-resource commodity ticker entries with citations and confidence labels
   - Priority: P1
