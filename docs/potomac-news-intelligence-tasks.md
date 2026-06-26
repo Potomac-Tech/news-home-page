@@ -270,13 +270,13 @@ Blocked reason:
   - Verification: Added a public economy summary loader, Firefly full-cost fallback, reusable homepage widget, and workflow documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with only existing LF-to-CRLF warnings; project-ref search found only the correct `xlpkdoeldtlhearqajat` references and existing docs that warn against the wrong project. In-app Browser QA on `http://localhost:3002/` confirmed page identity, no console errors/warnings, `$155M` headline, `$147.3M - $155M` range, `Jun 26, 2026` date with no stale `Jun 25, 2026` display, methodology note, CTA text, CTA navigation to `/apply`, and no mobile horizontal overflow at `390x844`. Browser screenshot capture timed out with `Page.captureScreenshot`, so desktop `1280x720` and mobile `390x844` screenshot evidence was captured with bundled Playwright using local Microsoft Edge. Live Supabase reads were not exercised because no Supabase publishable key or applied reachable schema was available, so QA covered the safe fallback path.
   - Blocked reason: None.
 
-- [ ] Task 033: Build Scout/Command detailed economy dashboard
+- [x] Task 033: Build Scout/Command detailed economy dashboard
   - Priority: P1
   - Goal: Give paid members access to deeper lunar economy analysis.
   - Acceptance criteria: Dashboard shows detailed scenarios, source tables, assumptions, downloads, and update timestamps with Scout/Command access control.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Paid Scout and Command users now have a protected lunar economy dashboard with scenario analysis, methodology assumptions, reviewed sources, update history, and CSV downloads.
+  - Verification: Added Scout/Command RLS read policies for active published economy records, a gated `/member/economy` route, protected CSV download routes, member/homepage entry points, and workflow documentation. `npm run build:next` passed and registered `/member/economy` plus `/member/economy/downloads/[kind]`; `npm run build` passed for the legacy Vite site; `git diff --check` passed with only existing LF-to-CRLF warnings. Local route checks on the existing `http://127.0.0.1:3001` Next dev server confirmed `/member/economy` renders the no-config paid-data gate and `/member/economy/downloads/scenarios` returns `503` without Supabase configuration. Project-ref search found only the correct `xlpkdoeldtlhearqajat` references and existing documentation warnings about the wrong project. `npm run lint` could not run because the repo has no ESLint configuration file. `npx supabase migration list --local` could not run because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live Scout/Command data reads could not be exercised because no Supabase publishable key, applied reachable schema, or seeded paid test user was available.
+  - Blocked reason: None.
 
 - [ ] Task 034: Create data request, data offer, extraction run, and audit log schema
   - Priority: P0

@@ -59,6 +59,12 @@ export default async function MemberPage() {
                             Summit tracker
                         </Link>
                         <Link
+                            href="/member/economy"
+                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+                        >
+                            Economy dashboard
+                        </Link>
+                        <Link
                             href="/auth/logout"
                             className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                         >

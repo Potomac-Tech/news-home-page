@@ -108,7 +108,7 @@ export function EconomySummaryWidget({
 
             <div className="mt-6 flex flex-wrap gap-3">
                 <Link
-                    href="/apply"
+                    href="/member/economy"
                     className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
                 >
                     Unlock methodology
