@@ -206,13 +206,13 @@ Blocked reason:
   - Verification: `npm run build` passed; `git diff --check` passed with only LF-to-CRLF warnings. Root Vite preview QA on `http://127.0.0.1:4173/` confirmed `/`, `/events`, and `/news/vipc-grant-winner` render the news-first homepage, event calendar, article gate, and Potomac-branded sponsor units in the app that Cloudflare Pages currently builds. Browser DOM and console checks passed with no framework overlay or app warnings/errors; Browser screenshot and locator-click calls timed out, so bundled Playwright using local Microsoft Edge captured desktop `1280x720` and mobile `390x844` screenshot evidence and clicked the homepage Calendar link through to `/events`. Live direct-sold campaign rendering from Supabase could not be exercised because the schema is not applied to a reachable authenticated project in this session.
   - Blocked reason: None.
 
-- [ ] Task 025: Create public company universe and dynamic top-20 space company ranking
+- [x] Task 025: Create public company universe and dynamic top-20 space company ranking
   - Priority: P1
   - Goal: Maintain a ranked list of publicly traded space companies for ticker display.
   - Acceptance criteria: Admin-maintained eligible company universe exists; ranking logic selects top 20 by the chosen metric and records ranking date/source.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Analysts now have a protected company universe and dated top-20 ranking workflow for public space-company ticker coverage.
+  - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. Added an explicit-grant/RLS Supabase migration for public company records, ranking runs, top-20 ranking snapshots, and the staff-checked ranking function; added `/admin/companies` for maintaining companies and generating/publishing snapshots; documented the workflow. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live remote migration/RLS verification was not run because authenticated Supabase database tooling was unavailable in this session.
+  - Blocked reason: None.
 
 - [ ] Task 026: Add curated/delayed stock quote ingestion and ticker UI
   - Priority: P1
