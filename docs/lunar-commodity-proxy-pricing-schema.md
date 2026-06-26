@@ -28,5 +28,6 @@ the records through Supabase-backed staff tooling.
 
 ## Task Boundary
 
-This task creates the schema only. Task 028 is responsible for adding the 20
-lunar-resource commodity ticker entries with citations and confidence labels.
+This task created the schema only. Task 028 adds the first 20
+lunar-resource commodity ticker entries with citations and confidence labels in
+`docs/lunar-commodity-ticker-seed.md`.

@@ -230,13 +230,13 @@ Blocked reason:
   - Verification: `git diff --check` passed. Added a Supabase migration for commodities, proxy-pricing models, price observations, source citations, explicit grants, RLS policies, confidence labels, update cadence fields, and workflow documentation. App builds were not rerun because this task only changed SQL and docs. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live migration/RLS verification was not run because authenticated Supabase database tooling and an applied reachable schema were unavailable.
   - Blocked reason: None.
 
-- [ ] Task 028: Add 20 lunar-resource commodity ticker entries with citations and confidence labels
+- [x] Task 028: Add 20 lunar-resource commodity ticker entries with citations and confidence labels
   - Priority: P1
   - Goal: Seed or configure the commodity ticker with lunar-resource-relevant entries.
   - Acceptance criteria: 20 commodity entries exist with price/proxy source notes, confidence labels, units, and display-ready ticker fields.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The lunar-resource ticker now has 20 display-ready commodity entries with proxy values, units, confidence labels, source notes, and citations.
+  - Verification: Added a Supabase seed migration plus documentation for 20 lunar-resource commodities, each with an active commodity row, `Public ticker proxy v1` model, displayable price/proxy observation, and citation. Static verification counted 20 seed rows, confirmed no unexpected wrong-project Supabase references were introduced, and `git diff --check` passed with only the existing LF-to-CRLF warning. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live remote migration/RLS verification was not run because authenticated Supabase database tooling was unavailable in this session.
+  - Blocked reason: None.
 
 - [ ] Task 029: Create lunar economy model schema with assumptions, sources, versions, and daily estimates
   - Priority: P0
