@@ -246,13 +246,13 @@ Blocked reason:
   - Verification: Added a Supabase migration and schema documentation for six economy-model tables with enums, constraints, indexes, explicit grants, RLS enabled on all tables, and public/staff/manage policies. Static checks confirmed six `lunar_economy_*` tables, six RLS enablements, eighteen policies, confidence-score fields, source review status, publication status, and no unexpected wrong-project Supabase references. `git diff --check` passed. App builds were not rerun because this task only changed SQL and docs. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live remote migration/RLS verification was not run because authenticated Supabase database tooling was unavailable in this session.
   - Blocked reason: None.
 
-- [ ] Task 030: Implement Firefly benchmark using full NASA-paid cost basis
+- [x] Task 030: Implement Firefly benchmark using full NASA-paid cost basis
   - Priority: P0
   - Goal: Calculate the Firefly lunar surface data benchmark from the full NASA-paid cost, not only the data addendum.
   - Acceptance criteria: Benchmark includes original `~$100M` mission cost, `$10M` data addendum, `~$45M` PRISM contracts, citations, methodology notes, and versioned assumptions.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The Firefly lunar data benchmark now uses the full NASA-paid cost basis, not just the later data addendum.
+  - Verification: Added a Supabase seed migration and documentation for `firefly-blue-ghost-full-cost-benchmark-v1`, including four public source documents, seven versioned assumptions, a published baseline scenario, and a published daily output. Static checks confirmed the benchmark includes `$101M` mission delivery, `$93.3M` original award reference, `$44M` PRISM/science payload cost basis, `$10M` data addendum, `$155M` baseline, `$147.3M` lower reference, and the `baseline_full_nasa_paid_cost` scenario key. Source review used NASA, Firefly, NASA Science CLPS delivery, and Associated Press pages. `git diff --check` passed with only the existing LF-to-CRLF warning. App builds were not rerun because this task only changed SQL and docs. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live remote migration/RLS verification was not run because authenticated Supabase database tooling was unavailable in this session.
+  - Blocked reason: None.
 
 - [ ] Task 031: Build analyst-facing economy methodology and source table UI
   - Priority: P1

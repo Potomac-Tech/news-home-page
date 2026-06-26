@@ -35,7 +35,7 @@ use user-editable metadata for authorization.
 
 ## Task Boundary
 
-This task creates the schema only. Task 030 is responsible for seeding the
-Firefly benchmark assumptions and sources using the full NASA-paid cost basis:
-approximately `$100M` original mission cost, `$10M` data addendum, and
-approximately `$45M` in PRISM contracts.
+This task created the schema only. Task 030 seeds the Firefly benchmark
+assumptions and sources in `docs/firefly-full-cost-benchmark.md` using the full
+NASA-paid cost basis: approximately `$100M` original mission cost, `$10M` data
+addendum, and approximately `$45M` in PRISM/payload costs.
