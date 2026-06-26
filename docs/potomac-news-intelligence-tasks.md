@@ -238,13 +238,13 @@ Blocked reason:
   - Verification: Added a Supabase seed migration plus documentation for 20 lunar-resource commodities, each with an active commodity row, `Public ticker proxy v1` model, displayable price/proxy observation, and citation. Static verification counted 20 seed rows, confirmed no unexpected wrong-project Supabase references were introduced, and `git diff --check` passed with only the existing LF-to-CRLF warning. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live remote migration/RLS verification was not run because authenticated Supabase database tooling was unavailable in this session.
   - Blocked reason: None.
 
-- [ ] Task 029: Create lunar economy model schema with assumptions, sources, versions, and daily estimates
+- [x] Task 029: Create lunar economy model schema with assumptions, sources, versions, and daily estimates
   - Priority: P0
   - Goal: Store the analytical model behind the daily lunar economy tracker.
   - Acceptance criteria: Schema supports model versions, assumptions, source documents, scenario estimates, confidence scores, and daily output values.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The lunar economy tracker now has a database design for model versions, assumptions, reviewed sources, scenario estimates, confidence scoring, and daily published outputs.
+  - Verification: Added a Supabase migration and schema documentation for six economy-model tables with enums, constraints, indexes, explicit grants, RLS enabled on all tables, and public/staff/manage policies. Static checks confirmed six `lunar_economy_*` tables, six RLS enablements, eighteen policies, confidence-score fields, source review status, publication status, and no unexpected wrong-project Supabase references. `git diff --check` passed. App builds were not rerun because this task only changed SQL and docs. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live remote migration/RLS verification was not run because authenticated Supabase database tooling was unavailable in this session.
+  - Blocked reason: None.
 
 - [ ] Task 030: Implement Firefly benchmark using full NASA-paid cost basis
   - Priority: P0
