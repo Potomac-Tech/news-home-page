@@ -262,13 +262,13 @@ Blocked reason:
   - Verification: Added `/admin/economy`, an editor/analyst/admin guard, server actions for methodology versions, assumptions, source documents, and assumption-source evidence links, plus workflow documentation. `npm run build:next` passed and registered `/admin/economy` as a dynamic route; `npm run build` passed for the legacy Vite site; `git diff --check` passed; project-ref search found only the correct `xlpkdoeldtlhearqajat` references and existing documentation warnings about the wrong project. `npm run lint` could not run because the repo has no ESLint configuration file. Live protected-route and Supabase edit-flow verification could not be exercised because no Supabase publishable key, applied reachable schema, or seeded analyst/editor/admin test account was available in this session.
   - Blocked reason: None.
 
-- [ ] Task 032: Build public economy summary widget
+- [x] Task 032: Build public economy summary widget
   - Priority: P1
   - Goal: Show a simplified public version of the lunar economy tracker.
   - Acceptance criteria: Public widget displays headline estimate, date, scenario/range label, concise methodology note, and membership CTA for details.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The homepage now shows a public lunar economy tracker with the headline estimate, date, range, confidence, source count, methodology note, and access prompts.
+  - Verification: Added a public economy summary loader, Firefly full-cost fallback, reusable homepage widget, and workflow documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with only existing LF-to-CRLF warnings; project-ref search found only the correct `xlpkdoeldtlhearqajat` references and existing docs that warn against the wrong project. In-app Browser QA on `http://localhost:3002/` confirmed page identity, no console errors/warnings, `$155M` headline, `$147.3M - $155M` range, `Jun 26, 2026` date with no stale `Jun 25, 2026` display, methodology note, CTA text, CTA navigation to `/apply`, and no mobile horizontal overflow at `390x844`. Browser screenshot capture timed out with `Page.captureScreenshot`, so desktop `1280x720` and mobile `390x844` screenshot evidence was captured with bundled Playwright using local Microsoft Edge. Live Supabase reads were not exercised because no Supabase publishable key or applied reachable schema was available, so QA covered the safe fallback path.
+  - Blocked reason: None.
 
 - [ ] Task 033: Build Scout/Command detailed economy dashboard
   - Priority: P1

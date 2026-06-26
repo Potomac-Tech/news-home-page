@@ -107,10 +107,4 @@ export const marketModules: MarketModule[] = [
         detail: "Commodity entries will carry source notes and confidence labels.",
         cadence: "Weekly model",
     },
-    {
-        label: "Lunar economy estimate",
-        value: "Versioned",
-        detail: "Public headline estimate with member-only methodology depth.",
-        cadence: "Daily output",
-    },
 ];
