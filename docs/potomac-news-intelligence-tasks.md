@@ -278,13 +278,13 @@ Blocked reason:
   - Verification: Added Scout/Command RLS read policies for active published economy records, a gated `/member/economy` route, protected CSV download routes, member/homepage entry points, and workflow documentation. `npm run build:next` passed and registered `/member/economy` plus `/member/economy/downloads/[kind]`; `npm run build` passed for the legacy Vite site; `git diff --check` passed with only existing LF-to-CRLF warnings. Local route checks on the existing `http://127.0.0.1:3001` Next dev server confirmed `/member/economy` renders the no-config paid-data gate and `/member/economy/downloads/scenarios` returns `503` without Supabase configuration. Project-ref search found only the correct `xlpkdoeldtlhearqajat` references and existing documentation warnings about the wrong project. `npm run lint` could not run because the repo has no ESLint configuration file. `npx supabase migration list --local` could not run because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live Scout/Command data reads could not be exercised because no Supabase publishable key, applied reachable schema, or seeded paid test user was available.
   - Blocked reason: None.
 
-- [ ] Task 034: Create data request, data offer, extraction run, and audit log schema
+- [x] Task 034: Create data request, data offer, extraction run, and audit log schema
   - Priority: P0
   - Goal: Store the data marketplace and its automated extraction history.
   - Acceptance criteria: Schema supports data requests, data offers, source documents, extraction runs, confidence labels, rationales, and audit logs.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The database now has a foundation for a Scout+ data marketplace, including data requests, data offers, reviewed sources, extraction job history, citations, confidence labels, rationale fields, and audit logs.
+  - Verification: Added `supabase/migrations/20260626193529_data_marketplace_extraction_schema.sql` with marketplace enums, data request/offer tables, source documents, request/offer citation joins, extraction runs, audit logs, indexes, triggers, grants, and RLS policies; added schema documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed; static search confirmed required tables, RLS enablement, policies, grants, source/citation joins, confidence labels, and audit logs are present. Project-ref search found the correct `xlpkdoeldtlhearqajat` reference in the new doc and no wrong project reference in the new migration/doc. `npm run lint` could not run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not run because no local Supabase Postgres was listening on `127.0.0.1:54322`; remote application was not run because authenticated Supabase database access is unavailable in this session.
+  - Blocked reason: None.
 
 - [ ] Task 035: Implement automated data-market extraction pipeline placeholder with confidence labels and citations
   - Priority: P1
