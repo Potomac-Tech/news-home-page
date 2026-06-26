@@ -20,6 +20,10 @@ const rankingMetrics = [
 
 const rankingStatuses = ["draft", "published", "archived"] as const;
 
+type StaffSupabase = Awaited<
+    ReturnType<typeof requireCompanyUniverseStaff>
+>["supabase"];
+
 function getRequiredString(formData: FormData, key: string) {
     const value = String(formData.get(key) ?? "").trim();
 
@@ -108,6 +112,62 @@ function getOptionalNumber(formData: FormData, key: string) {
     return numberValue;
 }
 
+function getRequiredNonnegativeNumber(formData: FormData, key: string) {
+    const value = getOptionalNumber(formData, key);
+
+    if (value == null) {
+        throw new Error(`Missing ${key}.`);
+    }
+
+    return value;
+}
+
+function getOptionalSignedNumber(formData: FormData, key: string) {
+    const value = String(formData.get(key) ?? "").trim().replaceAll(",", "");
+
+    if (!value) {
+        return null;
+    }
+
+    const numberValue = Number(value);
+
+    if (!Number.isFinite(numberValue)) {
+        throw new Error(`Invalid ${key}.`);
+    }
+
+    return numberValue;
+}
+
+function getNonnegativeInteger(formData: FormData, key: string, fallback: number) {
+    const value = String(formData.get(key) ?? "").trim();
+
+    if (!value) {
+        return fallback;
+    }
+
+    const integerValue = Number(value);
+
+    if (
+        !Number.isInteger(integerValue) ||
+        integerValue < 0 ||
+        !Number.isSafeInteger(integerValue)
+    ) {
+        throw new Error(`Invalid ${key}.`);
+    }
+
+    return integerValue;
+}
+
+function getRequiredTimestamp(formData: FormData, key: string) {
+    const value = getOptionalTimestamp(formData, key);
+
+    if (!value) {
+        throw new Error(`Missing ${key}.`);
+    }
+
+    return value;
+}
+
 function getCurrencyCode(formData: FormData) {
     const value = String(formData.get("ranking_metric_currency") ?? "USD")
         .trim()
@@ -115,6 +175,18 @@ function getCurrencyCode(formData: FormData) {
 
     if (!/^[A-Z]{3}$/.test(value)) {
         throw new Error("Invalid ranking metric currency.");
+    }
+
+    return value;
+}
+
+function getQuoteCurrencyCode(formData: FormData) {
+    const value = String(formData.get("quote_currency_code") ?? "USD")
+        .trim()
+        .toUpperCase();
+
+    if (!/^[A-Z]{3}$/.test(value)) {
+        throw new Error("Invalid quote currency.");
     }
 
     return value;
@@ -193,6 +265,61 @@ function companyPayload(formData: FormData, userId: string) {
     };
 }
 
+async function getCompanySnapshot(supabase: StaffSupabase, companyId: string) {
+    const { data, error } = await supabase
+        .from("public_space_companies")
+        .select("company_name,ticker_symbol,exchange_code")
+        .eq("id", companyId)
+        .single();
+
+    if (error || !data) {
+        throw new Error(error?.message ?? "Company not found.");
+    }
+
+    return data as {
+        company_name: string;
+        ticker_symbol: string;
+        exchange_code: string;
+    };
+}
+
+async function quotePayload(
+    formData: FormData,
+    userId: string,
+    supabase: StaffSupabase
+) {
+    const companyId = getRequiredString(formData, "company_id");
+    const company = await getCompanySnapshot(supabase, companyId);
+
+    return {
+        company_id: companyId,
+        company_name_snapshot: company.company_name,
+        ticker_symbol_snapshot: company.ticker_symbol,
+        exchange_code_snapshot: company.exchange_code,
+        quote_as_of_at: getRequiredTimestamp(formData, "quote_as_of_at"),
+        source_name: getRequiredString(formData, "quote_source_name"),
+        source_url: getOptionalString(formData, "quote_source_url"),
+        source_retrieved_at:
+            getOptionalTimestamp(formData, "quote_source_retrieved_at") ??
+            new Date().toISOString(),
+        delay_minutes: getNonnegativeInteger(
+            formData,
+            "delay_minutes",
+            15
+        ),
+        currency_code: getQuoteCurrencyCode(formData),
+        last_price: getRequiredNonnegativeNumber(formData, "last_price"),
+        price_change: getOptionalSignedNumber(formData, "price_change"),
+        price_change_percent: getOptionalSignedNumber(
+            formData,
+            "price_change_percent"
+        ),
+        market_state: getOptionalString(formData, "market_state") ?? "delayed",
+        is_displayable: formData.get("is_displayable") === "on",
+        updated_by: userId,
+    };
+}
+
 export async function createCompany(formData: FormData) {
     const { supabase, userId } = await requireCompanyUniverseStaff();
     const { error } = await supabase.from("public_space_companies").insert({
@@ -220,6 +347,39 @@ export async function updateCompany(formData: FormData) {
     }
 
     revalidatePath("/admin/companies");
+}
+
+export async function createQuote(formData: FormData) {
+    const { supabase, userId } = await requireCompanyUniverseStaff();
+    const { error } = await supabase.from("public_space_company_quotes").insert({
+        ...(await quotePayload(formData, userId, supabase)),
+        created_by: userId,
+    });
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    revalidatePath("/admin/companies");
+    revalidatePath("/");
+    revalidatePath("/member");
+}
+
+export async function updateQuote(formData: FormData) {
+    const { supabase, userId } = await requireCompanyUniverseStaff();
+    const quoteId = getRequiredString(formData, "quote_id");
+    const { error } = await supabase
+        .from("public_space_company_quotes")
+        .update(await quotePayload(formData, userId, supabase))
+        .eq("id", quoteId);
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    revalidatePath("/admin/companies");
+    revalidatePath("/");
+    revalidatePath("/member");
 }
 
 export async function createRankingSnapshot(formData: FormData) {

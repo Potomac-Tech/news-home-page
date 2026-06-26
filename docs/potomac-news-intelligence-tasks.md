@@ -214,13 +214,13 @@ Blocked reason:
   - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. Added an explicit-grant/RLS Supabase migration for public company records, ranking runs, top-20 ranking snapshots, and the staff-checked ranking function; added `/admin/companies` for maintaining companies and generating/publishing snapshots; documented the workflow. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live remote migration/RLS verification was not run because authenticated Supabase database tooling was unavailable in this session.
   - Blocked reason: None.
 
-- [ ] Task 026: Add curated/delayed stock quote ingestion and ticker UI
+- [x] Task 026: Add curated/delayed stock quote ingestion and ticker UI
   - Priority: P1
   - Goal: Show stock data without requiring real-time licensing in MVP.
   - Acceptance criteria: Quote records include source, delay/freshness timestamp, price, change, and ticker display on public/dashboard surfaces.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Staff can now curate delayed public-company quote rows, and the homepage plus member workspace can show the latest displayable ticker data without real-time market feeds.
+  - Verification: `npm run build:next` passed; `npm run build` passed; `git diff --check` passed. A local `next start` smoke test on `http://127.0.0.1:3004/` confirmed the public homepage renders the safe quote-feed fallback when no displayable Supabase quote rows are available. Added the delayed quote schema/RLS migration, quote maintenance controls in `/admin/companies`, a shared quote-backed ticker loader, public homepage ticker rendering, member workspace ticker rendering, and workflow documentation. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live quote insertion/RLS verification was not run because authenticated Supabase database tooling and an applied reachable schema were unavailable.
+  - Blocked reason: None.
 
 - [ ] Task 027: Create commodity asset and proxy-pricing model schema
   - Priority: P1

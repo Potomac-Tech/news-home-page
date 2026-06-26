@@ -131,8 +131,8 @@ export const marketModules: MarketModule[] = [
 ];
 
 export const tickerItems = [
+    { symbol: "TOP20", label: "Public company ranking", value: "Pending" },
     { symbol: "DATA", label: "Mission data rights", value: "Watching" },
-    { symbol: "SURF", label: "Surface operations", value: "Member brief" },
     { symbol: "PRXY", label: "Resource proxy model", value: "20 assets" },
     { symbol: "CMD", label: "Command intelligence", value: "Org-level" },
 ];

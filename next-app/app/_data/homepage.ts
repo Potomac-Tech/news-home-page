@@ -23,12 +23,6 @@ export type MarketModule = {
     cadence: string;
 };
 
-export type TickerItem = {
-    symbol: string;
-    label: string;
-    value: string;
-};
-
 export const fallbackStories: HomeStory[] = [
     {
         title: "VIPC backs Potomac's lunar intelligence platform",
@@ -118,28 +112,5 @@ export const marketModules: MarketModule[] = [
         value: "Versioned",
         detail: "Public headline estimate with member-only methodology depth.",
         cadence: "Daily output",
-    },
-];
-
-export const tickerItems: TickerItem[] = [
-    {
-        symbol: "DATA",
-        label: "Mission data rights",
-        value: "Watching",
-    },
-    {
-        symbol: "SURF",
-        label: "Surface operations",
-        value: "Member brief",
-    },
-    {
-        symbol: "PRXY",
-        label: "Resource proxy model",
-        value: "20 assets",
-    },
-    {
-        symbol: "CMD",
-        label: "Command intelligence",
-        value: "Org-level",
     },
 ];

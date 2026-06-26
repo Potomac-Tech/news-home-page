@@ -4,9 +4,9 @@ import {
     eventTeasers,
     fallbackStories,
     marketModules,
-    tickerItems,
     type HomeStory,
 } from "./_data/homepage";
+import { loadPublicTickerItems } from "./_data/marketQuotes";
 import { SponsorUnit } from "./_components/SponsorUnit";
 import {
     loadSponsorUnits,
@@ -186,12 +186,13 @@ function StoryCard({ story }: { story: HomeStory }) {
 }
 
 export default async function HomePage() {
-    const [stories, sponsorUnits] = await Promise.all([
+    const [stories, sponsorUnits, tickerItems] = await Promise.all([
         getHomepageStories(),
         loadSponsorUnits([
             sponsorPlacementKeys.homepageLeadRail,
             sponsorPlacementKeys.marketModuleBand,
         ]),
+        loadPublicTickerItems(4),
     ]);
     const featuredStory = stories[0] ?? fallbackStories[0];
     const latestStories = stories.slice(1).length ? stories.slice(1) : fallbackStories.slice(1);
@@ -299,8 +300,19 @@ export default async function HomePage() {
                                     <span className="text-sm text-potomac-cream/75">
                                         {item.label}
                                     </span>
-                                    <span className="text-right text-xs font-bold uppercase tracking-[0.12em] text-white">
+                                    <span
+                                        className={
+                                            item.trend === "down"
+                                                ? "text-right text-xs font-bold uppercase tracking-[0.12em] text-red-200"
+                                                : item.trend === "up"
+                                                  ? "text-right text-xs font-bold uppercase tracking-[0.12em] text-potomac-gold"
+                                                  : "text-right text-xs font-bold uppercase tracking-[0.12em] text-white"
+                                        }
+                                    >
                                         {item.value}
+                                        <span className="mt-1 block text-[0.65rem] font-semibold normal-case tracking-normal text-potomac-cream/45">
+                                            {item.detail}
+                                        </span>
                                     </span>
                                 </div>
                             ))}

@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { requireCompanyUniverseStaff } from "../../../lib/auth/company-universe";
 import {
     createCompany,
+    createQuote,
     createRankingSnapshot,
     updateCompany,
+    updateQuote,
     updateRankingRun,
 } from "./actions";
 
@@ -63,6 +65,26 @@ type Ranking = {
     company_metric_source_name: string | null;
     company_metric_source_url: string | null;
     created_at: string;
+};
+
+type Quote = {
+    id: string;
+    company_id: string;
+    company_name_snapshot: string;
+    ticker_symbol_snapshot: string;
+    exchange_code_snapshot: string;
+    quote_as_of_at: string;
+    source_name: string;
+    source_url: string | null;
+    source_retrieved_at: string;
+    delay_minutes: number;
+    currency_code: string;
+    last_price: number;
+    price_change: number | null;
+    price_change_percent: number | null;
+    market_state: string;
+    is_displayable: boolean;
+    updated_at: string;
 };
 
 const companyStatuses = [
@@ -169,6 +191,52 @@ function formatMetricValue(
         notation: value >= 1_000_000_000 ? "compact" : "standard",
         maximumFractionDigits: value >= 1_000_000_000 ? 1 : 0,
     }).format(value);
+}
+
+function formatQuotePrice(value: number, currencyCode = "USD") {
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: currencyCode,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(value);
+}
+
+function formatSignedNumber(value: number | null | undefined, suffix = "") {
+    if (value == null) {
+        return "Not set";
+    }
+
+    const sign = value > 0 ? "+" : "";
+
+    return `${sign}${value.toFixed(2)}${suffix}`;
+}
+
+function CompanySelect({
+    companies,
+    defaultValue,
+}: {
+    companies: Company[];
+    defaultValue?: string;
+}) {
+    return (
+        <select
+            required
+            name="company_id"
+            defaultValue={defaultValue ?? ""}
+            className={inputClass}
+        >
+            <option value="" disabled>
+                Select company
+            </option>
+            {companies.map((company) => (
+                <option key={company.id} value={company.id}>
+                    {company.company_name} ({company.exchange_code}:
+                    {company.ticker_symbol})
+                </option>
+            ))}
+        </select>
+    );
 }
 
 function CompanyFormFields({ company }: { company?: Company }) {
@@ -353,6 +421,136 @@ function CompanyFormFields({ company }: { company?: Company }) {
     );
 }
 
+function QuoteFormFields({
+    quote,
+    companies,
+}: {
+    quote?: Quote;
+    companies: Company[];
+}) {
+    const defaultQuoteTime =
+        quote?.quote_as_of_at ?? new Date().toISOString();
+
+    return (
+        <div className="grid gap-5 lg:grid-cols-2">
+            <div className="lg:col-span-2">
+                <FieldLabel>Company</FieldLabel>
+                <CompanySelect
+                    companies={companies}
+                    defaultValue={quote?.company_id}
+                />
+            </div>
+            <div>
+                <FieldLabel>Quote time</FieldLabel>
+                <input
+                    required
+                    name="quote_as_of_at"
+                    type="datetime-local"
+                    defaultValue={toDateTimeLocal(defaultQuoteTime)}
+                    className={inputClass}
+                />
+            </div>
+            <div>
+                <FieldLabel>Delay minutes</FieldLabel>
+                <input
+                    name="delay_minutes"
+                    type="number"
+                    min="0"
+                    step="1"
+                    defaultValue={quote?.delay_minutes ?? 15}
+                    className={inputClass}
+                />
+            </div>
+            <div>
+                <FieldLabel>Last price</FieldLabel>
+                <input
+                    required
+                    name="last_price"
+                    type="number"
+                    min="0"
+                    step="0.0001"
+                    defaultValue={quote?.last_price ?? ""}
+                    className={inputClass}
+                />
+            </div>
+            <div>
+                <FieldLabel>Currency</FieldLabel>
+                <input
+                    name="quote_currency_code"
+                    maxLength={3}
+                    defaultValue={quote?.currency_code ?? "USD"}
+                    className={inputClass}
+                />
+            </div>
+            <div>
+                <FieldLabel>Price change</FieldLabel>
+                <input
+                    name="price_change"
+                    type="number"
+                    step="0.0001"
+                    defaultValue={quote?.price_change ?? ""}
+                    className={inputClass}
+                />
+            </div>
+            <div>
+                <FieldLabel>Change percent</FieldLabel>
+                <input
+                    name="price_change_percent"
+                    type="number"
+                    step="0.0001"
+                    defaultValue={quote?.price_change_percent ?? ""}
+                    className={inputClass}
+                />
+            </div>
+            <div>
+                <FieldLabel>Source</FieldLabel>
+                <input
+                    required
+                    name="quote_source_name"
+                    defaultValue={quote?.source_name ?? ""}
+                    className={inputClass}
+                />
+            </div>
+            <div>
+                <FieldLabel>Source URL</FieldLabel>
+                <input
+                    name="quote_source_url"
+                    defaultValue={quote?.source_url ?? ""}
+                    className={inputClass}
+                />
+            </div>
+            <div>
+                <FieldLabel>Source retrieved</FieldLabel>
+                <input
+                    name="quote_source_retrieved_at"
+                    type="datetime-local"
+                    defaultValue={toDateTimeLocal(quote?.source_retrieved_at)}
+                    className={inputClass}
+                />
+            </div>
+            <div>
+                <FieldLabel>Market state</FieldLabel>
+                <input
+                    name="market_state"
+                    defaultValue={quote?.market_state ?? "delayed"}
+                    className={inputClass}
+                />
+            </div>
+            <div className="lg:col-span-2">
+                <label className="flex items-center gap-3 text-sm text-potomac-cream/75">
+                    <input
+                        type="checkbox"
+                        name="is_displayable"
+                        defaultChecked={quote?.is_displayable ?? false}
+                        className="h-4 w-4 accent-potomac-gold"
+                    />
+                    Displayable
+                </label>
+            </div>
+        </div>
+    );
+}
+
 function RankingSnapshotForm() {
     const today = new Date().toISOString().slice(0, 10);
 
@@ -419,7 +617,7 @@ function RankingSnapshotForm() {
 
 export default async function PublicCompanyUniverseAdminPage() {
     const { supabase } = await requireCompanyUniverseStaff();
-    const [companiesResult, rankingRunsResult, rankingsResult] =
+    const [companiesResult, rankingRunsResult, rankingsResult, quotesResult] =
         await Promise.all([
             supabase
                 .from("public_space_companies")
@@ -440,6 +638,13 @@ export default async function PublicCompanyUniverseAdminPage() {
                     "id,ranking_run_id,company_id,rank_number,ranking_metric_value,metric_as_of_date,company_name_snapshot,ticker_symbol_snapshot,exchange_code_snapshot,company_metric_source_name,company_metric_source_url,created_at"
                 )
                 .order("rank_number"),
+            supabase
+                .from("public_space_company_quotes")
+                .select(
+                    "id,company_id,company_name_snapshot,ticker_symbol_snapshot,exchange_code_snapshot,quote_as_of_at,source_name,source_url,source_retrieved_at,delay_minutes,currency_code,last_price,price_change,price_change_percent,market_state,is_displayable,updated_at"
+                )
+                .order("quote_as_of_at", { ascending: false })
+                .limit(50),
         ]);
 
     if (companiesResult.error) {
@@ -454,9 +659,14 @@ export default async function PublicCompanyUniverseAdminPage() {
         throw new Error(rankingsResult.error.message);
     }
 
+    if (quotesResult.error) {
+        throw new Error(quotesResult.error.message);
+    }
+
     const companies = (companiesResult.data ?? []) as Company[];
     const rankingRuns = (rankingRunsResult.data ?? []) as RankingRun[];
     const rankings = (rankingsResult.data ?? []) as Ranking[];
+    const quotes = (quotesResult.data ?? []) as Quote[];
     const rankingsByRunId = new Map<string, Ranking[]>();
 
     rankings.forEach((ranking) => {
@@ -638,6 +848,138 @@ export default async function PublicCompanyUniverseAdminPage() {
 
                     <aside className="space-y-8">
                         <RankingSnapshotForm />
+                        <section>
+                            <form action={createQuote} className="glass-card rounded p-6">
+                                <h2 className="font-serif text-2xl text-white">
+                                    Add Delayed Quote
+                                </h2>
+                                <div className="mt-5">
+                                    <QuoteFormFields companies={companies} />
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="mt-6 rounded border border-potomac-gold/50 px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+                                >
+                                    Add quote
+                                </button>
+                            </form>
+
+                            <h2 className="mt-8 font-serif text-3xl text-white">
+                                Delayed Quotes
+                            </h2>
+                            <div className="mt-5 space-y-5">
+                                {quotes.length === 0 ? (
+                                    <div className="glass-card rounded p-6 text-potomac-cream/75">
+                                        No delayed quotes yet.
+                                    </div>
+                                ) : (
+                                    quotes.map((quote) => (
+                                        <article
+                                            key={quote.id}
+                                            className="glass-card rounded p-6"
+                                        >
+                                            <div className="flex flex-wrap items-start justify-between gap-4">
+                                                <div>
+                                                    <div className="flex flex-wrap items-center gap-3">
+                                                        <h3 className="font-serif text-2xl text-white">
+                                                            {
+                                                                quote.ticker_symbol_snapshot
+                                                            }
+                                                        </h3>
+                                                        <span className="rounded border border-potomac-gold/40 px-3 py-1 text-xs uppercase tracking-[0.16em] text-potomac-gold">
+                                                            {quote.is_displayable
+                                                                ? "Displayable"
+                                                                : "Draft"}
+                                                        </span>
+                                                    </div>
+                                                    <p className="mt-2 text-sm text-potomac-cream/65">
+                                                        {
+                                                            quote.company_name_snapshot
+                                                        }{" "}
+                                                        |{" "}
+                                                        {
+                                                            quote.exchange_code_snapshot
+                                                        }
+                                                    </p>
+                                                </div>
+                                                <div className="text-right text-sm">
+                                                    <p className="font-semibold text-white">
+                                                        {formatQuotePrice(
+                                                            quote.last_price,
+                                                            quote.currency_code
+                                                        )}
+                                                    </p>
+                                                    <p
+                                                        className={
+                                                            quote.price_change !=
+                                                                null &&
+                                                            quote.price_change < 0
+                                                                ? "mt-1 text-red-200"
+                                                                : "mt-1 text-potomac-gold"
+                                                        }
+                                                    >
+                                                        {formatSignedNumber(
+                                                            quote.price_change
+                                                        )}{" "}
+                                                        |{" "}
+                                                        {formatSignedNumber(
+                                                            quote.price_change_percent,
+                                                            "%"
+                                                        )}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <dl className="mt-5 grid gap-4 text-sm text-potomac-cream/70 md:grid-cols-2">
+                                                <div>
+                                                    <dt className="font-bold uppercase tracking-[0.14em] text-potomac-gold">
+                                                        Quote time
+                                                    </dt>
+                                                    <dd className="mt-1">
+                                                        {formatDateTime(
+                                                            quote.quote_as_of_at
+                                                        )}
+                                                    </dd>
+                                                </div>
+                                                <div>
+                                                    <dt className="font-bold uppercase tracking-[0.14em] text-potomac-gold">
+                                                        Source
+                                                    </dt>
+                                                    <dd className="mt-1">
+                                                        {quote.source_name} |{" "}
+                                                        {quote.delay_minutes}m
+                                                    </dd>
+                                                </div>
+                                            </dl>
+                                            <details className="mt-6 border-y border-white/10 py-5">
+                                                <summary className="cursor-pointer text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                                                    Edit quote
+                                                </summary>
+                                                <form
+                                                    action={updateQuote}
+                                                    className="mt-6"
+                                                >
+                                                    <input
+                                                        type="hidden"
+                                                        name="quote_id"
+                                                        value={quote.id}
+                                                    />
+                                                    <QuoteFormFields
+                                                        quote={quote}
+                                                        companies={companies}
+                                                    />
+                                                    <button
+                                                        type="submit"
+                                                        className="mt-6 rounded border border-potomac-gold/50 px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+                                                    >
+                                                        Save quote
+                                                    </button>
+                                                </form>
+                                            </details>
+                                        </article>
+                                    ))
+                                )}
+                            </div>
+                        </section>
                         <section>
                             <h2 className="font-serif text-3xl text-white">
                                 Ranking Snapshots
