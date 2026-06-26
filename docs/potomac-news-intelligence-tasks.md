@@ -254,13 +254,13 @@ Blocked reason:
   - Verification: Added a Supabase seed migration and documentation for `firefly-blue-ghost-full-cost-benchmark-v1`, including four public source documents, seven versioned assumptions, a published baseline scenario, and a published daily output. Static checks confirmed the benchmark includes `$101M` mission delivery, `$93.3M` original award reference, `$44M` PRISM/science payload cost basis, `$10M` data addendum, `$155M` baseline, `$147.3M` lower reference, and the `baseline_full_nasa_paid_cost` scenario key. Source review used NASA, Firefly, NASA Science CLPS delivery, and Associated Press pages. `git diff --check` passed with only the existing LF-to-CRLF warning. App builds were not rerun because this task only changed SQL and docs. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`; live remote migration/RLS verification was not run because authenticated Supabase database tooling was unavailable in this session.
   - Blocked reason: None.
 
-- [ ] Task 031: Build analyst-facing economy methodology and source table UI
+- [x] Task 031: Build analyst-facing economy methodology and source table UI
   - Priority: P1
   - Goal: Let analysts inspect and maintain lunar economy methodology inputs.
   - Acceptance criteria: Analyst view shows assumptions, formulas, citations, source tables, confidence labels, and methodology version history.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Analysts now have a protected economy admin workspace for reviewing methodology versions, assumptions, source records, evidence links, confidence labels, and output history.
+  - Verification: Added `/admin/economy`, an editor/analyst/admin guard, server actions for methodology versions, assumptions, source documents, and assumption-source evidence links, plus workflow documentation. `npm run build:next` passed and registered `/admin/economy` as a dynamic route; `npm run build` passed for the legacy Vite site; `git diff --check` passed; project-ref search found only the correct `xlpkdoeldtlhearqajat` references and existing documentation warnings about the wrong project. `npm run lint` could not run because the repo has no ESLint configuration file. Live protected-route and Supabase edit-flow verification could not be exercised because no Supabase publishable key, applied reachable schema, or seeded analyst/editor/admin test account was available in this session.
+  - Blocked reason: None.
 
 - [ ] Task 032: Build public economy summary widget
   - Priority: P1
