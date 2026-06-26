@@ -11,6 +11,7 @@
         "dev:next": "next dev next-app -p 3001",
         "build": "tsc && vite build && node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\"",
         "build:vite": "tsc && vite build && node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\"",
+        "extract:data-marketplace": "node scripts/data-market-extraction-placeholder.mjs",
         "prebuild:next": "npm run sync:next-public",
         "build:next": "next build next-app",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",

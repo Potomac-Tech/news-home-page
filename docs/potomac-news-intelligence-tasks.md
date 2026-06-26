@@ -286,13 +286,13 @@ Blocked reason:
   - Verification: Added `supabase/migrations/20260626193529_data_marketplace_extraction_schema.sql` with marketplace enums, data request/offer tables, source documents, request/offer citation joins, extraction runs, audit logs, indexes, triggers, grants, and RLS policies; added schema documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed; static search confirmed required tables, RLS enablement, policies, grants, source/citation joins, confidence labels, and audit logs are present. Project-ref search found the correct `xlpkdoeldtlhearqajat` reference in the new doc and no wrong project reference in the new migration/doc. `npm run lint` could not run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not run because no local Supabase Postgres was listening on `127.0.0.1:54322`; remote application was not run because authenticated Supabase database access is unavailable in this session.
   - Blocked reason: None.
 
-- [ ] Task 035: Implement automated data-market extraction pipeline placeholder with confidence labels and citations
+- [x] Task 035: Implement automated data-market extraction pipeline placeholder with confidence labels and citations
   - Priority: P1
   - Goal: Establish the pipeline structure for extracting data requests/offers from news and scholarly sources.
   - Acceptance criteria: Placeholder or initial pipeline can create draft/published marketplace records with citations, confidence labels, extraction rationale, and audit trace.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: A dry-run-first extraction pipeline placeholder now turns reviewed source notes into draft or publish-ready marketplace requests and offers with citations, confidence labels, rationale, and audit records.
+  - Verification: Added `npm run extract:data-marketplace`, a local placeholder extraction script, sample input, and workflow documentation. Dry run generated one extraction run, one source document, one data request, one data offer, confidence labels, extraction rationales, and source-linked payloads without writing to Supabase. Publish-mode dry run confirmed planned records switch to approved/open/available states. `node --check scripts/data-market-extraction-placeholder.mjs` passed; `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with only existing LF-to-CRLF warnings. Apply-mode wrong-project verification with `https://nwoluvjdojzayozyzlob.supabase.co` failed before any write with the expected canonical-project error for `xlpkdoeldtlhearqajat`. Live apply-mode writes were not run because no Supabase service key or reachable applied schema was available in this session.
+  - Blocked reason: None.
 
 - [ ] Task 036: Build Scout+ data marketplace UI for requests and offers
   - Priority: P1
