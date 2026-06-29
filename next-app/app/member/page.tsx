@@ -10,6 +10,13 @@ import {
     loadMemberJobAlerts,
     type JobAlert,
 } from "../_data/jobAlerts";
+import {
+    formatSpaceWeatherDateTime,
+    formatSpaceWeatherFreshness,
+    loadMemberSpaceWeatherSnapshots,
+    summarizeSpaceWeatherMetrics,
+    type SpaceWeatherSnapshot,
+} from "../_data/spaceWeather";
 
 export const dynamic = "force-dynamic";
 
@@ -295,6 +302,83 @@ function JobAlertsCard({ alerts }: { alerts: JobAlert[] }) {
     );
 }
 
+function SpaceWeatherCard({
+    snapshots,
+}: {
+    snapshots: SpaceWeatherSnapshot[];
+}) {
+    return (
+        <section className="glass-card h-fit rounded p-6">
+            <div className="border-b border-white/10 pb-4">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                    Space weather
+                </p>
+                <h2 className="mt-2 font-serif text-2xl text-white">
+                    Source Conditions
+                </h2>
+            </div>
+            <div className="mt-5 space-y-4">
+                {snapshots.map((snapshot) => (
+                    <article
+                        key={snapshot.sourceKey}
+                        className="border-b border-white/10 pb-4 last:border-0 last:pb-0"
+                    >
+                        <div className="flex items-start justify-between gap-4">
+                            <div>
+                                <p className="text-sm font-bold text-white">
+                                    {snapshot.sourceProduct}
+                                </p>
+                                <p className="mt-1 text-xs text-potomac-cream/55">
+                                    {snapshot.sourceAgency}
+                                </p>
+                            </div>
+                            <span className="shrink-0 rounded border border-potomac-gold/35 px-2 py-1 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-potomac-gold">
+                                {formatSpaceWeatherFreshness(
+                                    snapshot.freshnessStatus
+                                )}
+                            </span>
+                        </div>
+                        <p className="mt-3 text-xs leading-5 text-potomac-cream/65">
+                            {snapshot.statusSummary}
+                        </p>
+                        <dl className="mt-3 space-y-2 text-xs text-potomac-cream/55">
+                            <div className="flex justify-between gap-4">
+                                <dt>Updated</dt>
+                                <dd className="text-right text-potomac-cream/75">
+                                    {formatSpaceWeatherDateTime(
+                                        snapshot.sourceUpdatedAt
+                                    )}
+                                </dd>
+                            </div>
+                            {summarizeSpaceWeatherMetrics(
+                                snapshot.keyMetrics
+                            ).map((metric) => (
+                                <div
+                                    key={`${snapshot.sourceKey}-${metric.key}`}
+                                    className="flex justify-between gap-4"
+                                >
+                                    <dt className="capitalize">{metric.key}</dt>
+                                    <dd className="text-right text-potomac-cream/75">
+                                        {metric.value}
+                                    </dd>
+                                </div>
+                            ))}
+                        </dl>
+                        <a
+                            href={snapshot.sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-3 inline-flex text-xs font-bold uppercase tracking-[0.14em] text-potomac-gold transition hover:text-potomac-cream"
+                        >
+                            {snapshot.sourceName}
+                        </a>
+                    </article>
+                ))}
+            </div>
+        </section>
+    );
+}
+
 export default async function MemberPage() {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getClaims();
@@ -304,11 +388,13 @@ export default async function MemberPage() {
         redirect("/auth/login?next=/member");
     }
 
-    const [tickerItems, nexusStatus, jobAlerts] = await Promise.all([
-        loadPublicTickerItems(6),
-        loadNexusAccessStatus(supabase, claims.sub),
-        loadMemberJobAlerts({ supabase, limit: 4 }),
-    ]);
+    const [tickerItems, nexusStatus, jobAlerts, spaceWeatherSnapshots] =
+        await Promise.all([
+            loadPublicTickerItems(6),
+            loadNexusAccessStatus(supabase, claims.sub),
+            loadMemberJobAlerts({ supabase, limit: 4 }),
+            loadMemberSpaceWeatherSnapshots({ supabase, limit: 3 }),
+        ]);
 
     return (
         <section className="bg-grid-pattern">
@@ -365,6 +451,7 @@ export default async function MemberPage() {
                 <aside className="space-y-6">
                     <NexusAccessCard status={nexusStatus} />
                     <JobAlertsCard alerts={jobAlerts} />
+                    <SpaceWeatherCard snapshots={spaceWeatherSnapshots} />
                     <section className="glass-card h-fit rounded p-6">
                         <div className="border-b border-white/10 pb-4">
                             <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">

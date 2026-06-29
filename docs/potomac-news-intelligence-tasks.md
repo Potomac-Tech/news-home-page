@@ -334,13 +334,13 @@ Blocked reason:
   - Verification: Added `supabase/migrations/20260629220305_job_alerts_schema.sql` with job-alert enums, `space_sector_job_alerts`, employer/role/location/source/posting-date/freshness fields, seed alerts for official NASA, SpaceX, Blue Origin, and Lockheed Martin career sources, explicit authenticated grants, RLS, and staff manage policies. Added `/member` job-alert rendering plus a safe fallback loader and documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with the recurring LF-to-CRLF warning on `next-app/app/member/page.tsx`; static checks confirmed required schema fields, RLS/grants, loader, UI card, and source labels. Project-ref search found only the correct `xlpkdoeldtlhearqajat` references and existing documentation warnings about `nwoluvjdojzayozyzlob`. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live member reads were not exercised because no Supabase publishable key, applied reachable schema, or signed-in member test account was available.
   - Blocked reason: None.
 
-- [ ] Task 041: Add space weather source schema and dashboard module
+- [x] Task 041: Add space weather source schema and dashboard module
   - Priority: P2
   - Goal: Surface space-weather context inside the dashboard.
   - Acceptance criteria: Schema and dashboard module include source attribution, update timestamp, key metrics, and graceful stale-data states.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Members now have a dashboard space-weather card that shows official NOAA/NASA source conditions, update times, compact metrics, attribution, and current/stale labels.
+  - Verification: Added `supabase/migrations/20260629220633_space_weather_sources.sql` with space-weather freshness/publication enums, `space_weather_source_snapshots`, source attribution, source update/retrieval timestamps, stale-after thresholds, risk labels, JSON key metrics, official NOAA SWPC and NASA DONKI seed snapshots, explicit authenticated grants, RLS, and staff manage policies. Added `/member` space-weather rendering plus a safe fallback loader and documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with the recurring LF-to-CRLF warning on `next-app/app/member/page.tsx`; static checks confirmed required source fields, update timestamps, key metrics, freshness states, RLS/grants, loader, UI card, and source labels. Current source pages checked included NOAA SWPC current conditions, Planetary K-index, Real-Time Solar Wind, Alerts/Watches/Warnings, and NASA CCMC DONKI. Project-ref search found only the correct `xlpkdoeldtlhearqajat` references and existing documentation warnings about `nwoluvjdojzayozyzlob`. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live member reads were not exercised because no Supabase publishable key, applied reachable schema, or signed-in member test account was available.
+  - Blocked reason: None.
 
 - [ ] Task 042: Add CSV/XLSX upload flow for Scout/Command experimental test data
   - Priority: P1
