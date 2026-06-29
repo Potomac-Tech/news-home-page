@@ -326,13 +326,13 @@ Blocked reason:
   - Verification: Added a `/member` Nexus access card that checks active normalized roles and user-scoped active entitlements, shows role/entitlement status, and renders `https://nexus-explore.potomacdb.com` as a placeholder link for Scout, Command, and staff roles without appending any SSO token or session material. Added workflow documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files. Static checks confirmed the Nexus card, status loader, placeholder domain, and SSO-safety documentation are present. Project-ref search found only the correct `xlpkdoeldtlhearqajat` references and existing documentation warnings about the wrong project. Local `/member` route rendering could not exercise the signed-in card because the existing dev server has no Supabase public configuration and returns the pre-existing missing-config server error for `/member`; live signed-in Nexus status reads were not exercised because no Supabase publishable key, applied reachable schema, or seeded Scout/Command test user was available.
   - Blocked reason: None.
 
-- [ ] Task 040: Add NASA and large-space-company job alerts schema and dashboard module
+- [x] Task 040: Add NASA and large-space-company job alerts schema and dashboard module
   - Priority: P2
   - Goal: Provide useful job alerts for space-sector roles.
   - Acceptance criteria: Schema and dashboard module support employer, role, location, source URL, posting date, and freshness indicators.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Members now have a dashboard job-alert card for NASA and major space-company hiring sources, backed by a curated Supabase schema with source links, posting dates, locations, and freshness labels.
+  - Verification: Added `supabase/migrations/20260629220305_job_alerts_schema.sql` with job-alert enums, `space_sector_job_alerts`, employer/role/location/source/posting-date/freshness fields, seed alerts for official NASA, SpaceX, Blue Origin, and Lockheed Martin career sources, explicit authenticated grants, RLS, and staff manage policies. Added `/member` job-alert rendering plus a safe fallback loader and documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with the recurring LF-to-CRLF warning on `next-app/app/member/page.tsx`; static checks confirmed required schema fields, RLS/grants, loader, UI card, and source labels. Project-ref search found only the correct `xlpkdoeldtlhearqajat` references and existing documentation warnings about `nwoluvjdojzayozyzlob`. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live member reads were not exercised because no Supabase publishable key, applied reachable schema, or signed-in member test account was available.
+  - Blocked reason: None.
 
 - [ ] Task 041: Add space weather source schema and dashboard module
   - Priority: P2

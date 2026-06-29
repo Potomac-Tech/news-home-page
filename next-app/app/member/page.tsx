@@ -4,6 +4,12 @@ import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase/server";
 import { ScoutCheckoutButton } from "./ScoutCheckoutButton";
 import { loadPublicTickerItems } from "../_data/marketQuotes";
+import {
+    formatJobAlertDate,
+    formatJobAlertFreshness,
+    loadMemberJobAlerts,
+    type JobAlert,
+} from "../_data/jobAlerts";
 
 export const dynamic = "force-dynamic";
 
@@ -227,6 +233,68 @@ function NexusAccessCard({ status }: { status: NexusAccessStatus }) {
     );
 }
 
+function JobAlertsCard({ alerts }: { alerts: JobAlert[] }) {
+    return (
+        <section className="glass-card h-fit rounded p-6">
+            <div className="border-b border-white/10 pb-4">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                    Job alerts
+                </p>
+                <h2 className="mt-2 font-serif text-2xl text-white">
+                    NASA & Space Hiring
+                </h2>
+            </div>
+            <div className="mt-5 space-y-4">
+                {alerts.map((alert) => (
+                    <article
+                        key={alert.alertKey}
+                        className="border-b border-white/10 pb-4 last:border-0 last:pb-0"
+                    >
+                        <div className="flex items-start justify-between gap-4">
+                            <div>
+                                <p className="text-sm font-bold text-white">
+                                    {alert.employerName}
+                                </p>
+                                <h3 className="mt-1 text-sm leading-5 text-potomac-cream/80">
+                                    {alert.roleTitle}
+                                </h3>
+                            </div>
+                            <span className="shrink-0 rounded border border-potomac-gold/35 px-2 py-1 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-potomac-gold">
+                                {formatJobAlertFreshness(alert.freshnessStatus)}
+                            </span>
+                        </div>
+                        <dl className="mt-3 space-y-2 text-xs text-potomac-cream/55">
+                            <div>
+                                <dt className="sr-only">Location</dt>
+                                <dd>{alert.locationName}</dd>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                                <dt>Posting date</dt>
+                                <dd className="text-potomac-cream/75">
+                                    {formatJobAlertDate(alert.postingDate)}
+                                </dd>
+                            </div>
+                        </dl>
+                        {alert.freshnessNote ? (
+                            <p className="mt-3 text-xs leading-5 text-potomac-cream/50">
+                                {alert.freshnessNote}
+                            </p>
+                        ) : null}
+                        <a
+                            href={alert.sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-3 inline-flex text-xs font-bold uppercase tracking-[0.14em] text-potomac-gold transition hover:text-potomac-cream"
+                        >
+                            {alert.sourceName}
+                        </a>
+                    </article>
+                ))}
+            </div>
+        </section>
+    );
+}
+
 export default async function MemberPage() {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getClaims();
@@ -236,9 +304,10 @@ export default async function MemberPage() {
         redirect("/auth/login?next=/member");
     }
 
-    const [tickerItems, nexusStatus] = await Promise.all([
+    const [tickerItems, nexusStatus, jobAlerts] = await Promise.all([
         loadPublicTickerItems(6),
         loadNexusAccessStatus(supabase, claims.sub),
+        loadMemberJobAlerts({ supabase, limit: 4 }),
     ]);
 
     return (
@@ -295,6 +364,7 @@ export default async function MemberPage() {
                 </div>
                 <aside className="space-y-6">
                     <NexusAccessCard status={nexusStatus} />
+                    <JobAlertsCard alerts={jobAlerts} />
                     <section className="glass-card h-fit rounded p-6">
                         <div className="border-b border-white/10 pb-4">
                             <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
