@@ -52,6 +52,13 @@ export type DatasetCatalogEntry = {
     publication_status: string;
     published_at: string | null;
     display_order: number;
+    release_state: string;
+    exclusive_access_starts_at: string | null;
+    exclusive_access_ends_at: string | null;
+    scout_release_at: string | null;
+    public_release_at: string | null;
+    release_state_note: string | null;
+    unavailable_reason: string | null;
     sources: DatasetCatalogSource[];
     isFallback: boolean;
 };
@@ -95,6 +102,13 @@ const entryColumns = [
     "publication_status",
     "published_at",
     "display_order",
+    "release_state",
+    "exclusive_access_starts_at",
+    "exclusive_access_ends_at",
+    "scout_release_at",
+    "public_release_at",
+    "release_state_note",
+    "unavailable_reason",
 ].join(",");
 
 const sourceColumns = [
@@ -159,6 +173,14 @@ export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         publication_status: "published",
         published_at: fallbackRetrievedAt,
         display_order: 10,
+        release_state: "public_demo",
+        exclusive_access_starts_at: null,
+        exclusive_access_ends_at: null,
+        scout_release_at: null,
+        public_release_at: fallbackRetrievedAt,
+        release_state_note:
+            "Public source-hosted dataset or demo is immediately visible in the catalog.",
+        unavailable_reason: null,
         isFallback: true,
         sources: [
             {
@@ -221,6 +243,14 @@ export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         publication_status: "published",
         published_at: fallbackRetrievedAt,
         display_order: 20,
+        release_state: "public_demo",
+        exclusive_access_starts_at: null,
+        exclusive_access_ends_at: null,
+        scout_release_at: null,
+        public_release_at: fallbackRetrievedAt,
+        release_state_note:
+            "Public source-hosted dataset or demo is immediately visible in the catalog.",
+        unavailable_reason: null,
         isFallback: true,
         sources: [
             {
@@ -286,6 +316,14 @@ export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         publication_status: "published",
         published_at: fallbackRetrievedAt,
         display_order: 30,
+        release_state: "public_demo",
+        exclusive_access_starts_at: null,
+        exclusive_access_ends_at: null,
+        scout_release_at: null,
+        public_release_at: fallbackRetrievedAt,
+        release_state_note:
+            "Public source-hosted dataset or demo is immediately visible in the catalog.",
+        unavailable_reason: null,
         isFallback: true,
         sources: [
             {
@@ -349,6 +387,14 @@ export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         publication_status: "published",
         published_at: fallbackRetrievedAt,
         display_order: 40,
+        release_state: "scout_delayed",
+        exclusive_access_starts_at: null,
+        exclusive_access_ends_at: null,
+        scout_release_at: "2026-07-31T13:00:00.000Z",
+        public_release_at: null,
+        release_state_note:
+            "Public demo is visible now; enriched working records are queued for Scout release.",
+        unavailable_reason: null,
         isFallback: true,
         sources: [
             {
@@ -385,7 +431,7 @@ export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         availability_state: "upcoming",
         availability_note:
             "Cataloged before full dataset release; current public preview is limited to methodology summaries.",
-        access_tier_required: "scout",
+        access_tier_required: "command",
         is_sample_available: false,
         sample_url: null,
         is_demo_available: true,
@@ -408,10 +454,18 @@ export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         source_license:
             "Potomac proprietary derived model; source citations remain visible where licensed or public.",
         source_retrieved_at: fallbackRetrievedAt,
-        release_target_date: "2026-07-31",
+        release_target_date: "2027-06-29",
         publication_status: "published",
         published_at: fallbackRetrievedAt,
         display_order: 50,
+        release_state: "command_exclusive",
+        exclusive_access_starts_at: fallbackRetrievedAt,
+        exclusive_access_ends_at: "2027-06-29T13:00:00.000Z",
+        scout_release_at: "2027-06-29T13:00:00.000Z",
+        public_release_at: null,
+        release_state_note:
+            "Command-exclusive benchmark pack for the first year after cataloged collection; Scout access begins after the exclusivity window.",
+        unavailable_reason: null,
         isFallback: true,
         sources: [
             {
@@ -430,6 +484,78 @@ export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
                 retrieved_at: fallbackRetrievedAt,
                 is_public: true,
                 confidence_label: "medium",
+                display_order: 10,
+            },
+        ],
+    },
+    {
+        id: "fallback-potomac-volatiles-feed",
+        dataset_key: "potomac-near-real-time-polar-volatiles-feed",
+        slug: "potomac-near-real-time-polar-volatiles-feed",
+        title: "Potomac Near-Real-Time Polar Volatiles Feed",
+        summary:
+            "Placeholder catalog record for future near-real-time lunar polar volatiles intelligence once collection, rights, and customer allocation are approved.",
+        dataset_kind: "potomac_proprietary",
+        provider_name: "Potomac Database Systems",
+        owner_name: "Potomac Database Systems",
+        collection_name: "Command intelligence",
+        availability_state: "restricted",
+        availability_note:
+            "Unavailable until collection rights, review workflow, and Command allocation are approved.",
+        access_tier_required: "command",
+        is_sample_available: false,
+        sample_url: null,
+        is_demo_available: false,
+        demo_url: null,
+        sample_note:
+            "No public sample is available while collection and rights review are pending.",
+        coverage_start_at: null,
+        coverage_end_at: null,
+        geography_scope: "Lunar polar regions",
+        mission_name: null,
+        instrument_name: null,
+        data_types: [
+            "near-real-time intelligence",
+            "volatiles",
+            "polar operations",
+            "collection placeholder",
+        ],
+        update_frequency: "Unavailable until production collection is approved.",
+        source_landing_url: null,
+        source_license:
+            "Potomac proprietary placeholder; no redistribution or data access is available.",
+        source_retrieved_at: fallbackRetrievedAt,
+        release_target_date: null,
+        publication_status: "published",
+        published_at: fallbackRetrievedAt,
+        display_order: 60,
+        release_state: "unavailable",
+        exclusive_access_starts_at: null,
+        exclusive_access_ends_at: null,
+        scout_release_at: null,
+        public_release_at: null,
+        release_state_note:
+            "Unavailable records are represented explicitly so members can see planned categories without assuming access.",
+        unavailable_reason:
+            "Collection rights, security review, and customer allocation are not approved.",
+        isFallback: true,
+        sources: [
+            {
+                id: "fallback-source-potomac-volatiles",
+                dataset_id: "fallback-potomac-volatiles-feed",
+                source_key: "potomac-volatiles-placeholder",
+                source_name: "Potomac near-real-time volatiles placeholder",
+                source_publisher: "Potomac Database Systems",
+                source_type: "placeholder",
+                source_url: null,
+                citation_text:
+                    "Internal placeholder catalog source for a future near-real-time polar volatiles intelligence product.",
+                license_notes:
+                    "Potomac proprietary planning record; no source data is distributed.",
+                published_at: null,
+                retrieved_at: fallbackRetrievedAt,
+                is_public: true,
+                confidence_label: "experimental",
                 display_order: 10,
             },
         ],

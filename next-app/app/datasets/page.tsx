@@ -89,6 +89,81 @@ function kindLabel(value: string) {
     return statusLabel(value);
 }
 
+function releaseStateLabel(value: string) {
+    if (value === "command_exclusive") {
+        return "Command-exclusive";
+    }
+
+    if (value === "scout_delayed") {
+        return "Scout-delayed";
+    }
+
+    if (value === "public_demo") {
+        return "Public/demo";
+    }
+
+    return statusLabel(value);
+}
+
+function daysUntil(value: string | null | undefined) {
+    if (!value) {
+        return null;
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return null;
+    }
+
+    return Math.max(
+        0,
+        Math.ceil((date.getTime() - Date.now()) / (24 * 60 * 60 * 1000))
+    );
+}
+
+function releaseWindow(entry: DatasetCatalogEntry) {
+    if (!entry.exclusive_access_starts_at && !entry.exclusive_access_ends_at) {
+        return null;
+    }
+
+    if (!entry.exclusive_access_starts_at) {
+        return `Until ${formatDate(entry.exclusive_access_ends_at)}`;
+    }
+
+    if (!entry.exclusive_access_ends_at) {
+        return `From ${formatDate(entry.exclusive_access_starts_at)}`;
+    }
+
+    return `${formatDate(entry.exclusive_access_starts_at)} - ${formatDate(
+        entry.exclusive_access_ends_at
+    )}`;
+}
+
+function releaseStateDetail(entry: DatasetCatalogEntry) {
+    if (entry.release_state === "unavailable") {
+        return entry.unavailable_reason ?? "Dataset access is not available.";
+    }
+
+    if (entry.release_state === "command_exclusive") {
+        const remainingDays = daysUntil(entry.exclusive_access_ends_at);
+        const remainingText =
+            remainingDays === null
+                ? ""
+                : ` (${remainingDays.toLocaleString()} days remaining)`;
+
+        return `Exclusive until ${formatDate(
+            entry.exclusive_access_ends_at
+        )}${remainingText}`;
+    }
+
+    if (entry.release_state === "scout_delayed") {
+        return `Scout release ${formatDate(entry.scout_release_at)}`;
+    }
+
+    return `Public/demo release ${formatDate(entry.public_release_at)}`;
+}
+
 function catalogJsonLd(entries: DatasetCatalogEntry[]) {
     return {
         "@context": "https://schema.org",
@@ -224,6 +299,7 @@ function SourceList({ sources }: { sources: DatasetCatalogSource[] }) {
 
 function DatasetCard({ entry }: { entry: DatasetCatalogEntry }) {
     const dataTypes = entry.data_types.join(", ");
+    const exclusiveWindow = releaseWindow(entry);
 
     return (
         <article className="glass-card rounded p-6">
@@ -253,6 +329,15 @@ function DatasetCard({ entry }: { entry: DatasetCatalogEntry }) {
                     </p>
                     <p className="mt-2 text-xs uppercase tracking-[0.12em] text-potomac-cream/45">
                         Release {formatDate(entry.release_target_date)}
+                    </p>
+                    <p className="mt-4 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
+                        Release state
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-potomac-cream/70">
+                        {releaseStateLabel(entry.release_state)}
+                    </p>
+                    <p className="mt-2 text-xs leading-5 text-potomac-cream/50">
+                        {releaseStateDetail(entry)}
                     </p>
                 </div>
             </div>
@@ -297,6 +382,22 @@ function DatasetCard({ entry }: { entry: DatasetCatalogEntry }) {
                                     label: "Source reviewed",
                                     value: formatDate(entry.source_retrieved_at),
                                 },
+                                {
+                                    label: "Exclusive window",
+                                    value: exclusiveWindow,
+                                },
+                                {
+                                    label: "Scout release",
+                                    value: entry.scout_release_at
+                                        ? formatDate(entry.scout_release_at)
+                                        : null,
+                                },
+                                {
+                                    label: "Public release",
+                                    value: entry.public_release_at
+                                        ? formatDate(entry.public_release_at)
+                                        : null,
+                                },
                             ]}
                         />
                     </div>
@@ -335,6 +436,11 @@ function DatasetCard({ entry }: { entry: DatasetCatalogEntry }) {
                     {entry.sample_note ? (
                         <p className="mt-4 text-xs leading-5 text-potomac-cream/50">
                             {entry.sample_note}
+                        </p>
+                    ) : null}
+                    {entry.release_state_note ? (
+                        <p className="mt-3 border-l border-potomac-gold/35 pl-3 text-xs leading-5 text-potomac-cream/55">
+                            {entry.release_state_note}
                         </p>
                     ) : null}
                 </section>

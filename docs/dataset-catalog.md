@@ -16,6 +16,10 @@ mission and instrument context, data type labels, source landing URL, source
 license notes, sample/demo flags, sample/demo URLs, release target date, and
 publication state.
 
+Task 038 extends entries with release-state metadata for Command-exclusive,
+Scout-delayed, public/demo, and unavailable records, including one-year
+exclusivity windows and release-date display fields.
+
 ## Seeded Catalog Entries
 
 - NASA PDS Lunar Orbital Data Explorer.
@@ -23,6 +27,7 @@ publication state.
 - USGS Unified Geologic Map of the Moon.
 - Potomac Lunar Site Intelligence Demo.
 - Potomac Lunar Economy Benchmark Pack.
+- Potomac Near-Real-Time Polar Volatiles Feed placeholder.
 
 ## Access Model
 
@@ -30,9 +35,8 @@ Published catalog entries are readable by public visitors. Public source rows
 are readable when their parent catalog entry is published. Editors, analysts,
 and admins can read and manage draft, published, and archived catalog records.
 
-This task does not expose raw paid datasets. Tier requirements are catalog
-metadata only. Task 038 should add release-state calculations and one-year
-exclusivity behavior.
+This task does not expose raw paid datasets. Tier requirements and release
+states are catalog metadata only.
 
 ## UI
 
@@ -43,3 +47,4 @@ exclusivity behavior.
   entries as local fallback content.
 - The route includes DataCatalog/Dataset structured data and is listed in the
   sitemap.
+- Release-state labels and timing are rendered for each catalog entry.
