@@ -35,6 +35,11 @@ export const currentRoutes = [
         note: "Public event calendar with teaser fields and member-gated event details.",
     },
     {
+        href: "/datasets",
+        source: "next-app/app/datasets/page.tsx",
+        note: "Public dataset catalog with NASA/science archives, Potomac proprietary entries, source metadata, availability, tier, sample, and demo indicators.",
+    },
+    {
         href: "/member/summits",
         source: "next-app/app/member/summits/page.tsx",
         note: "Member-gated internal summit tracker with upcoming summit and past-event summary views.",
