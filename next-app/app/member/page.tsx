@@ -42,8 +42,8 @@ export default async function MemberPage() {
                         <span className="text-potomac-gold">
                             {claims.email ?? claims.sub}
                         </span>
-                        . Membership status and entitlements will appear here
-                        after the access-control schema is added.
+                        . Membership status, entitlements, and paid
+                        intelligence modules appear here as access is approved.
                     </p>
                     <div className="mt-10 flex flex-wrap gap-4">
                         <Link
@@ -63,6 +63,12 @@ export default async function MemberPage() {
                             className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                         >
                             Economy dashboard
+                        </Link>
+                        <Link
+                            href="/member/marketplace"
+                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+                        >
+                            Data marketplace
                         </Link>
                         <Link
                             href="/auth/logout"

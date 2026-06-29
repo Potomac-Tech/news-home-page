@@ -294,13 +294,13 @@ Blocked reason:
   - Verification: Added `npm run extract:data-marketplace`, a local placeholder extraction script, sample input, and workflow documentation. Dry run generated one extraction run, one source document, one data request, one data offer, confidence labels, extraction rationales, and source-linked payloads without writing to Supabase. Publish-mode dry run confirmed planned records switch to approved/open/available states. `node --check scripts/data-market-extraction-placeholder.mjs` passed; `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with only existing LF-to-CRLF warnings. Apply-mode wrong-project verification with `https://nwoluvjdojzayozyzlob.supabase.co` failed before any write with the expected canonical-project error for `xlpkdoeldtlhearqajat`. Live apply-mode writes were not run because no Supabase service key or reachable applied schema was available in this session.
   - Blocked reason: None.
 
-- [ ] Task 036: Build Scout+ data marketplace UI for requests and offers
+- [x] Task 036: Build Scout+ data marketplace UI for requests and offers
   - Priority: P1
   - Goal: Let paid members browse data requests and offers.
   - Acceptance criteria: Scout+ users can view request/offer lists, details, sources, confidence labels, locations, instruments, and mission metadata.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Paid members now have a protected data marketplace page for reviewing approved data requests and dataset offers with source evidence, confidence labels, and mission context.
+  - Verification: Added `/member/marketplace`, a Scout/Command/staff access guard, a live Supabase data loader for approved marketplace requests/offers/source evidence, a member workspace link, and workflow documentation. `npm run build:next` passed and registered `/member/marketplace`; `npm run build` passed for the legacy Vite site; `git diff --check` passed with the recurring LF-to-CRLF warning on a touched file. Local route check on the existing `http://127.0.0.1:3001` Next dev server confirmed `/member/marketplace` renders the no-config paid-data gate with expected copy. Project-ref search found only the correct `xlpkdoeldtlhearqajat` references and existing documentation warnings about the wrong project. `npm run lint` was not run because the repo has no ESLint configuration file. Live Scout/Command marketplace reads could not be exercised because no Supabase publishable key, applied reachable schema, or seeded paid test user was available in this session.
+  - Blocked reason: None.
 
 - [ ] Task 037: Create dataset catalog with public NASA/science data and Potomac proprietary entries
   - Priority: P1
