@@ -440,6 +440,12 @@ export default async function MemberPage() {
                             Data marketplace
                         </Link>
                         <Link
+                            href="/member/test-data"
+                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+                        >
+                            Test data uploads
+                        </Link>
+                        <Link
                             href="/auth/logout"
                             className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                         >
