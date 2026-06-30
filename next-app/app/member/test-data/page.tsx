@@ -4,6 +4,11 @@ import { redirect } from "next/navigation";
 import { getTestDataAccessContext } from "../../../lib/auth/test-data";
 import { hasPotomacSupabasePublicConfig } from "../../../lib/supabase/config";
 import { createClient } from "../../../lib/supabase/server";
+import {
+    CompareForm,
+    type CompareDatasetOption,
+    type CompareUploadOption,
+} from "./CompareForm";
 import { UploadForm } from "./UploadForm";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +27,23 @@ type TestDataUpload = {
     uploaded_at: string;
     test_environment: string | null;
     test_campaign: string | null;
+};
+
+type TestDataComparison = {
+    id: string;
+    status: string;
+    result_summary: string;
+    limitations: string[];
+    compatibility_score: number | null;
+    created_at: string;
+    upload: {
+        title: string;
+        original_filename: string;
+    } | null;
+    reference_dataset: {
+        title: string;
+        provider_name: string;
+    } | null;
 };
 
 const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {
@@ -198,6 +220,90 @@ function RecentUploads({ uploads }: { uploads: TestDataUpload[] }) {
     );
 }
 
+function RecentComparisons({
+    comparisons,
+}: {
+    comparisons: TestDataComparison[];
+}) {
+    return (
+        <section className="glass-card rounded p-6">
+            <div className="border-b border-white/10 pb-5">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                    Results
+                </p>
+                <h2 className="mt-2 font-serif text-3xl text-white">
+                    Comparison History
+                </h2>
+            </div>
+            <div className="mt-6 space-y-5">
+                {comparisons.length ? (
+                    comparisons.map((comparison) => (
+                        <article
+                            key={comparison.id}
+                            className="border-b border-white/10 pb-5 last:border-0 last:pb-0"
+                        >
+                            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                                <div>
+                                    <p className="text-sm font-bold text-white">
+                                        {comparison.upload?.title ??
+                                            "Upload unavailable"}
+                                    </p>
+                                    <p className="mt-1 text-xs text-potomac-cream/50">
+                                        vs{" "}
+                                        {comparison.reference_dataset?.title ??
+                                            "Reference unavailable"}
+                                    </p>
+                                </div>
+                                <div className="flex flex-wrap gap-2 text-[0.65rem] font-bold uppercase tracking-[0.14em]">
+                                    <span className="rounded border border-potomac-gold/35 px-2 py-1 text-potomac-gold">
+                                        {statusLabel(comparison.status)}
+                                    </span>
+                                    <span className="rounded border border-white/15 px-2 py-1 text-potomac-cream/65">
+                                        {comparison.compatibility_score == null
+                                            ? "Score pending"
+                                            : `${comparison.compatibility_score}%`}
+                                    </span>
+                                </div>
+                            </div>
+                            <p className="mt-4 text-sm leading-6 text-potomac-cream/75">
+                                {comparison.result_summary}
+                            </p>
+                            <dl className="mt-4 grid gap-3 text-xs text-potomac-cream/55 md:grid-cols-2">
+                                <div>
+                                    <dt className="font-bold uppercase tracking-[0.12em] text-potomac-gold">
+                                        Provider
+                                    </dt>
+                                    <dd className="mt-1">
+                                        {comparison.reference_dataset
+                                            ?.provider_name ?? "Not set"}
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt className="font-bold uppercase tracking-[0.12em] text-potomac-gold">
+                                        Created
+                                    </dt>
+                                    <dd className="mt-1">
+                                        {formatDateTime(comparison.created_at)}
+                                    </dd>
+                                </div>
+                            </dl>
+                            <ul className="mt-4 space-y-2 text-xs leading-5 text-potomac-cream/55">
+                                {comparison.limitations.map((limitation) => (
+                                    <li key={limitation}>{limitation}</li>
+                                ))}
+                            </ul>
+                        </article>
+                    ))
+                ) : (
+                    <p className="text-sm leading-6 text-potomac-cream/60">
+                        No comparison runs are saved for this account yet.
+                    </p>
+                )}
+            </div>
+        </section>
+    );
+}
+
 export default async function ExperimentalTestDataPage() {
     if (!hasPotomacSupabasePublicConfig()) {
         return <ConfigGate />;
@@ -217,17 +323,55 @@ export default async function ExperimentalTestDataPage() {
         return <LockedGate />;
     }
 
-    const { data, error } = await supabase
-        .from("experimental_test_data_uploads")
-        .select(
-            "id,title,original_filename,file_format,byte_size,validation_status,uploaded_at,test_environment,test_campaign"
-        )
-        .order("uploaded_at", { ascending: false })
-        .limit(8);
+    const [uploadsResult, datasetsResult, comparisonsResult] =
+        await Promise.all([
+            supabase
+                .from("experimental_test_data_uploads")
+                .select(
+                    "id,title,original_filename,file_format,byte_size,validation_status,uploaded_at,test_environment,test_campaign"
+                )
+                .order("uploaded_at", { ascending: false })
+                .limit(8),
+            supabase
+                .from("dataset_catalog_entries")
+                .select("id,title,provider_name,access_tier_required")
+                .eq("publication_status", "published")
+                .in("availability_state", ["available", "preview"])
+                .order("display_order", { ascending: true })
+                .limit(24),
+            supabase
+                .from("experimental_test_data_comparisons")
+                .select(
+                    "id,status,result_summary,limitations,compatibility_score,created_at,upload:experimental_test_data_uploads(title,original_filename),reference_dataset:dataset_catalog_entries(title,provider_name)"
+                )
+                .order("created_at", { ascending: false })
+                .limit(8),
+        ]);
+
+    const error =
+        uploadsResult.error ?? datasetsResult.error ?? comparisonsResult.error;
 
     if (error) {
         throw new Error(error.message);
     }
+
+    const uploads = (uploadsResult.data ?? []) as TestDataUpload[];
+    const datasetOptions = ((datasetsResult.data ??
+        []) as CompareDatasetOption[]).filter(
+        (dataset) =>
+            dataset.access_tier_required !== "command" ||
+            access.roleId === "command_user" ||
+            access.roleId === "admin"
+    );
+    const uploadOptions = uploads
+        .filter((upload) =>
+            ["accepted", "needs_review"].includes(upload.validation_status)
+        )
+        .map((upload) => ({
+            id: upload.id,
+            title: upload.title,
+            original_filename: upload.original_filename,
+        })) satisfies CompareUploadOption[];
 
     return (
         <section className="bg-grid-pattern">
@@ -270,7 +414,37 @@ export default async function ExperimentalTestDataPage() {
 
                 <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
                     <UploadForm />
-                    <RecentUploads uploads={(data ?? []) as TestDataUpload[]} />
+                    <RecentUploads uploads={uploads} />
+                </div>
+
+                <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
+                    <CompareForm
+                        uploads={uploadOptions}
+                        datasets={datasetOptions}
+                    />
+                    <section className="glass-card h-fit rounded p-6">
+                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                            Assumptions
+                        </p>
+                        <h2 className="mt-2 font-serif text-2xl text-white">
+                            Scope Guardrails
+                        </h2>
+                        <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
+                            The current comparison records metadata and scope
+                            alignment only. Row parsing, unit normalization,
+                            statistical fit, and analyst approval remain future
+                            data-operations work.
+                        </p>
+                    </section>
+                </div>
+
+                <div className="mt-8">
+                    <RecentComparisons
+                        comparisons={
+                            (comparisonsResult.data ??
+                                []) as unknown as TestDataComparison[]
+                        }
+                    />
                 </div>
             </div>
         </section>

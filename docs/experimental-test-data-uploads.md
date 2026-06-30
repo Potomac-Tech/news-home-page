@@ -55,12 +55,36 @@ uploading. It does not parse rows or compare columns yet. Task 043 should add
 dataset selection, comparison logic, assumptions, and clearer row/column-level
 validation after files are available in private storage.
 
+## Comparison Dashboard
+
+Task 043 adds a scaffolded comparison workflow on the same `/member/test-data`
+page. Paid members can select one accepted upload and one approved, available or
+preview reference dataset from `dataset_catalog_entries`.
+
+Comparison runs are stored in `experimental_test_data_comparisons` with:
+
+- selected upload
+- selected reference dataset
+- status
+- result summary
+- assumptions
+- limitations
+- compatibility score
+
+The first comparison method is intentionally limited to metadata and scope
+alignment. It records the file format, campaign context, reference provider,
+dataset kind, data types, and a preliminary score. It does not parse file rows,
+normalize units, or calculate statistical fit. The result card displays those
+limitations so members understand the output is a planning signal, not an
+analyst-approved data product.
+
 ## Verification Notes
 
 Live upload verification requires:
 
 - Potomac Supabase public URL and publishable key for project
   `xlpkdoeldtlhearqajat`
-- applied migration `20260630030304_experimental_test_data_uploads.sql`
+- applied migrations `20260630030304_experimental_test_data_uploads.sql` and
+  `20260630030735_experimental_test_data_comparisons.sql`
 - signed-in Scout or Command test user
 - Supabase Storage enabled for the private bucket
