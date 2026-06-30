@@ -7,6 +7,7 @@ const navItems = [
     { href: "/member", label: "Member" },
     { href: "/organization", label: "Organization" },
     { href: "/apply", label: "Apply" },
+    { href: "/pricing", label: "Pricing" },
     { href: "/command", label: "Command" },
     { href: "/admin/applications", label: "Admin" },
     { href: "/admin/sponsors", label: "Sponsors" },
@@ -34,12 +35,12 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                             <span className="text-potomac-gold">NEWS</span>
                         </span>
                     </Link>
-                    <nav className="hidden items-center gap-4 md:flex">
+                    <nav className="hidden max-w-[46rem] flex-wrap items-center justify-end gap-3 md:flex lg:max-w-none lg:gap-4">
                         {navItems.map((item) => (
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className="text-sm font-semibold uppercase tracking-widest text-gray-400 transition hover:text-potomac-gold"
+                                className="text-xs font-semibold uppercase tracking-widest text-gray-400 transition hover:text-potomac-gold lg:text-sm"
                             >
                                 {item.label}
                             </Link>

@@ -430,13 +430,13 @@ Blocked reason:
   - Verification: Added `docs/tier-packaging-and-gates.md` with tier names, internal role mappings, free/manual/self-serve billing model, `$25,000/user/year` Scout pricing, Command sales-led approval, included features, initial limits, upgrade paths, access-control notes, and legacy Member terminology guidance. Updated `docs/member-access-schema.md` to link the schema model back to the canonical tier packaging doc. `git diff --check` passed with the recurring LF-to-CRLF warning on `docs/member-access-schema.md`; static search confirmed Explorer, Scout, Command, pricing, upgrade path, access-control, and legacy terminology coverage. No app build was run because this was documentation-only.
   - Blocked reason: None.
 
-- [ ] Task 053: Build Explorer/Scout/Command pricing and upgrade entry points
+- [x] Task 053: Build Explorer/Scout/Command pricing and upgrade entry points
   - Priority: P1
   - Goal: Make tier differences and upgrade paths clear to prospects and approved members.
   - Acceptance criteria: Public pricing or membership page explains Explorer, Scout, and Command; member dashboard surfaces relevant upgrade CTAs; Scout checkout and Command interest paths remain connected.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Prospects and approved members now have a public pricing page and dashboard entry point that explain Explorer, Scout, and Command access and route users to the right application, checkout, or sales path.
+  - Verification: Added `/pricing`, public and member navigation links, homepage CTA, sitemap coverage, metadata/JSON-LD, and `docs/pricing-upgrade-entry-points.md`. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files; `npm run lint` still cannot run because the repo has no ESLint configuration file. Browser QA used local Microsoft Edge through Playwright CLI because the in-app Browser setup timed out and the Playwright test runner was not installed in the repo; desktop `1280x720` and mobile `390x844` screenshots of `/pricing` rendered the tier page without visible first-viewport overflow. Local route checks confirmed `/pricing`, `/apply`, `/command`, and `/sitemap.xml` return `200`, `/pricing` includes the Explorer/Scout/Command headline, `$25,000` Scout price, `/apply`, `/member`, `/command` links, JSON-LD, and sitemap inclusion. Live Scout checkout and `/member` workspace verification could not be exercised because the dev server has no `NEXT_PUBLIC_SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+  - Blocked reason: None.
 
 - [ ] Task 054: Build lunar industry terminal navigation and dashboard shell
   - Priority: P0
