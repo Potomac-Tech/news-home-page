@@ -422,13 +422,13 @@ Blocked reason:
   - Verification: Added `/member/rfqs`, RFQ access helpers, server actions for RFQ creation, status updates, response submission, and reporting, plus a member dashboard link and workflow documentation. `npm run build:next` passed and registered `/member/rfqs`; `npm run build` passed; `git diff --check` passed with the recurring LF-to-CRLF warning on `next-app/app/member/page.tsx`; static search confirmed RFQ route/action/auth coverage. Browser QA used local Microsoft Edge through Playwright because the in-app Browser tool was unavailable and bundled Playwright Chromium was not installed; `http://127.0.0.1:3020/member/rfqs` returned `200`, rendered the no-config Supabase gate with RFQ workspace copy, had no framework overlay, no console errors, `/apply` navigation, and no horizontal overflow at desktop `1280x720` or mobile `390x844`. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was reachable. Live RFQ posting, browsing, response, organization attribution, moderation, and report verification was not exercised because no Supabase publishable key, applied reachable RFQ schema, or seeded Scout/Command/organization-admin/moderator test users were available.
   - Blocked reason: None.
 
-- [ ] Task 052: Document Explorer, Scout, and Command tier packaging and gates
+- [x] Task 052: Document Explorer, Scout, and Command tier packaging and gates
   - Priority: P0
   - Goal: Align the product model with Explorer as the free approved base membership, Scout as the professional paid tier, and Command as the enterprise tier.
   - Acceptance criteria: Documentation and access-control notes define tier names, pricing/approval model, limits, included features, upgrade paths, and legacy Member terminology handling.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The Explorer, Scout, and Command packaging model is now documented in one place, including who each tier is for, how access is granted, what each tier includes, and how the older Member terminology should be used.
+  - Verification: Added `docs/tier-packaging-and-gates.md` with tier names, internal role mappings, free/manual/self-serve billing model, `$25,000/user/year` Scout pricing, Command sales-led approval, included features, initial limits, upgrade paths, access-control notes, and legacy Member terminology guidance. Updated `docs/member-access-schema.md` to link the schema model back to the canonical tier packaging doc. `git diff --check` passed with the recurring LF-to-CRLF warning on `docs/member-access-schema.md`; static search confirmed Explorer, Scout, Command, pricing, upgrade path, access-control, and legacy terminology coverage. No app build was run because this was documentation-only.
+  - Blocked reason: None.
 
 - [ ] Task 053: Build Explorer/Scout/Command pricing and upgrade entry points
   - Priority: P1

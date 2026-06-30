@@ -30,6 +30,12 @@ supabase/migrations/20260623121852_member_access_schema.sql
 - Organization admins: `organization_members.role = 'org_admin'` plus the `org_admin` role.
 - Staff roles: `editor`, `analyst`, and `admin` role records are seeded for later policy work.
 
+See `docs/tier-packaging-and-gates.md` for the canonical product packaging
+model: Explorer maps to the existing approved `member` role, Scout is the
+self-serve `$25,000/user/year` paid tier, and Command is the manual
+organization-level enterprise tier. The user-facing noun "member" remains valid
+for approved people across all tiers.
+
 ## Verification Limit
 
 The migration was created with `npx supabase --workdir "C:\Users\JacobMatthews\Documents\Potomac Website" migration new member_access_schema`.
