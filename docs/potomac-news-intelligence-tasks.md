@@ -374,13 +374,13 @@ Blocked reason:
   - Verification: Added `supabase/migrations/20260630080208_command_perks_tracking.sql` with Command perk type/status/priority enums, `command_perk_commitments`, fulfillment fields, explicit grants, RLS policies for organization visibility and staff management, active Command entitlement checks, and admin-only deletion. Extended `/admin/command` with active Command organization selection, perk creation, perk update, fulfillment status, due/fulfilled dates, next steps, blocked reasons, sponsorship notes, and audit-event writes. Added workflow documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files; static search confirmed Command perk schema/UI/action coverage and correct `xlpkdoeldtlhearqajat` project references while only existing docs warn against `nwoluvjdojzayozyzlob`. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live perk creation/update verification was not exercised because no Supabase publishable key, applied reachable schema, active Command organization, or signed-in admin test user was available.
   - Blocked reason: None.
 
-- [ ] Task 046: Create member-to-member chat schema, RLS, moderation, and audit model
+- [x] Task 046: Create member-to-member chat schema, RLS, moderation, and audit model
   - Priority: P1
   - Goal: Define the data model and access rules for safe direct chat between approved members.
   - Acceptance criteria: Schema supports conversations, participants, messages, read receipts, muted/blocked participants, report/moderation records, audit events, and RLS that limits access to approved participants and authorized staff.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Approved members now have a database foundation for safe direct chat with read state, muting, blocking, reporting, moderation, and audit records.
+  - Verification: Added `supabase/migrations/20260630080656_member_chat_schema.sql` with chat conversations, participants, messages, read receipts, blocks, reports, moderation actions, audit events, enum states, indexes, updated-at triggers, explicit grants, private authorization helpers, and RLS policies for approved Explorer/Scout/Command participants plus analyst/admin moderation. Added workflow documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed; static search confirmed the required chat tables, block/report/moderation/audit tables, helper functions, RLS policies, and correct `xlpkdoeldtlhearqajat` project references while only existing docs warn against `nwoluvjdojzayozyzlob`. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live RLS behavior was not exercised because no Supabase publishable key, applied reachable schema, or seeded Explorer/Scout/Command/moderator test users were available.
+  - Blocked reason: None.
 
 - [ ] Task 047: Build direct member-to-member chat UI and notification surfaces
   - Priority: P1
