@@ -382,13 +382,13 @@ Blocked reason:
   - Verification: Added `supabase/migrations/20260630080656_member_chat_schema.sql` with chat conversations, participants, messages, read receipts, blocks, reports, moderation actions, audit events, enum states, indexes, updated-at triggers, explicit grants, private authorization helpers, and RLS policies for approved Explorer/Scout/Command participants plus analyst/admin moderation. Added workflow documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed; static search confirmed the required chat tables, block/report/moderation/audit tables, helper functions, RLS policies, and correct `xlpkdoeldtlhearqajat` project references while only existing docs warn against `nwoluvjdojzayozyzlob`. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live RLS behavior was not exercised because no Supabase publishable key, applied reachable schema, or seeded Explorer/Scout/Command/moderator test users were available.
   - Blocked reason: None.
 
-- [ ] Task 047: Build direct member-to-member chat UI and notification surfaces
+- [x] Task 047: Build direct member-to-member chat UI and notification surfaces
   - Priority: P1
   - Goal: Let approved Members, Scout users, and Command users start and continue member-to-member conversations.
   - Acceptance criteria: Member dashboard includes chat inbox, conversation detail, compose/reply flow, unread indicators, privacy-constrained member discovery, report/block controls, and graceful empty/error states.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Approved members now have a protected chat workspace for direct conversations, replies, unread status, member discovery, reporting, and blocking.
+  - Verification: Added `/member/chat`, server actions for starting conversations, replies, read receipts, reports, and blocks, a member dashboard link, workflow documentation, and `supabase/migrations/20260630130336_member_chat_profile_discovery.sql` for chat profile discovery plus conversation timestamp updates. `npm run build:next` passed and registered `/member/chat`; `npm run build` passed; `git diff --check` passed with the recurring LF-to-CRLF warning on `next-app/app/member/page.tsx`; static search confirmed chat UI/action/migration coverage and correct `xlpkdoeldtlhearqajat` project references while only existing docs warn against `nwoluvjdojzayozyzlob`. Browser QA against `http://127.0.0.1:3017/member/chat` confirmed the no-config member-chat gate, page title, no framework overlay, no console errors, `/apply` navigation, and no mobile horizontal overflow at `390x844`; Browser screenshot capture timed out with `Page.captureScreenshot`. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live compose/reply/report/block verification was not exercised because no Supabase publishable key, applied reachable schema, or seeded approved member test users were available.
+  - Blocked reason: None.
 
 - [ ] Task 048: Add moderated member forum schema, RLS, and audit model
   - Priority: P1
