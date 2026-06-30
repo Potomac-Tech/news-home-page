@@ -438,13 +438,13 @@ Blocked reason:
   - Verification: Added `/pricing`, public and member navigation links, homepage CTA, sitemap coverage, metadata/JSON-LD, and `docs/pricing-upgrade-entry-points.md`. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files; `npm run lint` still cannot run because the repo has no ESLint configuration file. Browser QA used local Microsoft Edge through Playwright CLI because the in-app Browser setup timed out and the Playwright test runner was not installed in the repo; desktop `1280x720` and mobile `390x844` screenshots of `/pricing` rendered the tier page without visible first-viewport overflow. Local route checks confirmed `/pricing`, `/apply`, `/command`, and `/sitemap.xml` return `200`, `/pricing` includes the Explorer/Scout/Command headline, `$25,000` Scout price, `/apply`, `/member`, `/command` links, JSON-LD, and sitemap inclusion. Live Scout checkout and `/member` workspace verification could not be exercised because the dev server has no `NEXT_PUBLIC_SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
   - Blocked reason: None.
 
-- [ ] Task 054: Build lunar industry terminal navigation and dashboard shell
+- [x] Task 054: Build lunar industry terminal navigation and dashboard shell
   - Priority: P0
   - Goal: Organize the platform as a lunar industry terminal rather than a generic space site.
   - Acceptance criteria: Navigation and dashboard shell expose lunar news, launches, spacecraft/landers, procurement, regulatory, companies, economy, datasets, marketplace, events, calculators, alerts, and account areas with responsive behavior.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The site now presents Potomac as a lunar industry terminal, with public navigation and dashboard cards for news, missions, markets, datasets, events, calculators, alerts, and account paths.
+  - Verification: Added a shared terminal module map, responsive global terminal navigation, `/terminal`, lightweight route shells for launches, spacecraft/landers, procurement, regulatory, companies, calculators, alerts, and account, a member dashboard terminal map, sitemap entries, and `docs/lunar-terminal-navigation-shell.md`. `npm run build:next` passed and registered the new routes; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files; `npm run lint` still cannot run because the repo has no ESLint configuration file. Browser QA used local Microsoft Edge through Playwright CLI because the in-app Browser setup timed out earlier in the run; desktop `1280x720` and mobile `390x844` screenshots of `/terminal` rendered the terminal shell and responsive navigation. Local route checks confirmed `/terminal`, `/launches`, `/spacecraft`, `/procurement`, `/regulatory`, `/companies`, `/calculators`, `/alerts`, and `/account` return `200`; sitemap checks confirmed each new public shell route is included. Live member workspace verification could not be exercised because the dev server has no `NEXT_PUBLIC_SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+  - Blocked reason: None.
 
 - [ ] Task 055: Add lunar launch, spacecraft, lander, payload, and satellite tracker schema
   - Priority: P1

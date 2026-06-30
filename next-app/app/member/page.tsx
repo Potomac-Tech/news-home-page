@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase/server";
+import { TerminalDashboardShell } from "../_components/TerminalDashboardShell";
 import { ScoutCheckoutButton } from "./ScoutCheckoutButton";
 import { loadPublicTickerItems } from "../_data/marketQuotes";
 import {
@@ -527,6 +528,11 @@ export default async function MemberPage() {
                     </section>
                 </aside>
             </div>
+            <TerminalDashboardShell
+                title="Member terminal map"
+                description="Navigate the lunar intelligence workspace by mission, market, news, dataset, community, alert, and account area."
+                showMemberActions
+            />
         </section>
     );
 }

@@ -2,28 +2,22 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { potomacBrand } from "../_data/brand";
 import { externalChannels } from "../_data/channels";
+import { terminalHeaderItems } from "../_data/terminal";
 
-const navItems = [
+const utilityNavItems = [
+    { href: "/terminal", label: "Terminal" },
+    { href: "/pricing", label: "Pricing" },
+    { href: "/apply", label: "Apply" },
+    { href: "/command", label: "Command" },
     { href: "/member", label: "Member" },
     { href: "/organization", label: "Organization" },
-    { href: "/apply", label: "Apply" },
-    { href: "/pricing", label: "Pricing" },
-    { href: "/command", label: "Command" },
-    { href: "/admin/applications", label: "Admin" },
-    { href: "/admin/sponsors", label: "Sponsors" },
-    { href: "/nexus", label: "Nexus" },
-    { href: "/hardware", label: "Hardware" },
-    { href: "/team", label: "Team" },
-    { href: "/news", label: "News" },
-    { href: "/datasets", label: "Datasets" },
-    { href: "/events", label: "Events" },
 ];
 
 export function MigrationShell({ children }: { children: ReactNode }) {
     return (
         <div className="min-h-screen bg-potomac-secondary text-potomac-cream">
             <header className="border-b border-potomac-gold/30 bg-potomac-primary">
-                <div className="mx-auto flex min-h-20 w-full max-w-7xl items-center justify-between gap-6 px-4 py-4 md:px-8">
+                <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-4 md:px-8 lg:flex-row lg:items-center lg:justify-between">
                     <Link href="/" className="flex items-center gap-4">
                         <img
                             src={potomacBrand.assets.logo}
@@ -35,23 +29,42 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                             <span className="text-potomac-gold">NEWS</span>
                         </span>
                     </Link>
-                    <nav className="hidden max-w-[46rem] flex-wrap items-center justify-end gap-3 md:flex lg:max-w-none lg:gap-4">
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                className="text-xs font-semibold uppercase tracking-widest text-gray-400 transition hover:text-potomac-gold lg:text-sm"
-                            >
-                                {item.label}
-                            </Link>
-                        ))}
-                        <a
-                            href="/auth/login"
-                            className="rounded border border-potomac-gold px-5 py-2 text-xs font-bold uppercase tracking-[0.2em] text-potomac-gold transition hover:bg-potomac-gold hover:text-potomac-primary"
+                    <div className="flex flex-col gap-3 lg:items-end">
+                        <nav
+                            aria-label="Terminal sections"
+                            className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-wrap lg:justify-end lg:overflow-visible lg:px-0"
                         >
-                            Sign in
-                        </a>
-                    </nav>
+                            {terminalHeaderItems.map((item) => (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    className="shrink-0 text-xs font-semibold uppercase tracking-widest text-gray-400 transition hover:text-potomac-gold"
+                                >
+                                    {item.label}
+                                </Link>
+                            ))}
+                        </nav>
+                        <nav
+                            aria-label="Access navigation"
+                            className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-wrap lg:justify-end lg:overflow-visible lg:px-0"
+                        >
+                            {utilityNavItems.map((item) => (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    className="shrink-0 text-xs font-semibold uppercase tracking-widest text-potomac-cream/55 transition hover:text-potomac-gold"
+                                >
+                                    {item.label}
+                                </Link>
+                            ))}
+                            <a
+                                href="/auth/login"
+                                className="shrink-0 rounded border border-potomac-gold px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:bg-potomac-gold hover:text-potomac-primary"
+                            >
+                                Sign in
+                            </a>
+                        </nav>
+                    </div>
                 </div>
             </header>
             <main>{children}</main>
