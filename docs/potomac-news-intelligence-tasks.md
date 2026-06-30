@@ -414,13 +414,13 @@ Blocked reason:
   - Verification: Added `supabase/migrations/20260630180219_rfq_schema_rls_moderation.sql` with RFQ posts, invited organizations, RFQ/response resource links, responses, status events, reports, moderation actions, audit events, enum states, indexes, updated-at triggers, explicit grants, private authorization helpers, and RLS policies for Scout/Command users, organization admins, moderators, analysts, and admins. Added schema documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed; static search confirmed the required RFQ tables, response workflow, visibility helpers, grants, RLS enablement, moderation policies, and retained audit records. Supabase guidance was checked against current RLS/API docs and the 2026 breaking change that new tables may not be exposed to Data/GraphQL APIs automatically. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was reachable. Live RLS behavior was not exercised because no Supabase publishable key, applied reachable schema, or seeded Scout/Command/organization-admin/moderator/staff test users were available.
   - Blocked reason: None.
 
-- [ ] Task 051: Build Scout/Command RFQ posting, browsing, and response UI
+- [x] Task 051: Build Scout/Command RFQ posting, browsing, and response UI
   - Priority: P1
   - Goal: Let Scout and Command members post, browse, and respond to lunar industry RFQs.
   - Acceptance criteria: Dashboard includes RFQ list, filters, detail page, post form, response form, organization-aware permissions, moderation/report actions, and graceful states for members without access.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Scout and Command members now have a protected RFQ workspace for viewing opportunities, posting requests, submitting responses, updating statuses, and reporting items for moderation.
+  - Verification: Added `/member/rfqs`, RFQ access helpers, server actions for RFQ creation, status updates, response submission, and reporting, plus a member dashboard link and workflow documentation. `npm run build:next` passed and registered `/member/rfqs`; `npm run build` passed; `git diff --check` passed with the recurring LF-to-CRLF warning on `next-app/app/member/page.tsx`; static search confirmed RFQ route/action/auth coverage. Browser QA used local Microsoft Edge through Playwright because the in-app Browser tool was unavailable and bundled Playwright Chromium was not installed; `http://127.0.0.1:3020/member/rfqs` returned `200`, rendered the no-config Supabase gate with RFQ workspace copy, had no framework overlay, no console errors, `/apply` navigation, and no horizontal overflow at desktop `1280x720` or mobile `390x844`. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was reachable. Live RFQ posting, browsing, response, organization attribution, moderation, and report verification was not exercised because no Supabase publishable key, applied reachable RFQ schema, or seeded Scout/Command/organization-admin/moderator test users were available.
+  - Blocked reason: None.
 
 - [ ] Task 052: Document Explorer, Scout, and Command tier packaging and gates
   - Priority: P0
