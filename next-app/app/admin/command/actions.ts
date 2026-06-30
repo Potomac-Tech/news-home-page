@@ -10,11 +10,111 @@ type CommandInterestRequest = {
     estimated_seats: number | null;
 };
 
+const commandRequestStatuses = [
+    "new",
+    "contacted",
+    "qualified",
+    "approved",
+    "rejected",
+    "archived",
+] as const;
+const commandPerkTypes = [
+    "analyst_support",
+    "proposal_support",
+    "mission_brief",
+    "custom_alert",
+    "executive_perk",
+    "free_sponsorship",
+] as const;
+const commandPerkStatuses = [
+    "promised",
+    "requested",
+    "in_progress",
+    "fulfilled",
+    "blocked",
+    "canceled",
+] as const;
+const commandPerkPriorities = ["low", "normal", "high", "urgent"] as const;
+
 function getRequiredString(formData: FormData, key: string) {
     const value = String(formData.get(key) ?? "").trim();
 
     if (!value) {
         throw new Error(`Missing ${key}.`);
+    }
+
+    return value;
+}
+
+function getOptionalString(formData: FormData, key: string) {
+    const value = String(formData.get(key) ?? "").trim();
+
+    return value || null;
+}
+
+function getOptionalTimestamp(formData: FormData, key: string) {
+    const value = String(formData.get(key) ?? "").trim();
+
+    if (!value) {
+        return null;
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        throw new Error(`Invalid ${key}.`);
+    }
+
+    return date.toISOString();
+}
+
+function getCommandRequestStatus(formData: FormData) {
+    const value = getRequiredString(formData, "status");
+
+    if (
+        !commandRequestStatuses.includes(
+            value as (typeof commandRequestStatuses)[number]
+        )
+    ) {
+        throw new Error("Invalid Command request status.");
+    }
+
+    return value;
+}
+
+function getCommandPerkType(formData: FormData) {
+    const value = getRequiredString(formData, "perk_type");
+
+    if (!commandPerkTypes.includes(value as (typeof commandPerkTypes)[number])) {
+        throw new Error("Invalid Command perk type.");
+    }
+
+    return value;
+}
+
+function getCommandPerkStatus(formData: FormData) {
+    const value = getRequiredString(formData, "status");
+
+    if (
+        !commandPerkStatuses.includes(
+            value as (typeof commandPerkStatuses)[number]
+        )
+    ) {
+        throw new Error("Invalid Command perk status.");
+    }
+
+    return value;
+}
+
+function getCommandPerkPriority(formData: FormData) {
+    const value = getRequiredString(formData, "priority");
+
+    if (
+        !commandPerkPriorities.includes(
+            value as (typeof commandPerkPriorities)[number]
+        )
+    ) {
+        throw new Error("Invalid Command perk priority.");
     }
 
     return value;
@@ -44,7 +144,7 @@ async function loadCommandRequest(id: string) {
 
 export async function updateCommandRequestStatus(formData: FormData) {
     const requestId = getRequiredString(formData, "request_id");
-    const status = getRequiredString(formData, "status");
+    const status = getCommandRequestStatus(formData);
     const decisionNote = String(formData.get("decision_note") ?? "").trim();
     const { supabase, userId } = await requireAdmin();
 
@@ -70,6 +170,128 @@ export async function updateCommandRequestStatus(formData: FormData) {
             request_id: requestId,
             status,
             decision_note: decisionNote || null,
+        },
+    });
+
+    revalidatePath("/admin/command");
+}
+
+export async function createCommandPerk(formData: FormData) {
+    const { supabase, userId } = await requireAdmin();
+    const organizationId = getRequiredString(formData, "organization_id");
+    const status = getCommandPerkStatus(formData);
+    const dueAt = getOptionalTimestamp(formData, "due_at");
+    const now = new Date().toISOString();
+
+    const { data: entitlement } = await supabase
+        .from("entitlements")
+        .select("id")
+        .eq("organization_id", organizationId)
+        .eq("tier", "command")
+        .eq("status", "active")
+        .or(`ends_at.is.null,ends_at.gt.${now}`)
+        .order("starts_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+    const { data: perk, error } = await supabase
+        .from("command_perk_commitments")
+        .insert({
+            organization_id: organizationId,
+            entitlement_id: entitlement?.id ?? null,
+            perk_type: getCommandPerkType(formData),
+            status,
+            priority: getCommandPerkPriority(formData),
+            title: getRequiredString(formData, "title"),
+            request_summary: getOptionalString(formData, "request_summary"),
+            next_step: getOptionalString(formData, "next_step"),
+            internal_note: getOptionalString(formData, "internal_note"),
+            due_at: dueAt,
+            fulfilled_at: status === "fulfilled" ? now : null,
+            blocked_reason:
+                status === "blocked"
+                    ? getRequiredString(formData, "blocked_reason")
+                    : getOptionalString(formData, "blocked_reason"),
+            sponsorship_inventory_note: getOptionalString(
+                formData,
+                "sponsorship_inventory_note"
+            ),
+            created_by: userId,
+            updated_by: userId,
+        })
+        .select("id")
+        .single();
+
+    if (error || !perk) {
+        throw new Error(error?.message ?? "Command perk not created.");
+    }
+
+    await supabase.from("access_audit_events").insert({
+        actor_user_id: userId,
+        organization_id: organizationId,
+        event_type: "command_perk.created",
+        event_summary: "Created a Command perk commitment.",
+        metadata: {
+            perk_id: perk.id,
+            status,
+            due_at: dueAt,
+        },
+    });
+
+    revalidatePath("/admin/command");
+}
+
+export async function updateCommandPerk(formData: FormData) {
+    const { supabase, userId } = await requireAdmin();
+    const perkId = getRequiredString(formData, "perk_id");
+    const organizationId = getRequiredString(formData, "organization_id");
+    const status = getCommandPerkStatus(formData);
+    const dueAt = getOptionalTimestamp(formData, "due_at");
+    const now = new Date().toISOString();
+
+    const { error } = await supabase
+        .from("command_perk_commitments")
+        .update({
+            status,
+            priority: getCommandPerkPriority(formData),
+            title: getRequiredString(formData, "title"),
+            request_summary: getOptionalString(formData, "request_summary"),
+            fulfillment_summary: getOptionalString(
+                formData,
+                "fulfillment_summary"
+            ),
+            next_step: getOptionalString(formData, "next_step"),
+            internal_note: getOptionalString(formData, "internal_note"),
+            due_at: dueAt,
+            fulfilled_at:
+                status === "fulfilled"
+                    ? getOptionalTimestamp(formData, "fulfilled_at") ?? now
+                    : null,
+            blocked_reason:
+                status === "blocked"
+                    ? getRequiredString(formData, "blocked_reason")
+                    : getOptionalString(formData, "blocked_reason"),
+            sponsorship_inventory_note: getOptionalString(
+                formData,
+                "sponsorship_inventory_note"
+            ),
+            updated_by: userId,
+        })
+        .eq("id", perkId);
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    await supabase.from("access_audit_events").insert({
+        actor_user_id: userId,
+        organization_id: organizationId,
+        event_type: "command_perk.updated",
+        event_summary: `Updated Command perk status to ${status}.`,
+        metadata: {
+            perk_id: perkId,
+            status,
+            due_at: dueAt,
         },
     });
 
