@@ -398,13 +398,13 @@ Blocked reason:
   - Verification: Added `supabase/migrations/20260630131146_member_forum_schema.sql` with forum, topic, post/reply, reaction, bookmark, report, moderation action, and audit-event tables; added forum enum states, a normalized `moderator` role, private tier/moderation helpers, explicit authenticated/service grants, and RLS policies for Explorer, Scout, Command, moderator, analyst, editor, and admin access. Added schema documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed; static search confirmed required forum tables, helpers, grants, RLS enablement, moderation policies, and retained audit records. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live RLS behavior was not exercised because no Supabase publishable key, applied reachable schema, or seeded Explorer/Scout/Command/moderator/staff test users were available.
   - Blocked reason: None.
 
-- [ ] Task 049: Build moderated member forum UI
+- [x] Task 049: Build moderated member forum UI
   - Priority: P1
   - Goal: Let approved members discuss lunar markets, missions, datasets, procurement, regulatory issues, and events.
   - Acceptance criteria: Member dashboard includes forum index, topic list, topic detail, compose/reply flow, reporting controls, moderator states, empty/error states, and clear access messaging for public or unapproved users.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Approved members now have a protected forum workspace for browsing channels, opening discussion topics, replying, saving discussions, marking useful posts, and reporting content for moderation.
+  - Verification: Added the `/member/forums` route, protected member-forum auth helpers, forum server actions, member dashboard navigation, and forum UI documentation. `npm run build:next` passed and registered `/member/forums`; `npm run build` passed; `git diff --check` passed with the existing line-ending warning for `next-app/app/member/page.tsx`; browser QA on `http://127.0.0.1:3018/member/forums` confirmed the Supabase access gate renders, the main `Apply for access` link navigates to `/apply`, desktop and mobile widths have no horizontal overflow, and no browser console warnings or errors were captured. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live approved-member forum posting was not exercised because no Supabase publishable key, applied reachable schema, or seeded member/moderator users were available.
+  - Blocked reason: None.
 
 - [ ] Task 050: Add RFQ schema, RLS, response workflow, moderation, and audit model
   - Priority: P1
