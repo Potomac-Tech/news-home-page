@@ -390,13 +390,13 @@ Blocked reason:
   - Verification: Added `/member/chat`, server actions for starting conversations, replies, read receipts, reports, and blocks, a member dashboard link, workflow documentation, and `supabase/migrations/20260630130336_member_chat_profile_discovery.sql` for chat profile discovery plus conversation timestamp updates. `npm run build:next` passed and registered `/member/chat`; `npm run build` passed; `git diff --check` passed with the recurring LF-to-CRLF warning on `next-app/app/member/page.tsx`; static search confirmed chat UI/action/migration coverage and correct `xlpkdoeldtlhearqajat` project references while only existing docs warn against `nwoluvjdojzayozyzlob`. Browser QA against `http://127.0.0.1:3017/member/chat` confirmed the no-config member-chat gate, page title, no framework overlay, no console errors, `/apply` navigation, and no mobile horizontal overflow at `390x844`; Browser screenshot capture timed out with `Page.captureScreenshot`. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live compose/reply/report/block verification was not exercised because no Supabase publishable key, applied reachable schema, or seeded approved member test users were available.
   - Blocked reason: None.
 
-- [ ] Task 048: Add moderated member forum schema, RLS, and audit model
+- [x] Task 048: Add moderated member forum schema, RLS, and audit model
   - Priority: P1
   - Goal: Define the data model and access controls for member forums.
   - Acceptance criteria: Schema supports forums, topics, posts, replies, reactions or bookmarks, reports, moderation actions, retained audit events, and RLS for Explorer, Scout, Command, moderator, analyst, editor, and admin access.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The platform now has a database foundation for moderated member forums with tier-gated access, posts, replies, reports, moderation records, and audit history.
+  - Verification: Added `supabase/migrations/20260630131146_member_forum_schema.sql` with forum, topic, post/reply, reaction, bookmark, report, moderation action, and audit-event tables; added forum enum states, a normalized `moderator` role, private tier/moderation helpers, explicit authenticated/service grants, and RLS policies for Explorer, Scout, Command, moderator, analyst, editor, and admin access. Added schema documentation. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed; static search confirmed required forum tables, helpers, grants, RLS enablement, moderation policies, and retained audit records. `npm run lint` still cannot run because the repo has no ESLint configuration file. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was listening on `127.0.0.1:54322`. Live RLS behavior was not exercised because no Supabase publishable key, applied reachable schema, or seeded Explorer/Scout/Command/moderator/staff test users were available.
+  - Blocked reason: None.
 
 - [ ] Task 049: Build moderated member forum UI
   - Priority: P1
