@@ -478,13 +478,13 @@ Blocked reason:
   - Verification: Added `/procurement`, `/procurement/[slug]`, `/regulatory`, `/regulatory/[slug]`, and `/member/procurement`; added a shared procurement/regulatory Supabase loader with fallback records, citation joins, filters, search helpers, and normalized Scout/Command access checks; added dashboard navigation and `docs/lunar-procurement-regulatory-hub-ui.md`. `npm run build:next` passed and registered the new routes; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files; local production route checks confirmed `/procurement`, `/procurement/clps-instrument-rfi`, `/regulatory`, and `/regulatory/fcc-lunar-relay-spectrum-watch` return `200` and render expected hub/detail copy, filters, citations, upgrade prompts, and watchlist hooks. `npm run lint` still cannot run because the repo has no ESLint configuration file. Live Scout/Command Supabase reads, RLS behavior, and watchlist persistence were not exercised because no Potomac Supabase publishable key, applied reachable schema, saved-work schema, or seeded Scout/Command/staff test users were available.
   - Blocked reason: None.
 
-- [ ] Task 059: Create lunar company profile and comparison schema
+- [x] Task 059: Create lunar company profile and comparison schema
   - Priority: P1
   - Goal: Store profiles for companies participating in the lunar industry.
   - Acceptance criteria: Schema supports company sectors, programs, contracts, facilities, leadership, public financials or licensed financial fields, news links, relationships, source citations, and comparison attributes.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The database now has a planned structure for lunar company profiles, facilities, leadership, contracts, financial metrics, news links, relationships, source citations, and comparison fields.
+  - Verification: Created `supabase/migrations/20260701140308_lunar_company_profiles_comparison_schema.sql` with company profile, facility, leadership, contract, financial, news-link, relationship, comparison-attribute, and source-citation tables; added publication/visibility/confidence/source-review/relationship enums, freshness fields, analyst review state, source license notes, explicit Data API grants, RLS enablement, and public/Explorer/Scout/Command/staff policies using normalized roles. Added `docs/lunar-company-profile-comparison-schema.md`. Supabase guidance was checked against the current 2026 Data API grant/RLS change. Static search confirmed required company, sector, program, contract, facility, leadership, financial, news, relationship, source, comparison, confidence, review, grant, RLS, and policy structures. `npm run build:next` passed; `npm run build` passed; `npm run lint` passed; `git diff --check` passed with the recurring LF-to-CRLF warning on the touched task file; project-ref search found only the correct `xlpkdoeldtlhearqajat` references in active config/docs and existing warnings against the wrong project. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was reachable. Live migration application and RLS behavior were not exercised because no Supabase publishable key, applied reachable schema, authenticated database tooling, or seeded public/Explorer/Scout/Command/staff test users were available.
+  - Blocked reason: None.
 
 - [ ] Task 060: Build lunar company directory, profile, and comparison UI
   - Priority: P1
