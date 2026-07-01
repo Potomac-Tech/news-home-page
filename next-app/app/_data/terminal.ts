@@ -55,7 +55,7 @@ export const terminalModules: TerminalModule[] = [
         label: "Companies",
         href: "/companies",
         summary: "Lunar company profiles, relationships, programs, and comparisons.",
-        status: "planned",
+        status: "live",
         section: "Markets",
     },
     {
