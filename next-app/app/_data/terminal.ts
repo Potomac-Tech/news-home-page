@@ -95,7 +95,7 @@ export const terminalModules: TerminalModule[] = [
         label: "Calculators",
         href: "/calculators",
         summary: "Mission cost, windows, link, thermal, radiation, and power tools.",
-        status: "planned",
+        status: "live",
         section: "Missions",
     },
     {

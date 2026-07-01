@@ -502,13 +502,13 @@ Blocked reason:
   - Verification: Created `supabase/migrations/20260701190220_lunar_mission_calculator_framework.sql` with calculator definition, version, assumption, formula-step, validation-rule, source-citation, and saved-run tables; added publication/visibility/confidence/source-review enums, units, input/output schemas, formula manifests, source license notes, validation messages, saved-run snapshots, explicit Data API grants, RLS enablement, and public/Explorer/Scout/Command/staff policies using normalized roles. Added `docs/lunar-mission-calculator-framework.md`. Supabase guidance was checked against the current 2026 Data API grant/RLS change. Static search confirmed required calculator, assumption, formula, citation, unit, confidence, version, validation, saved-run, grant, RLS, and policy structures. `npm run build:next` passed; `npm run build` passed; `npm run lint` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on pre-existing touched config files; `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` connected and listed the new local migration. Live migration application and RLS behavior were not exercised because the broader historical migrations are not applied remotely, real runtime keys are absent, and no seeded Explorer/Scout/Command/organization/staff test users are available.
   - Blocked reason: None.
 
-- [ ] Task 062: Build initial lunar mission calculators
+- [x] Task 062: Build initial lunar mission calculators
   - Priority: P1
   - Goal: Provide practical calculators for lunar mission planning workflows.
   - Acceptance criteria: Initial calculators cover lunar mission cost, launch window assumptions, RF link budget, thermal budget, radiation exposure, and power budget with clear limitations and citations.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The calculator page now has six working lunar planning tools for cost, launch-window pressure, RF link margin, thermal balance, radiation exposure, and surface power.
+  - Verification: Added `/calculators` as an interactive calculator workspace with local fallback definitions for lunar mission cost, launch-window screen, RF link budget, thermal balance, radiation exposure, and surface power budget; each calculator includes editable assumptions, units, formula notes, limitation notes, citations, confidence labels, and a Scout+ saved-run label for the Task 061 persistence model. Added `next-app/app/_data/lunarCalculators.ts`, `next-app/app/calculators/LunarCalculatorWorkspace.tsx`, and `docs/lunar-mission-calculators.md`; updated terminal navigation to mark calculators live. `npm run build:next` passed; `npm run build` passed; `npm run lint` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on pre-existing touched config files and touched calculator files; static search confirmed all six calculator names and saved-run label are present; a temporary local production server check for `/calculators` returned `200` and confirmed expected calculator content. Live Supabase-backed calculator definitions and saved runs were not exercised because the Task 061 schema is not applied remotely, real runtime keys are absent, and no seeded Explorer/Scout/Command test users are available.
+  - Blocked reason: None.
 
 - [ ] Task 063: Add global search, command palette, and related intelligence index
   - Priority: P0
