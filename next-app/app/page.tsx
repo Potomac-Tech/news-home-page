@@ -4,10 +4,16 @@ import {
     eventTeasers,
     fallbackStories,
     marketModules,
-    sponsorSlots,
-    tickerItems,
     type HomeStory,
 } from "./_data/homepage";
+import { loadPublicTickerItems } from "./_data/marketQuotes";
+import { SponsorUnit } from "./_components/SponsorUnit";
+import { EconomySummaryWidget } from "./_components/EconomySummaryWidget";
+import {
+    loadSponsorUnits,
+    sponsorPlacementKeys,
+} from "./_data/sponsorAds";
+import { loadPublicEconomySummary } from "./_data/economy";
 import { potomacBrand } from "./_data/brand";
 import {
     absoluteSiteUrl,
@@ -182,9 +188,21 @@ function StoryCard({ story }: { story: HomeStory }) {
 }
 
 export default async function HomePage() {
-    const stories = await getHomepageStories();
+    const [stories, sponsorUnits, tickerItems, economySummary] = await Promise.all([
+        getHomepageStories(),
+        loadSponsorUnits([
+            sponsorPlacementKeys.homepageLeadRail,
+            sponsorPlacementKeys.marketModuleBand,
+        ]),
+        loadPublicTickerItems(4),
+        loadPublicEconomySummary(),
+    ]);
     const featuredStory = stories[0] ?? fallbackStories[0];
     const latestStories = stories.slice(1).length ? stories.slice(1) : fallbackStories.slice(1);
+    const homepageSponsorUnits = [
+        sponsorUnits.get(sponsorPlacementKeys.homepageLeadRail)!,
+        sponsorUnits.get(sponsorPlacementKeys.marketModuleBand)!,
+    ];
     const headlineItemListJsonLd = {
         "@context": "https://schema.org",
         "@type": "ItemList",
@@ -285,8 +303,19 @@ export default async function HomePage() {
                                     <span className="text-sm text-potomac-cream/75">
                                         {item.label}
                                     </span>
-                                    <span className="text-right text-xs font-bold uppercase tracking-[0.12em] text-white">
+                                    <span
+                                        className={
+                                            item.trend === "down"
+                                                ? "text-right text-xs font-bold uppercase tracking-[0.12em] text-red-200"
+                                                : item.trend === "up"
+                                                  ? "text-right text-xs font-bold uppercase tracking-[0.12em] text-potomac-gold"
+                                                  : "text-right text-xs font-bold uppercase tracking-[0.12em] text-white"
+                                        }
+                                    >
                                         {item.value}
+                                        <span className="mt-1 block text-[0.65rem] font-semibold normal-case tracking-normal text-potomac-cream/45">
+                                            {item.detail}
+                                        </span>
                                     </span>
                                 </div>
                             ))}
@@ -309,7 +338,17 @@ export default async function HomePage() {
                 </div>
 
                 <aside>
-                    <h2 className="font-serif text-2xl text-white">Event Teasers</h2>
+                    <div className="flex items-center justify-between gap-4">
+                        <h2 className="font-serif text-2xl text-white">
+                            Event Teasers
+                        </h2>
+                        <Link
+                            href="/events"
+                            className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold hover:text-potomac-cream"
+                        >
+                            Calendar
+                        </Link>
+                    </div>
                     <div className="mt-5 space-y-4">
                         {eventTeasers.map((event) => (
                             <article key={event.name} className="glass-card rounded p-5">
@@ -342,23 +381,29 @@ export default async function HomePage() {
                         title="Markets And Models"
                         description="The public surface shows which intelligence modules are active without exposing paid methodology, model assumptions, or member-only source detail."
                     />
-                    <div className="mt-8 grid gap-5 md:grid-cols-3">
-                        {marketModules.map((module) => (
-                            <article key={module.label} className="glass-card rounded p-5">
-                                <p className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
-                                    {module.cadence}
-                                </p>
-                                <h3 className="mt-4 font-serif text-2xl text-white">
-                                    {module.value}
-                                </h3>
-                                <p className="mt-2 text-sm font-semibold uppercase tracking-[0.12em] text-potomac-cream/55">
-                                    {module.label}
-                                </p>
-                                <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                                    {module.detail}
-                                </p>
-                            </article>
-                        ))}
+                    <div className="mt-8 grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,0.75fr)]">
+                        <EconomySummaryWidget summary={economySummary} />
+                        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+                            {marketModules.map((module) => (
+                                <article
+                                    key={module.label}
+                                    className="glass-card rounded p-5"
+                                >
+                                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
+                                        {module.cadence}
+                                    </p>
+                                    <h3 className="mt-4 font-serif text-2xl text-white">
+                                        {module.value}
+                                    </h3>
+                                    <p className="mt-2 text-sm font-semibold uppercase tracking-[0.12em] text-potomac-cream/55">
+                                        {module.label}
+                                    </p>
+                                    <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
+                                        {module.detail}
+                                    </p>
+                                </article>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
@@ -377,6 +422,12 @@ export default async function HomePage() {
                             Member application
                         </Link>
                         <Link
+                            href="/pricing"
+                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+                        >
+                            Compare tiers
+                        </Link>
+                        <Link
                             href="/command"
                             className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                         >
@@ -387,22 +438,9 @@ export default async function HomePage() {
 
                 <div>
                     <h2 className="font-serif text-2xl text-white">Sponsor Slots</h2>
-                    <div className="mt-5 grid gap-5 md:grid-cols-3">
-                        {sponsorSlots.map((slot) => (
-                            <article key={slot.name} className="glass-card rounded p-5">
-                                <p className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
-                                    {slot.status}
-                                </p>
-                                <h3 className="mt-4 font-serif text-xl leading-snug text-white">
-                                    {slot.name}
-                                </h3>
-                                <p className="mt-2 text-xs uppercase tracking-[0.12em] text-potomac-cream/45">
-                                    {slot.placement}
-                                </p>
-                                <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                                    {slot.note}
-                                </p>
-                            </article>
+                    <div className="mt-5 grid gap-5 md:grid-cols-2">
+                        {homepageSponsorUnits.map((unit) => (
+                            <SponsorUnit key={unit.placementKey} unit={unit} />
                         ))}
                     </div>
                 </div>

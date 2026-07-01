@@ -7,6 +7,7 @@ const Navbar: React.FC = () => {
     const isHardware =
         location.pathname === "/hardware" || location.pathname === "/source";
     const isNews = location.pathname.startsWith("/news");
+    const isEvents = location.pathname.startsWith("/events");
 
     const getLinkClass = (isActive: boolean) => {
         return `text-sm font-semibold tracking-widest transition uppercase ${
@@ -39,6 +40,8 @@ const Navbar: React.FC = () => {
                                 ? "TEAM"
                                 : isNews
                                 ? "NEWS"
+                                : isEvents
+                                ? "EVENTS"
                                 : ""}
                         </span>
                     </h1>
@@ -64,6 +67,9 @@ const Navbar: React.FC = () => {
                 </Link>
                 <Link to="/news" className={getLinkClass(isNews)}>
                     News
+                </Link>
+                <Link to="/events" className={getLinkClass(isEvents)}>
+                    Events
                 </Link>
 
                 {/* Auth Button */}

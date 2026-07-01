@@ -30,6 +30,26 @@ export const currentRoutes = [
         note: "Future CMS-backed feed route.",
     },
     {
+        href: "/events",
+        source: "next-app/app/events/page.tsx",
+        note: "Public event calendar with teaser fields and member-gated event details.",
+    },
+    {
+        href: "/datasets",
+        source: "next-app/app/datasets/page.tsx",
+        note: "Public dataset catalog with NASA/science archives, Potomac proprietary entries, source metadata, availability, tier, sample, and demo indicators.",
+    },
+    {
+        href: "/member/summits",
+        source: "next-app/app/member/summits/page.tsx",
+        note: "Member-gated internal summit tracker with upcoming summit and past-event summary views.",
+    },
+    {
+        href: "/admin/sponsors",
+        source: "next-app/app/admin/sponsors/page.tsx",
+        note: "Staff-only sponsor, placement, campaign, discount, and reporting workflow.",
+    },
+    {
         href: "/news/vipc-grant-winner",
         source: "src/pages/VipcGrantWinner.tsx",
         note: "Existing story route reserved for article migration.",

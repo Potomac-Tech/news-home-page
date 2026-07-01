@@ -20,6 +20,11 @@ import {
     type ArticleAccessContext,
     type ArticleAccessTier,
 } from "../../../lib/auth/article-access";
+import { SponsorUnit } from "../../_components/SponsorUnit";
+import {
+    loadSponsorUnits,
+    sponsorPlacementKeys,
+} from "../../_data/sponsorAds";
 
 export const dynamic = "force-dynamic";
 
@@ -338,13 +343,19 @@ function GatePanel({
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
     const { slug } = await params;
-    const loaded = await loadArticle(slug);
+    const [loaded, sponsorUnits] = await Promise.all([
+        loadArticle(slug),
+        loadSponsorUnits([sponsorPlacementKeys.articleSidebar]),
+    ]);
 
     if (!loaded) {
         notFound();
     }
 
     const { article, fullBody, access } = loaded;
+    const articleSponsorUnit = sponsorUnits.get(
+        sponsorPlacementKeys.articleSidebar
+    )!;
     const keyPoints = article.keyPoints.length
         ? article.keyPoints
         : [article.summary, article.teaser].filter(Boolean);
@@ -469,6 +480,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 </main>
 
                 <aside className="space-y-6">
+                    <SponsorUnit unit={articleSponsorUnit} />
+
                     <section className="glass-card rounded p-6">
                         <h2 className="font-serif text-2xl text-white">
                             Source Citations

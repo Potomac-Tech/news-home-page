@@ -1,3 +1,5 @@
+import { liveExternalChannelUrls } from "./channels";
+
 export const siteConfig = {
     name: "Potomac News & Intelligence",
     legalName: "Potomac Database Systems",
@@ -26,5 +28,6 @@ export function organizationJsonLd() {
         name: siteConfig.legalName,
         url: siteConfig.url,
         logo: absoluteSiteUrl(siteConfig.logoPath),
+        sameAs: liveExternalChannelUrls,
     };
 }

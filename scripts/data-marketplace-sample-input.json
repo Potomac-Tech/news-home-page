@@ -1,0 +1,64 @@
+{
+  "runKey": "sample-lunar-data-market-2026-06-26",
+  "pipelineName": "placeholder-news-scholar-extractor",
+  "source": {
+    "sourceKey": "sample-blue-ghost-science-data",
+    "title": "Sample source for Blue Ghost lunar surface data demand",
+    "publisher": "Potomac sample",
+    "documentType": "news_or_scholarly_source",
+    "url": "https://example.com/blue-ghost-lunar-data",
+    "publishedAt": "2026-06-26",
+    "retrievedAt": "2026-06-26T12:00:00.000Z",
+    "citationText": "Sample citation for local pipeline verification.",
+    "summary": "Placeholder source used to verify the data marketplace extraction pipeline shape.",
+    "licenseNotes": "Sample only. Replace with reviewed source license notes.",
+    "accessTierRequired": "scout",
+    "confidenceLabel": "medium"
+  },
+  "requests": [
+    {
+      "slug": "sample-lunar-regolith-thermal-request",
+      "title": "Thermal-property observations for lunar regolith planning",
+      "summary": "A mission planning team needs source-backed thermal-property observations for lunar regolith in comparable terrain.",
+      "requesterOrganization": "Sample mission planning team",
+      "dataType": "thermal_properties",
+      "requestedFormat": "CSV or NetCDF",
+      "missionName": "Commercial lunar surface mission",
+      "missionPhase": "preliminary_design",
+      "lunarRegion": "Mare Crisium analog",
+      "locationName": "Lunar nearside",
+      "instrumentName": "Thermal probe",
+      "neededBy": "2026-09-30",
+      "priorityScore": 65,
+      "accessTierRequired": "scout",
+      "confidenceLabel": "medium",
+      "confidenceScore": 68,
+      "extractionRationale": "The source describes a data need tied to surface thermal assumptions and mission design.",
+      "pageReference": "sample paragraph 4"
+    }
+  ],
+  "offers": [
+    {
+      "slug": "sample-blue-ghost-derived-surface-offer",
+      "title": "Derived lunar surface context package",
+      "summary": "A reviewed source indicates a derived package could support terrain, thermal, and mission-risk comparison work.",
+      "providerOrganization": "Potomac sample analyst desk",
+      "dataType": "derived_surface_context",
+      "deliveryMode": "download",
+      "availabilityState": "sample_pending_review",
+      "missionName": "Blue Ghost Mission 1",
+      "missionPhase": "post_landing_analysis",
+      "lunarRegion": "Mare Crisium",
+      "locationName": "Landing-site vicinity",
+      "instrumentName": "Multi-instrument source package",
+      "coverageStartAt": "2025-03-02T00:00:00.000Z",
+      "coverageEndAt": "2025-03-16T00:00:00.000Z",
+      "sampleUrl": "https://example.com/sample-lunar-surface-context",
+      "accessTierRequired": "command",
+      "confidenceLabel": "low",
+      "confidenceScore": 52,
+      "extractionRationale": "The source suggests a dataset offer candidate but requires analyst review before publication.",
+      "pageReference": "sample paragraph 7"
+    }
+  ]
+}
