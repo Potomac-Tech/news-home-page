@@ -470,13 +470,13 @@ Blocked reason:
   - Verification: Created `supabase/migrations/20260701041100_lunar_procurement_regulatory_intelligence.sql` with agency, procurement, award, regulatory-record, policy-milestone, and source-citation tables; added procurement/regulatory/status/visibility/confidence/source-review enums, SBIR/STTR fields, comment-period fields, compliance/risk notes, due/effective dates, source URLs, freshness timestamps, analyst review state, explicit Data API grants, RLS enablement, and public/member/Scout/Command/staff policies using normalized roles. Added `docs/lunar-procurement-regulatory-schema.md`. Supabase guidance was checked against the current 2026 Data API grant/RLS change. Static search confirmed required procurement, award, SBIR/STTR, regulatory, comment-period, policy, agency, source, confidence, review, grant, RLS, and policy structures. `npm run build:next` passed; `npm run build` passed; `git diff --check` passed; project-ref search found only the correct `xlpkdoeldtlhearqajat` references in the new documentation and existing config/task history. `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` could not connect because no local Supabase Postgres was reachable. Live migration application and RLS behavior were not exercised because no Supabase publishable key, applied reachable schema, authenticated database tooling, or seeded Scout/Command/staff test users were available.
   - Blocked reason: None.
 
-- [ ] Task 058: Build lunar procurement and regulatory hub UI
+- [x] Task 058: Build lunar procurement and regulatory hub UI
   - Priority: P1
   - Goal: Give Scout and Command members a practical hub for lunar opportunities and policy risk.
   - Acceptance criteria: Hub includes searchable/filterable procurement and regulatory lists, detail pages, due-date/status indicators, citations, watchlist hooks, and upgrade prompts for users without access.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The terminal now has searchable procurement and regulatory hubs with detail pages, due-date and status indicators, citations, upgrade prompts, and watchlist attachment points for future saved-work features.
+  - Verification: Added `/procurement`, `/procurement/[slug]`, `/regulatory`, `/regulatory/[slug]`, and `/member/procurement`; added a shared procurement/regulatory Supabase loader with fallback records, citation joins, filters, search helpers, and normalized Scout/Command access checks; added dashboard navigation and `docs/lunar-procurement-regulatory-hub-ui.md`. `npm run build:next` passed and registered the new routes; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files; local production route checks confirmed `/procurement`, `/procurement/clps-instrument-rfi`, `/regulatory`, and `/regulatory/fcc-lunar-relay-spectrum-watch` return `200` and render expected hub/detail copy, filters, citations, upgrade prompts, and watchlist hooks. `npm run lint` still cannot run because the repo has no ESLint configuration file. Live Scout/Command Supabase reads, RLS behavior, and watchlist persistence were not exercised because no Potomac Supabase publishable key, applied reachable schema, saved-work schema, or seeded Scout/Command/staff test users were available.
+  - Blocked reason: None.
 
 - [ ] Task 059: Create lunar company profile and comparison schema
   - Priority: P1

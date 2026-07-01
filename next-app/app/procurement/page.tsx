@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
-import { RouteScaffold } from "../_components/RouteScaffold";
+import { getLunarMarketIntelAccess } from "../../lib/auth/lunar-market-intel";
+import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+import { createClient } from "../../lib/supabase/server";
+import { LunarMarketIntelHub } from "../_components/LunarMarketIntelHub";
+import { loadLunarMarketIntel } from "../_data/lunarMarketIntel";
 
 export const metadata: Metadata = {
     title: "Lunar Procurement",
@@ -10,14 +14,43 @@ export const metadata: Metadata = {
     },
 };
 
-export default function ProcurementPage() {
+const allowedFilters = new Set(["open", "due", "sbir", "awards"]);
+
+export default async function ProcurementPage({
+    searchParams,
+}: {
+    searchParams?: Promise<{ filter?: string; q?: string }>;
+}) {
+    const params = await searchParams;
+    const activeFilter =
+        params?.filter && allowedFilters.has(params.filter)
+            ? params.filter
+            : "all";
+    const query = params?.q ?? "";
+    const supabase = hasPotomacSupabasePublicConfig()
+        ? await createClient()
+        : undefined;
+    const access = supabase
+        ? await getLunarMarketIntelAccess({ supabase })
+        : {
+              canReadScoutDetails: false,
+              canReadCommandDetails: false,
+          };
+    const canReadPaid =
+        access.canReadScoutDetails || access.canReadCommandDetails;
+    const records = await loadLunarMarketIntel({
+        mode: "procurement",
+        supabase,
+        includePaid: canReadPaid,
+    });
+
     return (
-        <RouteScaffold
-            title="Lunar procurement"
-            description="This terminal route is reserved for lunar solicitations, awards, SBIR/STTR opportunities, due dates, source URLs, confidence labels, and Scout or Command upgrade prompts."
-            status="Scout intelligence shell"
-            primaryHref="/pricing"
-            primaryLabel="Compare tiers"
+        <LunarMarketIntelHub
+            mode="procurement"
+            records={records}
+            activeFilter={activeFilter}
+            query={query}
+            canReadPaid={canReadPaid}
         />
     );
 }
