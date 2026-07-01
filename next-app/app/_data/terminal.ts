@@ -23,7 +23,7 @@ export const terminalModules: TerminalModule[] = [
         label: "Launches",
         href: "/launches",
         summary: "Upcoming lunar launch windows, vehicles, operators, and status.",
-        status: "planned",
+        status: "live",
         section: "Missions",
     },
     {
@@ -31,7 +31,7 @@ export const terminalModules: TerminalModule[] = [
         label: "Spacecraft and landers",
         href: "/spacecraft",
         summary: "Lunar spacecraft, landers, payloads, satellites, and phases.",
-        status: "planned",
+        status: "live",
         section: "Missions",
     },
     {

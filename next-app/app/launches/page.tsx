@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
-import { RouteScaffold } from "../_components/RouteScaffold";
+import { createClient } from "../../lib/supabase/server";
+import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+import { LunarMissionTracker } from "../_components/LunarMissionTracker";
+import { loadLunarMissionTracker } from "../_data/lunarMissions";
 
 export const metadata: Metadata = {
     title: "Lunar Launches",
@@ -10,14 +13,28 @@ export const metadata: Metadata = {
     },
 };
 
-export default function LaunchesPage() {
+export default async function LaunchesPage({
+    searchParams,
+}: {
+    searchParams?: Promise<{ filter?: string }>;
+}) {
+    const params = await searchParams;
+    const activeFilter =
+        params?.filter === "launches" || params?.filter === "active"
+            ? params.filter
+            : "all";
+    const supabase = hasPotomacSupabasePublicConfig()
+        ? await createClient()
+        : undefined;
+    const missions = await loadLunarMissionTracker({ supabase });
+
     return (
-        <RouteScaffold
-            title="Lunar launches"
-            description="This terminal route is reserved for source-backed lunar launch windows, vehicle status, operators, payload context, and mission citations."
-            status="Mission tracker shell"
-            primaryHref="/terminal"
-            primaryLabel="Terminal"
+        <LunarMissionTracker
+            missions={missions}
+            mode="launches"
+            activeFilter={activeFilter}
+            title="Lunar Launches"
+            description="Upcoming and active lunar launch windows with vehicles, sites, mission status, source freshness, and detail pages."
         />
     );
 }

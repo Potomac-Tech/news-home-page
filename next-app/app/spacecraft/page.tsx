@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
-import { RouteScaffold } from "../_components/RouteScaffold";
+import { createClient } from "../../lib/supabase/server";
+import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+import { LunarMissionTracker } from "../_components/LunarMissionTracker";
+import { loadLunarMissionTracker } from "../_data/lunarMissions";
 
 export const metadata: Metadata = {
     title: "Lunar Spacecraft and Landers",
@@ -10,14 +13,33 @@ export const metadata: Metadata = {
     },
 };
 
-export default function SpacecraftPage() {
+export default async function SpacecraftPage({
+    searchParams,
+}: {
+    searchParams?: Promise<{ filter?: string }>;
+}) {
+    const params = await searchParams;
+    const allowedFilters = new Set([
+        "spacecraft",
+        "landers",
+        "satellites",
+    ]);
+    const activeFilter =
+        params?.filter && allowedFilters.has(params.filter)
+            ? params.filter
+            : "all";
+    const supabase = hasPotomacSupabasePublicConfig()
+        ? await createClient()
+        : undefined;
+    const missions = await loadLunarMissionTracker({ supabase });
+
     return (
-        <RouteScaffold
-            title="Spacecraft and landers"
-            description="This terminal route is reserved for lunar spacecraft, landers, payloads, satellites, mission phases, landing sites, instruments, freshness, and source citations."
-            status="Object tracker shell"
-            primaryHref="/terminal"
-            primaryLabel="Terminal"
+        <LunarMissionTracker
+            missions={missions}
+            mode="spacecraft"
+            activeFilter={activeFilter}
+            title="Spacecraft and Landers"
+            description="Active lunar spacecraft, landers, satellites, payloads, destination states, landing-site context, freshness, and source citations."
         />
     );
 }
