@@ -494,13 +494,13 @@ Blocked reason:
   - Verification: Added `/companies`, `/companies/[slug]`, a shared lunar company Supabase loader with fallback records, search/filter helpers, tier access helpers, terminal/member navigation updates, and `docs/lunar-company-directory-profile-ui.md`. `npm run build:next` passed and registered `/companies` plus `/companies/[slug]`; `npm run build` passed; `npm run lint` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files; static search confirmed directory, profile, comparison, source/freshness, watchlist, Supabase table-loader, and project-ref documentation coverage. HTTP route checks confirmed `/companies`, `/companies?filter=clps&q=firefly`, `/companies/intuitive-machines`, and `/companies/astrobotic` return `200` and render expected fallback company, directory, comparison, upgrade, profile, and source content. Production browser QA used local Microsoft Edge through Playwright on `http://127.0.0.1:3027`; desktop `1280x720` and mobile `390x844` checks for `/companies` and `/companies/intuitive-machines` showed no horizontal overflow and no console errors. Live Supabase reads, role-gated detail unlocking, and watchlist persistence were not exercised because no Potomac Supabase publishable key, applied Task 059 schema, saved-work schema, or seeded Explorer/Scout/Command/staff test users were available.
   - Blocked reason: None.
 
-- [ ] Task 061: Add lunar mission calculator framework
+- [x] Task 061: Add lunar mission calculator framework
   - Priority: P1
   - Goal: Establish a reusable structure for lunar mission planning calculators.
   - Acceptance criteria: Framework supports named calculators, assumptions, formulas, source citations, units, confidence notes, version history, input validation, saved runs, and tier-based access.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The database now has a planned framework for lunar mission calculators, including versions, assumptions, formulas, citations, validation rules, saved runs, and tier-aware access.
+  - Verification: Created `supabase/migrations/20260701190220_lunar_mission_calculator_framework.sql` with calculator definition, version, assumption, formula-step, validation-rule, source-citation, and saved-run tables; added publication/visibility/confidence/source-review enums, units, input/output schemas, formula manifests, source license notes, validation messages, saved-run snapshots, explicit Data API grants, RLS enablement, and public/Explorer/Scout/Command/staff policies using normalized roles. Added `docs/lunar-mission-calculator-framework.md`. Supabase guidance was checked against the current 2026 Data API grant/RLS change. Static search confirmed required calculator, assumption, formula, citation, unit, confidence, version, validation, saved-run, grant, RLS, and policy structures. `npm run build:next` passed; `npm run build` passed; `npm run lint` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on pre-existing touched config files; `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` connected and listed the new local migration. Live migration application and RLS behavior were not exercised because the broader historical migrations are not applied remotely, real runtime keys are absent, and no seeded Explorer/Scout/Command/organization/staff test users are available.
+  - Blocked reason: None.
 
 - [ ] Task 062: Build initial lunar mission calculators
   - Priority: P1
