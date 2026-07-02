@@ -3,6 +3,11 @@ import type { ReactNode } from "react";
 import { potomacBrand } from "../_data/brand";
 import { externalChannels } from "../_data/channels";
 import { terminalHeaderItems } from "../_data/terminal";
+import {
+    getSearchSupabaseClient,
+    loadCommandPaletteEntries,
+} from "../_data/search";
+import { SearchCommandPalette } from "./SearchCommandPalette";
 
 const utilityNavItems = [
     { href: "/terminal", label: "Terminal" },
@@ -13,7 +18,10 @@ const utilityNavItems = [
     { href: "/organization", label: "Organization" },
 ];
 
-export function MigrationShell({ children }: { children: ReactNode }) {
+export async function MigrationShell({ children }: { children: ReactNode }) {
+    const supabase = await getSearchSupabaseClient();
+    const commandEntries = await loadCommandPaletteEntries({ supabase });
+
     return (
         <div className="min-h-screen bg-potomac-secondary text-potomac-cream">
             <header className="border-b border-potomac-gold/30 bg-potomac-primary">
@@ -46,8 +54,9 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                         </nav>
                         <nav
                             aria-label="Access navigation"
-                            className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-wrap lg:justify-end lg:overflow-visible lg:px-0"
+                            className="-mx-4 flex items-center gap-3 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-wrap lg:justify-end lg:overflow-visible lg:px-0"
                         >
+                            <SearchCommandPalette entries={commandEntries} />
                             {utilityNavItems.map((item) => (
                                 <Link
                                     key={item.href}

@@ -1,0 +1,535 @@
+import { createClient } from "../../lib/supabase/server";
+import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+
+export type SearchTier = "public" | "explorer" | "scout" | "command" | "staff";
+
+export type SearchResultKind =
+    | "article"
+    | "event"
+    | "company"
+    | "lunar_mission"
+    | "dataset"
+    | "data_request"
+    | "data_offer"
+    | "job"
+    | "procurement"
+    | "regulatory_record"
+    | "methodology_source"
+    | "dashboard_module"
+    | "calculator";
+
+export type SearchResult = {
+    id: string;
+    kind: SearchResultKind;
+    title: string;
+    eyebrow: string;
+    summary: string;
+    snippet: string;
+    href: string;
+    tier: SearchTier;
+    confidenceLabel: string;
+    freshnessAt: string | null;
+    isPinned: boolean;
+    sourceCount: number;
+    keywords: string[];
+    metadata?: Record<string, unknown>;
+    isFallback: boolean;
+};
+
+export type CommandPaletteEntry = {
+    id: string;
+    label: string;
+    description: string;
+    href: string;
+    section: string;
+    tier: SearchTier;
+    shortcut?: string | null;
+    isPinned: boolean;
+    keywords: string[];
+};
+
+type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
+
+export const searchScopes = [
+    { value: "all", label: "All" },
+    { value: "article", label: "Articles" },
+    { value: "event", label: "Events" },
+    { value: "company", label: "Companies" },
+    { value: "lunar_mission", label: "Missions" },
+    { value: "dataset", label: "Datasets" },
+    { value: "data_request", label: "Requests" },
+    { value: "data_offer", label: "Offers" },
+    { value: "job", label: "Jobs" },
+    { value: "procurement", label: "Procurement" },
+    { value: "regulatory_record", label: "Regulatory" },
+    { value: "methodology_source", label: "Methodology" },
+    { value: "dashboard_module", label: "Modules" },
+    { value: "calculator", label: "Calculators" },
+] as const;
+
+const fallbackSearchResults: SearchResult[] = [
+    {
+        id: "terminal",
+        kind: "dashboard_module",
+        title: "Lunar Intelligence Terminal",
+        eyebrow: "Dashboard module",
+        summary:
+            "Command-center overview for lunar news, missions, companies, procurements, regulatory watch, datasets, calculators, and alerts.",
+        snippet: "Jump to the main lunar industry terminal.",
+        href: "/terminal",
+        tier: "public",
+        confidenceLabel: "high",
+        freshnessAt: "2026-07-02T00:02:32.000Z",
+        isPinned: true,
+        sourceCount: 0,
+        keywords: ["terminal", "dashboard", "lunar intelligence"],
+        isFallback: true,
+    },
+    {
+        id: "vipc-article",
+        kind: "article",
+        title: "Potomac selected as VIPC Launch Grant winner",
+        eyebrow: "News",
+        summary:
+            "Public brief on the VIPC milestone and Potomac's lunar data infrastructure roadmap.",
+        snippet:
+            "Members receive deeper context on data acquisition, delivery, and gated intelligence coverage.",
+        href: "/news/vipc-grant-winner",
+        tier: "public",
+        confidenceLabel: "medium",
+        freshnessAt: "2026-05-18T12:00:00.000Z",
+        isPinned: true,
+        sourceCount: 3,
+        keywords: ["news", "VIPC", "grant", "source"],
+        isFallback: true,
+    },
+    {
+        id: "events",
+        kind: "event",
+        title: "Event Calendar",
+        eyebrow: "Events",
+        summary:
+            "Public event teasers and member-gated event detail for lunar industry meetings and Potomac summit planning.",
+        snippet: "Find public event signals and member preparation paths.",
+        href: "/events",
+        tier: "public",
+        confidenceLabel: "medium",
+        freshnessAt: "2026-06-23T22:04:25.000Z",
+        isPinned: false,
+        sourceCount: 0,
+        keywords: ["events", "calendar", "summits"],
+        isFallback: true,
+    },
+    {
+        id: "missions",
+        kind: "lunar_mission",
+        title: "Launch and Spacecraft Tracker",
+        eyebrow: "Missions",
+        summary:
+            "Lunar launches, spacecraft, landers, payloads, and satellites with status and source freshness.",
+        snippet: "Includes Artemis, CLPS, lunar spacecraft, landers, satellites, and payloads.",
+        href: "/launches",
+        tier: "explorer",
+        confidenceLabel: "medium",
+        freshnessAt: "2026-06-30T12:00:00.000Z",
+        isPinned: true,
+        sourceCount: 1,
+        keywords: ["launches", "spacecraft", "landers", "satellites", "CLPS"],
+        isFallback: true,
+    },
+    {
+        id: "companies",
+        kind: "company",
+        title: "Lunar Company Directory",
+        eyebrow: "Companies",
+        summary:
+            "Search and compare lunar company profiles, programs, facilities, contracts, leadership, and sources.",
+        snippet: "Includes Intuitive Machines, Astrobotic, Firefly, and comparison fields.",
+        href: "/companies",
+        tier: "explorer",
+        confidenceLabel: "medium",
+        freshnessAt: "2026-07-01T08:00:00.000Z",
+        isPinned: false,
+        sourceCount: 3,
+        keywords: ["companies", "profiles", "CLPS", "comparison"],
+        isFallback: true,
+    },
+    {
+        id: "datasets",
+        kind: "dataset",
+        title: "Lunar Dataset Catalog",
+        eyebrow: "Datasets",
+        summary:
+            "Public and paid dataset catalog entries with source metadata, release states, demos, and availability labels.",
+        snippet: "Find NASA PDS, LROC, USGS, Potomac demo, and proprietary dataset records.",
+        href: "/datasets",
+        tier: "public",
+        confidenceLabel: "high",
+        freshnessAt: "2026-06-29T13:00:00.000Z",
+        isPinned: false,
+        sourceCount: 6,
+        keywords: ["datasets", "PDS", "USGS", "release states"],
+        isFallback: true,
+    },
+    {
+        id: "procurement",
+        kind: "procurement",
+        title: "Lunar Procurement Hub",
+        eyebrow: "Scout intelligence",
+        summary:
+            "Searchable opportunity and award intelligence for lunar-relevant procurements, SBIR/STTR items, and deadlines.",
+        snippet: "Scout+ access unlocks opportunity records, due dates, and source posture.",
+        href: "/procurement",
+        tier: "scout",
+        confidenceLabel: "medium",
+        freshnessAt: "2026-07-01T08:00:00.000Z",
+        isPinned: false,
+        sourceCount: 1,
+        keywords: ["procurement", "SBIR", "STTR", "awards", "RFI"],
+        isFallback: true,
+    },
+    {
+        id: "regulatory",
+        kind: "regulatory_record",
+        title: "Lunar Regulatory Watch",
+        eyebrow: "Scout intelligence",
+        summary:
+            "Policy, filing, comment-period, compliance, and risk intelligence for lunar operators.",
+        snippet: "Scout+ access unlocks filings, FCC watch items, milestones, and risk notes.",
+        href: "/regulatory",
+        tier: "scout",
+        confidenceLabel: "medium",
+        freshnessAt: "2026-07-01T08:00:00.000Z",
+        isPinned: false,
+        sourceCount: 1,
+        keywords: ["regulatory", "FCC", "policy", "comments", "risk"],
+        isFallback: true,
+    },
+    {
+        id: "marketplace",
+        kind: "data_request",
+        title: "Data Requests and Offers",
+        eyebrow: "Scout workspace",
+        summary:
+            "Paid data-market records for lunar data requests, data offers, evidence, and extraction-backed intelligence.",
+        snippet: "Scout and Command users can browse source-backed marketplace records.",
+        href: "/member/marketplace",
+        tier: "scout",
+        confidenceLabel: "experimental",
+        freshnessAt: "2026-06-26T19:35:29.000Z",
+        isPinned: false,
+        sourceCount: 0,
+        keywords: ["data request", "data offer", "marketplace", "sources"],
+        isFallback: true,
+    },
+    {
+        id: "jobs",
+        kind: "job",
+        title: "Space Sector Job Alerts",
+        eyebrow: "Member module",
+        summary:
+            "Member-visible job alert module for lunar and space-sector hiring signals from official career sources.",
+        snippet: "Find hiring alerts from NASA, SpaceX, Blue Origin, and Lockheed Martin sources.",
+        href: "/member",
+        tier: "explorer",
+        confidenceLabel: "medium",
+        freshnessAt: "2026-06-29T22:03:05.000Z",
+        isPinned: false,
+        sourceCount: 4,
+        keywords: ["jobs", "careers", "hiring", "alerts"],
+        isFallback: true,
+    },
+    {
+        id: "calculators",
+        kind: "calculator",
+        title: "Lunar Mission Calculators",
+        eyebrow: "Planning tools",
+        summary:
+            "Interactive planning calculators for mission cost, windows, RF links, thermal balance, radiation, and power.",
+        snippet: "Run six local planning tools with assumptions, formulas, limitations, and citations.",
+        href: "/calculators",
+        tier: "explorer",
+        confidenceLabel: "medium",
+        freshnessAt: "2026-07-01T19:02:20.000Z",
+        isPinned: false,
+        sourceCount: 6,
+        keywords: ["calculators", "mission cost", "RF", "thermal", "power"],
+        isFallback: true,
+    },
+    {
+        id: "methodology",
+        kind: "methodology_source",
+        title: "Lunar Economy Methodology Sources",
+        eyebrow: "Scout methodology",
+        summary:
+            "Source-backed methodology and evidence records for lunar economy estimates and benchmark calculations.",
+        snippet:
+            "Includes Firefly Blue Ghost benchmark context using the full NASA-paid cost basis.",
+        href: "/member/economy",
+        tier: "scout",
+        confidenceLabel: "medium",
+        freshnessAt: "2026-06-26T08:14:58.000Z",
+        isPinned: false,
+        sourceCount: 3,
+        keywords: ["methodology", "Firefly", "Blue Ghost", "economy"],
+        isFallback: true,
+    },
+];
+
+export const fallbackCommandEntries: CommandPaletteEntry[] = [
+    {
+        id: "open-search",
+        label: "Open search",
+        description: "Search across terminal records and modules.",
+        href: "/search",
+        section: "Navigation",
+        tier: "public",
+        shortcut: "mod+k",
+        isPinned: true,
+        keywords: ["search", "find", "command"],
+    },
+    ...fallbackSearchResults
+        .filter((result) => result.kind === "dashboard_module" || result.isPinned)
+        .map((result) => ({
+            id: `open-${result.id}`,
+            label: result.kind === "dashboard_module" ? result.title : `Open ${result.title}`,
+            description: result.snippet || result.summary,
+            href: result.href,
+            section: result.eyebrow,
+            tier: result.tier,
+            shortcut: result.id === "terminal" ? "g t" : null,
+            isPinned: result.isPinned,
+            keywords: result.keywords,
+        })),
+    {
+        id: "open-procurement",
+        label: "Open procurement hub",
+        description: "Go to Scout lunar procurement and award intelligence.",
+        href: "/procurement",
+        section: "Lunar terminal",
+        tier: "scout",
+        isPinned: false,
+        keywords: ["procurement", "SBIR", "STTR"],
+    },
+    {
+        id: "open-regulatory",
+        label: "Open regulatory watch",
+        description: "Go to Scout regulatory and policy intelligence.",
+        href: "/regulatory",
+        section: "Lunar terminal",
+        tier: "scout",
+        isPinned: false,
+        keywords: ["regulatory", "FCC", "policy"],
+    },
+    {
+        id: "open-companies",
+        label: "Open company directory",
+        description: "Go to lunar company profiles and comparisons.",
+        href: "/companies",
+        section: "Lunar terminal",
+        tier: "explorer",
+        isPinned: false,
+        keywords: ["companies", "profiles"],
+    },
+    {
+        id: "open-calculators",
+        label: "Open calculators",
+        description: "Go to lunar mission planning calculators.",
+        href: "/calculators",
+        section: "Lunar terminal",
+        tier: "explorer",
+        isPinned: false,
+        keywords: ["calculators", "planning"],
+    },
+];
+
+const tierRank: Record<SearchTier, number> = {
+    public: 0,
+    explorer: 1,
+    scout: 2,
+    command: 3,
+    staff: 4,
+};
+
+export function tierLabel(tier: SearchTier) {
+    if (tier === "public") return "Public";
+    if (tier === "explorer") return "Explorer+";
+    if (tier === "scout") return "Scout+";
+    if (tier === "command") return "Command";
+    return "Staff";
+}
+
+export function canPreviewTier(tier: SearchTier) {
+    return tier === "public";
+}
+
+export function searchResults({
+    results,
+    query,
+    scope,
+}: {
+    results: SearchResult[];
+    query: string;
+    scope: string;
+}) {
+    const normalized = query.trim().toLowerCase();
+
+    return results
+        .filter((result) => scope === "all" || result.kind === scope)
+        .filter((result) => {
+            if (!normalized) return true;
+
+            return [
+                result.title,
+                result.eyebrow,
+                result.summary,
+                result.snippet,
+                result.kind,
+                result.tier,
+                ...result.keywords,
+            ].some((field) => field.toLowerCase().includes(normalized));
+        })
+        .sort((a, b) => {
+            if (a.isPinned !== b.isPinned) return a.isPinned ? -1 : 1;
+            if (tierRank[a.tier] !== tierRank[b.tier]) {
+                return tierRank[a.tier] - tierRank[b.tier];
+            }
+            return a.title.localeCompare(b.title);
+        });
+}
+
+function mapTier(value: string | null | undefined): SearchTier {
+    if (
+        value === "public" ||
+        value === "explorer" ||
+        value === "scout" ||
+        value === "command" ||
+        value === "staff"
+    ) {
+        return value;
+    }
+
+    return "explorer";
+}
+
+export async function loadSearchResults({
+    supabase,
+    limit = 80,
+}: {
+    supabase?: SupabaseServerClient;
+    limit?: number;
+} = {}): Promise<SearchResult[]> {
+    if (!hasPotomacSupabasePublicConfig() || !supabase) {
+        return fallbackSearchResults;
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from("intelligence_search_records")
+            .select(
+                "id,source_kind,title,eyebrow,summary,snippet,route_path,visibility_tier,confidence_label,freshness_at,is_admin_pinned,source_count,keywords,metadata"
+            )
+            .eq("publication_status", "published")
+            .eq("is_search_enabled", true)
+            .order("is_admin_pinned", { ascending: false })
+            .order("result_rank", { ascending: true })
+            .limit(limit);
+
+        if (error || !data?.length) {
+            return fallbackSearchResults;
+        }
+
+        return (data as Array<{
+            id: string;
+            source_kind: SearchResultKind;
+            title: string;
+            eyebrow: string | null;
+            summary: string | null;
+            snippet: string | null;
+            route_path: string;
+            visibility_tier: string | null;
+            confidence_label: string | null;
+            freshness_at: string | null;
+            is_admin_pinned: boolean;
+            source_count: number | null;
+            keywords: string[] | null;
+            metadata: Record<string, unknown> | null;
+        }>).map((row) => ({
+            id: row.id,
+            kind: row.source_kind,
+            title: row.title,
+            eyebrow: row.eyebrow ?? "Search result",
+            summary: row.summary ?? "",
+            snippet: row.snippet ?? row.summary ?? "",
+            href: row.route_path,
+            tier: mapTier(row.visibility_tier),
+            confidenceLabel: row.confidence_label ?? "medium",
+            freshnessAt: row.freshness_at,
+            isPinned: row.is_admin_pinned,
+            sourceCount: row.source_count ?? 0,
+            keywords: row.keywords ?? [],
+            metadata: row.metadata ?? {},
+            isFallback: false,
+        }));
+    } catch {
+        return fallbackSearchResults;
+    }
+}
+
+export async function loadCommandPaletteEntries({
+    supabase,
+}: {
+    supabase?: SupabaseServerClient;
+} = {}): Promise<CommandPaletteEntry[]> {
+    if (!hasPotomacSupabasePublicConfig() || !supabase) {
+        return fallbackCommandEntries;
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from("intelligence_command_entries")
+            .select(
+                "id,label,description,route_path,keyboard_shortcut,section_label,keywords,visibility_tier,is_admin_pinned"
+            )
+            .eq("publication_status", "published")
+            .order("is_admin_pinned", { ascending: false })
+            .order("admin_pin_rank", { ascending: true, nullsFirst: false })
+            .limit(40);
+
+        if (error || !data?.length) {
+            return fallbackCommandEntries;
+        }
+
+        return (data as Array<{
+            id: string;
+            label: string;
+            description: string | null;
+            route_path: string;
+            keyboard_shortcut: string | null;
+            section_label: string | null;
+            keywords: string[] | null;
+            visibility_tier: string | null;
+            is_admin_pinned: boolean;
+        }>).map((row) => ({
+            id: row.id,
+            label: row.label,
+            description: row.description ?? "",
+            href: row.route_path,
+            section: row.section_label ?? "Terminal",
+            tier: mapTier(row.visibility_tier),
+            shortcut: row.keyboard_shortcut,
+            isPinned: row.is_admin_pinned,
+            keywords: row.keywords ?? [],
+        }));
+    } catch {
+        return fallbackCommandEntries;
+    }
+}
+
+export async function getSearchSupabaseClient() {
+    if (!hasPotomacSupabasePublicConfig()) {
+        return undefined;
+    }
+
+    return createClient();
+}
