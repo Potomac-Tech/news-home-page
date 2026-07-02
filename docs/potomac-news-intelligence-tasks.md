@@ -582,13 +582,13 @@ Blocked reason:
   - Verification: Added `/legal/terms`, `/legal/privacy`, `/legal/cookies`, `/legal/accessibility`, `/legal/data-safety`, and `/account/delete`; added local cookie preference controls, shared trust navigation data, footer trust links, account-center links, sitemap coverage, and `docs/legal-trust-account-lifecycle-surfaces.md`. Static search confirmed Terms, Privacy, Cookies, Accessibility, Data Safety, account deletion, cookie preferences, and support/contact paths. `npm run lint` passed; `npm run build:next` passed and registered all trust/account routes; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files. Backend account deletion automation, legal counsel review, production cookie/analytics integration, and support SLA/retention handling were not implemented in this baseline surface task.
   - Blocked reason: None.
 
-- [ ] Task 072: Add security, accessibility, analytics, observability, and performance baseline
+- [x] Task 072: Add security, accessibility, analytics, observability, and performance baseline
   - Priority: P0
   - Goal: Define and verify non-functional requirements for a production-ready intelligence platform.
   - Acceptance criteria: Implementation includes security headers, rate limiting or documented controls, input validation, CSRF/session protections where applicable, accessibility checks, analytics events, logs/metrics/traces hooks, performance budgets, and documented error/empty/stale/offline states.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The platform now has baseline security headers, product analytics and logging hooks, performance targets, accessibility expectations, and operational-state guidance.
+  - Verification: Added global Next.js security headers in `next-app/next.config.mjs`, including HSTS, content-type protection, frame denial, referrer policy, permissions policy, opener policy, DNS prefetch control, and report-only CSP. Added `next-app/lib/platform/baseline.ts` with rate-limit defaults, analytics event dispatch, structured logging hooks, accessibility baseline checks, performance budgets, and ready/loading/empty/error/stale/offline/locked state copy. Added `docs/security-accessibility-observability-performance-baseline.md` documenting rate-limit enforcement, input validation, CSRF/session protections, accessibility checks, analytics, observability, performance budgets, and operational states. Static search confirmed security headers, rate limits, validation/CSRF/session guidance, accessibility checks, analytics events, logging hooks, performance budgets, and operational state coverage. `npm run lint` passed; `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files. CI enforcement, CSP reporting endpoints, production analytics provider integration, managed logs/metrics/traces, API middleware rate limiting, and measured Core Web Vitals collection remain follow-on work.
+  - Blocked reason: None.
 
 - [ ] Task 073: Add automated tests for auth, RBAC, article gating, billing, member chat, forums, RFQs, lunar terminal modules, and RLS
   - Priority: P0
