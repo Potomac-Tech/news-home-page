@@ -26,13 +26,13 @@ export async function MigrationShell({ children }: { children: ReactNode }) {
         <div className="min-h-screen bg-potomac-secondary text-potomac-cream">
             <header className="border-b border-potomac-gold/30 bg-potomac-primary">
                 <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-4 md:px-8 lg:flex-row lg:items-center lg:justify-between">
-                    <Link href="/" className="flex items-center gap-4">
+                    <Link href="/" className="flex min-w-0 items-center gap-4">
                         <img
                             src={potomacBrand.assets.logo}
                             alt="Potomac"
-                            className="h-12 w-auto"
+                            className="h-12 w-auto max-w-[11rem] object-contain"
                         />
-                        <span className="font-serif text-lg tracking-[0.22em] text-white md:text-xl">
+                        <span className="min-w-0 font-serif text-lg tracking-[0.22em] text-white md:text-xl">
                             POTOMAC{" "}
                             <span className="text-potomac-gold">NEWS</span>
                         </span>

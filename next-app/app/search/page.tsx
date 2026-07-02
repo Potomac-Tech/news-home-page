@@ -122,10 +122,14 @@ function ResultCard({ result }: { result: SearchResult }) {
                 {result.summary}
             </p>
             <p className="mt-4 border-l border-potomac-gold/35 pl-4 text-sm leading-6 text-potomac-cream/60">
-                {publicPreview
-                    ? result.snippet
-                    : `${tierLabel(result.tier)} access required for the full result; public preview keeps the route discoverable.`}
+                {result.snippet}
             </p>
+            {!publicPreview ? (
+                <p className="mt-3 rounded border border-white/10 bg-white/[0.02] px-3 py-2 text-xs leading-5 text-potomac-cream/55">
+                    {tierLabel(result.tier)} access is required for the full
+                    result; public preview keeps the route discoverable.
+                </p>
+            ) : null}
             <div className="mt-5 flex flex-wrap items-center gap-3 text-[0.65rem] uppercase tracking-[0.13em] text-potomac-cream/45">
                 <span>{result.confidenceLabel} confidence</span>
                 <span>{formatFreshness(result.freshnessAt)}</span>
