@@ -107,6 +107,14 @@ export const terminalModules: TerminalModule[] = [
         section: "Workspace",
     },
     {
+        id: "saved-work",
+        label: "Saved work",
+        href: "/member/saved-work",
+        summary: "Scout and Command watchlists, searches, reading list, and defaults.",
+        status: "scout",
+        section: "Workspace",
+    },
+    {
         id: "account",
         label: "Account",
         href: "/account",
