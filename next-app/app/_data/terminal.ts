@@ -103,7 +103,7 @@ export const terminalModules: TerminalModule[] = [
         label: "Alerts",
         href: "/alerts",
         summary: "Watched companies, missions, procurement, regulatory, and data changes.",
-        status: "planned",
+        status: "member",
         section: "Workspace",
     },
     {
