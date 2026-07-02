@@ -1,6 +1,10 @@
 **/node_modules
 **/dist
 **/.next
+**/.env
+**/.env.*
+!**/.env.example
+Supabase Token.txt
 next-app/public/*
 !next-app/public/.gitkeep
 supabase/.temp/
