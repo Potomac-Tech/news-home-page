@@ -510,13 +510,13 @@ Blocked reason:
   - Verification: Added `/calculators` as an interactive calculator workspace with local fallback definitions for lunar mission cost, launch-window screen, RF link budget, thermal balance, radiation exposure, and surface power budget; each calculator includes editable assumptions, units, formula notes, limitation notes, citations, confidence labels, and a Scout+ saved-run label for the Task 061 persistence model. Added `next-app/app/_data/lunarCalculators.ts`, `next-app/app/calculators/LunarCalculatorWorkspace.tsx`, and `docs/lunar-mission-calculators.md`; updated terminal navigation to mark calculators live. `npm run build:next` passed; `npm run build` passed; `npm run lint` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on pre-existing touched config files and touched calculator files; static search confirmed all six calculator names and saved-run label are present; a temporary local production server check for `/calculators` returned `200` and confirmed expected calculator content. Live Supabase-backed calculator definitions and saved runs were not exercised because the Task 061 schema is not applied remotely, real runtime keys are absent, and no seeded Explorer/Scout/Command test users are available.
   - Blocked reason: None.
 
-- [ ] Task 063: Add global search, command palette, and related intelligence index
+- [x] Task 063: Add global search, command palette, and related intelligence index
   - Priority: P0
   - Goal: Let members quickly find content and jump across the terminal.
   - Acceptance criteria: Search/index model covers articles, events, companies, lunar missions, datasets, data requests/offers, jobs, procurements, regulatory records, methodology sources, and dashboard modules; command palette supports keyboard navigation and admin-pinned results.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The database now has a planned global search and command-palette index that can organize terminal results, source evidence, keyboard shortcuts, synonyms, and admin-pinned navigation across the lunar intelligence product.
+  - Verification: Created `supabase/migrations/20260702000232_global_search_command_palette_index.sql` with search record, source evidence, command entry, and synonym tables; added record/source/visibility/status/confidence/command enums, generated full-text search vectors, GIN indexes, admin-pinned result fields, explicit Data API grants, RLS policies, and seeded terminal command records. Added `docs/global-search-command-palette-index.md`. Supabase guidance was checked against the current 2026 Data API grant/RLS change. Static search confirmed article, event, company, lunar mission, dataset, data request/offer, job, procurement, regulatory record, methodology source, dashboard module, command palette, admin-pinned, grant, RLS, synonym, and citation coverage. `npm run build:next` passed; `npm run build` passed; `npm run lint` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files; `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` listed local migrations through `20260702000232`. Live migration application, RLS behavior, and command/search reads were not exercised because real runtime keys, applied remote schema, and seeded Explorer/Scout/Command/staff test users are unavailable.
+  - Blocked reason: None.
 
 - [ ] Task 064: Build global search and command palette UI
   - Priority: P1
