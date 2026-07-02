@@ -41,6 +41,21 @@ const accountLinks = [
         label: "Command",
         detail: "Request organization-level access.",
     },
+    {
+        href: "/legal/cookies",
+        label: "Cookie preferences",
+        detail: "Review cookie categories and save local consent choices.",
+    },
+    {
+        href: "/account/delete",
+        label: "Account deletion",
+        detail: "Request account deletion and paid-access cancellation review.",
+    },
+    {
+        href: "/legal/data-safety",
+        label: "Data safety",
+        detail: "Review security, data handling, uploads, exports, and support paths.",
+    },
 ];
 
 export default function AccountPage() {

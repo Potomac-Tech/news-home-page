@@ -574,13 +574,13 @@ Blocked reason:
   - Verification: Added `supabase/migrations/20260702161000_scout_command_developer_platform.sql` with developer tier limits, endpoint catalog, API key metadata, usage logs, webhook subscriptions/deliveries, export jobs, explicit Data API grants, and RLS policies for Scout, Command, organization admin, and staff access. Added `/member/developer`, developer access helpers, Supabase/fallback dashboard data, terminal navigation, and `docs/scout-command-developer-platform.md`. Supabase guidance was checked against the current Data API grant/RLS model and 2026 changelog. Static search confirmed API key model, endpoint catalog, quota fields, usage logs, webhook subscriptions, export jobs, developer documentation route, grants, RLS, and tier-aware access controls. `npm run lint` passed; `npm run build:next` passed and registered `/member/developer`; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files; `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` listed local migrations through `20260702161000`. Live migration application, API key issuance, API handler auth, export workers, webhook delivery, and RLS behavior were not exercised because the pending migration chain remains blocked before Task 065/067/068/070 and seeded Scout/Command/staff users plus runtime secrets are unavailable.
   - Blocked reason: None.
 
-- [ ] Task 071: Add legal, trust, account lifecycle, and consent surfaces
+- [x] Task 071: Add legal, trust, account lifecycle, and consent surfaces
   - Priority: P0
   - Goal: Support membership, ads, analytics, uploads, and paid tiers with baseline public trust pages and controls.
   - Acceptance criteria: Public/member surfaces include Terms, Privacy, Cookies, Accessibility, Data Safety, account deletion request flow, cookie preference controls, and clear support/contact paths.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Public visitors and members now have baseline legal, privacy, cookie, accessibility, data-safety, and account-deletion support surfaces.
+  - Verification: Added `/legal/terms`, `/legal/privacy`, `/legal/cookies`, `/legal/accessibility`, `/legal/data-safety`, and `/account/delete`; added local cookie preference controls, shared trust navigation data, footer trust links, account-center links, sitemap coverage, and `docs/legal-trust-account-lifecycle-surfaces.md`. Static search confirmed Terms, Privacy, Cookies, Accessibility, Data Safety, account deletion, cookie preferences, and support/contact paths. `npm run lint` passed; `npm run build:next` passed and registered all trust/account routes; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files. Backend account deletion automation, legal counsel review, production cookie/analytics integration, and support SLA/retention handling were not implemented in this baseline surface task.
+  - Blocked reason: None.
 
 - [ ] Task 072: Add security, accessibility, analytics, observability, and performance baseline
   - Priority: P0

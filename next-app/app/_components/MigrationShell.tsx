@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { potomacBrand } from "../_data/brand";
 import { externalChannels } from "../_data/channels";
 import { terminalHeaderItems } from "../_data/terminal";
+import { trustRoutes } from "../_data/trust";
 import {
     getSearchSupabaseClient,
     loadCommandPaletteEntries,
@@ -78,7 +79,7 @@ export async function MigrationShell({ children }: { children: ReactNode }) {
             </header>
             <main>{children}</main>
             <footer className="border-t border-white/5 bg-potomac-primary">
-                <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 md:px-8 lg:grid-cols-[0.9fr_1.1fr]">
+                <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 md:px-8 lg:grid-cols-[0.8fr_1.2fr]">
                     <div>
                         <p className="font-serif text-lg tracking-[0.2em] text-white">
                             POTOMAC{" "}
@@ -88,6 +89,20 @@ export async function MigrationShell({ children }: { children: ReactNode }) {
                             Public lunar reporting and member intelligence
                             channels for the cislunar economy.
                         </p>
+                        <nav
+                            aria-label="Legal and trust"
+                            className="mt-5 flex flex-wrap gap-x-4 gap-y-2"
+                        >
+                            {trustRoutes.map((route) => (
+                                <Link
+                                    key={route.href}
+                                    href={route.href}
+                                    className="text-xs font-semibold uppercase tracking-[0.14em] text-potomac-cream/45 transition hover:text-potomac-gold"
+                                >
+                                    {route.label}
+                                </Link>
+                            ))}
+                        </nav>
                     </div>
                     <nav
                         aria-label="External channels"
