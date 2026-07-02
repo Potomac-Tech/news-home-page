@@ -566,13 +566,13 @@ Blocked reason:
   - Verification: Added `next-app/app/_components/IntelligenceDataExplorer.tsx` with search filtering, sortable columns, pagination, configurable page sizes, a column picker, source badges, freshness tooltips, confidence styling, compact chart bars with tooltips, a data-table fallback when chart data is absent, CSV download, print-to-PDF export, entitlement-aware locked export buttons, and responsive horizontal table behavior. Added `docs/intelligence-table-chart-export-framework.md` with usage and entitlement guidance. `npm run lint` passed; `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on unrelated local files; static search confirmed filtering, sorting, pagination, column picker, source/freshness/confidence labels, chart tooltips, data-table fallback, CSV/PDF export, and entitlement controls are covered. Browser interaction testing was not run because no live module consumes the reusable framework yet.
   - Blocked reason: None.
 
-- [ ] Task 070: Add Scout/Command API, exports, webhooks, and developer portal scaffold
+- [x] Task 070: Add Scout/Command API, exports, webhooks, and developer portal scaffold
   - Priority: P1
   - Goal: Provide paid workflow infrastructure for Scout and Command users.
   - Acceptance criteria: Scaffold includes API key model, endpoint catalog, quota fields, usage logs, webhook subscriptions, export jobs, developer documentation route, and tier-aware access controls.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Scout and Command users now have a developer-platform foundation for API access, quota tracking, export jobs, webhooks, and developer documentation.
+  - Verification: Added `supabase/migrations/20260702161000_scout_command_developer_platform.sql` with developer tier limits, endpoint catalog, API key metadata, usage logs, webhook subscriptions/deliveries, export jobs, explicit Data API grants, and RLS policies for Scout, Command, organization admin, and staff access. Added `/member/developer`, developer access helpers, Supabase/fallback dashboard data, terminal navigation, and `docs/scout-command-developer-platform.md`. Supabase guidance was checked against the current Data API grant/RLS model and 2026 changelog. Static search confirmed API key model, endpoint catalog, quota fields, usage logs, webhook subscriptions, export jobs, developer documentation route, grants, RLS, and tier-aware access controls. `npm run lint` passed; `npm run build:next` passed and registered `/member/developer`; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files; `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` listed local migrations through `20260702161000`. Live migration application, API key issuance, API handler auth, export workers, webhook delivery, and RLS behavior were not exercised because the pending migration chain remains blocked before Task 065/067/068/070 and seeded Scout/Command/staff users plus runtime secrets are unavailable.
+  - Blocked reason: None.
 
 - [ ] Task 071: Add legal, trust, account lifecycle, and consent surfaces
   - Priority: P0

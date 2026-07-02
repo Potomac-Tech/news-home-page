@@ -115,6 +115,14 @@ export const terminalModules: TerminalModule[] = [
         section: "Workspace",
     },
     {
+        id: "developer",
+        label: "Developer portal",
+        href: "/member/developer",
+        summary: "Paid API keys, endpoint catalog, quotas, webhooks, and exports.",
+        status: "scout",
+        section: "Workspace",
+    },
+    {
         id: "account",
         label: "Account",
         href: "/account",
