@@ -558,13 +558,13 @@ Blocked reason:
   - Verification: Created `supabase/migrations/20260702150512_data_source_registry_trust_layer.sql` with source registry, citation requirement, parser run, health check, quality review, and registry-link tables; added source owner, URL, terms/license review, refresh frequency, parser/job, health, freshness, citation, quality score, confidence, publication, and analyst review fields; added explicit Data API grants, RLS enablement, and staff-only policies using normalized editor/analyst/admin roles. Added `/admin/sources`, staff auth, validated server actions, and `docs/data-source-registry-trust-layer.md`. Supabase guidance was checked against current Data API grant/RLS documentation and the 2026 Data API exposure changelog. `npm run lint` passed; `npm run build:next` passed and registered `/admin/sources`; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on unrelated local files; static search confirmed source owner, URL, license review, refresh, parser/job, health, freshness, citation requirements, quality score, confidence label, analyst review state, grants, RLS, and admin workflow coverage; `npx supabase migration list --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` listed local migrations through `20260702150512`. Live migration application, protected admin route interaction, and RLS behavior were not exercised because the pending migration chain remains blocked before Task 065/067/068 and seeded editor/analyst/admin test users are unavailable.
   - Blocked reason: None.
 
-- [ ] Task 069: Add reusable table, chart, and export framework for intelligence modules
+- [x] Task 069: Add reusable table, chart, and export framework for intelligence modules
   - Priority: P0
   - Goal: Standardize how data-heavy modules display, cite, filter, and export information.
   - Acceptance criteria: Framework supports filtering, sorting, pagination, column picker, source columns, freshness labels, confidence labels, chart tooltips, data-table fallback, CSV/PDF export where entitled, and responsive behavior.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: Data-heavy intelligence pages now have a reusable table, chart, and export component so future modules can use consistent filters, citations, freshness labels, and paid export controls.
+  - Verification: Added `next-app/app/_components/IntelligenceDataExplorer.tsx` with search filtering, sortable columns, pagination, configurable page sizes, a column picker, source badges, freshness tooltips, confidence styling, compact chart bars with tooltips, a data-table fallback when chart data is absent, CSV download, print-to-PDF export, entitlement-aware locked export buttons, and responsive horizontal table behavior. Added `docs/intelligence-table-chart-export-framework.md` with usage and entitlement guidance. `npm run lint` passed; `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on unrelated local files; static search confirmed filtering, sorting, pagination, column picker, source/freshness/confidence labels, chart tooltips, data-table fallback, CSV/PDF export, and entitlement controls are covered. Browser interaction testing was not run because no live module consumes the reusable framework yet.
+  - Blocked reason: None.
 
 - [ ] Task 070: Add Scout/Command API, exports, webhooks, and developer portal scaffold
   - Priority: P1
