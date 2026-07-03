@@ -590,13 +590,13 @@ Blocked reason:
   - Verification: Added global Next.js security headers in `next-app/next.config.mjs`, including HSTS, content-type protection, frame denial, referrer policy, permissions policy, opener policy, DNS prefetch control, and report-only CSP. Added `next-app/lib/platform/baseline.ts` with rate-limit defaults, analytics event dispatch, structured logging hooks, accessibility baseline checks, performance budgets, and ready/loading/empty/error/stale/offline/locked state copy. Added `docs/security-accessibility-observability-performance-baseline.md` documenting rate-limit enforcement, input validation, CSRF/session protections, accessibility checks, analytics, observability, performance budgets, and operational states. Static search confirmed security headers, rate limits, validation/CSRF/session guidance, accessibility checks, analytics events, logging hooks, performance budgets, and operational state coverage. `npm run lint` passed; `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files. CI enforcement, CSP reporting endpoints, production analytics provider integration, managed logs/metrics/traces, API middleware rate limiting, and measured Core Web Vitals collection remain follow-on work.
   - Blocked reason: None.
 
-- [ ] Task 073: Add automated tests for auth, RBAC, article gating, billing, member chat, forums, RFQs, lunar terminal modules, and RLS
+- [x] Task 073: Add automated tests for auth, RBAC, article gating, billing, member chat, forums, RFQs, lunar terminal modules, and RLS
   - Priority: P0
   - Goal: Cover critical security and access-control behavior with tests.
   - Acceptance criteria: Automated tests exercise login/session behavior, membership gating, role restrictions, billing entitlement updates, direct chat/forum/RFQ access and moderation rules, lunar terminal module gates, exports/API gates, and RLS expectations.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The project now has automated safety checks for the most important member access, paid tier, community, lunar terminal, export/API, and database security contracts.
+  - Verification: Added `tests/potomac-critical-flows.test.mjs` and an `npm test` script using Node's built-in test runner. The suite checks Supabase login/session/logout wiring, normalized role-based article gating, admin/org-admin restrictions, Scout Stripe checkout/webhook entitlement updates and idempotency, member chat/forum/RFQ access and moderation schema, lunar module tier gates, Scout/Command developer/export gates, protected-table RLS policies, avoidance of user-editable metadata for authorization, and the canonical `xlpkdoeldtlhearqajat` Supabase project reference. `npm test` passed with 8 tests; `npm run lint` passed; `npm run build:next` passed; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched files. Live RLS execution against Supabase was not run because the pending migration chain remains blocked before Task 065/067/068/070 and seeded Explorer/Scout/Command/staff test users are unavailable.
+  - Blocked reason: None.
 
 - [ ] Task 074: Add end-to-end tests for public teaser, Explorer article unlock, Scout dashboard, chat/forums/RFQs, and Command admin flows
   - Priority: P1

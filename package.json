@@ -15,6 +15,7 @@
         "prebuild:next": "npm run sync:next-public",
         "build:next": "next build next-app",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "test": "node --test tests/*.test.mjs",
         "preview": "vite preview",
         "prestart:next": "npm run sync:next-public",
         "start:next": "next start next-app -p 3001"
