@@ -606,10 +606,10 @@ Blocked reason:
   - Verification: Added `tests/potomac-e2e-flows.e2e.test.mjs` and `npm run test:e2e`; the E2E script builds the Next app, starts a local production server, and runs Playwright against public teaser, Explorer sign-in, Scout developer access, chat/forums/RFQ redirects, lunar terminal navigation, and Command public/admin flows using the canonical `xlpkdoeldtlhearqajat` Supabase URL with a placeholder publishable key. `npm run test:e2e` passed with 6 browser tests; `npm test` passed with 8 static tests; `npm run lint` passed; `npm run build` passed; `git diff --check` passed with recurring LF-to-CRLF warnings on touched/pre-existing files. Live authenticated Explorer full-body unlock, Scout dashboard data, chat conversation posting, forum posting, RFQ browsing/responding, and Command admin database actions were not exercised because seeded Explorer/Scout/Command/admin test users and live Supabase credentials are unavailable in this run.
   - Blocked reason: None.
 
-- [ ] Task 075: Run build, lint, tests, and document remaining gaps
+- [x] Task 075: Run build, lint, tests, and document remaining gaps
   - Priority: P0
   - Goal: Verify the implementation and capture any remaining gaps.
   - Acceptance criteria: Build, lint, and available tests are run; results are recorded; remaining gaps or skipped checks are documented clearly.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason:
+  - Non-technical summary: The current implementation has been checked with the available builds, linting, static tests, and browser E2E tests, with the remaining live-data and production-integration gaps documented.
+  - Verification: `npm run test:e2e` passed after building the Next app and running 6 Playwright browser tests; `npm test` passed with 8 static critical-flow tests; `npm run lint` passed; `npm run build` passed for the Vite site; `git diff --check` passed with recurring LF-to-CRLF warnings on touched/pre-existing files. `npm run test:e2e` also verified `npm run build:next`, which passed and registered the current Next route set. Remaining gaps: live authenticated Explorer full-body unlock, Scout dashboard data, chat conversation posting, forum posting, RFQ browsing/responding, Command admin database actions, Supabase RLS execution, remote migration application, email/webhook delivery, production analytics/observability, and real seeded Explorer/Scout/Command/staff/admin user journeys remain unverified because live Supabase credentials, seeded role users, and production integrations are unavailable in this automation run.
+  - Blocked reason: None.
