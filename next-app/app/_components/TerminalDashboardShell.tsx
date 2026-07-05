@@ -32,7 +32,7 @@ function moduleClassName(status: TerminalModule["status"]) {
 
 export function TerminalDashboardShell({
     title = "Lunar industry terminal",
-    description = "Fast paths across Potomac's lunar news, mission tracking, procurement, regulatory, company, economy, dataset, marketplace, event, calculator, alert, and account areas.",
+    description = "Fast paths across Cabeus Explorer's lunar news, mission tracking, procurement, regulatory, company, economy, dataset, marketplace, event, calculator, alert, and account areas.",
     showMemberActions = false,
 }: TerminalDashboardShellProps) {
     return (

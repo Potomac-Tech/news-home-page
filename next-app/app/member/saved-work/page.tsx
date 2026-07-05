@@ -99,7 +99,7 @@ function ConfigGate() {
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Watchlists, saved searches, reading-list items, and
                         preference writes use paid-member Supabase tables. Set
-                        the Potomac public environment variables and sign in
+                        the Cabeus Explorer public environment variables and sign in
                         with Scout or Command access.
                     </p>
                     <Link
@@ -893,7 +893,7 @@ function LoadWarning({ dashboard }: { dashboard: SavedWorkDashboard }) {
         <div className="mt-8 rounded border border-potomac-gold/35 bg-potomac-gold/10 p-4 text-sm leading-6 text-potomac-cream/75">
             Saved-work tables could not be read in this environment:{" "}
             {dashboard.loadError}. The route still renders the controls, but
-            live data needs the Task 065 schema applied to the Potomac Supabase
+            live data needs the Task 065 schema applied to the Cabeus Explorer Supabase
             project.
         </div>
     );

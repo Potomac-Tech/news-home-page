@@ -97,7 +97,7 @@ function ConfigGate() {
                         Supabase session required
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                        Uploads require Potomac Supabase Storage and a signed-in
+                        Uploads require Cabeus Explorer Supabase Storage and a signed-in
                         Scout or Command member. Configure the public Supabase
                         environment variables before testing this flow locally.
                     </p>

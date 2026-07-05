@@ -42,7 +42,9 @@ export function CommandInterestForm() {
 
         form.reset();
         setState("submitted");
-        setMessage("Command interest received. Potomac will follow up directly.");
+        setMessage(
+            "Command interest received. Cabeus Explorer will follow up directly."
+        );
     }
 
     return (

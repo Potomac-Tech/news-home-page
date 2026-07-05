@@ -122,7 +122,7 @@ function ConfigGate() {
                         Supabase session required
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                        RFQs are paid-member workflows and require Potomac
+                        RFQs are paid-member workflows and require Cabeus Explorer
                         Supabase public configuration plus a signed-in Scout or
                         Command member.
                     </p>

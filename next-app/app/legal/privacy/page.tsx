@@ -4,7 +4,7 @@ import { LegalPageShell } from "../_components/LegalPageShell";
 export const metadata: Metadata = {
     title: "Privacy",
     description:
-        "Potomac privacy baseline for account, usage, billing, and intelligence workflow data.",
+        "Cabeus Explorer privacy baseline for account, usage, billing, and intelligence workflow data.",
     alternates: {
         canonical: "/legal/privacy",
     },
@@ -19,7 +19,7 @@ export default function PrivacyPage() {
             sections={[
                 {
                     title: "Account Data",
-                    body: "Potomac uses Supabase Auth for login and session handling. Account records can include identity, application, organization, role, entitlement, approval, and audit details needed to operate member access.",
+                    body: "Cabeus Explorer uses Supabase Auth for login and session handling. Account records can include identity, application, organization, role, entitlement, approval, and audit details needed to operate member access.",
                 },
                 {
                     title: "Workflow Data",

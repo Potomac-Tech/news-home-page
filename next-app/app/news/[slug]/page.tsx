@@ -136,15 +136,15 @@ function mapArticle(row: EditorialArticleRow, citations: ArticleCitation[]): Art
         id: row.id,
         slug: row.slug,
         title: row.title,
-        dek: row.dek ?? row.public_summary ?? "Potomac intelligence brief.",
-        summary: row.public_summary ?? row.dek ?? "Potomac intelligence brief.",
+        dek: row.dek ?? row.public_summary ?? "Cabeus Explorer intelligence brief.",
+        summary: row.public_summary ?? row.dek ?? "Cabeus Explorer intelligence brief.",
         keyPoints: parseKeyPoints(row.public_key_points),
         intro: row.intro_markdown ?? row.public_teaser_markdown ?? "",
         teaser: row.public_teaser_markdown ?? row.public_summary ?? "",
         publishedAt: row.published_at ?? new Date().toISOString(),
         accessTier: normalizeTier(row.access_tier_required),
         heroImageUrl: row.hero_image_url ?? "/Source Rendering.png",
-        heroImageAlt: row.hero_image_alt ?? "Potomac lunar intelligence rendering",
+        heroImageAlt: row.hero_image_alt ?? "Cabeus Explorer lunar intelligence rendering",
         citations,
     };
 }
@@ -271,7 +271,7 @@ export async function generateMetadata({
             canonical: canonicalPath,
         },
         openGraph: {
-            title: fallbackArticle?.title ?? "Potomac Article",
+            title: fallbackArticle?.title ?? "Cabeus Explorer Article",
             description: fallbackArticle?.summary ?? siteConfig.description,
             url: absoluteSiteUrl(canonicalPath),
             siteName: siteConfig.name,

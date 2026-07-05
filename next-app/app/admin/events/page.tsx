@@ -396,7 +396,7 @@ export default async function AdminEventsPage() {
                     <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
                         Create public event teasers, maintain member-only
                         logistics, and publish major conferences, summits, and
-                        workshops into the Potomac event calendar.
+                        workshops into the Cabeus Explorer event calendar.
                     </p>
                 </div>
 

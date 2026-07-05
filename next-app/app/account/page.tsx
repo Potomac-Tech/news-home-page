@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
     title: "Account",
     description:
-        "Potomac account route for member workspace, organization admin, pricing, application, and sign-in paths.",
+        "Cabeus Explorer account route for member workspace, organization admin, pricing, application, and sign-in paths.",
     alternates: {
         canonical: "/account",
     },

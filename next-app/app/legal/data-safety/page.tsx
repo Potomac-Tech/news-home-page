@@ -4,7 +4,7 @@ import { LegalPageShell } from "../_components/LegalPageShell";
 export const metadata: Metadata = {
     title: "Data Safety",
     description:
-        "Potomac data safety baseline for security, uploads, exports, webhooks, and incident contact paths.",
+        "Cabeus Explorer data safety baseline for security, uploads, exports, webhooks, and incident contact paths.",
     alternates: {
         canonical: "/legal/data-safety",
     },
@@ -15,7 +15,7 @@ export default function DataSafetyPage() {
         <LegalPageShell
             eyebrow="Trust"
             title="Data Safety"
-            description="This baseline documents how Potomac should handle member data, source files, uploads, exports, API access, and operational safety before production launch."
+            description="This baseline documents how Cabeus Explorer should handle member data, source files, uploads, exports, API access, and operational safety before production launch."
             sections={[
                 {
                     title: "Access Control",

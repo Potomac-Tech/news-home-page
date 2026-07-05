@@ -4,7 +4,7 @@ import { CommandInterestForm } from "./CommandInterestForm";
 export const metadata: Metadata = {
     title: "Command",
     description:
-        "Register Command interest for organization-level Potomac lunar intelligence access.",
+        "Register Command interest for organization-level Cabeus Explorer lunar intelligence access.",
     alternates: {
         canonical: "/command",
     },

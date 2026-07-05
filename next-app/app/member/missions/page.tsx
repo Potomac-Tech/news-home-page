@@ -25,7 +25,7 @@ function ConfigGate() {
                         Supabase session required
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                        Member mission details are read from the Potomac
+                        Member mission details are read from the Cabeus Explorer
                         Supabase project. Configure the public environment
                         variables and sign in with Explorer, Scout, Command, or
                         staff access to view gated tracker rows.

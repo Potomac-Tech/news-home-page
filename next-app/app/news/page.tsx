@@ -6,14 +6,14 @@ import { absoluteSiteUrl, jsonLdScript, siteConfig } from "../_data/site";
 export const metadata: Metadata = {
     title: "News",
     description:
-        "Public Potomac news and article teasers for lunar intelligence readers.",
+        "Public Cabeus Explorer news and article teasers for lunar intelligence readers.",
     alternates: {
         canonical: "/news",
     },
     openGraph: {
-        title: "News | Potomac",
+        title: "News | Cabeus Explorer",
         description:
-            "Public Potomac news and article teasers for lunar intelligence readers.",
+            "Public Cabeus Explorer news and article teasers for lunar intelligence readers.",
         url: absoluteSiteUrl("/news"),
         siteName: siteConfig.name,
         type: "website",
@@ -30,7 +30,7 @@ export default function NewsPage() {
     const newsItemListJsonLd = {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        name: "Potomac public news feed",
+        name: "Cabeus Explorer public news feed",
         itemListElement: articles.map((article, index) => ({
             "@type": "ListItem",
             position: index + 1,

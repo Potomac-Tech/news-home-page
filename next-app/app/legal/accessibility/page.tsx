@@ -4,7 +4,7 @@ import { LegalPageShell } from "../_components/LegalPageShell";
 export const metadata: Metadata = {
     title: "Accessibility",
     description:
-        "Potomac accessibility commitment, testing baseline, and support path.",
+        "Cabeus Explorer accessibility commitment, testing baseline, and support path.",
     alternates: {
         canonical: "/legal/accessibility",
     },
@@ -15,7 +15,7 @@ export default function AccessibilityPage() {
         <LegalPageShell
             eyebrow="Accessibility"
             title="Accessibility"
-            description="Potomac aims to make public and member intelligence workflows usable with keyboard navigation, readable contrast, semantic structure, and clear support paths."
+            description="Cabeus Explorer aims to make public and member intelligence workflows usable with keyboard navigation, readable contrast, semantic structure, and clear support paths."
             sections={[
                 {
                     title: "Baseline",

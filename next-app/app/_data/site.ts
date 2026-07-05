@@ -1,12 +1,12 @@
 import { liveExternalChannelUrls } from "./channels";
 
 export const siteConfig = {
-    name: "Potomac News & Intelligence",
+    name: "Cabeus Explorer",
     legalName: "Potomac Database Systems",
     url: "https://potomacdb.com",
     description:
-        "Potomac public lunar news, market signals, event previews, and member-gated intelligence.",
-    logoPath: "/Potomac Logo.png",
+        "Lunar industrial intelligence, market signals, readiness tools, and member-gated context for builders of the lunar economy.",
+    logoPath: "/cabeus-lunar-industrial-hero.png",
 } as const;
 
 export function absoluteSiteUrl(pathOrUrl: string) {

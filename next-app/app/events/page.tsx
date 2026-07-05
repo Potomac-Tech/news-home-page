@@ -31,14 +31,14 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
     title: "Events",
     description:
-        "Public Potomac event calendar with member-only details for lunar conferences, summits, and workshops.",
+        "Public Cabeus Explorer event calendar with member-only details for lunar conferences, summits, and workshops.",
     alternates: {
         canonical: "/events",
     },
     openGraph: {
-        title: "Events | Potomac",
+        title: "Events | Cabeus Explorer",
         description:
-            "Public Potomac event calendar with member-only details for lunar conferences, summits, and workshops.",
+            "Public Cabeus Explorer event calendar with member-only details for lunar conferences, summits, and workshops.",
         url: absoluteSiteUrl("/events"),
         siteName: siteConfig.name,
         type: "website",
@@ -403,7 +403,7 @@ export default async function EventsPage() {
     const eventItemListJsonLd = {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        name: "Potomac public event calendar",
+        name: "Cabeus Explorer public event calendar",
         itemListElement: events.map((event, index) => ({
             "@type": "ListItem",
             position: index + 1,

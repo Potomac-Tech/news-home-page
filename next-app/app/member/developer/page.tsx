@@ -66,7 +66,7 @@ function ConfigGate() {
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         API keys, usage logs, webhook subscriptions, and export
-                        jobs are paid-member records. Set the Potomac public
+                        jobs are paid-member records. Set the Cabeus Explorer public
                         Supabase environment variables and sign in with Scout or
                         Command access.
                     </p>
@@ -147,7 +147,7 @@ function LoadWarning({ dashboard }: { dashboard: DeveloperPlatformDashboard }) {
         <div className="mt-8 rounded border border-potomac-gold/35 bg-potomac-gold/10 p-4 text-sm leading-6 text-potomac-cream/75">
             Developer-platform tables could not be read in this environment:{" "}
             {dashboard.loadError}. The portal is rendering scaffold data until
-            the Task 070 migration is applied to the Potomac Supabase project.
+            the Task 070 migration is applied to the Cabeus Explorer Supabase project.
         </div>
     );
 }

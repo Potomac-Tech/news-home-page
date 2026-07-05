@@ -143,7 +143,7 @@ function ConfigGate() {
                         Supabase session required
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                        Forums are member-gated and require the Potomac
+                        Forums are member-gated and require the Cabeus Explorer
                         Supabase public environment variables plus an approved
                         signed-in member.
                     </p>

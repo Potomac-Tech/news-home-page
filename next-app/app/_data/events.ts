@@ -40,7 +40,7 @@ export const fallbackEvents: EventCalendarRecord[] = [
         title: "Lunar Surface Markets Roundtable",
         eventType: "roundtable",
         accessTier: "member",
-        organizer: "Potomac",
+        organizer: "Cabeus Explorer",
         location: "Washington, DC",
         timezone: "America/New_York",
         startsAt: "2026-07-16T14:00:00-04:00",
@@ -63,7 +63,7 @@ export const fallbackEvents: EventCalendarRecord[] = [
             sourceLinks: [
                 {
                     label: "Briefing source",
-                    title: "Potomac lunar intelligence event tracker",
+                    title: "Cabeus Explorer lunar intelligence event tracker",
                     url: "https://potomacdb.com/events",
                 },
             ],
@@ -76,7 +76,7 @@ export const fallbackEvents: EventCalendarRecord[] = [
         title: "Cislunar Supply Chain Briefing",
         eventType: "briefing",
         accessTier: "member",
-        organizer: "Potomac",
+        organizer: "Cabeus Explorer",
         location: "Virtual",
         timezone: "America/New_York",
         startsAt: "2026-08-06T11:00:00-04:00",
@@ -107,7 +107,7 @@ export const fallbackEvents: EventCalendarRecord[] = [
         title: "Mission Data Rights Workshop",
         eventType: "workshop",
         accessTier: "member",
-        organizer: "Potomac",
+        organizer: "Cabeus Explorer",
         location: "Member-only",
         timezone: "America/New_York",
         startsAt: "2026-09-10T13:00:00-04:00",
@@ -124,7 +124,7 @@ export const fallbackEvents: EventCalendarRecord[] = [
         publishedAt: "2026-06-20T12:00:00-04:00",
         details: {
             memberDetails:
-                "The workshop packet covers NASA-paid mission-cost benchmarks, addendum treatment, and how Potomac labels confidence across data-rights assumptions.",
+                "The workshop packet covers NASA-paid mission-cost benchmarks, addendum treatment, and how Cabeus Explorer labels confidence across data-rights assumptions.",
             registrationUrl: "https://potomacdb.com/apply",
             contactEmail: "events@potomacdb.com",
             sourceLinks: [],

@@ -38,6 +38,13 @@ This file is the persistent operating memory for the Potomac News & Intelligence
 - Store authorization in normalized tables or trusted app metadata, not in user-editable metadata.
 - Use Supabase Edge Functions or scheduled jobs where appropriate for feed ingestion, economy recalculation, data-market extraction, and notifications.
 - Before making schema changes, follow the Supabase skill guidance: check current documentation, prefer iterative SQL through MCP/CLI before creating clean migrations, and verify changes.
+- Remote SQL deployment workaround: the Supabase CLI can link to project `xlpkdoeldtlhearqajat`, but `migration list --linked` / `db push --linked` may fail with `PgClient: Failed to connect` even when credentials are valid. Direct host `db.xlpkdoeldtlhearqajat.supabase.co` may also fail DNS/IPv6 resolution in this environment. The verified working remote DB path is Docker `psql` through the pooler:
+  - Connection string shape: `host=aws-1-us-east-1.pooler.supabase.com port=5432 dbname=postgres user=postgres.xlpkdoeldtlhearqajat sslmode=require`
+  - Password source: `SUPABASE_DB_PASSWORD` environment variable only; never write the password into repo files, task docs, or automation memory.
+  - Use `docker run --rm -e PGPASSWORD=$env:SUPABASE_DB_PASSWORD postgres:17 psql "$conn" ...` for verification and manual migration application when the CLI is blocked.
+  - Before applying migrations manually, query `supabase_migrations.schema_migrations` and insert a migration-history row after each successful migration.
+  - Always skip `supabase/migrations/20260701201833_seed_local_test_users.sql` for remote deployments unless the user explicitly requests known-password local QA users in the remote project.
+  - Rotate any Supabase personal access token or DB password that appears in chat/screenshots.
 
 ## Firefly Benchmark Rule
 

@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
     title: "Search",
     description:
-        "Global Potomac terminal search for articles, events, companies, missions, datasets, procurement, regulatory records, methodology sources, and modules.",
+        "Global Cabeus Explorer terminal search for articles, events, companies, missions, datasets, procurement, regulatory records, methodology sources, and modules.",
     alternates: {
         canonical: "/search",
     },
@@ -47,7 +47,7 @@ function SearchForm({ query, scope }: { query: string; scope: string }) {
     return (
         <form action="/search" className="grid gap-3 lg:grid-cols-[1fr_12rem_auto]">
             <label className="sr-only" htmlFor="global-search">
-                Search Potomac
+                Search Cabeus Explorer
             </label>
             <input
                 id="global-search"

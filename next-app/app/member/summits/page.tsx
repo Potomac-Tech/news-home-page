@@ -125,7 +125,7 @@ function ConfigGate() {
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Internal summit records are member-gated and are not
-                        rendered from local fallback data. Configure the Potomac
+                        rendered from local fallback data. Configure the Cabeus Explorer
                         Supabase public environment variables and sign in with
                         an approved role to view the tracker.
                     </p>
@@ -324,7 +324,7 @@ export default async function MemberSummitsPage() {
                         Internal Summit Tracker
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
-                        Upcoming Potomac summits, internal planning status, and
+                        Upcoming Cabeus Explorer summits, internal planning status, and
                         post-event summaries for approved members.
                     </p>
                 </div>

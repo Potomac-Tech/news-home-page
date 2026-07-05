@@ -5,12 +5,12 @@ import { absoluteSiteUrl, jsonLdScript } from "../_data/site";
 export const metadata: Metadata = {
     title: "Pricing",
     description:
-        "Compare Potomac Explorer, Scout, and Command access for lunar news and intelligence.",
+        "Compare Cabeus Explorer membership tiers for lunar news and intelligence.",
     alternates: {
         canonical: "/pricing",
     },
     openGraph: {
-        title: "Potomac Pricing",
+        title: "Cabeus Explorer Pricing",
         description:
             "Explorer is free after approval, Scout is self-serve at $25,000/user/year, and Command is organization-level enterprise access.",
         url: absoluteSiteUrl("/pricing"),
@@ -95,13 +95,13 @@ export default function PricingPage() {
     const productJsonLd = {
         "@context": "https://schema.org",
         "@type": "Product",
-        name: "Potomac News & Intelligence",
+        name: "Cabeus Explorer News & Intelligence",
         description:
             "Lunar industry news and member-gated intelligence tiers for Explorer, Scout, and Command users.",
         url: absoluteSiteUrl("/pricing"),
         offers: tiers.map((tier) => ({
             "@type": "Offer",
-            name: `Potomac ${tier.name}`,
+            name: `Cabeus Explorer ${tier.name}`,
             price: tier.name === "Scout" ? "25000" : "0",
             priceCurrency: "USD",
             availability: "https://schema.org/InStock",

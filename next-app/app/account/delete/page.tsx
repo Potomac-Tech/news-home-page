@@ -5,13 +5,13 @@ import { supportEmail } from "../../_data/trust";
 export const metadata: Metadata = {
     title: "Account Deletion",
     description:
-        "Request Potomac account deletion, export review, and membership cancellation support.",
+        "Request Cabeus Explorer account deletion, export review, and membership cancellation support.",
     alternates: {
         canonical: "/account/delete",
     },
 };
 
-const deletionMailto = `mailto:${supportEmail}?subject=Potomac%20account%20deletion%20request`;
+const deletionMailto = `mailto:${supportEmail}?subject=Cabeus%20Explorer%20account%20deletion%20request`;
 
 export default function AccountDeletionPage() {
     return (
@@ -25,7 +25,7 @@ export default function AccountDeletionPage() {
                         Account Deletion Request
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
-                        Request deletion review for your Potomac account,
+                        Request deletion review for your Cabeus Explorer account,
                         membership records, saved work, and paid workflow data.
                         Some records may need to be retained for billing,
                         security, legal, audit, or organization-administration

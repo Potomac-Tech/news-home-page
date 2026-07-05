@@ -25,9 +25,9 @@ export type MarketModule = {
 
 export const fallbackStories: HomeStory[] = [
     {
-        title: "VIPC backs Potomac's lunar intelligence platform",
+        title: "VIPC backs Cabeus Explorer's lunar intelligence platform",
         summary:
-            "The grant supports Potomac's work turning lunar mission, market, and technology signals into a member-ready intelligence product.",
+            "The grant supports Cabeus Explorer's work turning lunar mission, market, and technology signals into a member-ready intelligence product.",
         snippet:
             "Public readers can follow the company milestone while the CMS-backed article system prepares richer member-only analysis.",
         href: "/news/vipc-grant-winner",
@@ -40,7 +40,7 @@ export const fallbackStories: HomeStory[] = [
         summary:
             "Government contracts, private payloads, and downstream analytics are converging around who can use surface data first.",
         snippet:
-            "Potomac is tracking procurement signals, data addenda, and emerging exclusivity windows for members.",
+            "Cabeus Explorer is tracking procurement signals, data addenda, and emerging exclusivity windows for members.",
         href: "/news",
         publishedAt: "2026-06-12",
         accessTier: "Scout",

@@ -88,10 +88,10 @@ const fallbackSearchResults: SearchResult[] = [
     {
         id: "vipc-article",
         kind: "article",
-        title: "Potomac selected as VIPC Launch Grant winner",
+        title: "Cabeus Explorer selected as VIPC Launch Grant winner",
         eyebrow: "News",
         summary:
-            "Public brief on the VIPC milestone and Potomac's lunar data infrastructure roadmap.",
+            "Public brief on the VIPC milestone and Cabeus Explorer's lunar data infrastructure roadmap.",
         snippet:
             "Members receive deeper context on data acquisition, delivery, and gated intelligence coverage.",
         href: "/news/vipc-grant-winner",
@@ -109,7 +109,7 @@ const fallbackSearchResults: SearchResult[] = [
         title: "Event Calendar",
         eyebrow: "Events",
         summary:
-            "Public event teasers and member-gated event detail for lunar industry meetings and Potomac summit planning.",
+            "Public event teasers and member-gated event detail for lunar industry meetings and Cabeus Explorer summit planning.",
         snippet: "Find public event signals and member preparation paths.",
         href: "/events",
         tier: "public",
@@ -161,7 +161,7 @@ const fallbackSearchResults: SearchResult[] = [
         eyebrow: "Datasets",
         summary:
             "Public and paid dataset catalog entries with source metadata, release states, demos, and availability labels.",
-        snippet: "Find NASA PDS, LROC, USGS, Potomac demo, and proprietary dataset records.",
+        snippet: "Find NASA PDS, LROC, USGS, Cabeus Explorer demo, and proprietary dataset records.",
         href: "/datasets",
         tier: "public",
         confidenceLabel: "high",

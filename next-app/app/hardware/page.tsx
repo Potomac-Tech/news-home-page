@@ -4,7 +4,7 @@ import { RouteScaffold } from "../_components/RouteScaffold";
 export const metadata: Metadata = {
     title: "Hardware",
     description:
-        "Potomac hardware systems for low-cost lunar surface data collection and intelligence.",
+        "Cabeus Explorer hardware systems for low-cost lunar surface data collection and intelligence.",
     alternates: {
         canonical: "/hardware",
     },
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function HardwarePage() {
     return (
         <RouteScaffold
-            title="Potomac Hardware"
+            title="Cabeus Explorer Hardware"
             description="The hardware route is reserved in the Next.js scaffold so existing product positioning can move over without losing the current public URL."
             status="Route preserved"
             primaryHref="/source"

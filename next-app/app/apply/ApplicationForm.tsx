@@ -44,7 +44,7 @@ export function ApplicationForm() {
         form.reset();
         setState("submitted");
         setMessage(
-            "Application received. Potomac will review it before member access is granted."
+            "Application received. Cabeus Explorer will review it before member access is granted."
         );
     }
 

@@ -4,7 +4,7 @@ import { LegalPageShell } from "../_components/LegalPageShell";
 export const metadata: Metadata = {
     title: "Terms",
     description:
-        "Potomac membership, paid access, acceptable use, and platform terms.",
+        "Cabeus Explorer membership, paid access, acceptable use, and platform terms.",
     alternates: {
         canonical: "/legal/terms",
     },
@@ -15,7 +15,7 @@ export default function TermsPage() {
         <LegalPageShell
             eyebrow="Legal"
             title="Terms"
-            description="These baseline terms explain how Potomac access, paid intelligence workflows, and member responsibilities are framed before production launch."
+            description="These baseline terms explain how Cabeus Explorer access, paid intelligence workflows, and member responsibilities are framed before production launch."
             sections={[
                 {
                     title: "Membership And Access",
@@ -23,7 +23,7 @@ export default function TermsPage() {
                 },
                 {
                     title: "Intelligence Content",
-                    body: "Potomac provides news, market data, citations, calculators, datasets, and workflow tools for informational and planning use. Members remain responsible for independent validation before relying on the material for business, legal, engineering, or procurement decisions.",
+                    body: "Cabeus Explorer provides news, market data, citations, calculators, datasets, and workflow tools for informational and planning use. Members remain responsible for independent validation before relying on the material for business, legal, engineering, or procurement decisions.",
                 },
                 {
                     title: "Acceptable Use",

@@ -4,7 +4,7 @@ import { TerminalDashboardShell } from "../_components/TerminalDashboardShell";
 export const metadata: Metadata = {
     title: "Lunar Terminal",
     description:
-        "Potomac lunar industry terminal navigation for news, missions, markets, datasets, alerts, calculators, and account areas.",
+        "Cabeus Explorer lunar industry terminal navigation for news, missions, markets, datasets, alerts, calculators, and account areas.",
     alternates: {
         canonical: "/terminal",
     },
@@ -20,7 +20,7 @@ export default function TerminalPage() {
                             Lunar command center
                         </p>
                         <h1 className="mt-4 font-serif text-4xl leading-tight text-white md:text-6xl">
-                            Potomac lunar industry terminal
+                            Cabeus Explorer lunar industry terminal
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
                             A news-first terminal shell for lunar launches,

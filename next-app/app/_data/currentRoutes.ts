@@ -37,7 +37,7 @@ export const currentRoutes = [
     {
         href: "/datasets",
         source: "next-app/app/datasets/page.tsx",
-        note: "Public dataset catalog with NASA/science archives, Potomac proprietary entries, source metadata, availability, tier, sample, and demo indicators.",
+        note: "Public dataset catalog with NASA/science archives, Cabeus Explorer proprietary entries, source metadata, availability, tier, sample, and demo indicators.",
     },
     {
         href: "/member/summits",

@@ -17,14 +17,14 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
     title: "Dataset Catalog",
     description:
-        "Potomac dataset catalog for public lunar science archives and proprietary lunar intelligence data products.",
+        "Cabeus Explorer dataset catalog for public lunar science archives and proprietary lunar intelligence data products.",
     alternates: {
         canonical: "/datasets",
     },
     openGraph: {
-        title: "Dataset Catalog | Potomac",
+        title: "Dataset Catalog | Cabeus Explorer",
         description:
-            "Potomac dataset catalog for public lunar science archives and proprietary lunar intelligence data products.",
+            "Cabeus Explorer dataset catalog for public lunar science archives and proprietary lunar intelligence data products.",
         url: absoluteSiteUrl("/datasets"),
         siteName: siteConfig.name,
         type: "website",
@@ -79,7 +79,7 @@ function kindLabel(value: string) {
     }
 
     if (value === "potomac_proprietary") {
-        return "Potomac Proprietary";
+        return "Cabeus Proprietary";
     }
 
     if (value === "derived_model") {
@@ -168,7 +168,7 @@ function catalogJsonLd(entries: DatasetCatalogEntry[]) {
     return {
         "@context": "https://schema.org",
         "@type": "DataCatalog",
-        name: "Potomac lunar dataset catalog",
+        name: "Cabeus Explorer lunar dataset catalog",
         url: absoluteSiteUrl("/datasets"),
         provider: organizationJsonLd(),
         dataset: entries.map((entry) => ({
@@ -490,7 +490,7 @@ export default async function DatasetsPage() {
                             Dataset Catalog
                         </h1>
                         <p className="mt-6 max-w-3xl text-lg leading-8 text-potomac-cream/80">
-                            Public NASA and science archives alongside Potomac
+                            Public NASA and science archives alongside Cabeus Explorer
                             proprietary lunar intelligence datasets, with
                             source metadata, tier labels, availability states,
                             and sample or demo indicators.
@@ -529,7 +529,7 @@ export default async function DatasetsPage() {
                         detail="Open source access"
                     />
                     <Metric
-                        label="Potomac"
+                        label="Cabeus"
                         value={String(proprietaryCount)}
                         detail="Proprietary entries"
                     />

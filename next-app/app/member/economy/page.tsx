@@ -114,7 +114,7 @@ function ConfigGate() {
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Detailed lunar economy records are paid-member data and
                         are not rendered from local fallback data. Configure the
-                        Potomac Supabase public environment variables and sign
+                        Cabeus Explorer Supabase public environment variables and sign
                         in with Scout or Command access to view the dashboard.
                     </p>
                     <Link

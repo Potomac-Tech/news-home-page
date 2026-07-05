@@ -5,7 +5,7 @@ import { LegalPageShell } from "../_components/LegalPageShell";
 export const metadata: Metadata = {
     title: "Cookies",
     description:
-        "Potomac cookie categories, Supabase session use, analytics choices, and local preference controls.",
+        "Cabeus Explorer cookie categories, Supabase session use, analytics choices, and local preference controls.",
     alternates: {
         canonical: "/legal/cookies",
     },
@@ -16,7 +16,7 @@ export default function CookiesPage() {
         <LegalPageShell
             eyebrow="Cookies"
             title="Cookies"
-            description="Potomac uses essential cookies for authentication and security. Optional preference and analytics categories should only be enabled when the member chooses them."
+            description="Cabeus Explorer uses essential cookies for authentication and security. Optional preference and analytics categories should only be enabled when the member chooses them."
             sections={[
                 {
                     title: "Essential Cookies",

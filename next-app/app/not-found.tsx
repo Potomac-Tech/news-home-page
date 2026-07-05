@@ -8,7 +8,7 @@ export default function NotFound() {
                     Page not found
                 </h1>
                 <p className="mt-6 max-w-2xl text-lg leading-8 text-potomac-cream/80">
-                    The requested route is not part of the current Potomac
+                    The requested route is not part of the current Cabeus Explorer
                     migration scaffold.
                 </p>
                 <Link
