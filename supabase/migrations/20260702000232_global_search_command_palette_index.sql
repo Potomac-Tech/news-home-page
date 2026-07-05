@@ -115,15 +115,7 @@ create table if not exists public.intelligence_search_records (
     updated_by uuid references auth.users(id) on delete set null,
     created_at timestamptz not null default now(),
     updated_at timestamptz not null default now(),
-    search_document tsvector generated always as (
-        setweight(to_tsvector('english', coalesce(title, '')), 'A')
-        || setweight(to_tsvector('english', coalesce(eyebrow, '')), 'B')
-        || setweight(to_tsvector('english', coalesce(summary, '')), 'B')
-        || setweight(to_tsvector('english', coalesce(snippet, '')), 'C')
-        || setweight(to_tsvector('english', array_to_string(keywords, ' ')), 'A')
-        || setweight(to_tsvector('english', array_to_string(entities, ' ')), 'B')
-        || setweight(to_tsvector('english', array_to_string(tags, ' ')), 'C')
-    ) stored,
+    search_document tsvector not null default ''::tsvector,
     constraint intelligence_search_records_title_not_blank check (
         length(trim(title)) > 0
     ),
@@ -157,6 +149,57 @@ create table if not exists public.intelligence_search_records (
         jsonb_typeof(metadata) = 'object'
     )
 );
+
+create or replace function public.set_intelligence_search_records_document()
+returns trigger
+language plpgsql
+set search_path = public, pg_temp
+as $$
+begin
+    new.search_document :=
+        setweight(to_tsvector('english', coalesce(new.title, '')), 'A')
+        || setweight(to_tsvector('english', coalesce(new.eyebrow, '')), 'B')
+        || setweight(to_tsvector('english', coalesce(new.summary, '')), 'B')
+        || setweight(to_tsvector('english', coalesce(new.snippet, '')), 'C')
+        || setweight(
+            to_tsvector(
+                'english',
+                array_to_string(coalesce(new.keywords, '{}'::text[]), ' ')
+            ),
+            'A'
+        )
+        || setweight(
+            to_tsvector(
+                'english',
+                array_to_string(coalesce(new.entities, '{}'::text[]), ' ')
+            ),
+            'B'
+        )
+        || setweight(
+            to_tsvector(
+                'english',
+                array_to_string(coalesce(new.tags, '{}'::text[]), ' ')
+            ),
+            'C'
+        );
+
+    return new;
+end;
+$$;
+
+drop trigger if exists set_intelligence_search_records_document
+on public.intelligence_search_records;
+create trigger set_intelligence_search_records_document
+before insert or update of
+    title,
+    eyebrow,
+    summary,
+    snippet,
+    keywords,
+    entities,
+    tags
+on public.intelligence_search_records
+for each row execute function public.set_intelligence_search_records_document();
 
 create unique index if not exists intelligence_search_records_source_key
 on public.intelligence_search_records (
@@ -269,12 +312,7 @@ create table if not exists public.intelligence_command_entries (
     updated_by uuid references auth.users(id) on delete set null,
     created_at timestamptz not null default now(),
     updated_at timestamptz not null default now(),
-    command_document tsvector generated always as (
-        setweight(to_tsvector('english', coalesce(label, '')), 'A')
-        || setweight(to_tsvector('english', coalesce(description, '')), 'B')
-        || setweight(to_tsvector('english', coalesce(section_label, '')), 'B')
-        || setweight(to_tsvector('english', array_to_string(keywords, ' ')), 'A')
-    ) stored,
+    command_document tsvector not null default ''::tsvector,
     constraint intelligence_command_entries_key_not_blank check (
         length(trim(command_key)) > 0
     ),
@@ -296,6 +334,39 @@ create table if not exists public.intelligence_command_entries (
         jsonb_typeof(metadata) = 'object'
     )
 );
+
+create or replace function public.set_intelligence_command_entries_document()
+returns trigger
+language plpgsql
+set search_path = public, pg_temp
+as $$
+begin
+    new.command_document :=
+        setweight(to_tsvector('english', coalesce(new.label, '')), 'A')
+        || setweight(to_tsvector('english', coalesce(new.description, '')), 'B')
+        || setweight(to_tsvector('english', coalesce(new.section_label, '')), 'B')
+        || setweight(
+            to_tsvector(
+                'english',
+                array_to_string(coalesce(new.keywords, '{}'::text[]), ' ')
+            ),
+            'A'
+        );
+
+    return new;
+end;
+$$;
+
+drop trigger if exists set_intelligence_command_entries_document
+on public.intelligence_command_entries;
+create trigger set_intelligence_command_entries_document
+before insert or update of
+    label,
+    description,
+    section_label,
+    keywords
+on public.intelligence_command_entries
+for each row execute function public.set_intelligence_command_entries_document();
 
 create unique index if not exists intelligence_command_entries_key
 on public.intelligence_command_entries (lower(command_key));
@@ -338,8 +409,8 @@ create table if not exists public.intelligence_search_synonyms (
 create unique index if not exists intelligence_search_synonyms_term_key
 on public.intelligence_search_synonyms (
     lower(term),
-    coalesce(source_kind::text, '')
-);
+    source_kind
+) nulls not distinct;
 
 drop trigger if exists set_intelligence_search_synonyms_updated_at
 on public.intelligence_search_synonyms;
@@ -1075,7 +1146,7 @@ values
     ('dataset', array['data catalog', 'source archive', 'data product'], 'dataset', true),
     ('Firefly', array['Blue Ghost', 'CLPS', 'lunar economy benchmark'], null, true),
     ('FCC', array['spectrum', 'filing', 'regulatory'], 'regulatory_record', true)
-on conflict ((lower(term)), (coalesce(source_kind::text, ''))) do update set
+on conflict ((lower(term)), source_kind) do update set
     synonyms = excluded.synonyms,
     is_active = excluded.is_active,
     updated_at = now();

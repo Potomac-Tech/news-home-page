@@ -613,3 +613,43 @@ Blocked reason:
   - Non-technical summary: The current implementation has been checked with the available builds, linting, static tests, and browser E2E tests, with the remaining live-data and production-integration gaps documented.
   - Verification: `npm run test:e2e` passed after building the Next app and running 6 Playwright browser tests; `npm test` passed with 8 static critical-flow tests; `npm run lint` passed; `npm run build` passed for the Vite site; `git diff --check` passed with recurring LF-to-CRLF warnings on touched/pre-existing files. `npm run test:e2e` also verified `npm run build:next`, which passed and registered the current Next route set. Remaining gaps: live authenticated Explorer full-body unlock, Scout dashboard data, chat conversation posting, forum posting, RFQ browsing/responding, Command admin database actions, Supabase RLS execution, remote migration application, email/webhook delivery, production analytics/observability, and real seeded Explorer/Scout/Command/staff/admin user journeys remain unverified because live Supabase credentials, seeded role users, and production integrations are unavailable in this automation run.
   - Blocked reason: None.
+
+- [x] Task 076: Reverify completed tasks and unblock local Supabase migrations
+  - Priority: P0
+  - Goal: Reverify every completed Potomac News Intelligence task with the available local checks, use the local computer and Supabase stack to fix actionable blockers, and identify remaining matrix gaps.
+  - Acceptance criteria: All existing completed tasks remain checked; no unchecked task is missed; application builds, lint, static tests, browser E2E tests, local Supabase migration application, schema lint, and security advisors are rerun; actionable local blockers are fixed; remaining unsatisfied requirements are captured as new unchecked tasks.
+  - Non-technical summary: The full task list was rechecked, the app test suite still passes, and the local Supabase database migration chain is no longer stuck.
+  - Verification: Confirmed all 75 prior tasks were checked and no unchecked tasks existed before this audit. `npm run lint` passed; `npm test` passed with 8 static tests; `npm run build` passed; `npm run test:e2e` passed after `npm run build:next` and 6 browser tests; `git diff --check` passed with only the pre-existing LF-to-CRLF warning on `docs/codex-automation-memory.md`. Used Windows computer control to confirm local app/browser context was available without reading unrelated sensitive windows. Supabase CLI `2.109.0` and local Docker Supabase were available. Fixed the old migration blocker in `20260702000232_global_search_command_palette_index.sql` by replacing non-immutable generated `tsvector` columns with trigger-maintained search vectors and replacing enum-to-text unique-index expressions with `NULLS NOT DISTINCT` indexes. Fixed the next blocker in `20260702050828_watchlists_saved_work_preferences.sql` with the same nullable unique-index pattern. Added repair migrations `20260705023452_fix_public_company_ranking_status_cast.sql` and `20260705023613_harden_updated_at_search_path.sql`. `npx supabase migration up --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` now applies through `20260705023613`; `npx supabase db lint --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` reports no schema errors; `npx supabase db advisors --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website" --type security --level warn --fail-on error` reports no security issues. Performance advisors still report warning-level RLS optimization work: 73 `auth_rls_initplan` warnings and 86 `multiple_permissive_policies` warnings; Task 080 captures the production hardening follow-up. Live remote Supabase verification was not run because `SUPABASE_DB_PASSWORD`, Supabase runtime keys, Stripe secrets, and seeded role-user credentials are not present in the shell environment.
+  - Blocked reason: None.
+
+- [ ] Task 077: Verify canonical remote Supabase migrations and role journeys
+  - Priority: P0
+  - Goal: Prove the completed database-backed requirements against the real Potomac Supabase project.
+  - Acceptance criteria: Remote migration history for project `xlpkdoeldtlhearqajat` is reconciled; all production-intended migrations are applied or explicitly skipped; `20260701201833_seed_local_test_users.sql` is skipped unless explicitly approved for remote; Explorer, Scout, Command, organization admin, editor, analyst, and admin role journeys are seeded or otherwise available; RLS read/write checks cover article bodies, search, saved work, alerts, chat, forums, RFQs, lunar missions, procurement, regulatory records, companies, calculators, datasets, uploads, API/export tables, and audit logs; results are documented without exposing secrets.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Requires canonical project database credentials, runtime Supabase keys, and seeded or approved test users for `xlpkdoeldtlhearqajat`; never use `nwoluvjdojzayozyzlob`.
+
+- [ ] Task 078: Implement production alert evaluation and email delivery
+  - Priority: P1
+  - Goal: Complete R-ALERT-001 beyond the current alerts-center and delivery-hook scaffold.
+  - Acceptance criteria: Scheduled alert evaluation runs against watched companies, missions, procurements, regulatory records, datasets, events, marketplace records, and Command intelligence; in-app alert feed and unread badges are updated by the evaluator; email notifications are sent through a configured provider; member notification preferences and quiet hours are respected; delivery retries, failures, and audit logs are visible; unsubscribe or preference-management paths are documented and tested.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Requires email provider configuration, scheduling/runtime environment, and live or seeded member alert data.
+
+- [ ] Task 079: Build runtime paid API, export jobs, and webhook delivery
+  - Priority: P1
+  - Goal: Complete R-API-001 beyond the current Scout/Command developer-platform scaffold.
+  - Acceptance criteria: Versioned API routes authenticate developer API keys, enforce Scout/Command scopes and usage limits, write usage/audit logs, and return documented errors; CSV/PDF export requests create and process export jobs with downloadable results; webhook subscriptions deliver signed event payloads with retry/backoff and delivery logs; developer documentation reflects the live endpoints; tests cover authentication, quotas, exports, and webhook delivery behavior.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Requires runtime API design decisions, worker/scheduler environment, signing secret management, and live or seeded paid-member data.
+
+- [ ] Task 080: Add production trust, telemetry, accessibility, and performance enforcement
+  - Priority: P0
+  - Goal: Complete R-TRUST-001 beyond baseline pages and documented hooks.
+  - Acceptance criteria: Accessibility checks run in CI for key public/member/admin routes; analytics events are connected to a production provider with consent-aware behavior; managed logs, metrics, traces, and error reporting are configured; Core Web Vitals and route performance budgets are measured and reported; API rate limiting is enforced in middleware or infrastructure; Supabase performance advisor warnings are triaged and either fixed or explicitly accepted with rationale.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Requires production analytics/observability provider choices, CI/runtime configuration, and a deliberate RLS performance-hardening pass.

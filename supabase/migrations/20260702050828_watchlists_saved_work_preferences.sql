@@ -320,10 +320,10 @@ create table if not exists public.member_notification_preferences (
 create unique index if not exists member_notification_preferences_key
 on public.member_notification_preferences (
     owner_user_id,
-    coalesce(organization_id, '00000000-0000-0000-0000-000000000000'::uuid),
+    organization_id,
     channel,
-    coalesce(object_kind::text, '')
-);
+    object_kind
+) nulls not distinct;
 
 create index if not exists member_notification_preferences_owner_idx
 on public.member_notification_preferences (owner_user_id, enabled, channel);
