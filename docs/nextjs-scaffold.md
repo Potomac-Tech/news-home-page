@@ -1,37 +1,40 @@
-# Next.js Migration Scaffold
+# Next.js Application
 
-Task 003 added a first App Router scaffold in `next-app/` alongside the existing Vite app. The current Vite site remains the default development and build path while the Next.js structure is filled in.
+The production application is now the root Next.js App Router app. The previous
+Vite site and nested migration scaffold have been removed, so all local,
+GitHub, and Cloudflare workflows should use the same root app.
 
 ## Commands
 
-- Current Vite dev server: `npm run dev`
-- Current Vite production build: `npm run build`
-- Next.js dev server: `npm run dev:next`
-- Next.js production build: `npm run build:next`
-- Next.js production server: `npm run start:next`
+- Local development: `npm run dev`
+- Production build: `npm run build`
+- Local production server: `npm run start`
+- Cloudflare Worker preview: `npm run preview`
+- Cloudflare Worker deploy: `npm run deploy`
 
-The Next.js dev server uses port `3001` so it does not collide with the existing Vite server on port `3000`.
+The local Next.js server uses port `3001` by default.
 
-## Scaffolded Routes
+## Deployment Target
 
-| Next.js route | Current route/source accounted for | Status |
-| --- | --- | --- |
-| `/` | `src/pages/Home.tsx` | Public homepage scaffold. |
-| `/hardware` | `src/pages/Hardware.tsx` | Route reserved for the existing hardware page. |
-| `/source` | Vite redirect to `/hardware` | Redirect preserved with `next/navigation`. |
-| `/nexus` | `src/pages/Nexus.tsx` | Route reserved for the Nexus migration. |
-| `/team` | `src/pages/Team.tsx` | Route reserved for the public team page. |
-| `/news` | `src/pages/News.tsx` | Route reserved for the future CMS-backed article feed. |
-| `/news/vipc-grant-winner` | `src/pages/VipcGrantWinner.tsx` | Article route reserved for migration. |
+Cloudflare deploys the app through OpenNext for Cloudflare:
 
-## Asset Handling
+- `open-next.config.ts` defines the OpenNext adapter config.
+- `wrangler.jsonc` points Cloudflare Workers at `.open-next/worker.js`.
+- Static assets are emitted into `.open-next/assets`.
 
-The scaffold syncs the existing `public/` directory into `next-app/public/` before Next dev, build, and start commands. That keeps Potomac logos, team images, hardware imagery, Nexus imagery, the press release PDF, favicon, manifest, and CNAME available to both Vite and Next.js during the migration without duplicating large binary assets in Git.
+No `dist/` folder or Vite build output should be used for deployment.
 
-## Notes
+## Route Sources
 
-- `next.config.mjs` currently keeps the default Next runtime with React strict mode enabled.
-- `next-app/app/layout.tsx` imports `next-app/app/globals.css`, which mirrors the current Potomac Tailwind tokens and global utilities for the scaffold.
-- `docs/potomac-brand-foundation.md` documents the shared colors, fonts, asset paths, and asset-sync workflow.
-- Existing `react-router-dom` components are not imported into the Next.js scaffold. Route content is intentionally separated until each page is ported.
-- Supabase integration is not part of this task; it starts in Task 005 after the scaffold and brand foundation are in place.
+| Route | Source |
+| --- | --- |
+| `/` | `app/page.tsx` |
+| `/hardware` | `app/hardware/page.tsx` |
+| `/source` | `app/source/page.tsx` |
+| `/nexus` | `app/nexus/page.tsx` |
+| `/team` | `app/team/page.tsx` |
+| `/news` | `app/news/page.tsx` |
+| `/news/[slug]` | `app/news/[slug]/page.tsx` |
+
+Shared components, loaders, and brand data live in `app/_components`,
+`app/_data`, and `lib`.

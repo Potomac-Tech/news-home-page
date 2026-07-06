@@ -19,7 +19,7 @@ remote schema and signed-in test users are not available yet.
 ## Access and Data
 
 The current implementation uses local fallback calculator definitions in
-`next-app/app/_data/lunarCalculators.ts`. This gives the product a working
+`app/_data/lunarCalculators.ts`. This gives the product a working
 calculator surface before the historical Supabase migrations are applied to the
 canonical `xlpkdoeldtlhearqajat` project.
 

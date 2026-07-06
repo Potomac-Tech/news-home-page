@@ -15,7 +15,7 @@ intelligence surface.
 
 ## Data Source
 
-`next-app/app/_data/lunarCompanies.ts` loads from the Task 059 Supabase tables
+`app/_data/lunarCompanies.ts` loads from the Task 059 Supabase tables
 when the canonical Potomac Supabase public configuration is available. Without
 that configuration, it renders safe fallback records for Intuitive Machines,
 Astrobotic, and Firefly Aerospace so the terminal UI remains testable.

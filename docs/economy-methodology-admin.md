@@ -35,7 +35,7 @@ The page lets authorized staff:
 
 ## Verification Notes
 
-`npm run build:next` confirms the route compiles and is registered as the
+`npm run build` confirms the route compiles and is registered as the
 dynamic `/admin/economy` route. Live edit-flow verification still requires a
 reachable Supabase project with the Task 029 and Task 030 migrations applied, a
 valid publishable key, and a seeded editor, analyst, or admin user.

@@ -26,7 +26,7 @@ STRIPE_SCOUT_PRICE_ID=price_xxx
 
 ## Environment Variables
 
-Add these to `next-app/.env.local`:
+Add these to `.env.local`:
 
 ```text
 STRIPE_SECRET_KEY=sk_live_or_test_xxx

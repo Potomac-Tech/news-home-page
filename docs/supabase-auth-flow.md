@@ -13,13 +13,13 @@ Task 006 adds the initial login, logout, session refresh, and protected-route be
 
 ## Session Handling
 
-`next-app/proxy.ts` calls `updateSession()` from `next-app/lib/supabase/proxy.ts`. That proxy refreshes Supabase Auth claims with `supabase.auth.getClaims()` and writes refreshed cookies at the request boundary.
+`middleware.ts` calls `updateSession()` from `lib/supabase/proxy.ts`. That middleware refreshes Supabase Auth claims with `supabase.auth.getClaims()` and writes refreshed cookies at the request boundary.
 
 Protected server routes should use `supabase.auth.getClaims()` for access checks. Do not rely on unvalidated session data for authorization.
 
 ## Current Verification Limit
 
-The code builds without local Supabase keys, but live login could not be exercised in this automation run because no real `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` was available. Once a key is added to `next-app/.env.local`, verify:
+The code builds without local Supabase keys, but live login could not be exercised in this automation run because no real `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` was available. Once a key is added to `.env.local`, verify:
 
 1. `/member` redirects to `/auth/login?next=/member` when signed out.
 2. Magic-link sign-in reaches `/auth/callback` and lands on `/member`.

@@ -1,54 +1,35 @@
-# Potomac Brand Foundation
+# Cabeus Explorer Brand Foundation
 
-Task 004 preserves the current Potomac visual system for the Next.js migration scaffold.
+The production app uses the Cabeus Explorer identity system: industrial
+graphite surfaces, regolith tan, safety amber, steel white, oxide red, machine
+gray, condensed display type, technical data labels, and lunar infrastructure
+imagery.
 
 ## Brand Tokens
 
-The canonical colors remain:
-
 | Token | Value | Use |
 | --- | --- | --- |
-| `potomac.primary` | `#2D3038` | Headers, command bands, navigation surfaces. |
-| `potomac.secondary` | `#2E3138` | Page backgrounds and dark lunar surfaces. |
-| `potomac.gold` | `#D4AF37` | Primary accent, borders, calls to action, highlights. |
-| `potomac.cream` | `#EAE5D7` | Body text and light foreground elements. |
+| `cabeus.graphite` | `#1E2227` | Page and navigation surfaces. |
+| `cabeus.regolith` | `#B9A98B` | Secondary text, borders, muted industrial accents. |
+| `cabeus.amber` | `#F3A712` | Primary actions, highlights, signal states. |
+| `cabeus.steel` | `#EEF1F3` | High-contrast foreground text. |
+| `cabeus.oxide` | `#A34A32` | Risk and disruption accents. |
+| `cabeus.machine` | `#6D747D` | Technical labels and subdued UI chrome. |
 
-The canonical type choices remain:
+The root `tailwind.config.js` and `app/globals.css` define the production
+tokens and supporting global utilities.
 
-| Token | Font | Use |
-| --- | --- | --- |
-| `font-sans` | `Source Sans 3` | Body copy, labels, navigation, controls. |
-| `font-serif` | `Cinzel` | Potomac display headings and formal labels. |
+## Assets
 
-The Next scaffold defines these tokens in `next-app/tailwind.config.js` and keeps matching global utilities in `next-app/app/globals.css`.
+Runtime assets live directly in `public/` and are served by Next.js and
+Cloudflare OpenNext. There is no asset sync step and no nested public folder.
 
-## Asset Availability
+Important brand data is exposed through `app/_data/brand.ts`.
 
-The Vite site keeps canonical assets in `public/`. The Next scaffold has its own runtime public directory at `next-app/public/`, so `scripts/sync-next-public-assets.mjs` copies the canonical files into that folder before Next dev, build, or start commands.
+## Usage
 
-Run manually when needed:
+New surfaces should use:
 
-```bash
-npm run sync:next-public
-```
-
-The synced Next public folder is intentionally ignored except for `.gitkeep`, so large binary assets are not duplicated in Git.
-
-Important brand assets exposed through `next-app/app/_data/brand.ts`:
-
-- `/Potomac Logo.png`
-- `/Potomac Logo Transparent.png`
-- `/News_Logo.png`
-- `/Nexus Screenshot.png`
-- `/Source Rendering.png`
-- `/potomac-lunar-economy-press-release-05182026.pdf`
-
-## Component Usage
-
-New Next pages should use:
-
-- `next-app/app/_data/brand.ts` for named colors, fonts, assets, and surface classes.
-- Tailwind classes such as `bg-potomac-primary`, `text-potomac-gold`, `font-serif`, `bg-grid-pattern`, and `glass-card`.
-- The synced public asset paths for logos, screenshots, PDFs, and visual media.
-
-This keeps new Next work aligned with the current lunar command-center design while the Vite pages are migrated route by route.
+- `app/_data/brand.ts` for named colors, fonts, assets, and shared class groups.
+- `app/_components` for reusable production UI.
+- Root public paths for logos, PDFs, and visual media.

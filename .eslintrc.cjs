@@ -17,11 +17,11 @@ module.exports = {
     extends: ["eslint:recommended", "plugin:react-hooks/recommended"],
     ignorePatterns: [
         ".next/",
-        "dist/",
         "node_modules/",
-        "next-app/.next/",
-        "next-app/next-env.d.ts",
-        "next-app/public/",
+        ".open-next/",
+        ".wrangler/",
+        "cloudflare-env.d.ts",
+        "next-env.d.ts",
         "public/",
     ],
     rules: {

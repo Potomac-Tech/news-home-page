@@ -39,11 +39,11 @@ function escapeRegExp(value) {
 }
 
 test("auth routes and proxy preserve Supabase login/session/logout behavior", () => {
-    const loginPage = read("next-app/app/auth/login/page.tsx");
-    const loginForm = read("next-app/app/auth/login/LoginForm.tsx");
-    const callbackRoute = read("next-app/app/auth/callback/route.ts");
-    const logoutRoute = read("next-app/app/auth/logout/route.ts");
-    const proxy = read("next-app/proxy.ts");
+    const loginPage = read("app/auth/login/page.tsx");
+    const loginForm = read("app/auth/login/LoginForm.tsx");
+    const callbackRoute = read("app/auth/callback/route.ts");
+    const logoutRoute = read("app/auth/logout/route.ts");
+    const middleware = read("middleware.ts");
 
     assertIncludes(loginPage + loginForm, [
         "Supabase Auth",
@@ -56,13 +56,13 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
         "/member",
     ], "auth callback");
     assertIncludes(logoutRoute, ["signOut", "/auth/login"], "logout route");
-    assertIncludes(proxy, ["updateSession", "matcher"], "session proxy");
+    assertIncludes(middleware, ["updateSession", "matcher"], "session middleware");
 });
 
 test("article gating and RBAC helpers use normalized role assignments", () => {
-    const articleAccess = read("next-app/lib/auth/article-access.ts");
-    const adminAccess = read("next-app/lib/auth/admin.ts");
-    const orgAdminAccess = read("next-app/lib/auth/org-admin.ts");
+    const articleAccess = read("lib/auth/article-access.ts");
+    const adminAccess = read("lib/auth/admin.ts");
+    const orgAdminAccess = read("lib/auth/org-admin.ts");
 
     assertIncludes(articleAccess, [
         "getClaims",
@@ -86,9 +86,9 @@ test("article gating and RBAC helpers use normalized role assignments", () => {
 });
 
 test("Stripe billing webhook preserves Scout entitlement activation controls", () => {
-    const webhook = read("next-app/app/api/stripe/webhook/route.ts");
-    const checkout = read("next-app/app/api/stripe/scout-checkout/route.ts");
-    const stripeServer = read("next-app/lib/stripe/server.ts");
+    const webhook = read("app/api/stripe/webhook/route.ts");
+    const checkout = read("app/api/stripe/scout-checkout/route.ts");
+    const stripeServer = read("lib/stripe/server.ts");
     const migration = readMigration("20260623123101_stripe_webhook_events.sql");
 
     assertIncludes(checkout + stripeServer, [
@@ -120,9 +120,9 @@ test("Stripe billing webhook preserves Scout entitlement activation controls", (
 });
 
 test("member chat, forums, and RFQs enforce member access and moderation contracts", () => {
-    const chatAuth = read("next-app/lib/auth/member-chat.ts");
-    const forumAuth = read("next-app/lib/auth/member-forum.ts");
-    const rfqAuth = read("next-app/lib/auth/rfq.ts");
+    const chatAuth = read("lib/auth/member-chat.ts");
+    const forumAuth = read("lib/auth/member-forum.ts");
+    const rfqAuth = read("lib/auth/rfq.ts");
     const chatMigration = readMigration("20260630080656_member_chat_schema.sql");
     const forumMigration = readMigration("20260630131146_member_forum_schema.sql");
     const rfqMigration = readMigration("20260630180219_rfq_schema_rls_moderation.sql");
@@ -158,11 +158,11 @@ test("member chat, forums, and RFQs enforce member access and moderation contrac
 });
 
 test("lunar terminal modules keep Explorer, Scout, Command, and staff gates", () => {
-    const lunarAccess = read("next-app/lib/auth/lunar-market-intel.ts");
-    const missionsAccess = read("next-app/lib/auth/lunar-missions.ts");
-    const companiesPage = read("next-app/app/companies/page.tsx");
-    const procurementPage = read("next-app/app/procurement/page.tsx");
-    const regulatoryPage = read("next-app/app/regulatory/page.tsx");
+    const lunarAccess = read("lib/auth/lunar-market-intel.ts");
+    const missionsAccess = read("lib/auth/lunar-missions.ts");
+    const companiesPage = read("app/companies/page.tsx");
+    const procurementPage = read("app/procurement/page.tsx");
+    const regulatoryPage = read("app/regulatory/page.tsx");
 
     assertIncludes(lunarAccess, [
         "canReadMemberDetails",
@@ -185,9 +185,9 @@ test("lunar terminal modules keep Explorer, Scout, Command, and staff gates", ()
 });
 
 test("paid exports, API access, webhooks, and quota controls stay tier-aware", () => {
-    const developerAuth = read("next-app/lib/auth/developer-platform.ts");
-    const developerPage = read("next-app/app/member/developer/page.tsx");
-    const explorer = read("next-app/app/_components/IntelligenceDataExplorer.tsx");
+    const developerAuth = read("lib/auth/developer-platform.ts");
+    const developerPage = read("app/member/developer/page.tsx");
+    const explorer = read("app/_components/IntelligenceDataExplorer.tsx");
     const migration = readMigration("20260702161000_scout_command_developer_platform.sql");
 
     assertIncludes(developerAuth, [
@@ -256,12 +256,12 @@ test("workspace remains pinned to the canonical Potomac Supabase project", () =>
     const files = [
         read(".mcp.json"),
         read("docs/codex-automation-memory.md"),
-        read("next-app/lib/supabase/config.ts"),
+        read("lib/supabase/config.ts"),
     ].join("\n");
 
     assert.match(files, /xlpkdoeldtlhearqajat/, "canonical project ref should be present");
     assert.doesNotMatch(
-        read("next-app/lib/supabase/config.ts"),
+        read("lib/supabase/config.ts"),
         /nwoluvjdojzayozyzlob/,
         "runtime config should not reference the wrong Supabase project"
     );

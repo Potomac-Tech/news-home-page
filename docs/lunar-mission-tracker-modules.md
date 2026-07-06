@@ -51,10 +51,10 @@ clear no-config gate instead of using fallback member data.
 
 ## Verification Notes
 
-`npm run build:next` passed and registered `/launches`, `/spacecraft`,
+`npm run build` passed and registered `/launches`, `/spacecraft`,
 `/missions/[slug]`, and `/member/missions`.
 
-`npm run build` passed for the existing Vite site.
+`npm run build` passed for the root Next.js app.
 
 `git diff --check` passed with the recurring LF-to-CRLF warnings on touched
 files.

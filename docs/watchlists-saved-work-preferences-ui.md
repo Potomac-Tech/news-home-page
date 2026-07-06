@@ -19,7 +19,7 @@ personalization tables:
 
 ## Access Model
 
-`next-app/lib/auth/saved-work.ts` protects the route and server actions with
+`lib/auth/saved-work.ts` protects the route and server actions with
 normalized roles. Scout, Command, editor, analyst, and admin roles can use the
 workspace. Explorer users see an upgrade gate instead of write controls.
 

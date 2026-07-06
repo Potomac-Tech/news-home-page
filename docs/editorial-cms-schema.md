@@ -41,7 +41,7 @@ Authenticated members can read full bodies only when their assigned role satisfi
 
 ## Verification
 
-- `npm run build:next`
+- `npm run build`
 - `npm run build`
 - Static migration checks confirmed the schema includes article, author, tag, version, citation, SEO/AEO, teaser, gated-body, publish-state, and RLS definitions.
 

@@ -4,7 +4,7 @@ Task 054 organizes the Next.js scaffold around a lunar industry terminal.
 
 ## Shared Module Map
 
-`next-app/app/_data/terminal.ts` is the source of truth for terminal sections:
+`app/_data/terminal.ts` is the source of truth for terminal sections:
 
 - lunar news
 - launches

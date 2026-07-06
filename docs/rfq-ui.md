@@ -20,7 +20,7 @@ The route includes:
 
 ## Access Model
 
-`next-app/lib/auth/rfq.ts` gates the route to active Scout, Command, moderator,
+`lib/auth/rfq.ts` gates the route to active Scout, Command, moderator,
 analyst, or admin role assignments. Signed-out users are redirected to login,
 Explorer-only users see a paid-access gate, and all RFQ rows remain constrained
 by the Task 050 Supabase RLS policies.

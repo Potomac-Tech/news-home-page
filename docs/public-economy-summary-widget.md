@@ -21,7 +21,7 @@ remain in `/admin/economy` for staff and in future Scout/Command dashboards.
 
 ## Data Source
 
-`next-app/app/_data/economy.ts` loads the latest public, published
+`app/_data/economy.ts` loads the latest public, published
 `lunar_economy_daily_outputs` row when the correct Supabase public environment
 variables are present. Without live credentials, it falls back to the Firefly
 Blue Ghost full-cost benchmark from Task 030:

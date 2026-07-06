@@ -18,7 +18,7 @@ The form captures:
 
 ## Behavior
 
-`next-app/app/apply/ApplicationForm.tsx` inserts into `membership_applications` with `status = 'pending'`. If a visitor is already authenticated, the form also attaches the Supabase user id from Auth claims. Otherwise the application is submitted as a public pending application.
+`app/apply/ApplicationForm.tsx` inserts into `membership_applications` with `status = 'pending'`. If a visitor is already authenticated, the form also attaches the Supabase user id from Auth claims. Otherwise the application is submitted as a public pending application.
 
 The form does not write to `member_profiles`, `member_role_assignments`, or `entitlements`, so submission does not grant member access. Approval remains a separate admin workflow.
 

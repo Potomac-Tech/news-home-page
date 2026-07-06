@@ -1,57 +1,57 @@
 export const currentRoutes = [
     {
         href: "/",
-        source: "src/pages/Home.tsx",
+        source: "app/page.tsx",
         note: "Public news-first homepage with headlines, snippets, events, market modules, sponsor slots, and membership CTAs.",
     },
     {
         href: "/hardware",
-        source: "src/pages/Hardware.tsx",
-        note: "Existing hardware positioning route preserved in the scaffold.",
+        source: "app/hardware/page.tsx",
+        note: "Hardware positioning route in the production Next.js app.",
     },
     {
         href: "/source",
-        source: "src/App.tsx redirect",
-        note: "Redirects to /hardware to match current Vite behavior.",
+        source: "app/source/page.tsx",
+        note: "Redirects to /hardware from the production Next.js route.",
     },
     {
         href: "/nexus",
-        source: "src/pages/Nexus.tsx",
-        note: "Nexus route preserved for future dashboard connection.",
+        source: "app/nexus/page.tsx",
+        note: "Nexus route for dashboard connection.",
     },
     {
         href: "/team",
-        source: "src/pages/Team.tsx",
+        source: "app/team/page.tsx",
         note: "Public team route preserved.",
     },
     {
         href: "/news",
-        source: "src/pages/News.tsx",
-        note: "Future CMS-backed feed route.",
+        source: "app/news/page.tsx",
+        note: "CMS-backed feed route.",
     },
     {
         href: "/events",
-        source: "next-app/app/events/page.tsx",
+        source: "app/events/page.tsx",
         note: "Public event calendar with teaser fields and member-gated event details.",
     },
     {
         href: "/datasets",
-        source: "next-app/app/datasets/page.tsx",
+        source: "app/datasets/page.tsx",
         note: "Public dataset catalog with NASA/science archives, Cabeus Explorer proprietary entries, source metadata, availability, tier, sample, and demo indicators.",
     },
     {
         href: "/member/summits",
-        source: "next-app/app/member/summits/page.tsx",
+        source: "app/member/summits/page.tsx",
         note: "Member-gated internal summit tracker with upcoming summit and past-event summary views.",
     },
     {
         href: "/admin/sponsors",
-        source: "next-app/app/admin/sponsors/page.tsx",
+        source: "app/admin/sponsors/page.tsx",
         note: "Staff-only sponsor, placement, campaign, discount, and reporting workflow.",
     },
     {
         href: "/news/vipc-grant-winner",
-        source: "src/pages/VipcGrantWinner.tsx",
-        note: "Existing story route reserved for article migration.",
+        source: "app/news/[slug]/page.tsx",
+        note: "Migrated article route in the production Next.js app.",
     },
 ] as const;

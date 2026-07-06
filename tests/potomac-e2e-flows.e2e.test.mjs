@@ -139,7 +139,6 @@ before(async () => {
         [
             nextCliPath,
             "start",
-            "next-app",
             "-p",
             String(port),
             "--hostname",
@@ -277,7 +276,7 @@ test("lunar terminal navigation exposes the core intelligence modules", { timeou
     try {
         await page.goto(`${baseUrl}/terminal`, { waitUntil: "domcontentloaded" });
 
-        await assertVisibleText(page, "Potomac lunar industry terminal");
+        await assertVisibleText(page, "Cabeus Explorer lunar industry terminal");
         await assertVisibleText(page, "Lunar industry terminal");
         await assertVisibleText(page, "Launches");
         await assertVisibleText(page, "Spacecraft and landers");

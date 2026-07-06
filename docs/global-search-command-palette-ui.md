@@ -38,7 +38,7 @@ runtime keys.
 ## Command Palette
 
 The command palette is implemented in
-`next-app/app/_components/SearchCommandPalette.tsx`.
+`app/_components/SearchCommandPalette.tsx`.
 
 It supports:
 

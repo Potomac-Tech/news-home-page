@@ -5,7 +5,7 @@ surfaces.
 
 ## Security Headers
 
-`next-app/next.config.mjs` now applies global headers:
+`next.config.mjs` now applies global headers:
 
 - `Strict-Transport-Security`
 - `X-Content-Type-Options`
@@ -21,7 +21,7 @@ integration still need compatibility review before enforcing a blocking policy.
 
 ## Rate-Limit Baseline
 
-`next-app/lib/platform/baseline.ts` defines initial limits for:
+`lib/platform/baseline.ts` defines initial limits for:
 
 - public forms per IP per hour
 - authenticated writes per user per minute
@@ -39,7 +39,7 @@ limited. Developer API calls should use API-key quotas and usage logs from Task
 
 Current server actions and API routes should continue using typed allowlists,
 length checks, enum checks, route checks, and server-side entitlement checks.
-Supabase session refresh remains centralized in `next-app/proxy.ts`.
+Supabase session refresh remains centralized in `middleware.ts`.
 
 Follow-on hardening should add:
 

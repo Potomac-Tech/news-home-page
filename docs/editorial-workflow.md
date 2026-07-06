@@ -11,7 +11,7 @@ Task 016 adds a protected editor workflow at `/admin/editorial`.
 
 ## Access Control
 
-The route and server actions use `next-app/lib/auth/editorial.ts`.
+The route and server actions use `lib/auth/editorial.ts`.
 
 Access requires a signed-in Supabase Auth user with an active `editor` or `admin` role assignment. The database RLS policies from Task 015 still enforce staff-only writes on the editorial tables.
 
@@ -34,7 +34,7 @@ Each snapshot stores the article status, slug, title, public teaser fields, gate
 
 ## Verification
 
-- `npm run build:next`
+- `npm run build`
 - `npm run build`
 
 Live draft, update, preview, and publish actions were not executed because Supabase keys were unavailable and the editorial schema was not applied to a reachable database.

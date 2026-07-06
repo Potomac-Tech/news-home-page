@@ -13,7 +13,7 @@ Task 014 adds a scoped organization workspace at `/organization` in the Next.js 
 
 ## Authorization Model
 
-The page uses `next-app/lib/auth/org-admin.ts`, which checks Supabase Auth claims and then queries:
+The page uses `lib/auth/org-admin.ts`, which checks Supabase Auth claims and then queries:
 
 - `member_role_assignments` for active `org_admin` role assignments with `organization_id`.
 - `organization_members` for active `org_admin` memberships.
@@ -28,7 +28,7 @@ The resulting organization IDs are used as the only query scope. Row-level secur
 
 ## Verification
 
-- `npm run build:next`
+- `npm run build`
 - `npm run build`
 
 Live database reads were not exercised during implementation because Supabase keys were not available and local migrations were not applied to a reachable database.

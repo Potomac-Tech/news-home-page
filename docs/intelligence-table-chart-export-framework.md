@@ -4,7 +4,7 @@ Task 069 adds a reusable UI framework for data-heavy Potomac intelligence module
 
 ## Component
 
-`next-app/app/_components/IntelligenceDataExplorer.tsx` exports a client component for repeated table/chart/export surfaces.
+`app/_components/IntelligenceDataExplorer.tsx` exports a client component for repeated table/chart/export surfaces.
 
 It supports:
 

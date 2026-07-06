@@ -16,7 +16,7 @@ Do not use `nwoluvjdojzayozyzlob`.
 
 ## Environment Variables
 
-Use `next-app/.env.example` as the template for local Next.js development.
+Use `.env.example` as the template for local Next.js development.
 
 Browser-safe variables:
 
@@ -35,12 +35,12 @@ Never prefix secret keys with `NEXT_PUBLIC_`. Anything with that prefix can be b
 
 ## Client Utilities
 
-- `next-app/lib/supabase/client.ts` creates a browser Supabase client for Client Components.
-- `next-app/lib/supabase/server.ts` creates a server Supabase client for Server Components, Server Actions, and Route Handlers.
-- `next-app/lib/supabase/proxy.ts` refreshes Auth claims and writes session cookies at the request boundary.
-- `next-app/proxy.ts` wires the Supabase session refresh proxy into Next.js.
+- `lib/supabase/client.ts` creates a browser Supabase client for Client Components.
+- `lib/supabase/server.ts` creates a server Supabase client for Server Components, Server Actions, and Route Handlers.
+- `lib/supabase/proxy.ts` refreshes Auth claims and writes session cookies at the request boundary.
+- `middleware.ts` wires the Supabase session refresh helper into Next.js.
 
-The shared config in `next-app/lib/supabase/config.ts` rejects any `NEXT_PUBLIC_SUPABASE_URL` that does not exactly target `xlpkdoeldtlhearqajat`.
+The shared config in `lib/supabase/config.ts` rejects any `NEXT_PUBLIC_SUPABASE_URL` that does not exactly target `xlpkdoeldtlhearqajat`.
 
 ## Security Notes
 
