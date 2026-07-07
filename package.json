@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "next dev -p 3001",
-        "build": "next build",
+        "build": "next build --webpack",
         "extract:data-marketplace": "node scripts/data-market-extraction-placeholder.mjs",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "test": "node --test tests/potomac-critical-flows.test.mjs",
