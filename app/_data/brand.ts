@@ -24,7 +24,7 @@ export const potomacBrand = {
     },
     identity: {
         name: "Cabeus Explorer",
-        tagline: "The Lunar Industrialist",
+        tagline: "INTELLIGENCE FOR THE LUNAR INDUSTRIALIST",
         essence: "Intelligence for the builders of the lunar economy.",
     },
     surfaces: {
