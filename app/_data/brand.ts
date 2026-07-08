@@ -14,8 +14,8 @@ export const potomacBrand = {
         mono: "IBM Plex Mono",
     },
     assets: {
-        logo: "/Potomac Logo.png",
-        logoTransparent: "/Potomac Logo Transparent.png",
+        logo: "/cabeus-explorer-logo.png",
+        logoTransparent: "/cabeus-explorer-logo.png",
         newsLogo: "/News_Logo.png",
         nexusScreenshot: "/Nexus Screenshot.png",
         sourceRendering: "/Source Rendering.png",

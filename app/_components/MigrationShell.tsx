@@ -37,9 +37,9 @@ export async function MigrationShell({ children }: { children: ReactNode }) {
                     <Link href="/" className="flex min-w-0 items-center gap-3">
                         <span className="relative h-12 w-16 overflow-hidden border border-potomac-regolith/45 bg-potomac-secondary">
                             <img
-                                src={potomacBrand.assets.cabeusHero}
+                                src={potomacBrand.assets.logo}
                                 alt="Cabeus Explorer lunar industrial mark"
-                                className="h-full w-full object-cover object-[72%_44%] opacity-90"
+                                className="h-full w-full object-cover object-center opacity-90"
                             />
                             <span className="absolute inset-0 border border-black/50" />
                         </span>
