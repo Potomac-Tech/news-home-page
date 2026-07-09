@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase/server";
+import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
 import { TerminalDashboardShell } from "../_components/TerminalDashboardShell";
 import { ScoutCheckoutButton } from "./ScoutCheckoutButton";
 import { loadPublicTickerItems } from "../_data/marketQuotes";
@@ -381,7 +382,47 @@ function SpaceWeatherCard({
     );
 }
 
+function ConfigGate() {
+    return (
+        <section className="bg-grid-pattern">
+            <div className="mx-auto min-h-[calc(100vh-9rem)] w-full max-w-7xl px-4 py-20 md:px-8">
+                <div className="glass-card max-w-3xl rounded p-6">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                        Member workspace
+                    </p>
+                    <h1 className="mt-4 font-serif text-4xl leading-tight text-white">
+                        Member sign-in is being configured
+                    </h1>
+                    <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
+                        The member workspace will open after its secure sign-in
+                        service is connected. Public intelligence and membership
+                        information remain available while that setup is completed.
+                    </p>
+                    <div className="mt-6 flex flex-wrap gap-3">
+                        <Link
+                            href="/request-access"
+                            className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
+                        >
+                            Request Explorer access
+                        </Link>
+                        <Link
+                            href="/pricing"
+                            className="rounded border border-potomac-gold/50 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+                        >
+                            Compare tiers
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
+
 export default async function MemberPage() {
+    if (!hasPotomacSupabasePublicConfig()) {
+        return <ConfigGate />;
+    }
+
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getClaims();
     const claims = data?.claims as AuthClaims | undefined;

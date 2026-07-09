@@ -267,6 +267,18 @@ test("workspace remains pinned to the canonical Potomac Supabase project", () =>
     );
 });
 
+test("member workspace degrades safely when Supabase public configuration is absent", () => {
+    const memberPage = read("app/member/page.tsx");
+
+    assertIncludes(memberPage, [
+        "hasPotomacSupabasePublicConfig",
+        "function ConfigGate",
+        "Member sign-in is being configured",
+        "if (!hasPotomacSupabasePublicConfig())",
+        "return <ConfigGate />",
+    ], "member workspace configuration gate");
+});
+
 test("the enterprise display label is configurable without changing internal Command access", () => {
     const tierConfig = read("app/_data/tiers.ts");
     const publicTierSurfaces = [
