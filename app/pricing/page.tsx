@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteSiteUrl, jsonLdScript } from "../_data/site";
+import { tierConfig } from "../_data/tiers";
 
 export const metadata: Metadata = {
     title: "Pricing",
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "Cabeus Explorer Pricing",
         description:
-            "Explorer is free after approval, Scout is self-serve at $25,000/user/year, and Command is organization-level enterprise access.",
+            "Explorer is the free default membership, Scout is self-serve at $25,000/user/year, and Meridian is organization-level contract access.",
         url: absoluteSiteUrl("/pricing"),
         type: "website",
     },
@@ -22,12 +23,12 @@ const tiers = [
     {
         name: "Explorer",
         price: "Free",
-        cadence: "manual approval",
-        audience: "Individual readers and approved community members",
+        cadence: "default membership",
+        audience: "Individual readers and verified community members",
         description:
-            "Read full public-story bodies and participate in approved member community spaces after application review.",
-        href: "/apply",
-        cta: "Apply for access",
+            "Read full public-story bodies and participate in member community spaces after email verification and profile completion.",
+        href: "/request-access",
+        cta: "Start free",
         features: [
             "Full gated article bodies",
             "Member chat and moderated forums",
@@ -60,17 +61,17 @@ const tiers = [
         ],
     },
     {
-        name: "Command",
-        price: "Custom",
-        cadence: "organization agreement",
+        name: tierConfig.enterprise.publicName,
+        price: "Contract",
+        cadence: "organization discussion",
         audience: "Enterprises, agencies, and institutional teams",
         description:
-            "Manual sales-led organization access for Command-only intelligence, analyst support, and service delivery.",
+            "Manual organization access for enterprise intelligence, analyst support, and service delivery.",
         href: "/command",
-        cta: "Request Command",
+        cta: "Request Meridian",
         features: [
             "Organization-scoped seats and admins",
-            "Command-exclusive intelligence allocation",
+            "Enterprise intelligence allocation",
             "Analyst support, mission briefs, and service tracking",
             "Higher-limit exports, API, webhook, and alert plans",
         ],
@@ -87,7 +88,7 @@ const comparisonRows = [
     ["Economy dashboard downloads", "Upgrade", "Yes", "Yes"],
     ["Data marketplace", "Upgrade", "Yes", "Yes"],
     ["RFQs", "Upgrade", "Yes", "Yes"],
-    ["Command-exclusive intelligence", "No", "No", "Yes"],
+    ["Enterprise intelligence", "No", "No", "Yes"],
     ["Exports, API, webhooks", "No", "Planned", "Higher limits planned"],
 ] as const;
 
@@ -97,7 +98,7 @@ export default function PricingPage() {
         "@type": "Product",
         name: "Cabeus Explorer News & Intelligence",
         description:
-            "Lunar industry news and member-gated intelligence tiers for Explorer, Scout, and Command users.",
+            "Lunar industry news and member-gated intelligence tiers for Explorer, Scout, and Meridian users.",
         url: absoluteSiteUrl("/pricing"),
         offers: tiers.map((tier) => ({
             "@type": "Offer",
@@ -124,12 +125,12 @@ export default function PricingPage() {
                             Membership tiers
                         </p>
                         <h1 className="mt-4 font-serif text-4xl leading-tight text-white md:text-6xl">
-                            Explorer, Scout, and Command access
+                            Explorer, Scout, and Meridian access
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
                             Start with free approved Explorer access, upgrade to
                             Scout for professional intelligence workflows, or
-                            request Command for organization-level lunar market
+                            request Meridian for organization-level lunar market
                             coverage and analyst support.
                         </p>
                     </div>
@@ -219,7 +220,7 @@ export default function PricingPage() {
                                     <th className="py-3 pr-4">Capability</th>
                                     <th className="px-4 py-3">Explorer</th>
                                     <th className="px-4 py-3">Scout</th>
-                                    <th className="px-4 py-3">Command</th>
+                                    <th className="px-4 py-3">Meridian</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -248,14 +249,14 @@ export default function PricingPage() {
                         Upgrade paths
                     </h2>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                        Public visitors apply for Explorer, approved members
-                        start Scout checkout from the workspace, and Command
-                        prospects enter a manual sales workflow.
+                        Public visitors start with Explorer, approved members
+                        start Scout checkout from the workspace, and Meridian
+                        prospects enter a manual contract-discussion workflow.
                     </p>
                 </div>
                 <div className="grid gap-4 md:grid-cols-3">
                     <Link
-                        href="/apply"
+                        href="/request-access"
                         className="rounded border border-potomac-gold/35 p-5 transition hover:border-potomac-gold hover:bg-white/5"
                     >
                         <span className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
@@ -281,10 +282,10 @@ export default function PricingPage() {
                         className="rounded border border-potomac-gold/35 p-5 transition hover:border-potomac-gold hover:bg-white/5"
                     >
                         <span className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
-                            Team to Command
+                            Team to Meridian
                         </span>
                         <span className="mt-3 block text-sm leading-6 text-potomac-cream/70">
-                            Request organization-level access and sales review.
+                            Request organization-level access and contract review.
                         </span>
                     </Link>
                 </div>

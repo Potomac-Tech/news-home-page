@@ -295,22 +295,22 @@ test("lunar terminal navigation exposes the core intelligence modules", { timeou
     }
 });
 
-test("Command public and admin flows render the request path and admin protection", { timeout: 60000 }, async () => {
+test("Meridian public and admin flows render the request path and admin protection", { timeout: 60000 }, async () => {
     const { page, consoleMessages } = await newPage();
 
     try {
         await page.goto(`${baseUrl}/command`, { waitUntil: "domcontentloaded" });
-        await assertVisibleText(page, "Command Access");
-        await assertVisibleText(page, "Request Command access");
+        await assertVisibleText(page, "Meridian Access");
+        await assertVisibleText(page, "Request Meridian access");
 
         await page.getByLabel("Contact name").fill("Automation Reviewer");
-        await page.getByLabel("Contact email").fill("reviewer@example.com");
+        await page.getByLabel("Business email").fill("reviewer@example.com");
         await page.getByLabel("Organization").fill("Potomac Automation");
         await page.getByLabel("Title").fill("Program Lead");
         await page.getByLabel("Estimated seats").fill("12");
         await page
             .getByLabel("Mission need")
-            .fill("Validate Command request intake.");
+            .fill("Validate Meridian request intake.");
 
         await page.goto(`${baseUrl}/admin/command`, {
             waitUntil: "domcontentloaded",

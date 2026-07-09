@@ -21,6 +21,7 @@ import {
     organizationJsonLd,
     siteConfig,
 } from "./_data/site";
+import { tierConfig } from "./_data/tiers";
 import { createClient } from "../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../lib/supabase/config";
 
@@ -98,22 +99,28 @@ const supplyNodes = [
 
 const membershipTiers = [
     {
-        tier: "Explorer",
-        price: "$1,495/yr",
-        detail: "Essential intelligence and tools for professionals.",
-        features: ["Daily briefing", "Sector reports", "Project tracker"],
+        tier: tierConfig.explorer.publicName,
+        price: tierConfig.explorer.price,
+        detail: "Free default membership for verified readers who complete their profile.",
+        features: ["Public-story full bodies", "Community access", "Tracker previews"],
+        href: "/request-access",
+        cta: "Start free",
     },
     {
-        tier: "Scout",
-        price: "$3,495/yr",
-        detail: "Deeper insight and operational visibility.",
-        features: ["Everything in Explorer", "Supply chain map", "Analyst Q&A"],
+        tier: tierConfig.scout.publicName,
+        price: `${tierConfig.scout.price}/user/year`,
+        detail: "Paid professional intelligence for deeper lunar market workflows.",
+        features: ["Everything in Explorer", "Exports and alerts", "Advanced dashboards"],
+        href: "/upgrade?tier=scout",
+        cta: "Upgrade",
     },
     {
-        tier: "Meridian",
-        price: "$7,495/yr",
-        detail: "Strategic intelligence and advisory for decision leaders.",
+        tier: tierConfig.enterprise.publicName,
+        price: tierConfig.enterprise.price,
+        detail: "Organization-level intelligence through manual review and contract discussion.",
         features: ["Everything in Scout", "Private briefings", "Team access"],
+        href: "/upgrade?tier=meridian",
+        cta: "Discuss access",
     },
 ];
 
@@ -137,14 +144,14 @@ function formatDate(value: string) {
 
 function normalizeAccessTier(value: string | null | undefined): HomeStory["accessTier"] {
     if (value === "command") {
-        return "Command";
+        return tierConfig.enterprise.publicName;
     }
 
     if (value === "scout") {
         return "Scout";
     }
 
-    return "Member";
+    return tierConfig.explorer.publicName;
 }
 
 function articleHref(slug: string) {
@@ -374,7 +381,7 @@ export default async function HomePage() {
                                 Explore intelligence
                             </Link>
                             <Link
-                                href="/member/economy"
+                                href="/request-access?next=/member/economy"
                                 className="border border-potomac-regolith/45 px-5 py-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold"
                             >
                                 View readiness tracker
@@ -524,7 +531,7 @@ export default async function HomePage() {
                         eyebrow="Readiness tracker"
                         title="Operational context by sector"
                         description="Compact progress signals help members compare infrastructure, logistics, power, manufacturing, robotics, and workforce maturity without losing sight of source confidence."
-                        action={{ href: "/member/economy", label: "Open tracker" }}
+                        action={{ href: "/request-access?next=/member/economy", label: "Open tracker" }}
                     />
                     <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
                         {readinessTrackers.map((item) => (
@@ -656,10 +663,10 @@ export default async function HomePage() {
                                 ))}
                             </ul>
                             <Link
-                                href="/apply"
+                                href={tier.href}
                                 className="mt-6 inline-flex w-full justify-center border border-potomac-gold/55 px-4 py-2 font-mono text-[0.68rem] font-bold uppercase text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                             >
-                                Join {tier.tier}
+                                {tier.cta}
                             </Link>
                         </article>
                     ))}

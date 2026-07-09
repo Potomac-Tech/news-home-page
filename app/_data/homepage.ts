@@ -4,7 +4,7 @@ export type HomeStory = {
     snippet: string;
     href: string;
     publishedAt: string;
-    accessTier: "Member" | "Scout" | "Command";
+    accessTier: "Explorer" | "Scout" | "Meridian";
     sourceLabel: string;
 };
 
@@ -32,7 +32,7 @@ export const fallbackStories: HomeStory[] = [
             "Public readers can follow the company milestone while the CMS-backed article system prepares richer member-only analysis.",
         href: "/news/vipc-grant-winner",
         publishedAt: "2026-05-18",
-        accessTier: "Member",
+        accessTier: "Explorer",
         sourceLabel: "Company brief",
     },
     {
@@ -58,14 +58,14 @@ export const fallbackStories: HomeStory[] = [
         sourceLabel: "Method note",
     },
     {
-        title: "Command members need early mission-intelligence workflows",
+        title: "Meridian teams need early mission-intelligence workflows",
         summary:
             "Organization-level lunar programs need briefings, analyst support, and controlled access to near-real-time findings.",
         snippet:
-            "The Command workflow is being shaped around approved organizations, seats, and manual entitlement grants.",
+            "The Meridian workflow is being shaped around reviewed organizations, seats, and manual internal entitlement grants.",
         href: "/command",
         publishedAt: "2026-06-03",
-        accessTier: "Command",
+        accessTier: "Meridian",
         sourceLabel: "Access brief",
     },
 ];

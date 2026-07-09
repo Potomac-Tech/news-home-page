@@ -4,7 +4,7 @@ import { ApplicationForm } from "./ApplicationForm";
 export const metadata: Metadata = {
     title: "Apply",
     description:
-        "Apply for free Cabeus Explorer Member access to read full public-story bodies after approval.",
+        "Apply for free Cabeus Explorer Explorer access to read full public-story bodies after approval.",
     alternates: {
         canonical: "/apply",
     },
@@ -16,14 +16,14 @@ export default function ApplyPage() {
             <div className="mx-auto grid min-h-[calc(100vh-9rem)] w-full max-w-7xl items-center gap-10 px-4 py-20 md:grid-cols-[0.85fr_1.15fr] md:px-8">
                 <div>
                     <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-potomac-gold">
-                        Free Member access
+                        Free Explorer access
                     </p>
                     <h1 className="font-serif text-4xl leading-tight text-white md:text-6xl">
-                        Apply for Member access
+                        Apply for Explorer access
                     </h1>
                     <p className="mt-6 max-w-2xl text-lg leading-8 text-potomac-cream/80">
                         Applications enter manual review before full article
-                        access is granted. Scout and Command access remain
+                        access is granted. Scout and Meridian access remain
                         separate paid or organization-level decisions.
                     </p>
                 </div>

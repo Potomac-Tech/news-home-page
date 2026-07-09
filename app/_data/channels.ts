@@ -1,39 +1,18 @@
 export type ExternalChannel = {
-    id: "substack" | "podcast" | "linkedin" | "x";
+    id: "substack" | "podcast" | "linkedin";
     label: string;
     description: string;
     href: string | null;
-    status: "Live" | "Launch pending";
+    status: "Live";
 };
 
 export const externalChannels: ExternalChannel[] = [
-    {
-        id: "substack",
-        label: "Substack",
-        description: "Long-form public intelligence notes.",
-        href: null,
-        status: "Launch pending",
-    },
-    {
-        id: "podcast",
-        label: "Podcast",
-        description: "Audio briefings and event recaps.",
-        href: null,
-        status: "Launch pending",
-    },
     {
         id: "linkedin",
         label: "LinkedIn",
         description: "Company updates and public announcements.",
         href: "https://www.linkedin.com/company/potomac-database-systems",
         status: "Live",
-    },
-    {
-        id: "x",
-        label: "X",
-        description: "Fast public market and mission notes.",
-        href: null,
-        status: "Launch pending",
     },
 ];
 

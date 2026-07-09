@@ -80,7 +80,7 @@ const anonymousAccess: ArticleAccessContext = {
     state: "signed_out",
     userId: null,
     roleId: null,
-    loginHref: "/auth/login",
+    loginHref: "/request-access?tab=signin",
 };
 
 function formatDate(value: string) {
@@ -95,14 +95,14 @@ function formatDate(value: string) {
 
 function accessTierLabel(tier: ArticleAccessTier) {
     if (tier === "command") {
-        return "Command";
+        return "Meridian";
     }
 
     if (tier === "scout") {
         return "Scout";
     }
 
-    return "Member";
+    return "Explorer";
 }
 
 function parseKeyPoints(value: unknown) {
@@ -325,16 +325,16 @@ function GatePanel({
                     </Link>
                 ) : null}
                 <Link
-                    href="/apply"
+                    href="/request-access"
                     className="rounded border border-potomac-gold/50 px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                 >
-                    Apply for Member access
+                    Request Explorer access
                 </Link>
                 <Link
-                    href="/command"
+                    href="/upgrade?tier=meridian"
                     className="rounded border border-white/15 px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold"
                 >
-                    Command access
+                    Meridian access
                 </Link>
             </div>
         </section>
@@ -533,16 +533,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             Access Path
                         </h2>
                         <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                            Free Member access unlocks full public-story bodies
-                            after approval. Scout and Command roles satisfy
-                            Member gates and unlock deeper intelligence in later
+                            Free Explorer access unlocks full public-story bodies
+                            after verification and profile completion. Scout and
+                            Meridian paths unlock deeper intelligence in later
                             dashboard tasks.
                         </p>
                         <Link
-                            href="/apply"
+                            href="/request-access"
                             className="mt-6 inline-flex rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
                         >
-                            Apply for access
+                            Request access
                         </Link>
                     </section>
                 </aside>

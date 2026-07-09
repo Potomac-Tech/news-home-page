@@ -83,7 +83,7 @@ const anonymousAccess: EventAccessContext = {
     state: "signed_out",
     userId: null,
     roleId: null,
-    loginHref: "/auth/login?next=%2Fevents",
+    loginHref: "/request-access?next=%2Fevents",
 };
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -98,14 +98,14 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 
 function accessTierLabel(tier: EventAccessTier) {
     if (tier === "command") {
-        return "Command";
+        return "Meridian";
     }
 
     if (tier === "scout") {
         return "Scout";
     }
 
-    return "Member";
+    return "Explorer";
 }
 
 function eventTypeLabel(value: string) {
@@ -466,10 +466,10 @@ export default async function EventsPage() {
                                 details table for approved roles only.
                             </p>
                             <Link
-                                href="/apply"
+                                href="/request-access"
                                 className="mt-6 inline-flex rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                             >
-                                Apply for Member access
+                                Request Explorer access
                             </Link>
                         </section>
                     </aside>

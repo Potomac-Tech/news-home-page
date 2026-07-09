@@ -38,7 +38,7 @@ export function SponsorUnit({ unit, variant = "compact" }: SponsorUnitProps) {
                     </h3>
                 </div>
                 <span className="shrink-0 rounded border border-white/15 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-potomac-cream/55">
-                    {unit.isDirectSold ? "Active" : "Reserved"}
+                    {unit.isDirectSold ? "Active" : "Approved"}
                 </span>
             </div>
             <div className="mt-4">

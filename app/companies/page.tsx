@@ -452,22 +452,22 @@ export default async function CompaniesPage({
                         <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
                             Public visitors can inspect profile teasers and
                             source posture. Explorer members see member-level
-                            context. Scout and Command users unlock financial
+                            context. Scout and Meridian users unlock financial
                             metrics, contracts, comparison attributes, and
                             watchlist-ready records where RLS allows.
                         </p>
                         <div className="mt-5 flex flex-wrap gap-3">
                             <Link
-                                href="/pricing"
+                                href="/upgrade"
                                 className="rounded bg-potomac-gold px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                             >
-                                Compare tiers
+                                View upgrade paths
                             </Link>
                             <Link
-                                href="/command"
+                                href="/upgrade?tier=meridian"
                                 className="rounded border border-potomac-gold/50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                             >
-                                Command access
+                                Meridian access
                             </Link>
                         </div>
                     </section>

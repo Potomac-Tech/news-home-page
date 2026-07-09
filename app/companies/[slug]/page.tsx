@@ -95,22 +95,22 @@ function LockedPanel({ tier }: { tier: LunarCompanyTier }) {
                 Company intelligence is gated.
             </h2>
             <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
-                Scout and Command users can unlock contract, financial,
+                Scout and Meridian users can unlock contract, financial,
                 relationship, and comparison details where the underlying
                 source rights and RLS policies allow access.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
                 <Link
-                    href="/pricing"
+                    href="/upgrade"
                     className="rounded bg-potomac-gold px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                 >
-                    Compare tiers
+                    View upgrade paths
                 </Link>
                 <Link
-                    href="/command"
+                    href="/upgrade?tier=meridian"
                     className="rounded border border-potomac-gold/50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                 >
-                    Command access
+                    Meridian access
                 </Link>
             </div>
         </section>

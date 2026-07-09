@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 const accountLinks = [
     {
-        href: "/auth/login",
+        href: "/request-access?tab=signin",
         label: "Sign in",
         detail: "Enter the protected member workspace.",
     },
@@ -29,16 +29,16 @@ const accountLinks = [
     {
         href: "/pricing",
         label: "Pricing",
-        detail: "Compare Explorer, Scout, and Command access.",
+        detail: "Compare Explorer, Scout, and Meridian access.",
     },
     {
-        href: "/apply",
-        label: "Apply",
+        href: "/request-access",
+        label: "Request access",
         detail: "Request free Explorer access.",
     },
     {
         href: "/command",
-        label: "Command",
+        label: "Meridian",
         detail: "Request organization-level access.",
     },
     {
@@ -72,7 +72,7 @@ export default function AccountPage() {
                     <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
                         A single shell for sign-in, member workspace,
                         organization administration, pricing, Explorer
-                        application, and Command interest paths.
+                        access, and Meridian inquiry paths.
                     </p>
                 </div>
                 <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -67,17 +67,17 @@ export async function MigrationShell({ children }: { children: ReactNode }) {
                                 </Link>
                             ))}
                             <SearchCommandPalette entries={commandEntries} />
-                            <a
-                                href="/auth/login"
+                            <Link
+                                href="/request-access?tab=signin"
                                 className="shrink-0 border border-potomac-regolith/45 px-4 py-2 font-mono text-[0.68rem] font-bold uppercase text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold"
                             >
-                                Login
-                            </a>
+                                Sign in
+                            </Link>
                             <Link
-                                href="/apply"
+                                href="/request-access"
                                 className="shrink-0 bg-potomac-gold px-4 py-2 font-mono text-[0.68rem] font-bold uppercase text-potomac-primary transition hover:bg-potomac-cream"
                             >
-                                Join
+                                Join Explorer
                             </Link>
                         </nav>
                     </div>
@@ -126,47 +126,26 @@ export async function MigrationShell({ children }: { children: ReactNode }) {
                             ))}
                         </nav>
                     </div>
-                    <nav
-                        aria-label="External channels"
-                        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
-                    >
-                        {externalChannels.map((channel) =>
-                            channel.href ? (
-                                <a
-                                    key={channel.id}
-                                    href={channel.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="border border-potomac-regolith/25 p-4 transition hover:border-potomac-gold hover:bg-white/5"
-                                >
-                                    <span className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
-                                        {channel.label}
-                                    </span>
-                                    <span className="mt-2 block font-mono text-[0.65rem] uppercase text-potomac-cream/45">
-                                        {channel.status}
-                                    </span>
-                                    <span className="mt-3 block text-sm leading-5 text-potomac-cream/70">
-                                        {channel.description}
-                                    </span>
-                                </a>
-                            ) : (
-                                <span
-                                    key={channel.id}
-                                    aria-disabled="true"
-                                    className="border border-white/10 p-4"
-                                >
-                                    <span className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
-                                        {channel.label}
-                                    </span>
-                                    <span className="mt-2 block font-mono text-[0.65rem] uppercase text-potomac-cream/45">
-                                        {channel.status}
-                                    </span>
-                                    <span className="mt-3 block text-sm leading-5 text-potomac-cream/60">
-                                        {channel.description}
-                                    </span>
+                    <nav aria-label="External channels" className="grid gap-3 sm:grid-cols-2">
+                        {externalChannels.map((channel) => (
+                            <a
+                                key={channel.id}
+                                href={channel.href!}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="border border-potomac-regolith/25 p-4 transition hover:border-potomac-gold hover:bg-white/5"
+                            >
+                                <span className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
+                                    {channel.label}
                                 </span>
-                            )
-                        )}
+                                <span className="mt-2 block font-mono text-[0.65rem] uppercase text-potomac-cream/45">
+                                    {channel.status}
+                                </span>
+                                <span className="mt-3 block text-sm leading-5 text-potomac-cream/70">
+                                    {channel.description}
+                                </span>
+                            </a>
+                        ))}
                     </nav>
                 </div>
             </footer>

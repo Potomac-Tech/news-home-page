@@ -1,54 +1,27 @@
-"use client";
+import { submitMeridianInterest } from "./actions";
 
-import { FormEvent, useState } from "react";
-import { createClient } from "../../lib/supabase/client";
+type CommandInterestFormProps = {
+    status?: string;
+};
 
-type SubmissionState = "idle" | "submitting" | "submitted" | "error";
+const statusMessages: Record<string, string> = {
+    submitted:
+        "Meridian interest received. Cabeus Explorer will follow up directly for contract discussion.",
+    "business-email-required":
+        "Use a business or organization email for Meridian contract discussion.",
+    "missing-required": "Complete the required contact, email, and organization fields.",
+    "configuration-needed":
+        "Inquiry storage is not configured in this environment. Try again after deployment configuration is complete.",
+    "submit-error":
+        "The inquiry could not be stored. Try again or contact Cabeus Explorer through an approved support path.",
+};
 
-export function CommandInterestForm() {
-    const [state, setState] = useState<SubmissionState>("idle");
-    const [message, setMessage] = useState<string | null>(null);
-
-    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-        setState("submitting");
-        setMessage(null);
-
-        const form = event.currentTarget;
-        const formData = new FormData(form);
-        const estimatedSeats = Number(formData.get("estimated_seats") ?? 0);
-
-        const payload = {
-            contact_name: String(formData.get("contact_name") ?? "").trim(),
-            contact_email: String(formData.get("contact_email") ?? "").trim(),
-            organization_name: String(
-                formData.get("organization_name") ?? ""
-            ).trim(),
-            title: String(formData.get("title") ?? "").trim() || null,
-            estimated_seats: estimatedSeats > 0 ? estimatedSeats : null,
-            use_case: String(formData.get("use_case") ?? "").trim() || null,
-            status: "new",
-        };
-
-        const { error } = await createClient()
-            .from("command_interest_requests")
-            .insert(payload);
-
-        if (error) {
-            setState("error");
-            setMessage(error.message);
-            return;
-        }
-
-        form.reset();
-        setState("submitted");
-        setMessage(
-            "Command interest received. Cabeus Explorer will follow up directly."
-        );
-    }
+export function CommandInterestForm({ status }: CommandInterestFormProps) {
+    const message = status ? statusMessages[status] : undefined;
+    const isError = status && status !== "submitted";
 
     return (
-        <form onSubmit={handleSubmit} className="glass-card rounded p-6">
+        <form action={submitMeridianInterest} className="glass-card rounded p-6">
             <div className="grid gap-5 md:grid-cols-2">
                 <label className="block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
                     Contact name
@@ -61,7 +34,7 @@ export function CommandInterestForm() {
                     />
                 </label>
                 <label className="block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
-                    Contact email
+                    Business email
                     <input
                         required
                         name="contact_email"
@@ -108,18 +81,15 @@ export function CommandInterestForm() {
                 />
             </label>
             <button
-                disabled={state === "submitting"}
                 type="submit"
-                className="mt-6 w-full rounded bg-potomac-gold px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-6 w-full rounded bg-potomac-gold px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
             >
-                {state === "submitting" ? "Submitting" : "Request Command access"}
+                Request Meridian access
             </button>
             {message ? (
                 <p
                     className={`mt-4 text-sm leading-6 ${
-                        state === "error"
-                            ? "text-red-300"
-                            : "text-potomac-cream/80"
+                        isError ? "text-red-300" : "text-potomac-cream/80"
                     }`}
                 >
                     {message}
