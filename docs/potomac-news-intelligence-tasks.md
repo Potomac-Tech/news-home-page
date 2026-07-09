@@ -7,6 +7,9 @@ Task format:
 ```md
 Task NNN: Short title
 Priority:
+Requirement IDs:
+Supersedes:
+Superseded by:
 Goal:
 Acceptance criteria:
 Non-technical summary:
@@ -16,6 +19,9 @@ Blocked reason:
 
 - [x] Task 001: Confirm Supabase MCP target uses `xlpkdoeldtlhearqajat`
   - Priority: P0
+  - Requirement IDs: Legacy setup / N/A to current requirements matrix
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Ensure Codex and any Supabase tooling target the correct Potomac Supabase project.
   - Acceptance criteria: MCP configuration points to project ref `xlpkdoeldtlhearqajat`; any reference to `nwoluvjdojzayozyzlob` is removed or clearly marked as wrong; authentication status is documented.
   - Non-technical summary: Supabase tooling is now documented and project-scoped to the correct Potomac backend.
@@ -24,6 +30,9 @@ Blocked reason:
 
 - [x] Task 002: Add project documentation for the Next.js + Supabase migration
   - Priority: P0
+  - Requirement IDs: Legacy setup / N/A to current requirements matrix
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Document the intended migration from the current Vite site to a Next.js + Supabase architecture.
   - Acceptance criteria: Documentation explains the migration rationale, target stack, key risks, Supabase ownership boundaries, and expected developer workflow.
   - Non-technical summary: The migration path is now documented so the team can move from the current site to the future news and member platform with clearer guardrails.
@@ -32,6 +41,9 @@ Blocked reason:
 
 - [x] Task 003: Create initial Next.js app structure or migration scaffold
   - Priority: P0
+  - Requirement IDs: Legacy setup / N/A to current requirements matrix
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Establish the first usable Next.js structure for the future site.
   - Acceptance criteria: Project contains a working Next.js scaffold or migration-compatible structure; existing Potomac routes/assets are accounted for; build instructions are documented.
   - Non-technical summary: A separate Next.js scaffold now exists so the future platform can be built without disrupting the current live Vite site.
@@ -40,6 +52,9 @@ Blocked reason:
 
 - [x] Task 004: Preserve Potomac brand tokens, typography, colors, and assets
   - Priority: P0
+  - Requirement IDs: R-BRAND-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Carry the current Potomac visual identity into the new platform foundation.
   - Acceptance criteria: Brand colors, typography choices, logo assets, and lunar command-center styling are available to new pages/components without regressions.
   - Non-technical summary: The Next.js scaffold now has Potomac brand colors, fonts, styling utilities, and synced logo/media assets ready for new pages.
@@ -48,6 +63,9 @@ Blocked reason:
 
 - [x] Task 005: Add Supabase client/server integration
   - Priority: P0
+  - Requirement IDs: Legacy setup / N/A to current requirements matrix
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Connect the app to Supabase safely from browser and server contexts.
   - Acceptance criteria: Supabase clients are configured with the correct project ref, environment variable documentation exists, and no secret keys are exposed to the browser.
   - Non-technical summary: The Next.js scaffold now has safe Supabase browser and server connection helpers pointed at the correct Potomac project.
@@ -56,6 +74,9 @@ Blocked reason:
 
 - [x] Task 006: Add Supabase Auth login, logout, session handling, and protected routes
   - Priority: P0
+  - Requirement IDs: R-AUTH-001, R-AUTH-002
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let users sign in and route them based on authentication status.
   - Acceptance criteria: Login, logout, session refresh, protected route handling, and unauthenticated redirects work in the app.
   - Non-technical summary: The scaffold now has sign-in, sign-out, session refresh, and a protected member area ready for Supabase credentials.
@@ -64,6 +85,9 @@ Blocked reason:
 
 - [x] Task 007: Create member profile, application, organization, role, and entitlement schema
   - Priority: P0
+  - Requirement IDs: R-TIER-001, R-AUTH-003
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Define the core data model for members, organizations, approvals, roles, and paid access.
   - Acceptance criteria: Schema supports pending applicants, approved Members, Scout users, Command organizations, org admins, and entitlement records.
   - Non-technical summary: The initial database model now defines member applications, profiles, organizations, roles, org admins, and paid-access entitlements.
@@ -72,6 +96,9 @@ Blocked reason:
 
 - [x] Task 008: Add RLS policies for public, pending applicant, Member, Scout, Command, org admin, editor, analyst, and admin access
   - Priority: P0
+  - Requirement IDs: R-AUTH-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Protect Supabase data according to the membership and staff access model.
   - Acceptance criteria: RLS policies exist for relevant tables; each role can access only the expected rows/actions; policies avoid user-editable metadata for authorization.
   - Non-technical summary: The member access tables now have a documented RLS policy migration for public applications, members, paid tiers, organization admins, staff, and admins.
@@ -80,6 +107,9 @@ Blocked reason:
 
 - [x] Task 009: Build free Member application flow with manual approval state
   - Priority: P0
+  - Requirement IDs: R-TIER-001, R-AUTH-002
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let public visitors apply for free membership and enter a pending review state.
   - Acceptance criteria: Application form captures required fields, creates a pending application, shows confirmation, and does not grant full access before approval.
   - Non-technical summary: Public visitors can now submit a free Member application that stays pending until an admin reviews it.
@@ -88,6 +118,9 @@ Blocked reason:
 
 - [x] Task 010: Build admin approval workflow for free Members
   - Priority: P0
+  - Requirement IDs: R-TIER-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let authorized admins review, approve, or reject membership applications.
   - Acceptance criteria: Admin workflow lists pending applications, records decisions, updates member status, and keeps an audit trail.
   - Non-technical summary: Admins now have a protected review workflow for approving or rejecting free Member applications.
@@ -96,6 +129,9 @@ Blocked reason:
 
 - [x] Task 011: Add Stripe Scout checkout at `$25k/user/year`
   - Priority: P0
+  - Requirement IDs: R-UPGRADE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Support self-serve annual Scout upgrades for approved Members.
   - Acceptance criteria: Stripe product/price or documented configuration supports `$25k/user/year`; checkout starts only for eligible users; payment status is captured.
   - Non-technical summary: Approved Members now have a server-side Stripe Checkout path for the annual Scout upgrade.
@@ -104,6 +140,9 @@ Blocked reason:
 
 - [x] Task 012: Add Scout entitlement activation after successful payment
   - Priority: P0
+  - Requirement IDs: R-UPGRADE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Grant Scout access after successful Stripe payment or subscription activation.
   - Acceptance criteria: Stripe webhook or equivalent process updates entitlements, handles failures/idempotency, and records audit history.
   - Non-technical summary: Stripe webhook handling now activates Scout entitlements after payment and records duplicate-safe audit history.
@@ -112,6 +151,9 @@ Blocked reason:
 
 - [x] Task 013: Add Command interest form and manual sales/admin workflow
   - Priority: P0
+  - Requirement IDs: R-UPGRADE-002, R-UPGRADE-003
+  - Supersedes: None.
+  - Superseded by: Task 085
   - Goal: Capture enterprise Command interest without self-serve purchase.
   - Acceptance criteria: Command interest form stores requests, notifies/admin-surfaces leads, and supports manual entitlement grants after offline approval.
   - Non-technical summary: Enterprise Command interest can now be captured publicly and reviewed by admins for manual organization-level access grants.
@@ -120,6 +162,9 @@ Blocked reason:
 
 - [x] Task 014: Build organization admin portal for seats, members, entitlements, and billing contacts
   - Priority: P0
+  - Requirement IDs: R-TIER-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Give organization admins a place to manage their organization.
   - Acceptance criteria: Org admins can view organization details, members, seats, entitlements, and billing contacts within their permitted scope.
   - Non-technical summary: Organization admins now have a protected workspace to review their permitted organizations, seats, members, billing contact, and active entitlements.
@@ -128,6 +173,9 @@ Blocked reason:
 
 - [x] Task 015: Create editorial CMS schema for articles, authors, tags, versions, citations, and SEO metadata
   - Priority: P0
+  - Requirement IDs: R-CONTENT-001, R-HOME-001, R-HOME-002
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Store editorial content with public teaser and gated full-body support.
   - Acceptance criteria: CMS schema supports articles, authors, tags, versions, citations, SEO/AEO fields, teaser content, gated body, and publish states.
   - Non-technical summary: Editorial content now has a CMS-ready database design for public teasers, protected full stories, authors, tags, source citations, version history, and search metadata.
@@ -136,6 +184,9 @@ Blocked reason:
 
 - [x] Task 016: Build editor workflow for draft, preview, publish, and gated body content
   - Priority: P0
+  - Requirement IDs: R-CONTENT-001, R-HOME-002
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let editors manage news stories without code changes.
   - Acceptance criteria: Editors can create drafts, preview public/gated content, publish stories, and update gated bodies safely.
   - Non-technical summary: Editors now have a protected workspace for creating drafts, previewing public and member-only story content, saving versions, and publishing articles.
@@ -144,6 +195,9 @@ Blocked reason:
 
 - [x] Task 017: Build public news-first homepage with headline feed, snippets, event teasers, tickers, and sponsor slots
   - Priority: P0
+  - Requirement IDs: R-HOME-003, R-BRAND-001, R-ADS-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Make the homepage function as the public front door for the news/intelligence site.
   - Acceptance criteria: Homepage displays featured and latest stories, short snippets, event teasers, market modules, sponsor slots, and membership CTAs.
   - Non-technical summary: The public homepage now works as a news-first front door with a lead brief, latest-story snippets, event previews, market/ticker modules, sponsor placements, and Member/Command access calls to action.
@@ -152,6 +206,9 @@ Blocked reason:
 
 - [x] Task 018: Build article page with rich public teaser and gated full story
   - Priority: P0
+  - Requirement IDs: R-AUTH-001, R-UPGRADE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Balance SEO/AEO visibility with membership gating.
   - Acceptance criteria: Public visitors see headline, summary, key bullets, intro, citations, and signup prompts; approved Members can read the full article.
   - Non-technical summary: Article pages now show rich public teasers with key points, intro text, citations, and access prompts, while full bodies are requested only for signed-in users with an approved Member-or-higher role.
@@ -160,6 +217,9 @@ Blocked reason:
 
 - [x] Task 019: Add schema.org metadata, canonical URLs, sitemap, and robots configuration
   - Priority: P0
+  - Requirement IDs: R-QA-002
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Improve search and answer-engine discoverability for public pages.
   - Acceptance criteria: Public routes include relevant structured data, canonical URLs, sitemap coverage, and robots configuration that does not expose gated content improperly.
   - Non-technical summary: Public pages now publish canonical URLs, structured data, sitemap entries, and robots rules that expose public teaser content while keeping protected areas out of crawler paths.
@@ -168,6 +228,9 @@ Blocked reason:
 
 - [x] Task 020: Add Substack, podcast, LinkedIn, and X link modules
   - Priority: P1
+  - Requirement IDs: R-SOCIAL-001
+  - Supersedes: None.
+  - Superseded by: Task 077, Task 089
   - Goal: Make Potomac's external channels easy to find.
   - Acceptance criteria: Header, footer, or content modules include configurable links for Substack, podcast, LinkedIn, and X.
   - Non-technical summary: The site footer now has a reusable external-channel module for Substack, podcast, LinkedIn, and X, with LinkedIn live and the other channels clearly marked as launch pending until public URLs exist.
@@ -176,6 +239,9 @@ Blocked reason:
 
 - [x] Task 021: Build public/member event calendar with teaser-gated access
   - Priority: P1
+  - Requirement IDs: R-SCOPE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Promote major space conferences, summits, and workshops while reserving details for Members.
   - Acceptance criteria: Public users see event teasers; approved Members see full event details; event data is editable by authorized staff.
   - Non-technical summary: The site now has a public event calendar with conference and workshop teasers, member-only detail gates, and a staff editor for maintaining event data.
@@ -184,6 +250,9 @@ Blocked reason:
 
 - [x] Task 022: Build Potomac internal summit tracker and past-event summary view
   - Priority: P1
+  - Requirement IDs: R-SCOPE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Track Potomac's upcoming internal summits and summarize major news from past events.
   - Acceptance criteria: Member-gated tracker shows upcoming internal summits and past-event summaries with dates, status, and editable content.
   - Non-technical summary: Approved members now have a dedicated internal summit tracker for upcoming summit plans and past-event summaries, with a staff editor for maintaining the content.
@@ -192,6 +261,9 @@ Blocked reason:
 
 - [x] Task 023: Add sponsor and ad placement schema/admin controls
   - Priority: P1
+  - Requirement IDs: R-ADS-001
+  - Supersedes: None.
+  - Superseded by: Task 077, Task 089
   - Goal: Store and manage direct-sold sponsorship and ad inventory.
   - Acceptance criteria: Schema and admin controls support sponsors, placements, campaign dates, discounts, status, and reporting fields.
   - Non-technical summary: Staff can now manage sponsor accounts, sellable ad placements, campaign date windows, discount terms, and delivery reporting fields from a protected admin workflow.
@@ -200,6 +272,9 @@ Blocked reason:
 
 - [x] Task 024: Implement hybrid direct-sold/programmatic ad placement surfaces
   - Priority: P1
+  - Requirement IDs: R-ADS-001
+  - Supersedes: None.
+  - Superseded by: Task 077, Task 089
   - Goal: Display sponsor inventory and allow programmatic fallback where appropriate.
   - Acceptance criteria: Public pages can render direct-sold sponsor units and documented fallback slots without breaking layout or gated content.
   - Non-technical summary: Public pages now render sponsor units from live direct-sold campaign data when available, with stable Potomac-branded fallback slots when no campaign is active.
@@ -208,6 +283,9 @@ Blocked reason:
 
 - [x] Task 025: Create public company universe and dynamic top-20 space company ranking
   - Priority: P1
+  - Requirement IDs: R-LUNAR-003
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Maintain a ranked list of publicly traded space companies for ticker display.
   - Acceptance criteria: Admin-maintained eligible company universe exists; ranking logic selects top 20 by the chosen metric and records ranking date/source.
   - Non-technical summary: Analysts now have a protected company universe and dated top-20 ranking workflow for public space-company ticker coverage.
@@ -216,6 +294,9 @@ Blocked reason:
 
 - [x] Task 026: Add curated/delayed stock quote ingestion and ticker UI
   - Priority: P1
+  - Requirement IDs: R-SCOPE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Show stock data without requiring real-time licensing in MVP.
   - Acceptance criteria: Quote records include source, delay/freshness timestamp, price, change, and ticker display on public/dashboard surfaces.
   - Non-technical summary: Staff can now curate delayed public-company quote rows, and the homepage plus member workspace can show the latest displayable ticker data without real-time market feeds.
@@ -224,6 +305,9 @@ Blocked reason:
 
 - [x] Task 027: Create commodity asset and proxy-pricing model schema
   - Priority: P1
+  - Requirement IDs: R-SCOPE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Store lunar-resource commodity prices and proxy assumptions.
   - Acceptance criteria: Schema supports commodities, units, proxy formulas, source citations, confidence labels, and update cadence.
   - Non-technical summary: Lunar-resource commodity pricing now has a database foundation for assets, proxy formulas, source-backed observations, citations, confidence labels, and update cadence.
@@ -232,6 +316,9 @@ Blocked reason:
 
 - [x] Task 028: Add 20 lunar-resource commodity ticker entries with citations and confidence labels
   - Priority: P1
+  - Requirement IDs: R-SCOPE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Seed or configure the commodity ticker with lunar-resource-relevant entries.
   - Acceptance criteria: 20 commodity entries exist with price/proxy source notes, confidence labels, units, and display-ready ticker fields.
   - Non-technical summary: The lunar-resource ticker now has 20 display-ready commodity entries with proxy values, units, confidence labels, source notes, and citations.
@@ -240,6 +327,9 @@ Blocked reason:
 
 - [x] Task 029: Create lunar economy model schema with assumptions, sources, versions, and daily estimates
   - Priority: P0
+  - Requirement IDs: R-SCOPE-001, R-DATAOPS-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Store the analytical model behind the daily lunar economy tracker.
   - Acceptance criteria: Schema supports model versions, assumptions, source documents, scenario estimates, confidence scores, and daily output values.
   - Non-technical summary: The lunar economy tracker now has a database design for model versions, assumptions, reviewed sources, scenario estimates, confidence scoring, and daily published outputs.
@@ -248,6 +338,9 @@ Blocked reason:
 
 - [x] Task 030: Implement Firefly benchmark using full NASA-paid cost basis
   - Priority: P0
+  - Requirement IDs: R-SCOPE-001, R-DATAOPS-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Calculate the Firefly lunar surface data benchmark from the full NASA-paid cost, not only the data addendum.
   - Acceptance criteria: Benchmark includes original `~$100M` mission cost, `$10M` data addendum, `~$45M` PRISM contracts, citations, methodology notes, and versioned assumptions.
   - Non-technical summary: The Firefly lunar data benchmark now uses the full NASA-paid cost basis, not just the later data addendum.
@@ -256,6 +349,9 @@ Blocked reason:
 
 - [x] Task 031: Build analyst-facing economy methodology and source table UI
   - Priority: P1
+  - Requirement IDs: R-DATAOPS-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let analysts inspect and maintain lunar economy methodology inputs.
   - Acceptance criteria: Analyst view shows assumptions, formulas, citations, source tables, confidence labels, and methodology version history.
   - Non-technical summary: Analysts now have a protected economy admin workspace for reviewing methodology versions, assumptions, source records, evidence links, confidence labels, and output history.
@@ -264,6 +360,9 @@ Blocked reason:
 
 - [x] Task 032: Build public economy summary widget
   - Priority: P1
+  - Requirement IDs: R-SCOPE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Show a simplified public version of the lunar economy tracker.
   - Acceptance criteria: Public widget displays headline estimate, date, scenario/range label, concise methodology note, and membership CTA for details.
   - Non-technical summary: The homepage now shows a public lunar economy tracker with the headline estimate, date, range, confidence, source count, methodology note, and access prompts.
@@ -272,6 +371,9 @@ Blocked reason:
 
 - [x] Task 033: Build Scout/Command detailed economy dashboard
   - Priority: P1
+  - Requirement IDs: R-SCOPE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Give paid members access to deeper lunar economy analysis.
   - Acceptance criteria: Dashboard shows detailed scenarios, source tables, assumptions, downloads, and update timestamps with Scout/Command access control.
   - Non-technical summary: Paid Scout and Command users now have a protected lunar economy dashboard with scenario analysis, methodology assumptions, reviewed sources, update history, and CSV downloads.
@@ -280,6 +382,9 @@ Blocked reason:
 
 - [x] Task 034: Create data request, data offer, extraction run, and audit log schema
   - Priority: P0
+  - Requirement IDs: R-DATAOPS-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Store the data marketplace and its automated extraction history.
   - Acceptance criteria: Schema supports data requests, data offers, source documents, extraction runs, confidence labels, rationales, and audit logs.
   - Non-technical summary: The database now has a foundation for a Scout+ data marketplace, including data requests, data offers, reviewed sources, extraction job history, citations, confidence labels, rationale fields, and audit logs.
@@ -288,6 +393,9 @@ Blocked reason:
 
 - [x] Task 035: Implement automated data-market extraction pipeline placeholder with confidence labels and citations
   - Priority: P1
+  - Requirement IDs: R-DATAOPS-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Establish the pipeline structure for extracting data requests/offers from news and scholarly sources.
   - Acceptance criteria: Placeholder or initial pipeline can create draft/published marketplace records with citations, confidence labels, extraction rationale, and audit trace.
   - Non-technical summary: A dry-run-first extraction pipeline placeholder now turns reviewed source notes into draft or publish-ready marketplace requests and offers with citations, confidence labels, rationale, and audit records.
@@ -296,6 +404,9 @@ Blocked reason:
 
 - [x] Task 036: Build Scout+ data marketplace UI for requests and offers
   - Priority: P1
+  - Requirement IDs: R-DATAOPS-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let paid members browse data requests and offers.
   - Acceptance criteria: Scout+ users can view request/offer lists, details, sources, confidence labels, locations, instruments, and mission metadata.
   - Non-technical summary: Scout and Command users now have a protected data marketplace page for approved requests and offers with mission context, location and instrument fields, confidence labels, analyst rationale, and source evidence.
@@ -304,6 +415,9 @@ Blocked reason:
 
 - [x] Task 037: Create dataset catalog with public NASA/science data and Potomac proprietary entries
   - Priority: P1
+  - Requirement IDs: R-DATAOPS-001, R-SCOPE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Show available and upcoming datasets in one catalog.
   - Acceptance criteria: Catalog supports public datasets, Potomac proprietary datasets, source metadata, availability state, tier requirement, and sample/demo indicators.
   - Non-technical summary: The site now has a dataset catalog for public lunar science archives and Potomac proprietary previews, including availability, access tier, source, sample, and demo details.
@@ -312,6 +426,9 @@ Blocked reason:
 
 - [x] Task 038: Add tier-based dataset release states and one-year exclusivity logic
   - Priority: P1
+  - Requirement IDs: R-SCOPE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Enforce release timing by membership tier.
   - Acceptance criteria: Command-exclusive, Scout-delayed, public/demo, and unavailable states are represented; one-year exclusivity timing is calculated and visible to authorized users.
   - Non-technical summary: Dataset catalog entries now show whether data is Command-exclusive, Scout-delayed, public/demo, or unavailable, including one-year exclusivity timing where applicable.
@@ -320,6 +437,9 @@ Blocked reason:
 
 - [x] Task 039: Add Nexus dashboard card with entitlement status and SSO/deep-link placeholder
   - Priority: P1
+  - Requirement IDs: R-SCOPE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Connect the member dashboard to the existing Nexus experience.
   - Acceptance criteria: Dashboard card shows Nexus access status and a safe SSO/deep-link placeholder to `nexus-explore.potomacdb.com`.
   - Non-technical summary: The member workspace now shows Nexus access status and a safe placeholder link for Scout, Command, and staff users.
@@ -328,6 +448,9 @@ Blocked reason:
 
 - [x] Task 040: Add NASA and large-space-company job alerts schema and dashboard module
   - Priority: P2
+  - Requirement IDs: R-ALERT-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Provide useful job alerts for space-sector roles.
   - Acceptance criteria: Schema and dashboard module support employer, role, location, source URL, posting date, and freshness indicators.
   - Non-technical summary: Members now have a dashboard job-alert card for NASA and major space-company hiring sources, backed by a curated Supabase schema with source links, posting dates, locations, and freshness labels.
@@ -336,6 +459,9 @@ Blocked reason:
 
 - [x] Task 041: Add space weather source schema and dashboard module
   - Priority: P2
+  - Requirement IDs: R-SCOPE-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Surface space-weather context inside the dashboard.
   - Acceptance criteria: Schema and dashboard module include source attribution, update timestamp, key metrics, and graceful stale-data states.
   - Non-technical summary: Members now have a dashboard space-weather card that shows official NOAA/NASA source conditions, update times, compact metrics, attribution, and current/stale labels.
@@ -344,6 +470,9 @@ Blocked reason:
 
 - [x] Task 042: Add CSV/XLSX upload flow for Scout/Command experimental test data
   - Priority: P1
+  - Requirement IDs: R-AUTH-001, R-DATAOPS-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let paid members upload Earth test data for comparison.
   - Acceptance criteria: Scout/Command users can upload CSV/XLSX files, files are stored securely, validation errors are shown clearly, and unauthorized users are blocked.
   - Non-technical summary: Scout and Command members now have a protected test-data upload page for CSV/XLSX files, with private storage, clear validation messages, and locked access for unpaid or signed-out users.
@@ -352,6 +481,9 @@ Blocked reason:
 
 - [x] Task 043: Add comparison dashboard for Earth test data vs approved lunar/public datasets
   - Priority: P1
+  - Requirement IDs: R-SCOPE-001, R-DATAOPS-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Help users compare their experimental data against lunar or public reference datasets.
   - Acceptance criteria: Dashboard can select uploaded test data and approved datasets, run a comparison, and display results with clear assumptions/limitations.
   - Non-technical summary: Paid members can now select an uploaded Earth test file and an approved reference dataset, save a preliminary comparison, and see the assumptions and limitations clearly.
@@ -360,6 +492,9 @@ Blocked reason:
 
 - [x] Task 044: Add Command-only real-time/near-real-time intelligence access model
   - Priority: P0
+  - Requirement IDs: R-TIER-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Represent Command-exclusive intelligence access for newly collected lunar data.
   - Acceptance criteria: Data model and access rules support one Command user receiving real-time or near-real-time intelligence exclusive for at least one year after collection.
   - Non-technical summary: Command-exclusive lunar intelligence can now be allocated to one Command user with real-time or near-real-time access for a required one-year exclusivity window.
@@ -368,6 +503,9 @@ Blocked reason:
 
 - [x] Task 045: Add Command perks tracking for analyst support, proposal support, mission briefs, custom alerts, and sponsorship
   - Priority: P1
+  - Requirement IDs: R-TIER-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Track promised Command benefits and service delivery.
   - Acceptance criteria: Admin workflow tracks support requests, mission briefs, custom alerts, executive perks, free sponsorship, and fulfillment status.
   - Non-technical summary: Admins can now track Command customer benefits, due dates, fulfillment progress, blocked items, and sponsorship notes from the Command pipeline.
@@ -376,6 +514,9 @@ Blocked reason:
 
 - [x] Task 046: Create member-to-member chat schema, RLS, moderation, and audit model
   - Priority: P1
+  - Requirement IDs: R-MSG-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Define the data model and access rules for safe direct chat between approved members.
   - Acceptance criteria: Schema supports conversations, participants, messages, read receipts, muted/blocked participants, report/moderation records, audit events, and RLS that limits access to approved participants and authorized staff.
   - Non-technical summary: Approved members now have a database foundation for safe direct chat with read state, muting, blocking, reporting, moderation, and audit records.
@@ -384,6 +525,9 @@ Blocked reason:
 
 - [x] Task 047: Build direct member-to-member chat UI and notification surfaces
   - Priority: P1
+  - Requirement IDs: R-MSG-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let approved Members, Scout users, and Command users start and continue member-to-member conversations.
   - Acceptance criteria: Member dashboard includes chat inbox, conversation detail, compose/reply flow, unread indicators, privacy-constrained member discovery, report/block controls, and graceful empty/error states.
   - Non-technical summary: Approved members now have a protected chat workspace for direct conversations, replies, unread status, member discovery, reporting, and blocking.
@@ -392,6 +536,9 @@ Blocked reason:
 
 - [x] Task 048: Add moderated member forum schema, RLS, and audit model
   - Priority: P1
+  - Requirement IDs: R-COMM-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Define the data model and access controls for member forums.
   - Acceptance criteria: Schema supports forums, topics, posts, replies, reactions or bookmarks, reports, moderation actions, retained audit events, and RLS for Explorer, Scout, Command, moderator, analyst, editor, and admin access.
   - Non-technical summary: The platform now has a database foundation for moderated member forums with tier-gated access, posts, replies, reports, moderation records, and audit history.
@@ -400,6 +547,9 @@ Blocked reason:
 
 - [x] Task 049: Build moderated member forum UI
   - Priority: P1
+  - Requirement IDs: R-COMM-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let approved members discuss lunar markets, missions, datasets, procurement, regulatory issues, and events.
   - Acceptance criteria: Member dashboard includes forum index, topic list, topic detail, compose/reply flow, reporting controls, moderator states, empty/error states, and clear access messaging for public or unapproved users.
   - Non-technical summary: Approved members now have a protected forum workspace for browsing channels, opening discussion topics, replying, saving discussions, marking useful posts, and reporting content for moderation.
@@ -408,6 +558,9 @@ Blocked reason:
 
 - [x] Task 050: Add RFQ schema, RLS, response workflow, moderation, and audit model
   - Priority: P1
+  - Requirement IDs: R-RFQ-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Define the data model for Scout and Command RFQ workflows.
   - Acceptance criteria: Schema supports RFQ posts, organization attribution, categories, due dates, attachments or external links, response submissions, visibility controls, status changes, reports, moderation actions, and audit logs.
   - Non-technical summary: Scout and Command RFQs now have a database foundation for posting opportunities, inviting organizations, attaching links/files, receiving responses, tracking status changes, handling reports, moderating content, and preserving audit history.
@@ -416,6 +569,9 @@ Blocked reason:
 
 - [x] Task 051: Build Scout/Command RFQ posting, browsing, and response UI
   - Priority: P1
+  - Requirement IDs: R-RFQ-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let Scout and Command members post, browse, and respond to lunar industry RFQs.
   - Acceptance criteria: Dashboard includes RFQ list, filters, detail page, post form, response form, organization-aware permissions, moderation/report actions, and graceful states for members without access.
   - Non-technical summary: Scout and Command members now have a protected RFQ workspace for viewing opportunities, posting requests, submitting responses, updating statuses, and reporting items for moderation.
@@ -424,6 +580,9 @@ Blocked reason:
 
 - [x] Task 052: Document Explorer, Scout, and Command tier packaging and gates
   - Priority: P0
+  - Requirement IDs: R-TIER-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Align the product model with Explorer as the free approved base membership, Scout as the professional paid tier, and Command as the enterprise tier.
   - Acceptance criteria: Documentation and access-control notes define tier names, pricing/approval model, limits, included features, upgrade paths, and legacy Member terminology handling.
   - Non-technical summary: The Explorer, Scout, and Command packaging model is now documented in one place, including who each tier is for, how access is granted, what each tier includes, and how the older Member terminology should be used.
@@ -432,6 +591,9 @@ Blocked reason:
 
 - [x] Task 053: Build Explorer/Scout/Command pricing and upgrade entry points
   - Priority: P1
+  - Requirement IDs: R-TIER-001, R-UPGRADE-001, R-UPGRADE-002
+  - Supersedes: None.
+  - Superseded by: Task 078, Task 086
   - Goal: Make tier differences and upgrade paths clear to prospects and approved members.
   - Acceptance criteria: Public pricing or membership page explains Explorer, Scout, and Command; member dashboard surfaces relevant upgrade CTAs; Scout checkout and Command interest paths remain connected.
   - Non-technical summary: Prospects and approved members now have a public pricing page and dashboard entry point that explain Explorer, Scout, and Command access and route users to the right application, checkout, or sales path.
@@ -440,6 +602,9 @@ Blocked reason:
 
 - [x] Task 054: Build lunar industry terminal navigation and dashboard shell
   - Priority: P0
+  - Requirement IDs: R-SCOPE-001, R-NAV-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Organize the platform as a lunar industry terminal rather than a generic space site.
   - Acceptance criteria: Navigation and dashboard shell expose lunar news, launches, spacecraft/landers, procurement, regulatory, companies, economy, datasets, marketplace, events, calculators, alerts, and account areas with responsive behavior.
   - Non-technical summary: The site now presents Potomac as a lunar industry terminal, with public navigation and dashboard cards for news, missions, markets, datasets, events, calculators, alerts, and account paths.
@@ -448,6 +613,9 @@ Blocked reason:
 
 - [x] Task 055: Add lunar launch, spacecraft, lander, payload, and satellite tracker schema
   - Priority: P1
+  - Requirement IDs: R-LUNAR-001, R-MISSION-004
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Store lunar mission object tracking data with source-backed status.
   - Acceptance criteria: Schema supports lunar launches, spacecraft, landers, payloads, lunar satellites, operators, mission phases, launch windows, landing sites, instruments, status, timestamps, freshness, and source citations.
   - Non-technical summary: The database now has a planned structure for tracking lunar missions, operators, launches, spacecraft, landers, satellites, payloads, instruments, status history, landing sites, freshness, and source citations.
@@ -456,6 +624,9 @@ Blocked reason:
 
 - [x] Task 056: Build lunar launch, spacecraft, lander, and satellite tracker modules
   - Priority: P1
+  - Requirement IDs: R-LUNAR-001, R-MISSION-004
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let members track lunar missions and objects in the terminal.
   - Acceptance criteria: Dashboard modules show upcoming launches, active spacecraft/landers/satellites, mission status, source freshness, filters, detail pages, and gated detail levels by tier.
   - Non-technical summary: The terminal now has working lunar launch and spacecraft tracker pages, mission detail pages, and a member tracker entry point that shows source freshness, filters, mission status, and tier-aware detail prompts.
@@ -464,6 +635,9 @@ Blocked reason:
 
 - [x] Task 057: Add lunar procurement and regulatory intelligence schema
   - Priority: P1
+  - Requirement IDs: R-LUNAR-002
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Store lunar-relevant procurement and regulatory records.
   - Acceptance criteria: Schema supports procurements, awards, SBIR/STTR items, regulatory filings, comment periods, policy milestones, compliance notes, agencies, due dates, source URLs, confidence labels, and analyst review state.
   - Non-technical summary: The database now has a planned structure for tracking lunar procurements, awards, SBIR/STTR opportunities, regulatory filings, comment periods, policy milestones, compliance notes, agencies, due dates, source links, confidence, and analyst review state.
@@ -472,6 +646,9 @@ Blocked reason:
 
 - [x] Task 058: Build lunar procurement and regulatory hub UI
   - Priority: P1
+  - Requirement IDs: R-LUNAR-002
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Give Scout and Command members a practical hub for lunar opportunities and policy risk.
   - Acceptance criteria: Hub includes searchable/filterable procurement and regulatory lists, detail pages, due-date/status indicators, citations, watchlist hooks, and upgrade prompts for users without access.
   - Non-technical summary: The terminal now has searchable procurement and regulatory hubs with detail pages, due-date and status indicators, citations, upgrade prompts, and watchlist attachment points for future saved-work features.
@@ -480,6 +657,9 @@ Blocked reason:
 
 - [x] Task 059: Create lunar company profile and comparison schema
   - Priority: P1
+  - Requirement IDs: R-LUNAR-003
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Store profiles for companies participating in the lunar industry.
   - Acceptance criteria: Schema supports company sectors, programs, contracts, facilities, leadership, public financials or licensed financial fields, news links, relationships, source citations, and comparison attributes.
   - Non-technical summary: The database now has a planned structure for lunar company profiles, facilities, leadership, contracts, financial metrics, news links, relationships, source citations, and comparison fields.
@@ -488,6 +668,9 @@ Blocked reason:
 
 - [x] Task 060: Build lunar company directory, profile, and comparison UI
   - Priority: P1
+  - Requirement IDs: R-LUNAR-003
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let members discover, inspect, and compare lunar companies.
   - Acceptance criteria: UI includes searchable directory, company profile pages, comparison table, source/freshness labels, public teaser behavior, and Scout/Command detail gates where appropriate.
   - Non-technical summary: The terminal now has a searchable lunar company directory, company profile pages, comparison table, source/freshness labels, upgrade prompts, and watchlist attachment points.
@@ -496,6 +679,9 @@ Blocked reason:
 
 - [x] Task 061: Add lunar mission calculator framework
   - Priority: P1
+  - Requirement IDs: R-CALC-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Establish a reusable structure for lunar mission planning calculators.
   - Acceptance criteria: Framework supports named calculators, assumptions, formulas, source citations, units, confidence notes, version history, input validation, saved runs, and tier-based access.
   - Non-technical summary: The database now has a planned framework for lunar mission calculators, including versions, assumptions, formulas, citations, validation rules, saved runs, and tier-aware access.
@@ -504,6 +690,9 @@ Blocked reason:
 
 - [x] Task 062: Build initial lunar mission calculators
   - Priority: P1
+  - Requirement IDs: R-CALC-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Provide practical calculators for lunar mission planning workflows.
   - Acceptance criteria: Initial calculators cover lunar mission cost, launch window assumptions, RF link budget, thermal budget, radiation exposure, and power budget with clear limitations and citations.
   - Non-technical summary: The calculator page now has six working lunar planning tools for cost, launch-window pressure, RF link margin, thermal balance, radiation exposure, and surface power.
@@ -512,6 +701,9 @@ Blocked reason:
 
 - [x] Task 063: Add global search, command palette, and related intelligence index
   - Priority: P0
+  - Requirement IDs: R-SEARCH-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let members quickly find content and jump across the terminal.
   - Acceptance criteria: Search/index model covers articles, events, companies, lunar missions, datasets, data requests/offers, jobs, procurements, regulatory records, methodology sources, and dashboard modules; command palette supports keyboard navigation and admin-pinned results.
   - Non-technical summary: The database now has a planned global search and command-palette index that can organize terminal results, source evidence, keyboard shortcuts, synonyms, and admin-pinned navigation across the lunar intelligence product.
@@ -520,6 +712,9 @@ Blocked reason:
 
 - [x] Task 064: Build global search and command palette UI
   - Priority: P1
+  - Requirement IDs: R-SEARCH-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Make search and fast navigation usable from public and member surfaces.
   - Acceptance criteria: UI includes search page, scoped filters, result snippets, source/tier labels, no-result states, keyboard-accessible command palette, and entitlement-aware result visibility.
   - Non-technical summary: The terminal now has a global search page and keyboard command palette so visitors and members can quickly find articles, events, companies, missions, datasets, procurement, regulatory records, methodology sources, calculators, and dashboard modules.
@@ -528,6 +723,9 @@ Blocked reason:
 
 - [x] Task 065: Add watchlists, saved searches, reading list, and preference schema
   - Priority: P1
+  - Requirement IDs: R-WATCH-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Store user-specific monitoring and saved-work preferences.
   - Acceptance criteria: Schema supports watched companies, missions, procurements, regulatory records, events, datasets, marketplace records, saved searches, reading-list items, notification preferences, dashboard defaults, and audit-safe ownership.
   - Non-technical summary: The database now has a planned personalization model for Scout and Command members to save watchlists, searches, reading-list items, notification settings, and dashboard defaults.
@@ -536,6 +734,9 @@ Blocked reason:
 
 - [x] Task 066: Build watchlists, saved searches, reading list, and preference UI
   - Priority: P1
+  - Requirement IDs: R-WATCH-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Let Scout and Command members personalize what they monitor.
   - Acceptance criteria: Dashboard includes watchlist controls, saved search creation, reading-list save/remove actions, notification settings, dashboard defaults, and graceful states for unsupported objects or lower tiers.
   - Non-technical summary: Scout and Command members now have a saved-work workspace for watchlists, saved searches, reading-list items, notification preferences, and terminal defaults.
@@ -544,6 +745,9 @@ Blocked reason:
 
 - [x] Task 067: Add alerts center, email notifications, in-app notifications, and freshness indicators
   - Priority: P1
+  - Requirement IDs: R-ALERT-001, R-EMAIL-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Notify members about changes to watched lunar intelligence and important platform events.
   - Acceptance criteria: System supports alert rules, alert feed, unread badges, email delivery hooks, notification preferences, stale-data indicators, delivery audit logs, and tier-aware limits for Explorer, Scout, and Command.
   - Non-technical summary: Members now have an alerts center foundation with unread feed notices, stale-data labels, paid alert rules, email hook audit records, and tier-aware limits.
@@ -552,6 +756,9 @@ Blocked reason:
 
 - [x] Task 068: Add data source registry, license review, freshness, and quality scoring
   - Priority: P0
+  - Requirement IDs: R-DATAOPS-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Build the trust layer for source-backed lunar intelligence.
   - Acceptance criteria: Schema/admin workflow tracks source owner, URL, license/terms review, refresh frequency, parser/job, health, freshness, citation requirements, quality score, confidence label, and analyst review state.
   - Non-technical summary: Analysts now have a source registry foundation for tracking which lunar intelligence sources are usable, fresh, properly cited, healthy, and reviewed.
@@ -560,6 +767,9 @@ Blocked reason:
 
 - [x] Task 069: Add reusable table, chart, and export framework for intelligence modules
   - Priority: P0
+  - Requirement IDs: R-DATAOPS-001, R-API-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Standardize how data-heavy modules display, cite, filter, and export information.
   - Acceptance criteria: Framework supports filtering, sorting, pagination, column picker, source columns, freshness labels, confidence labels, chart tooltips, data-table fallback, CSV/PDF export where entitled, and responsive behavior.
   - Non-technical summary: Data-heavy intelligence pages now have a reusable table, chart, and export component so future modules can use consistent filters, citations, freshness labels, and paid export controls.
@@ -568,6 +778,9 @@ Blocked reason:
 
 - [x] Task 070: Add Scout/Command API, exports, webhooks, and developer portal scaffold
   - Priority: P1
+  - Requirement IDs: R-API-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Provide paid workflow infrastructure for Scout and Command users.
   - Acceptance criteria: Scaffold includes API key model, endpoint catalog, quota fields, usage logs, webhook subscriptions, export jobs, developer documentation route, and tier-aware access controls.
   - Non-technical summary: Scout and Command users now have a developer-platform foundation for API access, quota tracking, export jobs, webhooks, and developer documentation.
@@ -576,6 +789,9 @@ Blocked reason:
 
 - [x] Task 071: Add legal, trust, account lifecycle, and consent surfaces
   - Priority: P0
+  - Requirement IDs: R-TRUST-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Support membership, ads, analytics, uploads, and paid tiers with baseline public trust pages and controls.
   - Acceptance criteria: Public/member surfaces include Terms, Privacy, Cookies, Accessibility, Data Safety, account deletion request flow, cookie preference controls, and clear support/contact paths.
   - Non-technical summary: Public visitors and members now have baseline legal, privacy, cookie, accessibility, data-safety, and account-deletion support surfaces.
@@ -584,6 +800,9 @@ Blocked reason:
 
 - [x] Task 072: Add security, accessibility, analytics, observability, and performance baseline
   - Priority: P0
+  - Requirement IDs: R-TRUST-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Define and verify non-functional requirements for a production-ready intelligence platform.
   - Acceptance criteria: Implementation includes security headers, rate limiting or documented controls, input validation, CSRF/session protections where applicable, accessibility checks, analytics events, logs/metrics/traces hooks, performance budgets, and documented error/empty/stale/offline states.
   - Non-technical summary: The platform now has baseline security headers, product analytics and logging hooks, performance targets, accessibility expectations, and operational-state guidance.
@@ -592,6 +811,9 @@ Blocked reason:
 
 - [x] Task 073: Add automated tests for auth, RBAC, article gating, billing, member chat, forums, RFQs, lunar terminal modules, and RLS
   - Priority: P0
+  - Requirement IDs: R-QA-002
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Cover critical security and access-control behavior with tests.
   - Acceptance criteria: Automated tests exercise login/session behavior, membership gating, role restrictions, billing entitlement updates, direct chat/forum/RFQ access and moderation rules, lunar terminal module gates, exports/API gates, and RLS expectations.
   - Non-technical summary: The project now has automated safety checks for the most important member access, paid tier, community, lunar terminal, export/API, and database security contracts.
@@ -600,6 +822,9 @@ Blocked reason:
 
 - [x] Task 074: Add end-to-end tests for public teaser, Explorer article unlock, Scout dashboard, chat/forums/RFQs, and Command admin flows
   - Priority: P1
+  - Requirement IDs: R-QA-002
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Validate the main user journeys from browser-level behavior.
   - Acceptance criteria: E2E tests cover public article teaser, Explorer full article access, Scout dashboard access, direct chat inbox/conversation flows, forum posting, RFQ browsing/responding, lunar terminal navigation, and Command/admin workflows.
   - Non-technical summary: The project now has browser-level journey tests for the public article gate, sign-in unlock path, paid dashboard protection, community/RFQ gates, lunar terminal navigation, and Command request/admin access paths.
@@ -608,6 +833,9 @@ Blocked reason:
 
 - [x] Task 075: Run build, lint, tests, and document remaining gaps
   - Priority: P0
+  - Requirement IDs: R-QA-002, R-DEPLOY-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Verify the implementation and capture any remaining gaps.
   - Acceptance criteria: Build, lint, and available tests are run; results are recorded; remaining gaps or skipped checks are documented clearly.
   - Non-technical summary: The current implementation has been checked with the available builds, linting, static tests, and browser E2E tests, with the remaining live-data and production-integration gaps documented.
@@ -616,352 +844,440 @@ Blocked reason:
 
 - [x] Task 076: Reverify completed tasks and unblock local Supabase migrations
   - Priority: P0
+  - Requirement IDs: R-QA-002, R-DEPLOY-001
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Reverify every completed Potomac News Intelligence task with the available local checks, use the local computer and Supabase stack to fix actionable blockers, and identify remaining matrix gaps.
   - Acceptance criteria: All existing completed tasks remain checked; no unchecked task is missed; application builds, lint, static tests, browser E2E tests, local Supabase migration application, schema lint, and security advisors are rerun; actionable local blockers are fixed; remaining unsatisfied requirements are captured as new unchecked tasks.
   - Non-technical summary: The full task list was rechecked, the app test suite still passes, and the local Supabase database migration chain is no longer stuck.
-  - Verification: Confirmed all 75 prior tasks were checked and no unchecked tasks existed before this audit. `npm run lint` passed; `npm test` passed with 8 static tests; `npm run build` passed; `npm run test:e2e` passed after `npm run build:next` and 6 browser tests; `git diff --check` passed with only the pre-existing LF-to-CRLF warning on `docs/codex-automation-memory.md`. Used Windows computer control to confirm local app/browser context was available without reading unrelated sensitive windows. Supabase CLI `2.109.0` and local Docker Supabase were available. Fixed the old migration blocker in `20260702000232_global_search_command_palette_index.sql` by replacing non-immutable generated `tsvector` columns with trigger-maintained search vectors and replacing enum-to-text unique-index expressions with `NULLS NOT DISTINCT` indexes. Fixed the next blocker in `20260702050828_watchlists_saved_work_preferences.sql` with the same nullable unique-index pattern. Added repair migrations `20260705023452_fix_public_company_ranking_status_cast.sql` and `20260705023613_harden_updated_at_search_path.sql`. `npx supabase migration up --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` now applies through `20260705023613`; `npx supabase db lint --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` reports no schema errors; `npx supabase db advisors --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website" --type security --level warn --fail-on error` reports no security issues. Performance advisors still report warning-level RLS optimization work: 73 `auth_rls_initplan` warnings and 86 `multiple_permissive_policies` warnings; Task 080 captures the production hardening follow-up. Live remote Supabase verification was not run because `SUPABASE_DB_PASSWORD`, Supabase runtime keys, Stripe secrets, and seeded role-user credentials are not present in the shell environment.
+  - Verification: Confirmed all 75 prior tasks were checked and no unchecked tasks existed before this audit. `npm run lint` passed; `npm test` passed with 8 static tests; `npm run build` passed; `npm run test:e2e` passed after `npm run build:next` and 6 browser tests; `git diff --check` passed with only the pre-existing LF-to-CRLF warning on `docs/codex-automation-memory.md`. Used Windows computer control to confirm local app/browser context was available without reading unrelated sensitive windows. Supabase CLI `2.109.0` and local Docker Supabase were available. Fixed the old migration blocker in `20260702000232_global_search_command_palette_index.sql` by replacing non-immutable generated `tsvector` columns with trigger-maintained search vectors and replacing enum-to-text unique-index expressions with `NULLS NOT DISTINCT` indexes. Fixed the next blocker in `20260702050828_watchlists_saved_work_preferences.sql` with the same nullable unique-index pattern. Added repair migrations `20260705023452_fix_public_company_ranking_status_cast.sql` and `20260705023613_harden_updated_at_search_path.sql`. `npx supabase migration up --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` now applies through `20260705023613`; `npx supabase db lint --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website"` reports no schema errors; `npx supabase db advisors --local --workdir "C:\Users\JacobMatthews\Documents\Potomac Website" --type security --level warn --fail-on error` reports no security issues. Performance advisors still report warning-level RLS optimization work: 73 `auth_rls_initplan` warnings and 86 `multiple_permissive_policies` warnings; Task 109 captures the production hardening follow-up. Live remote Supabase verification was not run because `SUPABASE_DB_PASSWORD`, Supabase runtime keys, Stripe secrets, and seeded role-user credentials are not present in the shell environment.
   - Blocked reason: None.
 
-- [ ] Task 077: Verify canonical remote Supabase migrations and role journeys
+- [ ] Task 077: Reconcile live homepage copy, tiers, branding, ads, social links, and visible placeholders
   - Priority: P0
-  - Goal: Prove the completed database-backed requirements against the real Potomac Supabase project.
-  - Acceptance criteria: Remote migration history for project `xlpkdoeldtlhearqajat` is reconciled; all production-intended migrations are applied or explicitly skipped; `20260701201833_seed_local_test_users.sql` is skipped unless explicitly approved for remote; Explorer, Scout, Command, organization admin, editor, analyst, and admin role journeys are seeded or otherwise available; RLS read/write checks cover article bodies, search, saved work, alerts, chat, forums, RFQs, lunar missions, procurement, regulatory records, companies, calculators, datasets, uploads, API/export tables, and audit logs; results are documented without exposing secrets.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Requires canonical project database credentials, runtime Supabase keys, and seeded or approved test users for `xlpkdoeldtlhearqajat`; never use `nwoluvjdojzayozyzlob`.
-
-- [ ] Task 078: Implement production alert evaluation and email delivery
-  - Priority: P1
-  - Goal: Complete R-ALERT-001 beyond the current alerts-center and delivery-hook scaffold.
-  - Acceptance criteria: Scheduled alert evaluation runs against watched companies, missions, procurements, regulatory records, datasets, events, marketplace records, and Command intelligence; in-app alert feed and unread badges are updated by the evaluator; email notifications are sent through a configured provider; member notification preferences and quiet hours are respected; delivery retries, failures, and audit logs are visible; unsubscribe or preference-management paths are documented and tested.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Requires email provider configuration, scheduling/runtime environment, and live or seeded member alert data.
-
-- [ ] Task 079: Build runtime paid API, export jobs, and webhook delivery
-  - Priority: P1
-  - Goal: Complete R-API-001 beyond the current Scout/Command developer-platform scaffold.
-  - Acceptance criteria: Versioned API routes authenticate developer API keys, enforce Scout/Command scopes and usage limits, write usage/audit logs, and return documented errors; CSV/PDF export requests create and process export jobs with downloadable results; webhook subscriptions deliver signed event payloads with retry/backoff and delivery logs; developer documentation reflects the live endpoints; tests cover authentication, quotas, exports, and webhook delivery behavior.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Requires runtime API design decisions, worker/scheduler environment, signing secret management, and live or seeded paid-member data.
-
-- [ ] Task 080: Add production trust, telemetry, accessibility, and performance enforcement
-  - Priority: P0
-  - Goal: Complete R-TRUST-001 beyond baseline pages and documented hooks.
-  - Acceptance criteria: Accessibility checks run in CI for key public/member/admin routes; analytics events are connected to a production provider with consent-aware behavior; managed logs, metrics, traces, and error reporting are configured; Core Web Vitals and route performance budgets are measured and reported; API rate limiting is enforced in middleware or infrastructure; Supabase performance advisor warnings are triaged and either fixed or explicitly accepted with rationale.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Requires production analytics/observability provider choices, CI/runtime configuration, and a deliberate RLS performance-hardening pass.
-
-- [ ] Task 081: Reconcile live homepage copy, tiers, branding, ads, social links, and visible placeholders
-  - Priority: P0
+  - Requirement IDs: R-TIER-001, R-BRAND-001, R-HOME-003, R-ADS-001, R-SOCIAL-001, R-UPGRADE-001, R-UPGRADE-002, R-EMAIL-001, R-QA-002
+  - Supersedes: Task 020, Task 023, Task 024
+  - Superseded by: None.
   - Goal: Bring public surfaces into the approved Cabeus Explorer/Potomac model before adding new modules.
   - Acceptance criteria: Public copy uses Explorer as the free default signup membership, Scout at `$25k/user/year`, and Meridian as the current public enterprise label while internal RBAC remains Command and final naming remains open; public brand is Cabeus Explorer except approved Potomac Pathfinder and Potomac Source CTAs; no public route shows placeholder or launch-pending copy; social link modules are removed; incomplete sponsor slots are replaced with UDRI house ads, Potomac Pathfinder CTAs, Potomac Source CTAs, or source-backed empty states; account-required CTAs point to `/request-access`; premium CTAs point to `/upgrade`; Meridian surfaces do not show Stripe, self-serve checkout, public payment, or `mailto:` links or workflows and instead route to a submitted server-side inquiry form that emails through Resend Free to/from `info@potomacdb.com` after quota preflight with safe Reply-To behavior; desktop/mobile screenshots confirm no first-viewport overflow.
   - Non-technical summary: Pending.
   - Verification: Not run yet.
   - Blocked reason: None.
 
-- [ ] Task 082: Build admin content submission, approval, and deployment-readiness dashboard
+- [ ] Task 078: Add configurable enterprise product naming with Meridian as the current public label
   - Priority: P0
-  - Goal: Provide the operating workflow needed to avoid Codex-authored production placeholders.
-  - Acceptance criteria: Editor/admin dashboard supports submissions for homepage slides, carousel visuals, tracker rows, source citations, house ads, Pathfinder/Source CTAs, space/lunar contract awards, and public empty states; one editor/admin approval is sufficient; Supabase Storage image uploads support validation and alt text; scheduled auto-expiration is required by default with 14-day carousel, 30-day CTA/house-ad, and 7-day weekly tracker promotional defaults; publishing blocks missing citations, assets, destinations, or expiration metadata; Codex cannot mark production content seeding complete by inventing final copy.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: None.
-
-- [ ] Task 083: Add homepage top-story carousel schema and editor/admin controls
-  - Priority: P0
-  - Goal: Store and manage the hero carousel as editorial inventory rather than a static landing-page block.
-  - Acceptance criteria: Schema supports 3-5 active slides, latest reviewed CMS story auto-selection, editor/admin pinning and ranking, required/optional status, schedule windows, required expiration, audience mode, tier, visual asset, alt text, CTA label/route, citation/source note, freshness timestamp, audit log, and preview state; default public CTA is `Read the brief`; slide types include anonymous teaser, signed-in editorial story, custom intelligence card, and paid-tier teaser; unverified and profile-incomplete users cannot receive member-only slides; any editor/admin can publish, unpublish, reorder, and expire slides.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on existing editorial CMS tables from Tasks 015-016.
-
-- [ ] Task 084: Build rotating homepage hero carousel UI
-  - Priority: P0
-  - Goal: Replace the static hero area shown in the screenshot with a production carousel.
-  - Acceptance criteria: Homepage top hero rotates every 8 seconds across 3-5 active slides, has previous/next controls, slide indicators, pause/resume, hover/focus pause, keyboard navigation, touch-safe behavior, reduced-motion fallback, static one-slide fallback, accessible labels, SEO-safe teaser markup, responsive images, no layout shift, and no first-viewport overflow on desktop or mobile.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 083 schema/data contract.
-
-- [ ] Task 085: Build membership-aware carousel data resolver and teaser logic
-  - Priority: P0
-  - Goal: Serve the right carousel mix for anonymous, unverified, profile-incomplete, Explorer, Scout, Meridian/internal Command, and staff users.
-  - Acceptance criteria: Anonymous users see published story teaser slides plus `/request-access` CTAs; unverified signed-in users see public-safe teasers plus email verification prompts; verified/profile-incomplete users see public-safe teasers plus `/account/profile/complete` prompts; verified/profile-complete users see reviewed editorial stories and custom intelligence cards when personalization is enabled; Explorer users see at least one Scout or Meridian teaser when eligible reviewed content exists, with paid articles prioritized first; Scout and internal Command users see paid intelligence/custom cards rather than repetitive upgrade prompts; premium clicks route to `/upgrade`; personalization can override optional editor picks after 5 qualifying 90-day events; disabled personalization falls back to latest reviewed stories, required editor picks, paid-article teaser priority, and non-personalized tier cards; structured data exposes only public teaser content; tests cover anonymous, unverified, profile-incomplete, verified generic, Explorer, Scout, Meridian/internal Command, staff, sufficient-history, insufficient-history, and disabled-personalization states.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 083-084 and Task 107/112 access helpers.
-
-- [ ] Task 086: Add engagement telemetry and custom intelligence card model
-  - Priority: P1
-  - Goal: Track what users engage with most so signed-in carousel cards can become operationally relevant.
-  - Acceptance criteria: Telemetry records privacy-safe engagement signals for verified/profile-complete signed-in users over a rolling 90-day window, including article reads, searches, saved work, watchlists, tracker rows, company/profile views, alerts, paid articles, datasets, exports, and CTA clicks; resolver produces explainable card reasons; personalization threshold defaults to 5 qualifying events; account preferences disable behavior-based ranking only and do not disable analytics or engagement collection; data model respects organization/privacy boundaries and RLS.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on account preference storage and RLS verification from Task 077.
-
-- [ ] Task 087: Add weekly launch and mission tracker schema
-  - Priority: P0
-  - Goal: Store weekly launch and mission milestone data with source-backed value fields.
-  - Acceptance criteria: Schema supports Monday-Sunday local week windows with UTC fallback, launch/milestone type, launch provider, vehicle, mission, customer/payload, launch site/location, target/orbit/mission location, status, schedule confidence, lunar/cislunar flag, source citations, source registry IDs, last-reviewed timestamp, value state, exact cited value, cited range, analyst estimate, estimate methodology, estimate confidence, gated visibility, reviewer, and audit log.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on source registry trust layer from Task 068.
-
-- [ ] Task 088: Implement weekly launch and mission ingestion plus review workflow
-  - Priority: P0
-  - Goal: Populate the tracker from approved sources without inventing unreviewed data.
-  - Acceptance criteria: Ingestion uses Launch Library 2 where practical, official operator/customer/NASA/Space Force/agency pages for validation, Spaceflight Now/Next Spaceflight cross-checks, and procurement/award/company/SEC/official contracting records for value evidence; de-duplicates launches and milestones; handles slips, scrubs, holds, no-earlier-than dates, status changes, and source conflicts; flags lunar/cislunar relevance; creates draft rows requiring one editor/admin approval except automated source-reviewed `No launches this week` states; stores ingestion run ID, source check timestamp, confidence, and audit events.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: External source calls may be blocked until provider/API access and scheduled-job environment are configured.
-
-- [ ] Task 089: Build weekly launch and mission tracker UI
-  - Priority: P0
-  - Goal: Give users an operational weekly view of launches and mission milestones.
-  - Acceptance criteria: `/tracker/launches` renders only for verified/profile-complete signed-in users; anonymous users route to `/request-access`, unverified users to email verification, and profile-incomplete users to `/account/profile/complete`; view defaults to all/global launches for the user's Monday-Sunday local week; one-click lunar/cislunar filter is prominent; cards/table show UTC and local time, provider, vehicle, mission, customer/payload, launch site, target/orbit/location, milestone type, status, value state, citations, confidence, freshness, and review timestamp; empty weeks show the automated source-reviewed `No launches this week` state when applicable; mobile view has no horizontal overflow.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 087-088 and Task 107/112 access helpers.
-
-- [ ] Task 090: Connect Launches & Missions tracker to member navigation, search, alerts, and exports
-  - Priority: P0
-  - Goal: Make `/tracker/launches` a broader signed-in tracker app, not a static homepage card.
-  - Acceptance criteria: `/tracker/launches` blocks anonymous, email-unverified, and profile-incomplete users from the app shell; any verified/profile-complete account can view the basic app shell without approved Explorer status; Scout/Command-only value estimates, methodology, export, API, advanced filters, and alert features remain gated; member dashboard, account navigation, command palette, search results, breadcrumbs, route metadata, and terminal shell use `Launches & Missions`; search exposes only public-safe snippets to unverified/profile-incomplete states; alerts/watchlists/export hooks respect tier and profile gates.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 089, 065-070, and fixture users from Task 077 for full role coverage.
-
-- [ ] Task 091: Update homepage Launches Tracked card and handoff behavior
-  - Priority: P0
-  - Goal: Turn the current homepage metric into a useful entry point to `/tracker/launches`.
-  - Acceptance criteria: Homepage `Launches Tracked` card shows current reviewed count, source freshness, and lunar/cislunar subset count; verified/profile-complete users click through to `/tracker/launches` with week/timezone/filter context; signed-out users see a public teaser and `/request-access` CTA; unverified users see a verify-email CTA; profile-incomplete users route to `/account/profile/complete`; premium value/export/estimate clicks route to `/upgrade`; no dead link or static placeholder metric remains.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 087-090.
-
-- [ ] Task 092: Add contract value visibility and estimate-methodology gates
-  - Priority: P0
-  - Goal: Prevent premium value estimates from leaking while still showing public cited values where allowed.
-  - Acceptance criteria: Value states are exact cited value, cited range, analyst estimate, and not disclosed; exact cited values/ranges can display publicly only when source license/editorial settings allow; analyst estimates and methodology are visible only to Scout/Command; non-entitled views show `Sign up or Log In for More Details` and route to `/upgrade`; account-required states route through `/request-access`; profile-incomplete users complete `/account/profile/complete` before premium checkout or member content; tests confirm no estimate leakage in HTML, API payloads, metadata, search snippets, structured data, exports, or prefetched payloads.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 087-090 and paid-tier test users from Task 077.
-
-- [ ] Task 093: Seed launch, mission, and value source registry entries
-  - Priority: P0
-  - Goal: Give the tracker approved source entries instead of free-form URLs.
-  - Acceptance criteria: Source registry includes Launch Library 2, official NASA/Space Force/operator/customer pages, Spaceflight Now, Next Spaceflight, procurement/award sources, SEC/company sources where relevant, and official contracting records; each source includes owner, URL, terms/license review status, refresh frequency, parser/job owner, citation requirements, quality score, confidence, and analyst review state; unapproved sources cannot publish tracker rows.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 068 source registry schema and legal/license review where required.
-
-- [ ] Task 094: Add New Contract Awards module schema and ingestion workflow
-  - Priority: P0
-  - Goal: Track space/lunar contract awards separately from launches and mission operations.
-  - Acceptance criteria: Schema supports only space/lunar-relevant awards, award date as primary date, future effective date and option-exercise date as secondary fields, customer, vendor, program, award vehicle, amount, value state, citations, confidence, source registry IDs, reviewer, reviewed timestamp, audit log, and tier visibility; ingestion/review excludes general aerospace/defense awards unless directly space/lunar relevant; one editor/admin approval is sufficient.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on source registry entries from Task 093.
-
-- [ ] Task 095: Build New Contract Awards tracker module UI
-  - Priority: P0
-  - Goal: Show contract awards as a separate operational module.
-  - Acceptance criteria: Module shows only space/lunar-relevant awards; each card includes award date as primary date plus future effective date and option-exercise date as secondary fields when available, customer, vendor, program, amount/value state, confidence, source citations, reviewer, and last-reviewed timestamp; general aerospace/defense awards are excluded unless directly space/lunar relevant; same value visibility rules as Task 092 apply; signed-out users get public teasers and `/request-access`; unverified users see verification prompts; profile-incomplete users route to `/account/profile/complete`; non-entitled users route to `/upgrade` for premium details.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 094.
-
-- [ ] Task 096: Add Supabase Storage asset pipeline for Pathfinder and Source CTA images
-  - Priority: P0
-  - Goal: Store and serve the CEO-provided Pathfinder and Source CTA images safely.
-  - Acceptance criteria: Supabase Storage bucket/folder and admin upload/select controls support Pathfinder and Source CTA images; uploads validate file type, size, dimensions, alt text, attribution/source note, review status, and expiration metadata; existing CEO-provided images are added as reviewed assets or repo fallbacks with stable paths; no generic replacement art appears.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Supabase Storage configuration and the attached assets being available in the repo or upload workflow.
-
-- [ ] Task 097: Replace sponsor/social placeholders with UDRI, Pathfinder, and Source CTA surfaces
-  - Priority: P0
-  - Goal: Replace incomplete modules with approved strategic CTAs.
-  - Acceptance criteria: UDRI house ad uses `https://i.ytimg.com/vi/WSLxeLhlth4/maxresdefault.jpg` as the placeholder visual until approved copy/assets exist; CTA label is `Learn more`; CTA routes to `/request-access` until a final UDRI destination is approved; ad is labeled as a house ad/sponsor module without implying a paid campaign; Pathfinder CTA uses CEO-provided image and copy `Find the landing site`, `Pathfinder`, and `An impact-emplaced lunar sensor that survives hard landing independent of a lander and finds the best landing sites.` with route `/pathfinder/inquire`; Source CTA uses CEO-provided image and copy `Deliver data for building`, `Source`, and `A persistent lunar garage and rover designed for at least one year of operation to fully characterize the site in preparation for construction.` with route `/source/inquire`; no social links or launch-pending social modules render.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 096 for managed assets and Task 104 for inquiry forms.
-
-- [ ] Task 098: Remove public social links, social metadata, and launch-pending channel modules
-  - Priority: P0
-  - Goal: Ensure no social placeholders remain on the MVP site.
-  - Acceptance criteria: Header, footer, sponsor modules, channel modules, JSON-LD `sameAs`, metadata, sitemap references, and any social-card placeholders are removed or disabled unless explicitly approved; no Substack, podcast, LinkedIn, X, or other social link renders publicly; tests confirm no launch-pending social copy remains.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: None.
-
-- [ ] Task 099: Add source, citation, gating, and no-placeholder QA release checks
-  - Priority: P0
-  - Goal: Prevent the homepage, carousel, tracker, and award modules from shipping with placeholders or leaked gated data.
-  - Acceptance criteria: Release checks scan public/member routes for placeholder tokens, wrong tier names/prices, missing or inconsistent Meridian labeling, missing Resend Free server-side email routing to/from `info@potomacdb.com`, missing free-plan quota enforcement, accidental paid Resend plan/pay-as-you-go/dedicated-IP/paid-add-on/marketing-broadcast usage, social placeholders, missing citations, missing source freshness, missing value-basis labels, leaked gated estimates, email-unverified or profile-incomplete content leakage, missing expiration metadata, expired promotional content still rendering, broken CTA destinations, broken source links, brand-split violations, auth/profile/upgrade routing errors, accidental Meridian Stripe, online checkout, self-serve invoice, public payment, `mailto:` workflow, or payment-provider placeholder, missing Meridian business-email denylist validation, accessibility regressions, and mobile overflow; checks fail CI/build or produce a clear blocked task note; QA docs explain how editors resolve each blocker.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on route/test infrastructure and module implementations.
-
-- [ ] Task 100: Add production content import and release-blocking workflow
-  - Priority: P0
-  - Goal: Ensure Codex does not invent final site content and knows when to block.
-  - Acceptance criteria: Importer accepts only reviewed CMS stories, carousel slides, tracker rows, UDRI/Pathfinder/Source CTAs, `/request-access` auth fixture copy, `/upgrade` fixture copy, `/account/profile/complete` profile fixture copy, and contract-award rows that include approver, approval timestamp, citations, source registry IDs, expiration metadata, and asset references; importer rejects missing final content, missing citations, unapproved sources, unreviewed images, and placeholder copy; dashboard shows import status and blockers.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 082-099 and final reviewed content from an editor/admin.
-
-- [ ] Task 101: Verify production deployment on the current Cloudflare URL
-  - Priority: P0
-  - Goal: Prove the live site reflects the new carousel, tracker, auth, upgrade, profile, and no-placeholder requirements.
-  - Acceptance criteria: Production Cloudflare URL renders Cabeus Explorer public branding, rotating carousel, latest reviewed story teasers, `/request-access` Sign In / Sign Up path with Sign Up selected by default, `/upgrade` premium path, `/account/profile/complete` profile-completion path, UDRI house ad, Pathfinder/Source CTAs, no social links, no placeholder tokens, correct tier copy, no Meridian Stripe, online checkout, self-serve invoice, public payment, `mailto:`, or payment-provider placeholder, Meridian business-email denylist validation, Resend Free server-side email routing to/from `info@potomacdb.com`, Resend Free-plan configuration and quota-governor behavior, graceful queued/delayed states when the mock quota is exhausted, Launches Tracked handoff, `/tracker/launches` email/profile gate, weekly tracker data or no-launch state, New Contract Awards module, and no gated estimate leakage; verification includes desktop/mobile screenshots, route status, console logs, structured data, source links, CTA destinations, auth/profile/upgrade redirects, quota-state smoke tests, and rollback notes.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on deploy access, production build, source data, and reviewed content.
-
-- [ ] Task 102: Run regression suite for homepage, auth, profile, tracker, and gated-intelligence changes
-  - Priority: P0
-  - Goal: Ensure new homepage/tracker/auth/profile changes do not regress existing terminal features.
-  - Acceptance criteria: `npm run lint`, `npm test`, `npm run build`, `npm run build:next`, available E2E tests, local Supabase migration checks where practical, no-placeholder scans, auth/profile/upgrade routing tests, email-verification tests, profile-completion tests, carousel tests, tracker tests, CTA tests, Resend Free-plan quota-governor tests, mocked `daily_quota_exceeded`/`monthly_quota_exceeded`/`rate_limit_exceeded` tests, and mobile overflow checks pass or document exact blockers; remaining production/live Supabase gaps are captured as blocked reasons rather than marked complete.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 081-101.
-
-- [ ] Task 103: Prepare release-readiness checklist for operational launch
-  - Priority: P0
-  - Goal: Give Codex and editors a final checklist before considering the website operational.
-  - Acceptance criteria: Production checklist confirms approved content owner, one editor/admin approver, reviewed CMS stories, carousel slides, tracker data or no-launch state, New Contract Awards data or reviewed empty state, UDRI/Pathfinder/Source CTA assets, `/request-access`, `/upgrade`, and `/account/profile/complete` routes, source registry entries, expiration metadata, Supabase Storage assets, email-verification behavior, profile-completion behavior, premium upgrade routing, member gates, Scout checkout configuration, Meridian server-side inquiry path with simple personal-domain denylist validation, Resend Free-plan account configuration, Free-plan quota governor, queue/defer behavior, admin usage/queue view, Resend email delivery to/from `info@potomacdb.com`, and no Stripe, online checkout, self-serve invoice, public payment, `mailto:` workflow, payment-provider placeholder, paid Resend plan, or overage configuration, analytics events, no social links, no placeholders, rollback commit, and post-deploy smoke tests.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 081-102.
-
-- [ ] Task 104: Build strategic CTA inquiry forms and auth handoff
-  - Priority: P0
-  - Goal: Route strategic product interest and account access through the correct paths.
-  - Acceptance criteria: `/pathfinder/inquire` and `/source/inquire` render product-specific inquiry forms using approved Pathfinder/Source visual language; forms capture name, email, organization, role/title, product interest, message, CTA source, consent/communication preference, and attribution; submissions write to Supabase with staff review status, source CTA metadata, notification/audit hooks, and server-side Resend Free delivery using `info@potomacdb.com` as the default sender/from and destination, with quota preflight and queued/delayed handling; UDRI `Learn more` and generic account access CTAs route to `/request-access`; `/request-access` opens on the Sign Up tab, defaults Sign Up to free Explorer, allows any verified email domain for Explorer, and hands off to email verification and profile completion before member content becomes visible.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Supabase form table or lead schema and final CTA imagery from Task 096.
-
-- [ ] Task 105: Add personalization account controls and fallback homepage logic
-  - Priority: P1
-  - Goal: Let users disable behavior-based content ranking without disabling analytics or engagement collection.
-  - Acceptance criteria: Account settings include a personalization toggle that controls homepage/custom-card ranking only; disabled users receive latest reviewed stories, required editor/admin picks, paid-article teaser priority for Explorer users, and non-personalized tier cards; sufficient-history threshold is at least 5 qualifying events by default; personalization only applies to verified/profile-complete users; analytics and logs record the preference without using disabled users' behavior for ranking; tests cover enabled, disabled, no-history, sufficient-history, anonymous, unverified, profile-incomplete, Explorer, Scout, and Meridian/internal Command states.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 086 telemetry model and existing account settings route.
-
-- [ ] Task 106: Normalize Launches & Missions access and navigation labels
-  - Priority: P0
-  - Goal: Ensure the broader launch tracker is available to any verified/profile-complete authenticated account and consistently labeled in member navigation.
-  - Acceptance criteria: `/tracker/launches` blocks anonymous, unverified signed-in, and profile-incomplete users from member content but allows any authenticated account with verified email and completed profile to load the app shell; approved Explorer status is not required for basic tracker access; Scout/Command-only estimate values and methodology remain gated; member dashboard, account navigation, command palette, search results, breadcrumbs, and route metadata use the exact label `Launches & Missions`; the homepage metric can remain labeled `Launches Tracked`; tests cover anonymous redirect/gate, unverified authenticated verification prompt, profile-incomplete completion prompt, generic verified/profile-complete authenticated access, Explorer access, Scout/Command estimate unlock, and public-safe teaser behavior.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 087-092 and live role-user testing from Task 077 for full verification.
-
-- [ ] Task 107: Enforce email-verification and profile-completion gates for member and non-public content
-  - Priority: P0
-  - Goal: Make verified email and completed profile the first gates before member-only content or signed-in intelligence app shells become visible.
-  - Acceptance criteria: Shared auth/access helpers check Supabase email verification and profile completion before rendering member dashboards, `/tracker/launches`, full article bodies, paid intelligence, community/chat/forums/RFQ surfaces, saved work, alerts, uploads, admin dashboards, gated estimates, checkout, and personalized cards; email-unverified users see a verification-required state with resend/check-email guidance and public-safe CTAs; profile-incomplete users see a profile-completion-required state with `/account/profile/complete` CTA; public pages, `/request-access`, callback, logout, password recovery, account verification help, profile-completion help, and upgrade explainers remain accessible; route metadata, command palette, search results, server actions, API handlers, and RLS-facing helpers do not leak member content to email-unverified or profile-incomplete users; tests cover anonymous, email-unverified, profile-incomplete, verified/profile-complete generic authenticated, Explorer, Scout, Meridian/internal Command, staff, and admin cases.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Live verification depends on Supabase Auth configuration and seeded email/profile test users from Task 077; fixture-based tests can proceed earlier.
-
-- [ ] Task 108: Build email-verification UX, resend flow, and profile-completion handoff
-  - Priority: P0
-  - Goal: Make the verified-email requirement operational instead of a dead-end access gate.
-  - Acceptance criteria: Public-safe verification-required screens exist for member dashboards, `/tracker/launches`, full article bodies, paid intelligence, community/chat/forums/RFQ surfaces, saved work, alerts, uploads, admin dashboards, checkout, personalized cards, and gated estimates; screens explain that email verification is required before member content is visible; users can request a verification email resend with rate limiting, audit logging, and clear success/error states; verified users with incomplete profiles route to `/account/profile/complete`; `/request-access`, callback, password-recovery, account verification help, profile-completion flow, and `/upgrade` flows route users back to the intended destination after verification/profile completion; unverified users never receive member data in route metadata, command palette, search results, server actions, API handlers, or prefetched payloads; tests cover anonymous, unverified authenticated, newly verified, profile-incomplete, profile-complete, expired/invalid verification links, resend throttling, and post-verification return routing.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 107 shared gate and Supabase Auth email-verification configuration; fixture-based UI tests can proceed earlier.
-
-- [ ] Task 109: Enforce required scheduled auto-expiration for carousel, CTA, house-ad, and promotional content
-  - Priority: P0
-  - Goal: Ensure required expiration dates are enforced consistently, not only captured in admin forms.
-  - Acceptance criteria: Admin publishing actions block carousel slides, UDRI house ads, Pathfinder CTAs, Source CTAs, weekly tracker promotional modules, and public promotional content when required `expires_at` metadata is missing; default expiration windows are 14 days for carousel slides, 30 days for CTAs and house ads, and 7 days for weekly tracker promotional modules; render loaders suppress expired content even if a status flag was not updated; scheduled maintenance auto-unpublishes eligible content silently and records audit events without MVP admin alerts; release checks fail when expired promotional content still renders, required expiration metadata is missing, or default windows are exceeded without an exception.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 082 dashboard fields and Task 083/097 content schemas.
-
-- [ ] Task 110: Build `/request-access` Sign In / Sign Up auth page with free Explorer default
-  - Priority: P0
-  - Goal: Replace scattered account CTAs with one clear auth gateway that defaults new users into free Explorer membership.
-  - Acceptance criteria: `/request-access` renders a Cabeus Explorer Sign In / Sign Up page; the Sign Up tab is open by default for direct visits, account-required CTAs, UDRI `Learn more`, and signup-oriented CTAs; the free Explorer membership path is preselected; Explorer signup allows any verified email domain; Sign In remains available as a secondary tab; Sign In and Sign Up preserve return URL, source CTA, campaign attribution, required tier, and clicked-content context; Supabase signup/login/callback/logout/password recovery remain compatible; existing `/apply`, `/login`, and `/signup` routes redirect or canonicalize into `/request-access` unless needed for legacy callbacks; successful signup creates or requests the free Explorer membership record according to the current approval model, sends email verification, and then shows the verification-required state from Task 108; verified users with incomplete profiles route to `/account/profile/complete`; verified/profile-complete users return to the originally requested non-premium content; anonymous premium intent authenticates first, completes email verification/profile completion as needed, and then forwards to `/upgrade`; tests cover anonymous account-required CTA, direct sign-in, direct sign-up, default open Sign Up tab, Explorer default selection, personal/free email acceptance for Explorer, email-verification handoff, profile-completion handoff, callback return routing, password recovery compatibility, UDRI routing, premium-intent retention, and legacy route redirects.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Supabase Auth configuration for full live verification; fixture-based routing and UI tests can proceed earlier.
-
-- [ ] Task 111: Build premium upgrade page and gated-content routing for Scout and Meridian
-  - Priority: P0
-  - Goal: Send premium content clicks to the correct upgrade path: Scout self-serve Stripe and Meridian server-side contract-discussion form.
-  - Acceptance criteria: `/upgrade` accepts required tier, source content type, source object ID or slug, return URL, source CTA, and campaign/source metadata; premium-gated articles, datasets, tools, tracker estimates, exports, API features, advanced alerts, paid carousel teasers, and Meridian-only cards route to `/upgrade`; anonymous premium clicks first collect authentication through `/request-access`, complete email verification/profile completion as needed, and then return to `/upgrade`; email-unverified users see verification before Scout checkout or gated member content; profile-incomplete users complete `/account/profile/complete` before Scout checkout or before returning to gated content; email-verified/profile-complete Explorer or non-entitled users see Scout Stripe checkout for Scout upgrades; Meridian shows no Stripe, online checkout, self-serve invoice, public payment, `mailto:`, or payment-provider placeholder; Meridian requires a business or organization email, uses a configurable simple personal-domain denylist, rejects or asks users to replace consumer/personal email domains, collects contract-discussion intent, submits through a server-side form, sends email through Resend Free to and from `info@potomacdb.com`, uses the submitter's validated business email as Reply-To when available, checks quota before send, creates a staff-reviewable enterprise lead/audit record, stores the Resend provider message ID or queued/quota-held status when available, and tells the user Cabeus Explorer will follow up for contract discussions; Scout users see Meridian upgrade only when appropriate; already-entitled Command users are routed to the originally clicked content; Meridian copy clearly maps to the backend Command entitlement and does not create a fourth tier; failures, pending enterprise approval, missing contact-email configuration, missing Resend email transport configuration, free-plan quota holds, and email-delivery failures show operational messaging rather than placeholders; analytics track premium click source, upgrade impression, Scout checkout start, Scout checkout success, Scout checkout failure, Meridian contract-discussion start, Meridian lead submission, Meridian email sent/failed/queued, and return-to-content; tests cover anonymous premium click, email-unverified account, profile-incomplete account, Explorer to Scout, Explorer to Meridian, Scout attempting Meridian, already-entitled user, personal email rejected for Meridian, business email accepted for Meridian, missing contact email, missing Resend configuration, Resend Free quota hold, Resend server-side email payload to/from `info@potomacdb.com`, Reply-To behavior, lead/audit record creation, and gated estimate non-leakage.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Live Scout payment verification depends on Stripe configuration. Resend Free is approved for Meridian live email, but verification still depends on Resend verification for the `potomacdb.com` domain and `info@potomacdb.com` sender, DNS configuration, the `RESEND_API_KEY` runtime secret, quota-usage storage, and seeded business-email test users. Contact inbox and sender/from address are approved as `info@potomacdb.com`. UI/routing, business-email validation, no-checkout, mock-email, Reply-To behavior, quota-hold behavior, and non-leakage tests can proceed earlier.
-
-- [ ] Task 112: Build profile completion flow and profile-complete gate
-  - Priority: P0
-  - Goal: Require an operational user profile before any member content, tracker app shell, checkout, or personalized intelligence becomes visible.
-  - Acceptance criteria: `/account/profile/complete` collects full name, organization or affiliation, role/title, country, timezone, primary interest areas, and communication preference; phone, budget range, procurement timeline, and use-case detail remain optional unless triggered by an inquiry or sales workflow; Explorer profile completion does not reject personal/free email domains when the email is verified; Meridian upgrade or inquiry intent requires business/organization email validation through the simple personal-domain denylist handled by the upgrade/inquiry workflow; route preserves return URL, premium intent, source CTA, and campaign attribution; successful save marks the profile complete in normalized profile data or trusted app metadata, not user-editable metadata; shared helpers redirect profile-incomplete users away from member dashboards, `/tracker/launches`, full article bodies, paid intelligence, community/chat/forums/RFQ surfaces, saved work, alerts, uploads, admin dashboards, checkout, personalized cards, API/export features, and gated estimates; `/request-access`, callback, logout, password recovery, verification-required screens, profile-completion help, and public teaser pages remain accessible; tests cover profile-incomplete account, completed profile, partial save validation, Explorer with personal email accepted, return-to-content, return-to-upgrade, timezone defaulting, preference storage, and non-leakage in metadata/search/API/prefetch payloads.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on member profile schema from Task 007 and Supabase Auth test users from Task 077 for live verification; fixture-based UI and helper tests can proceed earlier.
-
-- [ ] Task 113: Build Meridian enterprise server-side inquiry form and business-email validation
-  - Priority: P0
-  - Goal: Make the Meridian enterprise path operational without Stripe, public payment, `mailto:`, or placeholder payment workflows.
-  - Acceptance criteria: Meridian CTAs from `/upgrade`, premium teasers, Meridian-only cards, pricing surfaces, and gated enterprise features never render Stripe checkout, posted pricing, invoice checkout, online checkout, public payment, public price, `mailto:` fallback, or generic payment placeholders; the path requires signed-in, email-verified, profile-complete users before enterprise contact actions; Explorer signup still allows any verified email domain; Meridian contact requires a business or organization email using a configurable simple personal-domain denylist, staff override, and audit logging; server-side email uses Resend Free with `info@potomacdb.com` as both destination and sender/from address with the submitter's validated business email as Reply-To when available; the MVP denylist includes common consumer domains such as `gmail.com`, `googlemail.com`, `yahoo.com`, `outlook.com`, `hotmail.com`, `live.com`, `msn.com`, `icloud.com`, `me.com`, `aol.com`, `proton.me`, `protonmail.com`, `pm.me`, `fastmail.com`, and `hey.com`; submissions capture user ID, verified auth email, business email, organization, role/title, requested product label `Meridian`, source CTA, source content, return URL, message, attribution, and consent/communication preference; the contact action is a submitted form handled server-side that sends server-side email through Resend Free to and from `info@potomacdb.com` for contract discussions after a quota preflight, stores the Resend provider message ID when returned or queued/quota-held state when relevant, and records a staff-reviewable Supabase lead/audit record where schema is available; missing Resend configuration or missing free-plan quota enforcement blocks release and shows admin-facing configuration messaging, not public placeholder copy; successful submission tells the user Cabeus Explorer will follow up by email for contract discussions and never grants entitlement automatically; backend entitlement remains internal `Command` and can only be activated manually by authorized staff after contract approval; tests cover Explorer personal-email allowance, Meridian personal-email block, Meridian business-email success, simple denylist configuration, staff override/audit, missing Resend configuration, Resend Free quota-hold behavior, Resend server-side email payload addressed to/from `info@potomacdb.com`, Reply-To behavior, no `mailto:` workflow, lead/audit record creation, duplicate submissions, analytics, no payment UI leakage, and backend Command entitlement mapping.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: The enterprise contact inbox and sender/from address are approved as `info@potomacdb.com`, and Resend Free is approved as the server-side email provider. Live production verification still requires Resend verification for the `potomacdb.com` domain and `info@potomacdb.com` sender, DNS configuration, the `RESEND_API_KEY` runtime secret, quota-usage storage, and seeded business-email test users. Fixture-based validation, routing, lead/audit, server-side payload, denylist, Reply-To behavior, quota-hold behavior, and no-payment tests can proceed earlier.
-
-- [ ] Task 114: Add configurable enterprise product naming with Meridian as the current public label
-  - Priority: P0
+  - Requirement IDs: R-TIER-001, R-UPGRADE-002
+  - Supersedes: Task 053
+  - Superseded by: None.
   - Goal: Refer to the public enterprise product as Meridian for now while preserving the backend Command entitlement and leaving room to finalize the name later.
   - Acceptance criteria: Public enterprise display name can be configured as `Meridian` or `Command` from a single config/CMS source; default is `Meridian`; backend role, entitlement, RLS, analytics tier, API scopes, and admin workflows continue to use internal `command` identifiers; sitemap, metadata, pricing, upgrade, carousel teasers, gated messages, dashboard copy, and QA scans use the configured display label consistently; tests confirm no accidental fourth tier, no public slash-labeling, no mixed `Command`/`Meridian` labeling beyond the configured display string, and no broken entitlement mapping.
   - Non-technical summary: Pending.
   - Verification: Not run yet.
   - Blocked reason: None.
 
-- [ ] Task 115: Add Meridian enterprise release QA and Resend email-delivery smoke tests
+- [ ] Task 079: Build `/request-access` Sign In / Sign Up auth page with free Explorer default
   - Priority: P0
-  - Goal: Prevent public enterprise label, payment, and email-routing regressions before deployment.
-  - Acceptance criteria: Automated and manual QA scan public/member/admin routes for the public label `Meridian`, absence of slash-label public enterprise copy, absence of Meridian Stripe/checkout/invoice/payment-provider/`mailto:` leakage, correct `/upgrade` routing, simple personal-domain denylist behavior, business-email acceptance, Resend Free server-side email payload addressed to/from `info@potomacdb.com`, Reply-To behavior, provider message-id logging, lead/audit record creation, backend Command entitlement mapping, no automatic entitlement grant, no paid Resend plan/pay-as-you-go/dedicated-IP/paid-add-on/marketing-broadcast usage, quota preflight behavior, and graceful quota-hold copy; production smoke test confirms failed Resend configuration or quota configuration blocks release with admin-facing messaging rather than public placeholders.
+  - Requirement IDs: R-AUTH-002, R-TIER-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Replace scattered account CTAs with one clear auth gateway that defaults new users into free Explorer membership.
+  - Acceptance criteria: `/request-access` renders a Cabeus Explorer Sign In / Sign Up page; the Sign Up tab is open by default for direct visits, account-required CTAs, UDRI `Learn more`, and signup-oriented CTAs; the free Explorer membership path is preselected; Explorer signup allows any verified email domain; Sign In remains available as a secondary tab; Sign In and Sign Up preserve return URL, source CTA, campaign attribution, required tier, and clicked-content context; Supabase signup/login/callback/logout/password recovery remain compatible; existing `/apply`, `/login`, and `/signup` routes redirect or canonicalize into `/request-access` unless needed for legacy callbacks; successful signup creates or requests the free Explorer membership record according to the current approval model, sends email verification, and then shows the verification-required state from Task 082; verified users with incomplete profiles route to `/account/profile/complete`; verified/profile-complete users return to the originally requested non-premium content; anonymous premium intent authenticates first, completes email verification/profile completion as needed, and then forwards to `/upgrade`; tests cover anonymous account-required CTA, direct sign-in, direct sign-up, default open Sign Up tab, Explorer default selection, personal/free email acceptance for Explorer, email-verification handoff, profile-completion handoff, callback return routing, password recovery compatibility, UDRI routing, premium-intent retention, and legacy route redirects.
   - Non-technical summary: Pending.
   - Verification: Not run yet.
-  - Blocked reason: Live email-send verification depends on Resend verification for the `potomacdb.com` domain and `info@potomacdb.com` sender, DNS configuration, the `RESEND_API_KEY` runtime secret, and quota-usage storage; label/payment/routing/denylist/sender-payload/mock-Resend/free-plan quota tests can proceed earlier.
+  - Blocked reason: Depends on Supabase Auth configuration for full live verification; fixture-based routing and UI tests can proceed earlier.
 
-- [ ] Task 116: Configure Resend Free production server-side email transport for forms and alerts
+- [ ] Task 080: Build profile completion flow and profile-complete gate
   - Priority: P0
+  - Requirement IDs: R-AUTH-001, R-AUTH-003
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Require an operational user profile before any member content, tracker app shell, checkout, or personalized intelligence becomes visible.
+  - Acceptance criteria: `/account/profile/complete` collects full name, organization or affiliation, role/title, country, timezone, primary interest areas, and communication preference; phone, budget range, procurement timeline, and use-case detail remain optional unless triggered by an inquiry or sales workflow; Explorer profile completion does not reject personal/free email domains when the email is verified; Meridian upgrade or inquiry intent requires business/organization email validation through the simple personal-domain denylist handled by the upgrade/inquiry workflow; route preserves return URL, premium intent, source CTA, and campaign attribution; successful save marks the profile complete in normalized profile data or trusted app metadata, not user-editable metadata; shared helpers redirect profile-incomplete users away from member dashboards, `/tracker/launches`, full article bodies, paid intelligence, community/chat/forums/RFQ surfaces, saved work, alerts, uploads, admin dashboards, checkout, personalized cards, API/export features, and gated estimates; `/request-access`, callback, logout, password recovery, verification-required screens, profile-completion help, and public teaser pages remain accessible; tests cover profile-incomplete account, completed profile, partial save validation, Explorer with personal email accepted, return-to-content, return-to-upgrade, timezone defaulting, preference storage, and non-leakage in metadata/search/API/prefetch payloads.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on member profile schema from Task 007 and Supabase Auth test users from Task 108 for live verification; fixture-based UI and helper tests can proceed earlier.
+
+- [ ] Task 081: Enforce email-verification and profile-completion gates for member and non-public content
+  - Priority: P0
+  - Requirement IDs: R-AUTH-001, R-AUTH-003
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Make verified email and completed profile the first gates before member-only content or signed-in intelligence app shells become visible.
+  - Acceptance criteria: Shared auth/access helpers check Supabase email verification and profile completion before rendering member dashboards, `/tracker/launches`, full article bodies, paid intelligence, community/chat/forums/RFQ surfaces, saved work, alerts, uploads, admin dashboards, gated estimates, checkout, and personalized cards; email-unverified users see a verification-required state with resend/check-email guidance and public-safe CTAs; profile-incomplete users see a profile-completion-required state with `/account/profile/complete` CTA; public pages, `/request-access`, callback, logout, password recovery, account verification help, profile-completion help, and upgrade explainers remain accessible; route metadata, command palette, search results, server actions, API handlers, and RLS-facing helpers do not leak member content to email-unverified or profile-incomplete users; tests cover anonymous, email-unverified, profile-incomplete, verified/profile-complete generic authenticated, Explorer, Scout, Meridian/internal Command, staff, and admin cases.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Live verification depends on Supabase Auth configuration and seeded email/profile test users from Task 108; fixture-based tests can proceed earlier.
+
+- [ ] Task 082: Build email-verification UX, resend flow, and profile-completion handoff
+  - Priority: P0
+  - Requirement IDs: R-AUTH-001, R-AUTH-002
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Make the verified-email requirement operational instead of a dead-end access gate.
+  - Acceptance criteria: Public-safe verification-required screens exist for member dashboards, `/tracker/launches`, full article bodies, paid intelligence, community/chat/forums/RFQ surfaces, saved work, alerts, uploads, admin dashboards, checkout, personalized cards, and gated estimates; screens explain that email verification is required before member content is visible; users can request a verification email resend with rate limiting, audit logging, and clear success/error states; verified users with incomplete profiles route to `/account/profile/complete`; `/request-access`, callback, password-recovery, account verification help, profile-completion flow, and `/upgrade` flows route users back to the intended destination after verification/profile completion; unverified users never receive member data in route metadata, command palette, search results, server actions, API handlers, or prefetched payloads; tests cover anonymous, unverified authenticated, newly verified, profile-incomplete, profile-complete, expired/invalid verification links, resend throttling, and post-verification return routing.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Task 081 shared gate and Supabase Auth email-verification configuration; fixture-based UI tests can proceed earlier.
+
+- [ ] Task 083: Configure Resend Free production server-side email transport for forms and alerts
+  - Priority: P0
+  - Requirement IDs: R-EMAIL-001, R-EMAIL-002, R-INQUIRY-002
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Give Meridian, Pathfinder, Source, UDRI fallback, alerts, and operational inquiry forms a real Resend Free-backed server-side email path instead of client-side links, paid-provider leakage, or placeholders.
   - Acceptance criteria: Resend Free is configured through a server-only email adapter with runtime secrets kept out of the repo; `RESEND_API_KEY` or an explicitly documented equivalent runtime binding is required for production; no paid Resend plan, pay-as-you-go overage, dedicated IP, paid add-on, extra sending domain, marketing broadcast, or paid automation dependency is enabled unless a future CEO-approved config explicitly changes the plan; `info@potomacdb.com` is the approved sender/from address and Meridian destination inbox; Reply-To uses the submitter's validated email when available and falls back to `info@potomacdb.com`; Pathfinder, Source, UDRI fallback, alerts, and operational inquiry destinations are configurable without code changes, with `info@potomacdb.com` as the default destination until specific inboxes are approved; form submissions store Supabase lead/audit records before email send where schema exists; sent messages store provider `resend`, provider message ID when returned, sender, recipient, recipient count, Reply-To, template/form type, related user/lead IDs, send status, retry status, quota bucket, and failure reason where available; failures and quota holds are logged, shown as operational errors or queued/delayed states, and never marked as successful public submissions unless the lead/audit and send/queue state are accurate; spam/rate-limit controls and free-plan quota controls are applied; tests use a mock Resend adapter and cover success, Resend provider failure, missing `RESEND_API_KEY`, duplicate submission, destination/from/reply-to behavior, provider message-id logging, quota preflight, soft-cap hold, hard-cap block, daily/monthly reset behavior, audit logging, and no secret leakage; production release blocks if Resend verification for the `potomacdb.com` domain and `info@potomacdb.com` sender, DNS configuration, destination email, required runtime secrets, or free-plan quota configuration are missing.
   - Non-technical summary: Pending.
   - Verification: Not run yet.
   - Blocked reason: Resend Free is approved as the production email provider and `info@potomacdb.com` is approved as the sender/from and default destination. Live verification still requires Resend verification for the `potomacdb.com` domain and `info@potomacdb.com` sender, DNS configuration, adding the `RESEND_API_KEY` runtime secret, quota-usage storage, and approving final Pathfinder/Source destination inboxes if they differ from the default. Mock-Resend implementation and free-plan quota tests can proceed earlier.
 
-- [ ] Task 117: Implement Resend Free-plan quota governor and graceful degradation
+- [ ] Task 084: Implement Resend Free-plan quota governor and graceful degradation
   - Priority: P0
+  - Requirement IDs: R-EMAIL-003, R-EMAIL-004
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Keep all app-controlled Resend usage within the Free-plan budget while preserving a reliable user experience for inquiries and alerts.
   - Acceptance criteria: Add a server-side quota governor for Resend with configurable Free-plan defaults of 90-email/day and 2,700-email/month soft caps, 100 transactional emails/day and 3,000 transactional emails/month hard caps, one sending domain, 30-day provider retention assumptions, an operational reserve of at least 10 emails/day and 300 emails/month for enterprise/inquiry/form messages, and a conservative internal send-rate cap below Resend's default 10 requests/second/team API rate limit; count every recipient in `To`, `CC`, and `BCC` separately; avoid CC/BCC for operational forms unless explicitly approved; disable inbound Resend receiving unless explicitly approved because received messages count against the quota; reserve configurable daily capacity for high-priority Meridian, Pathfinder, Source, UDRI, and operational inquiry submissions; treat alert emails and digest emails as lower priority; persist leads/audit records before attempting email; queue or mark email-delayed records when quota is exhausted; continue in-app alerts when email is paused; batch/digest lower-priority alerts where practical; suppress duplicate sends; capture and persist Resend response headers such as `x-resend-daily-quota`, `x-resend-monthly-quota`, `ratelimit-limit`, `ratelimit-remaining`, `ratelimit-reset`, and `retry-after` when available; handle Resend `daily_quota_exceeded`, `monthly_quota_exceeded`, and `rate_limit_exceeded` responses with backoff and queued retry rather than public failures; expose an admin-only usage and email queue dashboard with daily/monthly usage, remaining budget, reserved capacity, queued messages, failed sends, retry timing, reset windows, and provider message IDs; make public form success states say the request was received even when email is queued, without exposing internal quota details; ensure release checks fail if configuration implies a paid Resend plan, pay-as-you-go overages, dedicated IP add-ons, paid automation overages, marketing broadcasts, extra domains, unbounded retries, missing quota counters, or public quota-error leakage; tests cover normal send, recipient-count accounting, quota-reserved send, low-budget alert downgrade, quota-exhausted form submission, queued retry, duplicate suppression, Resend 429 responses, missing headers, admin usage view, and no paid-plan leakage.
   - Non-technical summary: Pending.
   - Verification: Not run yet.
   - Blocked reason: Live verification requires Resend Free-plan account access, verified domain/sender, `RESEND_API_KEY`, and representative production usage data. Schema, adapter, mock provider, queue, admin dashboard, and automated tests can proceed earlier.
 
-- [ ] Task 118: Make member alert email digest-first under Resend Free limits
+- [ ] Task 085: Build Meridian enterprise server-side inquiry form and business-email validation
+  - Priority: P0
+  - Requirement IDs: R-UPGRADE-002, R-UPGRADE-003, R-AUTH-004, R-INQUIRY-002, R-EMAIL-001, R-EMAIL-002
+  - Supersedes: Task 013
+  - Superseded by: None.
+  - Goal: Make the Meridian enterprise path operational without Stripe, public payment, `mailto:`, or placeholder payment workflows.
+  - Acceptance criteria: Meridian CTAs from `/upgrade`, premium teasers, Meridian-only cards, pricing surfaces, and gated enterprise features never render Stripe checkout, posted pricing, invoice checkout, online checkout, public payment, public price, `mailto:` fallback, or generic payment placeholders; the path requires signed-in, email-verified, profile-complete users before enterprise contact actions; Explorer signup still allows any verified email domain; Meridian contact requires a business or organization email using a configurable simple personal-domain denylist, staff override, and audit logging; server-side email uses Resend Free with `info@potomacdb.com` as both destination and sender/from address with the submitter's validated business email as Reply-To when available; the MVP denylist includes common consumer domains such as `gmail.com`, `googlemail.com`, `yahoo.com`, `outlook.com`, `hotmail.com`, `live.com`, `msn.com`, `icloud.com`, `me.com`, `aol.com`, `proton.me`, `protonmail.com`, `pm.me`, `fastmail.com`, and `hey.com`; submissions capture user ID, verified auth email, business email, organization, role/title, requested product label `Meridian`, source CTA, source content, return URL, message, attribution, and consent/communication preference; the contact action is a submitted form handled server-side that sends server-side email through Resend Free to and from `info@potomacdb.com` for contract discussions after a quota preflight, stores the Resend provider message ID when returned or queued/quota-held state when relevant, and records a staff-reviewable Supabase lead/audit record where schema is available; missing Resend configuration or missing free-plan quota enforcement blocks release and shows admin-facing configuration messaging, not public placeholder copy; successful submission tells the user Cabeus Explorer will follow up by email for contract discussions and never grants entitlement automatically; backend entitlement remains internal `Command` and can only be activated manually by authorized staff after contract approval; tests cover Explorer personal-email allowance, Meridian personal-email block, Meridian business-email success, simple denylist configuration, staff override/audit, missing Resend configuration, Resend Free quota-hold behavior, Resend server-side email payload addressed to/from `info@potomacdb.com`, Reply-To behavior, no `mailto:` workflow, lead/audit record creation, duplicate submissions, analytics, no payment UI leakage, and backend Command entitlement mapping.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: The enterprise contact inbox and sender/from address are approved as `info@potomacdb.com`, and Resend Free is approved as the server-side email provider. Live production verification still requires Resend verification for the `potomacdb.com` domain and `info@potomacdb.com` sender, DNS configuration, the `RESEND_API_KEY` runtime secret, quota-usage storage, and seeded business-email test users. Fixture-based validation, routing, lead/audit, server-side payload, denylist, Reply-To behavior, quota-hold behavior, and no-payment tests can proceed earlier.
+
+- [ ] Task 086: Build premium upgrade page and gated-content routing for Scout and Meridian
+  - Priority: P0
+  - Requirement IDs: R-UPGRADE-001, R-UPGRADE-002, R-UPGRADE-003, R-TIER-001, R-AUTH-001, R-AUTH-004
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Send premium content clicks to the correct upgrade path: Scout self-serve Stripe and Meridian server-side contract-discussion form.
+  - Acceptance criteria: `/upgrade` accepts required tier, source content type, source object ID or slug, return URL, source CTA, and campaign/source metadata; premium-gated articles, datasets, tools, tracker estimates, exports, API features, advanced alerts, paid carousel teasers, and Meridian-only cards route to `/upgrade`; anonymous premium clicks first collect authentication through `/request-access`, complete email verification/profile completion as needed, and then return to `/upgrade`; email-unverified users see verification before Scout checkout or gated member content; profile-incomplete users complete `/account/profile/complete` before Scout checkout or before returning to gated content; email-verified/profile-complete Explorer or non-entitled users see Scout Stripe checkout for Scout upgrades; Meridian shows no Stripe, online checkout, self-serve invoice, public payment, `mailto:`, or payment-provider placeholder; Meridian requires a business or organization email, uses a configurable simple personal-domain denylist, rejects or asks users to replace consumer/personal email domains, collects contract-discussion intent, submits through a server-side form, sends email through Resend Free to and from `info@potomacdb.com`, uses the submitter's validated business email as Reply-To when available, checks quota before send, creates a staff-reviewable enterprise lead/audit record, stores the Resend provider message ID or queued/quota-held status when available, and tells the user Cabeus Explorer will follow up for contract discussions; Scout users see Meridian upgrade only when appropriate; already-entitled Command users are routed to the originally clicked content; Meridian copy clearly maps to the backend Command entitlement and does not create a fourth tier; failures, pending enterprise approval, missing contact-email configuration, missing Resend email transport configuration, free-plan quota holds, and email-delivery failures show operational messaging rather than placeholders; analytics track premium click source, upgrade impression, Scout checkout start, Scout checkout success, Scout checkout failure, Meridian contract-discussion start, Meridian lead submission, Meridian email sent/failed/queued, and return-to-content; tests cover anonymous premium click, email-unverified account, profile-incomplete account, Explorer to Scout, Explorer to Meridian, Scout attempting Meridian, already-entitled user, personal email rejected for Meridian, business email accepted for Meridian, missing contact email, missing Resend configuration, Resend Free quota hold, Resend server-side email payload to/from `info@potomacdb.com`, Reply-To behavior, lead/audit record creation, and gated estimate non-leakage.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Live Scout payment verification depends on Stripe configuration. Resend Free is approved for Meridian live email, but verification still depends on Resend verification for the `potomacdb.com` domain and `info@potomacdb.com` sender, DNS configuration, the `RESEND_API_KEY` runtime secret, quota-usage storage, and seeded business-email test users. Contact inbox and sender/from address are approved as `info@potomacdb.com`. UI/routing, business-email validation, no-checkout, mock-email, Reply-To behavior, quota-hold behavior, and non-leakage tests can proceed earlier.
+
+- [ ] Task 087: Add Supabase Storage asset pipeline for Pathfinder and Source CTA images
+  - Priority: P0
+  - Requirement IDs: R-ADS-001, R-CONTENT-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Store and serve the CEO-provided Pathfinder and Source CTA images safely.
+  - Acceptance criteria: Supabase Storage bucket/folder and admin upload/select controls support Pathfinder and Source CTA images; uploads validate file type, size, dimensions, alt text, attribution/source note, review status, and expiration metadata; existing CEO-provided images are added as reviewed assets or repo fallbacks with stable paths; no generic replacement art appears.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Supabase Storage configuration and the attached assets being available in the repo or upload workflow.
+
+- [ ] Task 088: Build strategic CTA inquiry forms and auth handoff
+  - Priority: P0
+  - Requirement IDs: R-INQUIRY-001, R-INQUIRY-002, R-ADS-001, R-AUTH-002
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Route strategic product interest and account access through the correct paths.
+  - Acceptance criteria: `/pathfinder/inquire` and `/source/inquire` render product-specific inquiry forms using approved Pathfinder/Source visual language; forms capture name, email, organization, role/title, product interest, message, CTA source, consent/communication preference, and attribution; submissions write to Supabase with staff review status, source CTA metadata, notification/audit hooks, and server-side Resend Free delivery using `info@potomacdb.com` as the default sender/from and destination, with quota preflight and queued/delayed handling; UDRI `Learn more` and generic account access CTAs route to `/request-access`; `/request-access` opens on the Sign Up tab, defaults Sign Up to free Explorer, allows any verified email domain for Explorer, and hands off to email verification and profile completion before member content becomes visible.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Supabase form table or lead schema and final CTA imagery from Task 087.
+
+- [ ] Task 089: Replace sponsor/social placeholders with UDRI, Pathfinder, and Source CTA surfaces
+  - Priority: P0
+  - Requirement IDs: R-ADS-001, R-SOCIAL-001, R-HOME-003, R-INQUIRY-001
+  - Supersedes: Former Task 098, Task 020, Task 023, Task 024
+  - Superseded by: None.
+  - Goal: Replace incomplete modules with approved strategic CTAs.
+  - Acceptance criteria: UDRI house ad uses `https://i.ytimg.com/vi/WSLxeLhlth4/maxresdefault.jpg` as the placeholder visual until approved copy/assets exist; CTA label is `Learn more`; CTA routes to `/request-access` until a final UDRI destination is approved; ad is labeled as a house ad/sponsor module without implying a paid campaign; Pathfinder CTA uses CEO-provided image and copy `Find the landing site`, `Pathfinder`, and `An impact-emplaced lunar sensor that survives hard landing independent of a lander and finds the best landing sites.` with route `/pathfinder/inquire`; Source CTA uses CEO-provided image and copy `Deliver data for building`, `Source`, and `A persistent lunar garage and rover designed for at least one year of operation to fully characterize the site in preparation for construction.` with route `/source/inquire`; no social links or launch-pending social modules render.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Task 087 for managed assets and Task 088 for inquiry forms.
+
+- [ ] Task 090: Build admin content submission, approval, and deployment-readiness dashboard
+  - Priority: P0
+  - Requirement IDs: R-CONTENT-001, R-CONTENT-002, R-HOME-002, R-ADS-001, R-CONTRACT-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Provide the operating workflow needed to avoid Codex-authored production placeholders.
+  - Acceptance criteria: Editor/admin dashboard supports submissions for homepage slides, carousel visuals, tracker rows, source citations, house ads, Pathfinder/Source CTAs, space/lunar contract awards, and public empty states; one editor/admin approval is sufficient; Supabase Storage image uploads support validation and alt text; scheduled auto-expiration is required by default with 14-day carousel, 30-day CTA/house-ad, and 7-day weekly tracker promotional defaults; publishing blocks missing citations, assets, destinations, or expiration metadata; Codex cannot mark production content seeding complete by inventing final copy.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: None.
+
+- [ ] Task 091: Enforce required scheduled auto-expiration for carousel, CTA, house-ad, and promotional content
+  - Priority: P0
+  - Requirement IDs: R-CONTENT-002
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Ensure required expiration dates are enforced consistently, not only captured in admin forms.
+  - Acceptance criteria: Admin publishing actions block carousel slides, UDRI house ads, Pathfinder CTAs, Source CTAs, weekly tracker promotional modules, and public promotional content when required `expires_at` metadata is missing; default expiration windows are 14 days for carousel slides, 30 days for CTAs and house ads, and 7 days for weekly tracker promotional modules; render loaders suppress expired content even if a status flag was not updated; scheduled maintenance auto-unpublishes eligible content silently and records audit events without MVP admin alerts; release checks fail when expired promotional content still renders, required expiration metadata is missing, or default windows are exceeded without an exception.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Task 090 dashboard fields and Tasks 089 and 092 content schemas.
+
+- [ ] Task 092: Add homepage top-story carousel schema and editor/admin controls
+  - Priority: P0
+  - Requirement IDs: R-HOME-001, R-HOME-002, R-CONTENT-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Store and manage the hero carousel as editorial inventory rather than a static landing-page block.
+  - Acceptance criteria: Schema supports 3-5 active slides, latest reviewed CMS story auto-selection, editor/admin pinning and ranking, required/optional status, schedule windows, required expiration, audience mode, tier, visual asset, alt text, CTA label/route, citation/source note, freshness timestamp, audit log, and preview state; default public CTA is `Read the brief`; slide types include anonymous teaser, signed-in editorial story, custom intelligence card, and paid-tier teaser; unverified and profile-incomplete users cannot receive member-only slides; any editor/admin can publish, unpublish, reorder, and expire slides.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on existing editorial CMS tables from Tasks 015-016.
+
+- [ ] Task 093: Build rotating homepage hero carousel UI
+  - Priority: P0
+  - Requirement IDs: R-HOME-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Replace the static hero area shown in the screenshot with a production carousel.
+  - Acceptance criteria: Homepage top hero rotates every 8 seconds across 3-5 active slides, has previous/next controls, slide indicators, pause/resume, hover/focus pause, keyboard navigation, touch-safe behavior, reduced-motion fallback, static one-slide fallback, accessible labels, SEO-safe teaser markup, responsive images, no layout shift, and no first-viewport overflow on desktop or mobile.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Task 092 schema/data contract.
+
+- [ ] Task 094: Add engagement telemetry, personalization controls, and custom intelligence card model
   - Priority: P1
+  - Requirement IDs: R-HOME-006, R-WATCH-001, R-TRUST-001
+  - Supersedes: Former Task 105
+  - Superseded by: None.
+  - Goal: Track engagement, store personalization preferences, and support explainable custom intelligence cards without disabling required analytics.
+  - Acceptance criteria: Telemetry records privacy-safe engagement signals for verified/profile-complete signed-in users over a rolling 90-day window, including article reads, searches, saved work, watchlists, tracker rows, company/profile views, alerts, paid articles, datasets, exports, and CTA clicks; resolver produces explainable card reasons; personalization threshold defaults to 5 qualifying events; account preferences disable behavior-based ranking only and do not disable analytics or engagement collection; data model respects organization/privacy boundaries and RLS. Account settings include a personalization toggle that controls homepage/custom-card ranking only; disabled users receive latest reviewed stories, required editor/admin picks, paid-article teaser priority for Explorer users, and non-personalized tier cards; sufficient-history threshold is at least 5 qualifying events by default; personalization only applies to verified/profile-complete users; analytics and logs record the preference without using disabled users' behavior for ranking; tests cover enabled, disabled, no-history, sufficient-history, anonymous, unverified, profile-incomplete, Explorer, Scout, and Meridian/internal Command states.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on account preference storage, telemetry schema, and RLS verification from Task 108. Fixture-based preference and ranking tests can proceed earlier.
+
+- [ ] Task 095: Build membership-aware carousel resolver, teaser logic, and fallback behavior
+  - Priority: P0
+  - Requirement IDs: R-HOME-004, R-HOME-006, R-AUTH-001, R-UPGRADE-001
+  - Supersedes: Former Task 105
+  - Superseded by: None.
+  - Goal: Serve the right carousel mix and fallback logic for anonymous, unverified, profile-incomplete, Explorer, Scout, Meridian/internal Command, and staff users.
+  - Acceptance criteria: Anonymous users see published story teaser slides plus `/request-access` CTAs; unverified signed-in users see public-safe teasers plus email verification prompts; verified/profile-incomplete users see public-safe teasers plus `/account/profile/complete` prompts; verified/profile-complete users see reviewed editorial stories and custom intelligence cards when personalization is enabled; Explorer users see at least one Scout or Meridian teaser when eligible reviewed content exists, with paid articles prioritized first; Scout and internal Command users see paid intelligence/custom cards rather than repetitive upgrade prompts; premium clicks route to `/upgrade`; personalization can override optional editor picks after 5 qualifying 90-day events; disabled personalization falls back to latest reviewed stories, required editor picks, paid-article teaser priority, and non-personalized tier cards; structured data exposes only public teaser content; tests cover anonymous, unverified, profile-incomplete, verified generic, Explorer, Scout, Meridian/internal Command, staff, sufficient-history, insufficient-history, and disabled-personalization states. Disabled personalization falls back to latest reviewed stories, required editor/admin picks, paid-article teaser priority for Explorer users, and non-personalized tier cards; tests cover enabled, disabled, no-history, sufficient-history, anonymous, unverified, profile-incomplete, Explorer, Scout, and Meridian/internal Command states.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Tasks 092-094 and Tasks 080-081 access helpers.
+
+- [ ] Task 096: Add weekly launch and mission tracker schema
+  - Priority: P0
+  - Requirement IDs: R-MISSION-004, R-MISSION-005, R-MISSION-007, R-MISSION-008, R-LUNAR-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Store weekly launch and mission milestone data with source-backed value fields.
+  - Acceptance criteria: Schema supports Monday-Sunday local week windows with UTC fallback, launch/milestone type, launch provider, vehicle, mission, customer/payload, launch site/location, target/orbit/mission location, status, schedule confidence, lunar/cislunar flag, source citations, source registry IDs, last-reviewed timestamp, value state, exact cited value, cited range, analyst estimate, estimate methodology, estimate confidence, gated visibility, reviewer, and audit log.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on source registry trust layer from Task 068.
+
+- [ ] Task 097: Seed launch, mission, and value source registry entries
+  - Priority: P0
+  - Requirement IDs: R-MISSION-006, R-DATAOPS-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Give the tracker approved source entries instead of free-form URLs.
+  - Acceptance criteria: Source registry includes Launch Library 2, official NASA/Space Force/operator/customer pages, Spaceflight Now, Next Spaceflight, procurement/award sources, SEC/company sources where relevant, and official contracting records; each source includes owner, URL, terms/license review status, refresh frequency, parser/job owner, citation requirements, quality score, confidence, and analyst review state; unapproved sources cannot publish tracker rows.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Task 068 source registry schema and legal/license review where required.
+
+- [ ] Task 098: Implement weekly launch and mission ingestion plus review workflow
+  - Priority: P0
+  - Requirement IDs: R-MISSION-006, R-MISSION-009
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Populate the tracker from approved sources without inventing unreviewed data.
+  - Acceptance criteria: Ingestion uses Launch Library 2 where practical, official operator/customer/NASA/Space Force/agency pages for validation, Spaceflight Now/Next Spaceflight cross-checks, and procurement/award/company/SEC/official contracting records for value evidence; de-duplicates launches and milestones; handles slips, scrubs, holds, no-earlier-than dates, status changes, and source conflicts; flags lunar/cislunar relevance; creates draft rows requiring one editor/admin approval except automated source-reviewed `No launches this week` states; stores ingestion run ID, source check timestamp, confidence, and audit events.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: External source calls may be blocked until provider/API access and scheduled-job environment are configured.
+
+- [ ] Task 099: Build weekly launch and mission tracker UI
+  - Priority: P0
+  - Requirement IDs: R-MISSION-004, R-MISSION-008
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Give users an operational weekly view of launches and mission milestones.
+  - Acceptance criteria: `/tracker/launches` renders only for verified/profile-complete signed-in users; anonymous users route to `/request-access`, unverified users to email verification, and profile-incomplete users to `/account/profile/complete`; view defaults to all/global launches for the user's Monday-Sunday local week; one-click lunar/cislunar filter is prominent; cards/table show UTC and local time, provider, vehicle, mission, customer/payload, launch site, target/orbit/location, milestone type, status, value state, citations, confidence, freshness, and review timestamp; empty weeks show the automated source-reviewed `No launches this week` state when applicable; mobile view has no horizontal overflow.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Tasks 096-098 and Tasks 080-081 access helpers.
+
+- [ ] Task 100: Add contract value visibility and estimate-methodology gates
+  - Priority: P0
+  - Requirement IDs: R-MISSION-005, R-UPGRADE-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Prevent premium value estimates from leaking while still showing public cited values where allowed.
+  - Acceptance criteria: Value states are exact cited value, cited range, analyst estimate, and not disclosed; exact cited values/ranges can display publicly only when source license/editorial settings allow; analyst estimates and methodology are visible only to Scout/Command; non-entitled views show `Sign up or Log In for More Details` and route to `/upgrade`; account-required states route through `/request-access`; profile-incomplete users complete `/account/profile/complete` before premium checkout or member content; tests confirm no estimate leakage in HTML, API payloads, metadata, search snippets, structured data, exports, or prefetched payloads.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Tasks 087-101 and paid-tier test users from Task 108.
+
+- [ ] Task 101: Connect and normalize Launches & Missions access, navigation, search, alerts, and exports
+  - Priority: P0
+  - Requirement IDs: R-HOME-005, R-NAV-001, R-MISSION-004, R-SEARCH-001, R-ALERT-001, R-API-001
+  - Supersedes: Former Task 106
+  - Superseded by: None.
+  - Goal: Make `/tracker/launches` a broader signed-in tracker app with consistent Launches & Missions labeling, access gates, search, alerts, and export hooks.
+  - Acceptance criteria: `/tracker/launches` blocks anonymous, email-unverified, and profile-incomplete users from the app shell; any verified/profile-complete account can view the basic app shell without approved Explorer status; Scout/Command-only value estimates, methodology, export, API, advanced filters, and alert features remain gated; member dashboard, account navigation, command palette, search results, breadcrumbs, route metadata, and terminal shell use `Launches & Missions`; search exposes only public-safe snippets to unverified/profile-incomplete states; alerts/watchlists/export hooks respect tier and profile gates. `/tracker/launches` blocks anonymous, unverified signed-in, and profile-incomplete users from member content but allows any authenticated account with verified email and completed profile to load the app shell; approved Explorer status is not required for basic tracker access; Scout/Command-only estimate values and methodology remain gated; member dashboard, account navigation, command palette, search results, breadcrumbs, and route metadata use the exact label `Launches & Missions`; the homepage metric can remain labeled `Launches Tracked`; tests cover anonymous redirect/gate, unverified authenticated verification prompt, profile-incomplete completion prompt, generic verified/profile-complete authenticated access, Explorer access, Scout/Command estimate unlock, and public-safe teaser behavior.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Tasks 099-100, Tasks 063-070, and fixture users from Task 108 for full role coverage.
+
+- [ ] Task 102: Update homepage Launches Tracked card and handoff behavior
+  - Priority: P0
+  - Requirement IDs: R-HOME-005, R-MISSION-004
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Turn the current homepage metric into a useful entry point to `/tracker/launches`.
+  - Acceptance criteria: Homepage `Launches Tracked` card shows current reviewed count, source freshness, and lunar/cislunar subset count; verified/profile-complete users click through to `/tracker/launches` with week/timezone/filter context; signed-out users see a public teaser and `/request-access` CTA; unverified users see a verify-email CTA; profile-incomplete users route to `/account/profile/complete`; premium value/export/estimate clicks route to `/upgrade`; no dead link or static placeholder metric remains.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Tasks 087-101.
+
+- [ ] Task 103: Add New Contract Awards module schema and ingestion workflow
+  - Priority: P0
+  - Requirement IDs: R-CONTRACT-001, R-DATAOPS-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Track space/lunar contract awards separately from launches and mission operations.
+  - Acceptance criteria: Schema supports only space/lunar-relevant awards, award date as primary date, future effective date and option-exercise date as secondary fields, customer, vendor, program, award vehicle, amount, value state, citations, confidence, source registry IDs, reviewer, reviewed timestamp, audit log, and tier visibility; ingestion/review excludes general aerospace/defense awards unless directly space/lunar relevant; one editor/admin approval is sufficient.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on source registry entries from Task 097.
+
+- [ ] Task 104: Build New Contract Awards tracker module UI
+  - Priority: P0
+  - Requirement IDs: R-CONTRACT-001, R-MISSION-005
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Show contract awards as a separate operational module.
+  - Acceptance criteria: Module shows only space/lunar-relevant awards; each card includes award date as primary date plus future effective date and option-exercise date as secondary fields when available, customer, vendor, program, amount/value state, confidence, source citations, reviewer, and last-reviewed timestamp; general aerospace/defense awards are excluded unless directly space/lunar relevant; same value visibility rules as Task 100 apply; signed-out users get public teasers and `/request-access`; unverified users see verification prompts; profile-incomplete users route to `/account/profile/complete`; non-entitled users route to `/upgrade` for premium details.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Task 103.
+
+- [ ] Task 105: Implement production alert evaluation and email delivery
+  - Priority: P1
+  - Requirement IDs: R-ALERT-001, R-EMAIL-001, R-EMAIL-004
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Complete R-ALERT-001 beyond the current alerts-center and delivery-hook scaffold.
+  - Acceptance criteria: Scheduled alert evaluation runs against watched companies, missions, procurements, regulatory records, datasets, events, marketplace records, and Command intelligence; in-app alert feed and unread badges are updated by the evaluator; email notifications are sent through a configured provider; member notification preferences and quiet hours are respected; delivery retries, failures, and audit logs are visible; unsubscribe or preference-management paths are documented and tested.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Requires email provider configuration, scheduling/runtime environment, and live or seeded member alert data.
+
+- [ ] Task 106: Make member alert email digest-first under Resend Free limits
+  - Priority: P1
+  - Requirement IDs: R-ALERT-001, R-EMAIL-003, R-EMAIL-004
+  - Supersedes: None.
+  - Superseded by: None.
   - Goal: Preserve useful member alerts while preventing routine notifications from consuming the free daily email budget.
   - Acceptance criteria: Member alert emails default to digest delivery instead of one email per alert; high-priority alerts can request immediate delivery only when reserved quota remains; quiet hours and notification preferences are respected; in-app alert feed and unread badges update regardless of email status; when the email budget is low or exhausted, alerts stay in app and queue for the next digest window instead of failing publicly; admin/config controls define digest cadence, maximum daily alert emails, per-user daily cap, and priority thresholds; unsubscribe/preference links remain present where email is sent; tests cover digest grouping, instant-alert reserve use, quota exhaustion, in-app fallback, per-user caps, quiet hours, and preference changes.
   - Non-technical summary: Pending.
   - Verification: Not run yet.
-  - Blocked reason: Depends on Task 078 alert evaluator and Task 117 quota ledger. Fixture-based digest and in-app fallback tests can proceed earlier.
+  - Blocked reason: Depends on Task 105 alert evaluator and Task 084 quota ledger. Fixture-based digest and in-app fallback tests can proceed earlier.
 
-- [ ] Task 119: Add Resend Free release checks and operational monitoring
-  - Priority: P0
-  - Goal: Make free-tier email limits a release gate and ongoing admin-visible operational constraint.
-  - Acceptance criteria: Release QA checks `RESEND_PLAN=free` or equivalent config, `info@potomacdb.com` sender, one verified `potomacdb.com` sending domain, no paid-overage/pay-as-you-go/auto-upgrade code paths, quota ledger tables, queue worker configuration, admin quota dashboard, alert digest controls, 429 and quota-exceeded handling, and no public placeholder copy; smoke tests simulate Resend success, provider failure, `daily_quota_exceeded`, `monthly_quota_exceeded`, rate-limit 429, missing `RESEND_API_KEY`, missing DNS/sender verification, duplicate form submission, and quota-exhausted alert digest behavior; production operations document daily/monthly reset monitoring, manual resend procedure, escalation criteria for upgrading later, and how to keep the site functional when email sends are capped.
+- [ ] Task 107: Build runtime paid API, export jobs, and webhook delivery
+  - Priority: P1
+  - Requirement IDs: R-API-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Complete R-API-001 beyond the current Scout/Command developer-platform scaffold.
+  - Acceptance criteria: Versioned API routes authenticate developer API keys, enforce Scout/Command scopes and usage limits, write usage/audit logs, and return documented errors; CSV/PDF export requests create and process export jobs with downloadable results; webhook subscriptions deliver signed event payloads with retry/backoff and delivery logs; developer documentation reflects the live endpoints; tests cover authentication, quotas, exports, and webhook delivery behavior.
   - Non-technical summary: Pending.
   - Verification: Not run yet.
-  - Blocked reason: Live release checks require Resend account access, domain verification status, runtime secrets, and production deployment variables. Mocked release checks and documentation can proceed earlier.
+  - Blocked reason: Requires runtime API design decisions, worker/scheduler environment, signing secret management, and live or seeded paid-member data.
+
+- [ ] Task 108: Verify canonical remote Supabase migrations and role journeys
+  - Priority: P0
+  - Requirement IDs: R-AUTH-001, R-TIER-001, R-QA-002, R-DATAOPS-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Prove the completed database-backed requirements against the real Potomac Supabase project.
+  - Acceptance criteria: Remote migration history for project `xlpkdoeldtlhearqajat` is reconciled; all production-intended migrations are applied or explicitly skipped; `20260701201833_seed_local_test_users.sql` is skipped unless explicitly approved for remote; Explorer, Scout, Command, organization admin, editor, analyst, and admin role journeys are seeded or otherwise available; RLS read/write checks cover article bodies, search, saved work, alerts, chat, forums, RFQs, lunar missions, procurement, regulatory records, companies, calculators, datasets, uploads, API/export tables, and audit logs; results are documented without exposing secrets.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Requires canonical project database credentials, runtime Supabase keys, and seeded or approved test users for `xlpkdoeldtlhearqajat`; never use `nwoluvjdojzayozyzlob`.
+
+- [ ] Task 109: Add production trust, telemetry, accessibility, and performance enforcement
+  - Priority: P0
+  - Requirement IDs: R-TRUST-001, R-QA-002
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Complete R-TRUST-001 beyond baseline pages and documented hooks.
+  - Acceptance criteria: Accessibility checks run in CI for key public/member/admin routes; analytics events are connected to a production provider with consent-aware behavior; managed logs, metrics, traces, and error reporting are configured; Core Web Vitals and route performance budgets are measured and reported; API rate limiting is enforced in middleware or infrastructure; Supabase performance advisor warnings are triaged and either fixed or explicitly accepted with rationale.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Requires production analytics/observability provider choices, CI/runtime configuration, and a deliberate RLS performance-hardening pass.
+
+- [ ] Task 110: Add source, citation, gating, and no-placeholder QA release checks
+  - Priority: P0
+  - Requirement IDs: R-QA-002, R-HOME-003, R-DATAOPS-001, R-MISSION-005
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Prevent the homepage, carousel, tracker, and award modules from shipping with placeholders or leaked gated data.
+  - Acceptance criteria: Release checks scan public/member routes for placeholder tokens, wrong tier names/prices, missing or inconsistent Meridian labeling, missing Resend Free server-side email routing to/from `info@potomacdb.com`, missing free-plan quota enforcement, accidental paid Resend plan/pay-as-you-go/dedicated-IP/paid-add-on/marketing-broadcast usage, social placeholders, missing citations, missing source freshness, missing value-basis labels, leaked gated estimates, email-unverified or profile-incomplete content leakage, missing expiration metadata, expired promotional content still rendering, broken CTA destinations, broken source links, brand-split violations, auth/profile/upgrade routing errors, accidental Meridian Stripe, online checkout, self-serve invoice, public payment, `mailto:` workflow, or payment-provider placeholder, missing Meridian business-email denylist validation, accessibility regressions, and mobile overflow; checks fail CI/build or produce a clear blocked task note; QA docs explain how editors resolve each blocker.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on route/test infrastructure and module implementations.
+
+- [ ] Task 111: Add production content import and release-blocking workflow
+  - Priority: P0
+  - Requirement IDs: R-CONTENT-001, R-CONTENT-002, R-QA-002
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Ensure Codex does not invent final site content and knows when to block.
+  - Acceptance criteria: Importer accepts only reviewed CMS stories, carousel slides, tracker rows, UDRI/Pathfinder/Source CTAs, `/request-access` auth fixture copy, `/upgrade` fixture copy, `/account/profile/complete` profile fixture copy, and contract-award rows that include approver, approval timestamp, citations, source registry IDs, expiration metadata, and asset references; importer rejects missing final content, missing citations, unapproved sources, unreviewed images, and placeholder copy; dashboard shows import status and blockers.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Tasks 101-110 and final reviewed content from an editor/admin.
+
+- [ ] Task 112: Run regression suite for homepage, auth, profile, tracker, and gated-intelligence changes
+  - Priority: P0
+  - Requirement IDs: R-QA-002, R-DEPLOY-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Ensure new homepage/tracker/auth/profile changes do not regress existing terminal features.
+  - Acceptance criteria: `npm run lint`, `npm test`, `npm run build`, `npm run build:next`, available E2E tests, local Supabase migration checks where practical, no-placeholder scans, auth/profile/upgrade routing tests, email-verification tests, profile-completion tests, carousel tests, tracker tests, CTA tests, Resend Free-plan quota-governor tests, mocked `daily_quota_exceeded`/`monthly_quota_exceeded`/`rate_limit_exceeded` tests, and mobile overflow checks pass or document exact blockers; remaining production/live Supabase gaps are captured as blocked reasons rather than marked complete.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Tasks 077-111.
+
+- [ ] Task 113: Add Meridian, Resend, and operational release QA and monitoring checks
+  - Priority: P0
+  - Requirement IDs: R-QA-002, R-EMAIL-001, R-EMAIL-002, R-EMAIL-003, R-EMAIL-004, R-UPGRADE-002, R-UPGRADE-003
+  - Supersedes: Former Task 119
+  - Superseded by: None.
+  - Goal: Prevent public enterprise label, payment, email-routing, Resend quota, and operational-monitoring regressions before deployment.
+  - Acceptance criteria: Automated and manual QA scan public/member/admin routes for the public label `Meridian`, absence of slash-label public enterprise copy, absence of Meridian Stripe/checkout/invoice/payment-provider/`mailto:` leakage, correct `/upgrade` routing, simple personal-domain denylist behavior, business-email acceptance, Resend Free server-side email payload addressed to/from `info@potomacdb.com`, Reply-To behavior, provider message-id logging, lead/audit record creation, backend Command entitlement mapping, no automatic entitlement grant, no paid Resend plan/pay-as-you-go/dedicated-IP/paid-add-on/marketing-broadcast usage, quota preflight behavior, and graceful quota-hold copy; production smoke test confirms failed Resend configuration or quota configuration blocks release with admin-facing messaging rather than public placeholders. Release QA checks `RESEND_PLAN=free` or equivalent config, `info@potomacdb.com` sender, one verified `potomacdb.com` sending domain, no paid-overage/pay-as-you-go/auto-upgrade code paths, quota ledger tables, queue worker configuration, admin quota dashboard, alert digest controls, 429 and quota-exceeded handling, and no public placeholder copy; smoke tests simulate Resend success, provider failure, `daily_quota_exceeded`, `monthly_quota_exceeded`, rate-limit 429, missing `RESEND_API_KEY`, missing DNS/sender verification, duplicate form submission, and quota-exhausted alert digest behavior; production operations document daily/monthly reset monitoring, manual resend procedure, escalation criteria for upgrading later, and how to keep the site functional when email sends are capped.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Live email-send verification depends on Resend verification for the `potomacdb.com` domain and `info@potomacdb.com` sender, DNS configuration, the `RESEND_API_KEY` runtime secret, and quota-usage storage; label/payment/routing/denylist/sender-payload/mock-Resend/free-plan quota tests can proceed earlier. Live release checks require Resend account access, domain verification status, runtime secrets, and production deployment variables. Mocked release checks and documentation can proceed earlier.
+
+- [ ] Task 114: Verify production deployment on the current Cloudflare URL
+  - Priority: P0
+  - Requirement IDs: R-DEPLOY-001, R-QA-002
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Prove the live site reflects the new carousel, tracker, auth, upgrade, profile, and no-placeholder requirements.
+  - Acceptance criteria: Production Cloudflare URL renders Cabeus Explorer public branding, rotating carousel, latest reviewed story teasers, `/request-access` Sign In / Sign Up path with Sign Up selected by default, `/upgrade` premium path, `/account/profile/complete` profile-completion path, UDRI house ad, Pathfinder/Source CTAs, no social links, no placeholder tokens, correct tier copy, no Meridian Stripe, online checkout, self-serve invoice, public payment, `mailto:`, or payment-provider placeholder, Meridian business-email denylist validation, Resend Free server-side email routing to/from `info@potomacdb.com`, Resend Free-plan configuration and quota-governor behavior, graceful queued/delayed states when the mock quota is exhausted, Launches Tracked handoff, `/tracker/launches` email/profile gate, weekly tracker data or no-launch state, New Contract Awards module, and no gated estimate leakage; verification includes desktop/mobile screenshots, route status, console logs, structured data, source links, CTA destinations, auth/profile/upgrade redirects, quota-state smoke tests, and rollback notes.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on deploy access, production build, source data, and reviewed content.
+
+- [ ] Task 115: Prepare release-readiness checklist for operational launch
+  - Priority: P0
+  - Requirement IDs: R-DEPLOY-001, R-QA-002, R-CONTENT-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Give Codex and editors a final checklist before considering the website operational.
+  - Acceptance criteria: Production checklist confirms approved content owner, one editor/admin approver, reviewed CMS stories, carousel slides, tracker data or no-launch state, New Contract Awards data or reviewed empty state, UDRI/Pathfinder/Source CTA assets, `/request-access`, `/upgrade`, and `/account/profile/complete` routes, source registry entries, expiration metadata, Supabase Storage assets, email-verification behavior, profile-completion behavior, premium upgrade routing, member gates, Scout checkout configuration, Meridian server-side inquiry path with simple personal-domain denylist validation, Resend Free-plan account configuration, Free-plan quota governor, queue/defer behavior, admin usage/queue view, Resend email delivery to/from `info@potomacdb.com`, and no Stripe, online checkout, self-serve invoice, public payment, `mailto:` workflow, payment-provider placeholder, paid Resend plan, or overage configuration, analytics events, no social links, no placeholders, rollback commit, and post-deploy smoke tests.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: Depends on Tasks 077-114.
