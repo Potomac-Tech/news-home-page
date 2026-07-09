@@ -11,7 +11,7 @@ export const externalChannels: ExternalChannel[] = [
         id: "linkedin",
         label: "LinkedIn",
         description: "Company updates and public announcements.",
-        href: "https://www.linkedin.com/company/potomac-database-systems",
+        href: "https://www.linkedin.com/company/cabeus-explorer",
         status: "Live",
     },
 ];
