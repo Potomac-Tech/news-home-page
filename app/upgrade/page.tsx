@@ -5,7 +5,7 @@ import { tierConfig } from "../_data/tiers";
 export const metadata: Metadata = {
     title: "Upgrade",
     description:
-        "Choose Scout professional access or Meridian contract discussion for Cabeus Explorer.",
+        `Choose Scout professional access or ${tierConfig.enterprise.publicName} contract discussion for Cabeus Explorer.`,
     alternates: {
         canonical: "/upgrade",
     },
@@ -24,7 +24,7 @@ export default function UpgradePage() {
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
                         Scout is self-serve professional access at{" "}
-                        {tierConfig.scout.price}/user/year. Meridian is handled
+                        {tierConfig.scout.price}/user/year. {tierConfig.enterprise.publicName} is handled
                         through a submitted inquiry and manual contract discussion.
                     </p>
                 </div>
@@ -67,7 +67,7 @@ export default function UpgradePage() {
                             href="/command"
                             className="mt-6 inline-flex rounded border border-potomac-gold/50 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                         >
-                            Request Meridian
+                            Request {tierConfig.enterprise.publicName}
                         </Link>
                     </article>
                 </div>

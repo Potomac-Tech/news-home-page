@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "Cabeus Explorer Pricing",
         description:
-            "Explorer is the free default membership, Scout is self-serve at $25,000/user/year, and Meridian is organization-level contract access.",
+            `Explorer is the free default membership, Scout is self-serve at $25,000/user/year, and ${tierConfig.enterprise.publicName} is organization-level contract access.`,
         url: absoluteSiteUrl("/pricing"),
         type: "website",
     },
@@ -68,7 +68,7 @@ const tiers = [
         description:
             "Manual organization access for enterprise intelligence, analyst support, and service delivery.",
         href: "/command",
-        cta: "Request Meridian",
+        cta: `Request ${tierConfig.enterprise.publicName}`,
         features: [
             "Organization-scoped seats and admins",
             "Enterprise intelligence allocation",
@@ -98,7 +98,7 @@ export default function PricingPage() {
         "@type": "Product",
         name: "Cabeus Explorer News & Intelligence",
         description:
-            "Lunar industry news and member-gated intelligence tiers for Explorer, Scout, and Meridian users.",
+            `Lunar industry news and member-gated intelligence tiers for Explorer, Scout, and ${tierConfig.enterprise.publicName} users.`,
         url: absoluteSiteUrl("/pricing"),
         offers: tiers.map((tier) => ({
             "@type": "Offer",
@@ -125,12 +125,12 @@ export default function PricingPage() {
                             Membership tiers
                         </p>
                         <h1 className="mt-4 font-serif text-4xl leading-tight text-white md:text-6xl">
-                            Explorer, Scout, and Meridian access
+                            Explorer, Scout, and {tierConfig.enterprise.publicName} access
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
                             Start with free approved Explorer access, upgrade to
                             Scout for professional intelligence workflows, or
-                            request Meridian for organization-level lunar market
+                            request {tierConfig.enterprise.publicName} for organization-level lunar market
                             coverage and analyst support.
                         </p>
                     </div>
@@ -220,7 +220,7 @@ export default function PricingPage() {
                                     <th className="py-3 pr-4">Capability</th>
                                     <th className="px-4 py-3">Explorer</th>
                                     <th className="px-4 py-3">Scout</th>
-                                    <th className="px-4 py-3">Meridian</th>
+                                    <th className="px-4 py-3">{tierConfig.enterprise.publicName}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -250,7 +250,7 @@ export default function PricingPage() {
                     </h2>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Public visitors start with Explorer, approved members
-                        start Scout checkout from the workspace, and Meridian
+                        start Scout checkout from the workspace, and {tierConfig.enterprise.publicName}
                         prospects enter a manual contract-discussion workflow.
                     </p>
                 </div>
@@ -282,7 +282,7 @@ export default function PricingPage() {
                         className="rounded border border-potomac-gold/35 p-5 transition hover:border-potomac-gold hover:bg-white/5"
                     >
                         <span className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
-                            Team to Meridian
+                            Team to {tierConfig.enterprise.publicName}
                         </span>
                         <span className="mt-3 block text-sm leading-6 text-potomac-cream/70">
                             Request organization-level access and contract review.

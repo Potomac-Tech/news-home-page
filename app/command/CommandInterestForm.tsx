@@ -1,14 +1,14 @@
 import { submitMeridianInterest } from "./actions";
+import { tierConfig } from "../_data/tiers";
 
 type CommandInterestFormProps = {
     status?: string;
 };
 
 const statusMessages: Record<string, string> = {
-    submitted:
-        "Meridian interest received. Cabeus Explorer will follow up directly for contract discussion.",
+    submitted: `${tierConfig.enterprise.publicName} interest received. Cabeus Explorer will follow up directly for contract discussion.`,
     "business-email-required":
-        "Use a business or organization email for Meridian contract discussion.",
+        `Use a business or organization email for ${tierConfig.enterprise.publicName} contract discussion.`,
     "missing-required": "Complete the required contact, email, and organization fields.",
     "configuration-needed":
         "Inquiry storage is not configured in this environment. Try again after deployment configuration is complete.",
@@ -84,7 +84,7 @@ export function CommandInterestForm({ status }: CommandInterestFormProps) {
                 type="submit"
                 className="mt-6 w-full rounded bg-potomac-gold px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
             >
-                Request Meridian access
+                Request {tierConfig.enterprise.publicName} access
             </button>
             {message ? (
                 <p

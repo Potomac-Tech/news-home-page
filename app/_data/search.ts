@@ -1,5 +1,6 @@
 import { createClient } from "../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+import { publicTierName, tierConfig } from "./tiers";
 
 export type SearchTier = "public" | "explorer" | "scout" | "command" | "staff";
 
@@ -212,7 +213,7 @@ const fallbackSearchResults: SearchResult[] = [
         eyebrow: "Scout workspace",
         summary:
             "Paid data-market records for lunar data requests, data offers, evidence, and extraction-backed intelligence.",
-        snippet: "Scout and Command users can browse source-backed marketplace records.",
+        snippet: `Scout and ${tierConfig.enterprise.publicName} users can browse source-backed marketplace records.`,
         href: "/member/marketplace",
         tier: "scout",
         confidenceLabel: "experimental",
@@ -355,7 +356,7 @@ export function tierLabel(tier: SearchTier) {
     if (tier === "public") return "Public";
     if (tier === "explorer") return "Explorer+";
     if (tier === "scout") return "Scout+";
-    if (tier === "command") return "Command";
+    if (tier === "command") return publicTierName(tier);
     return "Staff";
 }
 

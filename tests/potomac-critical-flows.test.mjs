@@ -266,3 +266,43 @@ test("workspace remains pinned to the canonical Potomac Supabase project", () =>
         "runtime config should not reference the wrong Supabase project"
     );
 });
+
+test("the enterprise display label is configurable without changing internal Command access", () => {
+    const tierConfig = read("app/_data/tiers.ts");
+    const publicTierSurfaces = [
+        read("app/page.tsx"),
+        read("app/_data/homepage.ts"),
+        read("app/pricing/page.tsx"),
+        read("app/upgrade/page.tsx"),
+        read("app/command/page.tsx"),
+        read("app/account/page.tsx"),
+        read("app/events/page.tsx"),
+        read("app/news/[slug]/page.tsx"),
+        read("app/companies/page.tsx"),
+        read("app/member/page.tsx"),
+        read("app/_components/SearchCommandPalette.tsx"),
+        read("app/_data/search.ts"),
+    ].join("\n");
+
+    assertIncludes(tierConfig, [
+        'enterprisePublicNames = ["Meridian", "Command"]',
+        'enterprisePublicName: EnterprisePublicName = "Meridian"',
+        'internalName: "Command"',
+        "publicTierName",
+        'tier === "command_user"',
+    ], "enterprise tier configuration");
+    assert.doesNotMatch(
+        tierConfig,
+        /enterprisePublicNames\s*=\s*\[[^\]]{0,120},[^\]]{0,120},[^\]]{0,120}\]/,
+        "enterprise tier configuration must not introduce a fourth tier"
+    );
+    assertIncludes(publicTierSurfaces, [
+        "tierConfig.enterprise.publicName",
+        "publicTierName",
+    ], "public tier surfaces");
+    assert.doesNotMatch(
+        publicTierSurfaces,
+        /return "Meridian"|>Meridian|Meridian access|Meridian users|Meridian paths|Command access|Command detail|Command users|Command attendees/,
+        "public tier surfaces must use the configured enterprise display name"
+    );
+});

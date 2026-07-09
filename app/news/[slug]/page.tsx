@@ -25,6 +25,7 @@ import {
     loadSponsorUnits,
     sponsorPlacementKeys,
 } from "../../_data/sponsorAds";
+import { publicTierName, tierConfig } from "../../_data/tiers";
 
 export const dynamic = "force-dynamic";
 
@@ -94,15 +95,7 @@ function formatDate(value: string) {
 }
 
 function accessTierLabel(tier: ArticleAccessTier) {
-    if (tier === "command") {
-        return "Meridian";
-    }
-
-    if (tier === "scout") {
-        return "Scout";
-    }
-
-    return "Explorer";
+    return publicTierName(tier);
 }
 
 function parseKeyPoints(value: unknown) {
@@ -334,7 +327,7 @@ function GatePanel({
                     href="/upgrade?tier=meridian"
                     className="rounded border border-white/15 px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold"
                 >
-                    Meridian access
+                    {tierConfig.enterprise.publicName} access
                 </Link>
             </div>
         </section>
@@ -535,7 +528,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                             Free Explorer access unlocks full public-story bodies
                             after verification and profile completion. Scout and
-                            Meridian paths unlock deeper intelligence in later
+                            {tierConfig.enterprise.publicName} paths unlock deeper intelligence in later
                             dashboard tasks.
                         </p>
                         <Link

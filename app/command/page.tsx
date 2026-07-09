@@ -3,9 +3,9 @@ import { CommandInterestForm } from "./CommandInterestForm";
 import { tierConfig } from "../_data/tiers";
 
 export const metadata: Metadata = {
-    title: "Meridian",
+    title: tierConfig.enterprise.publicName,
     description:
-        "Register Meridian interest for organization-level Cabeus Explorer lunar intelligence access.",
+        `Register ${tierConfig.enterprise.publicName} interest for organization-level Cabeus Explorer lunar intelligence access.`,
     alternates: {
         canonical: "/command",
     },
@@ -31,7 +31,7 @@ export default async function CommandPage({ searchParams }: CommandPageProps) {
                         {tierConfig.enterprise.publicName} Access
                     </h1>
                     <p className="mt-6 max-w-2xl text-lg leading-8 text-potomac-cream/80">
-                        Meridian access is handled through direct review and
+                        {tierConfig.enterprise.publicName} access is handled through direct review and
                         admin approval for organizations that need deeper lunar
                         intelligence, analyst support, and mission briefings.
                     </p>

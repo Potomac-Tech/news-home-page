@@ -21,6 +21,7 @@ import {
     type EventAccessContext,
 } from "../../lib/auth/event-access";
 import { SponsorUnit } from "../_components/SponsorUnit";
+import { publicTierName } from "../_data/tiers";
 import {
     loadSponsorUnits,
     sponsorPlacementKeys,
@@ -97,15 +98,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 });
 
 function accessTierLabel(tier: EventAccessTier) {
-    if (tier === "command") {
-        return "Meridian";
-    }
-
-    if (tier === "scout") {
-        return "Scout";
-    }
-
-    return "Explorer";
+    return publicTierName(tier);
 }
 
 function eventTypeLabel(value: string) {

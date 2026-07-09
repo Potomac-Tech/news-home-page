@@ -1,10 +1,12 @@
+import { tierConfig } from "./tiers";
+
 export type HomeStory = {
     title: string;
     summary: string;
     snippet: string;
     href: string;
     publishedAt: string;
-    accessTier: "Explorer" | "Scout" | "Meridian";
+    accessTier: "Explorer" | "Scout" | (typeof tierConfig.enterprise)["publicName"];
     sourceLabel: string;
 };
 
@@ -58,14 +60,14 @@ export const fallbackStories: HomeStory[] = [
         sourceLabel: "Method note",
     },
     {
-        title: "Meridian teams need early mission-intelligence workflows",
+        title: `${tierConfig.enterprise.publicName} teams need early mission-intelligence workflows`,
         summary:
             "Organization-level lunar programs need briefings, analyst support, and controlled access to near-real-time findings.",
         snippet:
-            "The Meridian workflow is being shaped around reviewed organizations, seats, and manual internal entitlement grants.",
+            `The ${tierConfig.enterprise.publicName} workflow is being shaped around reviewed organizations, seats, and manual internal entitlement grants.`,
         href: "/command",
         publishedAt: "2026-06-03",
-        accessTier: "Meridian",
+        accessTier: tierConfig.enterprise.publicName,
         sourceLabel: "Access brief",
     },
 ];
@@ -90,7 +92,7 @@ export const eventTeasers: EventTeaser[] = [
         date: "Sep 10",
         location: "Member-only",
         publicNote: "Registration interest opens after agenda approval.",
-        memberNote: "Command attendees receive a tailored pre-read.",
+        memberNote: `${tierConfig.enterprise.publicName} attendees receive a tailored pre-read.`,
     },
 ];
 

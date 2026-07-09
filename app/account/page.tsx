@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { tierConfig } from "../_data/tiers";
 
 export const metadata: Metadata = {
     title: "Account",
@@ -24,12 +25,12 @@ const accountLinks = [
     {
         href: "/organization",
         label: "Organization",
-        detail: "Review Command organization seats and entitlements.",
+        detail: `Review ${tierConfig.enterprise.publicName} organization seats and entitlements.`,
     },
     {
         href: "/pricing",
         label: "Pricing",
-        detail: "Compare Explorer, Scout, and Meridian access.",
+        detail: `Compare Explorer, Scout, and ${tierConfig.enterprise.publicName} access.`,
     },
     {
         href: "/request-access",
@@ -38,7 +39,7 @@ const accountLinks = [
     },
     {
         href: "/command",
-        label: "Meridian",
+        label: tierConfig.enterprise.publicName,
         detail: "Request organization-level access.",
     },
     {
@@ -72,7 +73,7 @@ export default function AccountPage() {
                     <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
                         A single shell for sign-in, member workspace,
                         organization administration, pricing, Explorer
-                        access, and Meridian inquiry paths.
+                        access, and {tierConfig.enterprise.publicName} inquiry paths.
                     </p>
                 </div>
                 <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

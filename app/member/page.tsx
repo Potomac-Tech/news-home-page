@@ -18,6 +18,7 @@ import {
     summarizeSpaceWeatherMetrics,
     type SpaceWeatherSnapshot,
 } from "../_data/spaceWeather";
+import { publicTierName, tierConfig } from "../_data/tiers";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +57,7 @@ function roleLabel(roleId: string | null | undefined) {
     }
 
     if (roleId === "command_user") {
-        return "Command";
+        return publicTierName(roleId);
     }
 
     return roleId
@@ -116,9 +117,9 @@ async function loadNexusAccessStatus(
 
         if (activeRole === "command_user") {
             return {
-                label: "Command recognized",
+                label: `${tierConfig.enterprise.publicName} recognized`,
                 detail:
-                    "Command role is active. The Nexus placeholder opens without an SSO token exchange.",
+                    `${tierConfig.enterprise.publicName} access is active. The Nexus handoff opens without an SSO token exchange.`,
                 roleLabel: roleLabel(activeRole),
                 entitlementLabel,
                 canOpenPlaceholder,
@@ -155,7 +156,7 @@ async function loadNexusAccessStatus(
             return {
                 label: "Explorer active",
                 detail:
-                    "Explorer access is active. Nexus access is reserved for Scout, Command, and staff roles.",
+                    `Explorer access is active. Nexus access is reserved for Scout, ${tierConfig.enterprise.publicName}, and staff roles.`,
                 roleLabel: roleLabel(activeRole),
                 entitlementLabel,
                 canOpenPlaceholder: false,
@@ -227,7 +228,7 @@ function NexusAccessCard({ status }: { status: NexusAccessStatus }) {
                         href="/command"
                         className="rounded bg-potomac-gold px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                     >
-                        Command access
+                        {tierConfig.enterprise.publicName} access
                     </Link>
                 )}
                 <Link
