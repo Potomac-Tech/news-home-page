@@ -22,6 +22,9 @@ create table if not exists public.member_profile_completions (
     constraint member_profile_completions_preference_valid check (communication_preference in ('product_updates', 'research_digest', 'both', 'none'))
 );
 
+drop trigger if exists set_member_profile_completions_updated_at
+on public.member_profile_completions;
+
 create trigger set_member_profile_completions_updated_at
 before update on public.member_profile_completions
 for each row execute function public.set_updated_at();
@@ -31,11 +34,17 @@ grant all on public.member_profile_completions to service_role;
 
 alter table public.member_profile_completions enable row level security;
 
+drop policy if exists "member_profile_completions_select_own"
+on public.member_profile_completions;
+
 create policy "member_profile_completions_select_own"
 on public.member_profile_completions
 for select
 to authenticated
 using ((select auth.uid()) = user_id);
+
+drop policy if exists "member_profile_completions_insert_own"
+on public.member_profile_completions;
 
 create policy "member_profile_completions_insert_own"
 on public.member_profile_completions
@@ -43,12 +52,18 @@ for insert
 to authenticated
 with check ((select auth.uid()) = user_id);
 
+drop policy if exists "member_profile_completions_update_own"
+on public.member_profile_completions;
+
 create policy "member_profile_completions_update_own"
 on public.member_profile_completions
 for update
 to authenticated
 using ((select auth.uid()) = user_id)
 with check ((select auth.uid()) = user_id);
+
+drop policy if exists "member_profile_completions_select_staff"
+on public.member_profile_completions;
 
 create policy "member_profile_completions_select_staff"
 on public.member_profile_completions

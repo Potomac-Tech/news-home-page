@@ -407,6 +407,38 @@ test("unverified and profile-incomplete users receive only public-safe search in
     );
 });
 
+test("verification resend is rate-limited, audited, and does not persist raw email", () => {
+    const migration = readMigration("20260710151437_email_verification_resend_controls.sql");
+    const resendRoute = read("app/api/auth/resend-verification/route.ts");
+    const resendButton = read("app/account/verify/VerificationResendButton.tsx");
+    const verificationPage = read("app/account/verify/page.tsx");
+
+    assertIncludes(
+        migration + resendRoute + resendButton + verificationPage,
+        [
+            "email_verification_resend_rate_limits",
+            "email_verification_resend_events",
+            "email_hash",
+            "enable row level security",
+            "security definer",
+            "claim_email_verification_resend",
+            "complete_email_verification_resend",
+            "auth.resend",
+            'type: "signup"',
+            "Retry-After",
+            "Resend verification email",
+            "Account email",
+            "crypto.subtle.digest",
+        ],
+        "verification resend controls"
+    );
+    assert.doesNotMatch(
+        migration,
+        /email\s+(text|varchar)/i,
+        "verification resend audit records must not store raw email"
+    );
+});
+
 test("the enterprise display label is configurable without changing internal Command access", () => {
     const tierConfig = read("app/_data/tiers.ts");
     const publicTierSurfaces = [

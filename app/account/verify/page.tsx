@@ -6,6 +6,7 @@ import {
 } from "../../../lib/auth/profile-completion";
 import { hasPotomacSupabasePublicConfig } from "../../../lib/supabase/config";
 import { createClient } from "../../../lib/supabase/server";
+import { VerificationResendButton } from "./VerificationResendButton";
 
 export const dynamic = "force-dynamic";
 
@@ -22,10 +23,6 @@ export default async function VerifyEmailPage({
 
     const supabase = await createClient();
     const profileGate = await getProfileGateContext({ supabase, nextPath });
-
-    if (profileGate.state === "signed_out") {
-        redirect(profileGate.loginHref);
-    }
 
     if (profileGate.state === "profile_incomplete" && profileGate.profileHref) {
         redirect(profileGate.profileHref);
@@ -55,12 +52,7 @@ export default async function VerifyEmailPage({
                         >
                             Check sign-in status
                         </Link>
-                        <Link
-                            href="/request-access"
-                            className="rounded border border-white/15 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold"
-                        >
-                            Need a new link?
-                        </Link>
+                        <VerificationResendButton nextPath={nextPath} />
                     </div>
                 </div>
             </div>

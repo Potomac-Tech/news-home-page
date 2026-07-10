@@ -908,16 +908,16 @@ Blocked reason:
   - Verification: `npm test` passed 13 checks, including profile-gate, callback-handoff, protected-helper, and public-safe search/command-palette regression coverage. `npm run lint` and `npm run build` passed. Cloudflare deployment `b9855a5e-a544-4e71-a30b-20b039eefe17` succeeded; anonymous production checks returned `200` for `/request-access`, `/search`, and `/events`, plus `307` to unified sign-in for `/account/verify`, `/member`, `/member/chat`, and `/admin/editorial`. Live role-by-role browser coverage requires the seeded verified, incomplete, and tiered fixture accounts planned in Task 108.
   - Blocked reason: None. Full live fixture coverage remains scheduled under Task 108.
 
-- [ ] Task 082: Build email-verification UX, resend flow, and profile-completion handoff
+- [x] Task 082: Build email-verification UX, resend flow, and profile-completion handoff
   - Priority: P0
   - Requirement IDs: R-AUTH-001, R-AUTH-002
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Make the verified-email requirement operational instead of a dead-end access gate.
   - Acceptance criteria: Public-safe verification-required screens exist for member dashboards, `/tracker/launches`, full article bodies, paid intelligence, community/chat/forums/RFQ surfaces, saved work, alerts, uploads, admin dashboards, checkout, personalized cards, and gated estimates; screens explain that email verification is required before member content is visible; users can request a verification email resend with rate limiting, audit logging, and clear success/error states; verified users with incomplete profiles route to `/account/profile/complete`; `/request-access`, callback, password-recovery, account verification help, profile-completion flow, and `/upgrade` flows route users back to the intended destination after verification/profile completion; unverified users never receive member data in route metadata, command palette, search results, server actions, API handlers, or prefetched payloads; tests cover anonymous, unverified authenticated, newly verified, profile-incomplete, profile-complete, expired/invalid verification links, resend throttling, and post-verification return routing.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 081 shared gate and Supabase Auth email-verification configuration; fixture-based UI tests can proceed earlier.
+  - Non-technical summary: Members can now open a verification screen, request a new confirmation email using their account address, see clear success, error, and wait states, and continue to profile completion or their original destination after verification. The system records resend activity without storing raw email addresses and limits repeated requests.
+  - Verification: Added `/api/auth/resend-verification`, a public-safe verification screen/form, Supabase Auth `resend` handoff through `/auth/callback`, and migration `20260710151437_email_verification_resend_controls`. The canonical project has the resend rate-limit/audit tables, RLS, and protected RPC functions; the profile-completion migration was also safely re-applied after fixing its duplicate-trigger idempotency. `npm test` passed 14 checks, `npm run lint` passed, and `npm run build` passed. Canonical security advisor check found only three unrelated existing warnings on `compliance_settings`, `saml_providers`, and `security_audit_logs`; it did not flag the new resend controls. Cloudflare deployment and non-sending route checks follow this commit.
+  - Blocked reason: Actual email delivery depends on the configured Supabase Auth email provider, templates, allowed redirect URL, and production sender settings. The endpoint reports provider failures accurately; a live resend is not triggered during automated verification to avoid sending email without a designated test address.
 
 - [ ] Task 083: Configure Resend Free production server-side email transport for forms and alerts
   - Priority: P0
