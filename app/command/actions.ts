@@ -9,6 +9,11 @@ import {
     getOperationalEmailSender,
     sendOperationalEmail,
 } from "../../lib/email/resend";
+import {
+    hasValidResendFreePlanConfig,
+    resendFreePlanConfigurationError,
+    type ResendQuotaClaim,
+} from "../../lib/email/resend-quota";
 
 const personalEmailDomains = new Set([
     "aol.com",
@@ -92,12 +97,72 @@ export async function submitMeridianInterest(formData: FormData) {
             delivery_status: "queued",
             retry_status: "not_requested",
             quota_bucket: "operational",
+            priority: "operational",
+            idempotency_key: `meridian-interest:${interest.id}`,
         })
         .select("id")
         .single();
 
     if (deliveryEventError || !deliveryEvent) {
         redirect("/command?status=configuration-needed");
+    }
+
+    if (!hasValidResendFreePlanConfig()) {
+        await service
+            .schema("private")
+            .from("outbound_email_delivery_events")
+            .update({
+                delivery_status: "configuration_missing",
+                failure_reason: resendFreePlanConfigurationError(),
+                updated_at: new Date().toISOString(),
+            })
+            .eq("id", deliveryEvent.id);
+        redirect("/command?status=configuration-needed");
+    }
+
+    const { data: rateData, error: rateError } = await service
+        .schema("private")
+        .rpc("claim_resend_send_rate");
+    const rateClaim = (rateData as Array<{ allowed: boolean; retry_at: string | null }> | null)?.[0];
+
+    if (rateError || !rateClaim?.allowed) {
+        await service
+            .schema("private")
+            .from("outbound_email_delivery_events")
+            .update({
+                delivery_status: "held",
+                retry_status: "retry_pending",
+                failure_reason: "Resend send-rate capacity is temporarily unavailable.",
+                next_retry_at: rateClaim?.retry_at ?? null,
+                updated_at: new Date().toISOString(),
+            })
+            .eq("id", deliveryEvent.id);
+        redirect("/command?status=delivery-pending");
+    }
+
+    const { data: quotaData, error: quotaError } = await service
+        .schema("private")
+        .rpc("claim_resend_free_quota", {
+            p_event_id: deliveryEvent.id,
+            p_recipient_count: 1,
+            p_is_operational: true,
+        });
+    const quotaClaim = (quotaData as ResendQuotaClaim[] | null)?.[0];
+
+    if (quotaError || !quotaClaim?.allowed) {
+        await service
+            .schema("private")
+            .from("outbound_email_delivery_events")
+            .update({
+                delivery_status: "held",
+                retry_status: "retry_pending",
+                failure_reason:
+                    quotaClaim?.hold_reason ?? "Resend quota check is unavailable.",
+                next_retry_at: quotaClaim?.retry_at ?? null,
+                updated_at: new Date().toISOString(),
+            })
+            .eq("id", deliveryEvent.id);
+        redirect("/command?status=delivery-pending");
     }
 
     const delivery = await sendOperationalEmail({
@@ -124,10 +189,19 @@ export async function submitMeridianInterest(formData: FormData) {
             recipient: delivery.recipient,
             reply_to: contactEmail,
             delivery_status: delivery.deliveryStatus,
+            retry_status:
+                delivery.deliveryStatus === "held" ? "retry_pending" : "not_requested",
             failure_reason: delivery.failureReason,
+            provider_headers: delivery.providerHeaders,
+            next_retry_at: delivery.retryAt,
             updated_at: new Date().toISOString(),
         })
         .eq("id", deliveryEvent.id);
+
+    await service.schema("private").rpc("complete_resend_free_quota", {
+        p_recipient_count: 1,
+        p_sent: delivery.deliveryStatus === "sent",
+    });
 
     if (delivery.deliveryStatus === "sent") {
         redirect("/command?status=submitted");

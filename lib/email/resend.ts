@@ -17,11 +17,13 @@ type OperationalEmailInput = {
 };
 
 export type OperationalEmailResult = {
-    deliveryStatus: "sent" | "failed" | "configuration_missing";
+    deliveryStatus: "sent" | "failed" | "held" | "configuration_missing";
     providerMessageId: string | null;
     sender: string;
     recipient: string;
     failureReason: string | null;
+    providerHeaders: Record<string, string>;
+    retryAt: string | null;
 };
 
 const defaultAddress = "info@potomacdb.com";
@@ -70,6 +72,8 @@ export async function sendOperationalEmail({
             sender,
             recipient,
             failureReason: "RESEND_API_KEY is not configured.",
+            providerHeaders: {},
+            retryAt: null,
         };
     }
 
@@ -92,15 +96,40 @@ export async function sendOperationalEmail({
         const payload = (await response.json().catch(() => null)) as
             | { id?: string; message?: string; name?: string }
             | null;
+        const providerHeaders = Object.fromEntries(
+            [
+                "x-resend-daily-quota",
+                "x-resend-monthly-quota",
+                "ratelimit-limit",
+                "ratelimit-remaining",
+                "ratelimit-reset",
+                "retry-after",
+            ].flatMap((name) => {
+                const value = response.headers.get(name);
+                return value ? [[name, value]] : [];
+            })
+        );
+        const providerCode = payload?.name ?? "";
+        const isQuotaHold =
+            response.status === 429 ||
+            /daily_quota_exceeded|monthly_quota_exceeded|rate_limit_exceeded/i.test(
+                providerCode
+            );
+        const retryAfter = Number(response.headers.get("retry-after"));
+        const retryAt = Number.isFinite(retryAfter) && retryAfter > 0
+            ? new Date(Date.now() + retryAfter * 1000).toISOString()
+            : null;
 
         if (!response.ok || !payload?.id) {
             return {
-                deliveryStatus: "failed",
+                deliveryStatus: isQuotaHold ? "held" : "failed",
                 providerMessageId: null,
                 sender,
                 recipient,
                 failureReason:
                     payload?.message ?? payload?.name ?? `Resend returned ${response.status}.`,
+                providerHeaders,
+                retryAt,
             };
         }
 
@@ -110,6 +139,8 @@ export async function sendOperationalEmail({
             sender,
             recipient,
             failureReason: null,
+            providerHeaders,
+            retryAt: null,
         };
     } catch (error) {
         return {
@@ -119,6 +150,8 @@ export async function sendOperationalEmail({
             recipient,
             failureReason:
                 error instanceof Error ? error.message : "Resend request failed.",
+            providerHeaders: {},
+            retryAt: null,
         };
     }
 }

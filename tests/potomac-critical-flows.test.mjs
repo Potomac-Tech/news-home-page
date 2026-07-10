@@ -482,6 +482,50 @@ test("operational Resend email stays server-only, auditable, and safe on deliver
     );
 });
 
+test("Resend Free quota governor reserves capacity before sending and exposes an admin queue", () => {
+    const migration = readMigration("20260710184052_resend_free_quota_governor.sql");
+    const rateMigration = readMigration("20260710184521_resend_rate_window_enforcement.sql");
+    const adminMigration = readMigration("20260710184638_admin_resend_email_operations_rpc.sql");
+    const quota = read("lib/email/resend-quota.ts");
+    const transport = read("lib/email/resend.ts");
+    const action = read("app/command/actions.ts");
+    const adminPage = read("app/admin/email/page.tsx");
+    const environment = read(".env.example");
+
+    assertIncludes(migration + rateMigration + adminMigration + quota + transport + action + adminPage + environment, [
+        "daily_soft_cap integer not null default 90",
+        "monthly_soft_cap integer not null default 2700",
+        "daily_hard_cap integer not null default 100",
+        "monthly_hard_cap integer not null default 3000",
+        "operational_daily_reserve integer not null default 10",
+        "operational_monthly_reserve integer not null default 300",
+        "max_sends_per_second integer not null default 8",
+        "inbound_receiving_enabled boolean not null default false",
+        "sending_domain_count integer not null default 1",
+        "claim_resend_free_quota",
+        "claim_resend_send_rate",
+        "resend_send_rate_windows",
+        "complete_resend_free_quota",
+        "pg_advisory_xact_lock",
+        "idempotency_key",
+        "provider_headers",
+        "x-resend-daily-quota",
+        "daily_quota_exceeded",
+        "rate_limit_exceeded",
+        "delivery-pending",
+        "Resend Free email queue",
+        "get_resend_email_operations",
+        "admin access is required",
+        "RESEND_PLAN=free",
+        "RESEND_INBOUND_RECEIVING=disabled",
+    ], "Resend Free quota governance");
+    assert.doesNotMatch(
+        quota + environment,
+        /pay[-_ ]?as[-_ ]?you[-_ ]?go|NEXT_PUBLIC_RESEND/i,
+        "quota configuration must not add paid or public Resend controls"
+    );
+});
+
 test("the enterprise display label is configurable without changing internal Command access", () => {
     const tierConfig = read("app/_data/tiers.ts");
     const publicTierSurfaces = [
