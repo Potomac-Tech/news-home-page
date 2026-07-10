@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { tierConfig } from "../_data/tiers";
+import { createClient } from "../../lib/supabase/server";
+import { getProfileGateContext, safeReturnPath } from "../../lib/auth/profile-completion";
+import { ScoutCheckoutButton } from "../member/ScoutCheckoutButton";
 
 export const metadata: Metadata = {
     title: "Upgrade",
@@ -11,7 +15,21 @@ export const metadata: Metadata = {
     },
 };
 
-export default function UpgradePage() {
+type UpgradePageProps = {
+    searchParams: Promise<{ tier?: string; source?: string; content?: string; object?: string; next?: string; campaign?: string }>;
+};
+
+export default async function UpgradePage({ searchParams }: UpgradePageProps) {
+    const { tier, source, content, object, next, campaign } = await searchParams;
+    const requestedTier = tier === "meridian" ? "meridian" : "scout";
+    const returnUrl = safeReturnPath(next, "/member");
+    const upgradeUrl = `/upgrade?tier=${requestedTier}&next=${encodeURIComponent(returnUrl)}${source ? `&source=${encodeURIComponent(source)}` : ""}${content ? `&content=${encodeURIComponent(content)}` : ""}${object ? `&object=${encodeURIComponent(object)}` : ""}${campaign ? `&campaign=${encodeURIComponent(campaign)}` : ""}`;
+    const supabase = await createClient();
+    const gate = await getProfileGateContext({ supabase, nextPath: upgradeUrl });
+    if (gate.state === "signed_out" || gate.state === "email_unverified") redirect(gate.loginHref);
+    if (gate.state === "profile_incomplete" && gate.profileHref) redirect(gate.profileHref);
+    const commandHref = `/command?next=${encodeURIComponent(returnUrl)}${source ? `&source=${encodeURIComponent(source)}` : ""}${content ? `&content=${encodeURIComponent(content)}` : ""}${campaign ? `&campaign=${encodeURIComponent(campaign)}` : ""}`;
+
     return (
         <section className="bg-grid-pattern">
             <div className="mx-auto min-h-[calc(100vh-9rem)] w-full max-w-7xl px-4 py-16 md:px-8">
@@ -23,9 +41,7 @@ export default function UpgradePage() {
                         Scout or {tierConfig.enterprise.publicName}
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
-                        Scout is self-serve professional access at{" "}
-                        {tierConfig.scout.price}/user/year. {tierConfig.enterprise.publicName} is handled
-                        through a submitted inquiry and manual contract discussion.
+                        Continue from the intelligence item you selected. Scout is self-serve professional access; {tierConfig.enterprise.publicName} is handled through a submitted contract discussion.
                     </p>
                 </div>
                 <div className="mt-10 grid gap-5 md:grid-cols-2">
@@ -42,12 +58,7 @@ export default function UpgradePage() {
                         <p className="mt-5 text-sm leading-6 text-potomac-cream/70">
                             {tierConfig.scout.description}
                         </p>
-                        <Link
-                            href="/member"
-                            className="mt-6 inline-flex rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
-                        >
-                            Continue to workspace
-                        </Link>
+                        {requestedTier === "scout" ? <div className="mt-6"><ScoutCheckoutButton /></div> : <Link href={upgradeUrl.replace("tier=meridian", "tier=scout")} className="mt-6 inline-flex rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream">Choose Scout</Link>}
                     </article>
                     <article className="glass-card rounded p-6">
                         <h2 className="font-serif text-3xl text-white">
@@ -64,10 +75,10 @@ export default function UpgradePage() {
                             follow up for contract discussion after review.
                         </p>
                         <Link
-                            href="/command"
+                            href={commandHref}
                             className="mt-6 inline-flex rounded border border-potomac-gold/50 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                         >
-                            Request {tierConfig.enterprise.publicName}
+                            {requestedTier === "meridian" ? "Continue to contract discussion" : `Request ${tierConfig.enterprise.publicName}`}
                         </Link>
                     </article>
                 </div>

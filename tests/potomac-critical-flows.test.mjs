@@ -562,6 +562,30 @@ test("Meridian inquiry requires a completed member and retains the contract-only
     );
 });
 
+test("upgrade handoff preserves premium context and separates Scout checkout from Meridian", () => {
+    const upgrade = read("app/upgrade/page.tsx");
+    const checkout = read("app/member/ScoutCheckoutButton.tsx");
+
+    assertIncludes(upgrade + checkout, [
+        "tier?: string",
+        "source?: string",
+        "content?: string",
+        "object?: string",
+        "campaign?: string",
+        "getProfileGateContext",
+        "email_unverified",
+        "profile_incomplete",
+        "ScoutCheckoutButton",
+        "commandHref",
+        "tier=meridian",
+    ], "premium upgrade handoff");
+    assert.doesNotMatch(
+        upgrade,
+        /mailto:|invoice|payment-provider/i,
+        "Meridian handoff must not expose mailto or payment-provider placeholders"
+    );
+});
+
 test("the enterprise display label is configurable without changing internal Command access", () => {
     const tierConfig = read("app/_data/tiers.ts");
     const publicTierSurfaces = [
