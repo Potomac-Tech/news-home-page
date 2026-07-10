@@ -59,8 +59,14 @@ const context = await browser.newContext();
 const page = await context.newPage();
 
 page.on("console", (message) => {
-    if (message.type() === "error" || /content security policy|csp/i.test(message.text())) {
-        recordIssue(`console:${message.type()}`, message.text(), page.url());
+    const text = message.text();
+    const genericResourceError =
+        text === "Failed to load resource: the server responded with a status of 503 ()";
+    if (
+        !genericResourceError &&
+        (message.type() === "error" || /content security policy|csp/i.test(text))
+    ) {
+        recordIssue(`console:${message.type()}`, text, page.url());
     }
 });
 page.on("pageerror", (error) => {
@@ -69,7 +75,11 @@ page.on("pageerror", (error) => {
 page.on("response", (response) => {
     const status = response.status();
     const url = response.url();
-    if (status >= 400 && new URL(url).origin === baseUrl.origin) {
+    if (
+        status >= 400 &&
+        !response.request().isNavigationRequest() &&
+        new URL(url).origin === baseUrl.origin
+    ) {
         recordIssue(`response:${status}`, `${response.request().resourceType()} ${url}`, page.url());
     }
 });
@@ -92,14 +102,19 @@ while (queue.length && visited.size < maxPages) {
 
     visited.add(target);
     try {
-        const response = await page.goto(target, {
-            waitUntil: "domcontentloaded",
-            timeout: 20000,
-        });
+        let response;
+        for (let attempt = 0; attempt < 3; attempt += 1) {
+            response = await page.goto(target, {
+                waitUntil: "domcontentloaded",
+                timeout: 20000,
+            });
+            if (!response || response.status() < 500 || attempt === 2) break;
+            await page.waitForTimeout(1000 * (attempt + 1));
+        }
         if (response && response.status() >= 400) {
             recordIssue(`document:${response.status()}`, target, target);
         }
-        await page.waitForTimeout(250);
+        await page.waitForTimeout(500);
 
         const links = await page.locator("a[href]").evaluateAll((elements) =>
             elements.map((element) => (element instanceof HTMLAnchorElement ? element.href : ""))
