@@ -526,6 +526,42 @@ test("Resend Free quota governor reserves capacity before sending and exposes an
     );
 });
 
+test("Meridian inquiry requires a completed member and retains the contract-only path", () => {
+    const workflow = readMigration("20260710185238_meridian_authenticated_inquiry_workflow.sql");
+    const override = readMigration("20260710185543_meridian_domain_rule_admin_override.sql");
+    const page = read("app/command/page.tsx");
+    const form = read("app/command/CommandInterestForm.tsx");
+    const action = read("app/command/actions.ts");
+    const meridianSurfaces = [read("app/command/page.tsx"), read("app/command/CommandInterestForm.tsx")].join("\n");
+
+    assertIncludes(workflow + override + page + form + action, [
+        "member_profile_completions",
+        "email_confirmed_at is not null",
+        "meridian_email_domain_rules",
+        "meridian_email_validation_audit",
+        "googlemail.com",
+        "fastmail.com",
+        "hey.com",
+        "set_meridian_email_domain_rule",
+        "app_private.has_role('admin')",
+        "requested_product_label",
+        "verified_auth_email",
+        "source_cta",
+        "return_url",
+        "communication_preference",
+        "create_meridian_delivery_event",
+        "claim_meridian_delivery_quota",
+        "complete_meridian_delivery",
+        "getProfileGateContext",
+        "contract_discussion_contact_approved",
+    ], "Meridian inquiry workflow");
+    assert.doesNotMatch(
+        meridianSurfaces,
+        /mailto:|checkout|invoice|payment-provider/i,
+        "Meridian public surfaces must not expose payment or mailto workflows"
+    );
+});
+
 test("the enterprise display label is configurable without changing internal Command access", () => {
     const tierConfig = read("app/_data/tiers.ts");
     const publicTierSurfaces = [

@@ -3,6 +3,14 @@ import { tierConfig } from "../_data/tiers";
 
 type CommandInterestFormProps = {
     status?: string;
+    sourceCta?: string;
+    sourceContent?: string;
+    returnUrl: string;
+    attribution: Record<string, string>;
+    defaultName: string;
+    defaultOrganization: string;
+    defaultTitle: string;
+    communicationPreference: string;
 };
 
 const statusMessages: Record<string, string> = {
@@ -18,18 +26,33 @@ const statusMessages: Record<string, string> = {
         "Your inquiry is recorded and awaiting delivery review. Cabeus Explorer will follow up directly.",
 };
 
-export function CommandInterestForm({ status }: CommandInterestFormProps) {
+export function CommandInterestForm({
+    status,
+    sourceCta,
+    sourceContent,
+    returnUrl,
+    attribution,
+    defaultName,
+    defaultOrganization,
+    defaultTitle,
+    communicationPreference,
+}: CommandInterestFormProps) {
     const message = status ? statusMessages[status] : undefined;
     const isError = status && !["submitted", "delivery-pending"].includes(status);
 
     return (
         <form action={submitMeridianInterest} className="glass-card rounded p-6">
+            <input type="hidden" name="source_cta" value={sourceCta ?? ""} />
+            <input type="hidden" name="source_content" value={sourceContent ?? ""} />
+            <input type="hidden" name="return_url" value={returnUrl} />
+            <input type="hidden" name="attribution" value={JSON.stringify(attribution)} />
             <div className="grid gap-5 md:grid-cols-2">
                 <label className="block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
                     Contact name
                     <input
                         required
                         name="contact_name"
+                        defaultValue={defaultName}
                         type="text"
                         autoComplete="name"
                         className="mt-2 w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-base font-normal normal-case tracking-normal text-white outline-none transition focus:border-potomac-gold"
@@ -50,6 +73,7 @@ export function CommandInterestForm({ status }: CommandInterestFormProps) {
                     <input
                         required
                         name="organization_name"
+                        defaultValue={defaultOrganization}
                         type="text"
                         autoComplete="organization"
                         className="mt-2 w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-base font-normal normal-case tracking-normal text-white outline-none transition focus:border-potomac-gold"
@@ -59,6 +83,7 @@ export function CommandInterestForm({ status }: CommandInterestFormProps) {
                     Title
                     <input
                         name="title"
+                        defaultValue={defaultTitle}
                         type="text"
                         autoComplete="organization-title"
                         className="mt-2 w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-base font-normal normal-case tracking-normal text-white outline-none transition focus:border-potomac-gold"
@@ -73,6 +98,17 @@ export function CommandInterestForm({ status }: CommandInterestFormProps) {
                     min="1"
                     className="mt-2 w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-base font-normal normal-case tracking-normal text-white outline-none transition focus:border-potomac-gold"
                 />
+            </label>
+            <label className="mt-5 flex items-start gap-3 text-sm leading-6 text-potomac-cream/75">
+                <input
+                    required
+                    name="communication_preference"
+                    type="checkbox"
+                    value="contract_discussion_contact_approved"
+                    defaultChecked={communicationPreference === "contract_discussion_contact_approved"}
+                    className="mt-1 h-4 w-4 accent-potomac-gold"
+                />
+                <span>I agree that Cabeus Explorer may contact me about this Meridian contract discussion.</span>
             </label>
             <label className="mt-5 block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
                 Mission need

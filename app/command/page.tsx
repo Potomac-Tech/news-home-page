@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { CommandInterestForm } from "./CommandInterestForm";
 import { tierConfig } from "../_data/tiers";
+import { createClient } from "../../lib/supabase/server";
+import { getProfileGateContext, safeReturnPath } from "../../lib/auth/profile-completion";
 
 export const metadata: Metadata = {
     title: tierConfig.enterprise.publicName,
@@ -14,11 +17,23 @@ export const metadata: Metadata = {
 type CommandPageProps = {
     searchParams: Promise<{
         status?: string;
+        source?: string;
+        content?: string;
+        next?: string;
+        campaign?: string;
     }>;
 };
 
 export default async function CommandPage({ searchParams }: CommandPageProps) {
-    const { status } = await searchParams;
+    const { status, source, content, next, campaign } = await searchParams;
+    const supabase = await createClient();
+    const gate = await getProfileGateContext({ supabase, nextPath: "/command" });
+    if (gate.state === "signed_out" || gate.state === "email_unverified") {
+        redirect(gate.loginHref);
+    }
+    if (gate.state === "profile_incomplete" && gate.profileHref) {
+        redirect(gate.profileHref);
+    }
 
     return (
         <section className="bg-grid-pattern">
@@ -36,7 +51,17 @@ export default async function CommandPage({ searchParams }: CommandPageProps) {
                         intelligence, analyst support, and mission briefings.
                     </p>
                 </div>
-                <CommandInterestForm status={status} />
+                <CommandInterestForm
+                    status={status}
+                    sourceCta={source}
+                    sourceContent={content}
+                    returnUrl={safeReturnPath(next, "/command")}
+                    attribution={{ campaign: campaign ?? "", source: source ?? "" }}
+                    defaultName={gate.profile?.full_name ?? ""}
+                    defaultOrganization={gate.profile?.affiliation ?? ""}
+                    defaultTitle={gate.profile?.role_title ?? ""}
+                    communicationPreference={gate.profile?.communication_preference ?? ""}
+                />
             </div>
         </section>
     );

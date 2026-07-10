@@ -1,167 +1,123 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { getOperationalEmailRecipient, getOperationalEmailSender, sendOperationalEmail } from "../../lib/email/resend";
+import { hasValidResendFreePlanConfig, resendFreePlanConfigurationError } from "../../lib/email/resend-quota";
+import { getProfileGateContext, safeReturnPath } from "../../lib/auth/profile-completion";
 import { createClient } from "../../lib/supabase/server";
-import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
-import { createServiceClient } from "../../lib/supabase/service";
-import {
-    getOperationalEmailRecipient,
-    getOperationalEmailSender,
-    sendOperationalEmail,
-} from "../../lib/email/resend";
-import {
-    hasValidResendFreePlanConfig,
-    resendFreePlanConfigurationError,
-    type ResendQuotaClaim,
-} from "../../lib/email/resend-quota";
 
-const personalEmailDomains = new Set([
-    "aol.com",
-    "gmail.com",
-    "hotmail.com",
-    "icloud.com",
-    "live.com",
-    "me.com",
-    "msn.com",
-    "outlook.com",
-    "proton.me",
-    "protonmail.com",
-    "yahoo.com",
-]);
+type MeridianQuotaClaim = {
+    allowed: boolean;
+    hold_reason: string | null;
+    retry_at: string | null;
+};
 
-function getEmailDomain(email: string) {
-    const [, domain] = email.toLowerCase().split("@");
-    return domain ?? "";
+function text(formData: FormData, name: string) {
+    return String(formData.get(name) ?? "").trim();
 }
 
 export async function submitMeridianInterest(formData: FormData) {
-    const contactName = String(formData.get("contact_name") ?? "").trim();
-    const contactEmail = String(formData.get("contact_email") ?? "").trim();
-    const organizationName = String(formData.get("organization_name") ?? "").trim();
-    const title = String(formData.get("title") ?? "").trim();
-    const useCase = String(formData.get("use_case") ?? "").trim();
-    const estimatedSeats = Number(formData.get("estimated_seats") ?? 0);
-    const emailDomain = getEmailDomain(contactEmail);
+    const returnUrl = safeReturnPath(text(formData, "return_url"), "/command");
+    const supabase = await createClient();
+    const gate = await getProfileGateContext({ supabase, nextPath: returnUrl });
 
-    if (!contactName || !contactEmail || !organizationName || !emailDomain) {
+    if (gate.state === "signed_out" || gate.state === "email_unverified") {
+        redirect(gate.loginHref);
+    }
+    if (gate.state === "profile_incomplete" && gate.profileHref) {
+        redirect(gate.profileHref);
+    }
+
+    const contactName = text(formData, "contact_name");
+    const contactEmail = text(formData, "contact_email");
+    const organizationName = text(formData, "organization_name");
+    const title = text(formData, "title");
+    const useCase = text(formData, "use_case");
+    const estimatedSeats = Number(formData.get("estimated_seats") ?? 0);
+    const sourceCta = text(formData, "source_cta");
+    const sourceContent = text(formData, "source_content");
+    const communicationPreference = text(formData, "communication_preference");
+    let attribution: Record<string, string> = {};
+    try {
+        attribution = JSON.parse(text(formData, "attribution") || "{}") as Record<string, string>;
+    } catch {
+        attribution = {};
+    }
+
+    if (!contactName || !contactEmail || !organizationName) {
         redirect("/command?status=missing-required");
     }
 
-    if (personalEmailDomains.has(emailDomain)) {
-        redirect("/command?status=business-email-required");
-    }
+    const { data: interestId, error: interestError } = await supabase.rpc(
+        "submit_meridian_interest",
+        {
+            p_contact_name: contactName,
+            p_business_email: contactEmail,
+            p_organization_name: organizationName,
+            p_title: title,
+            p_estimated_seats: estimatedSeats,
+            p_use_case: useCase,
+            p_source_cta: sourceCta,
+            p_source_content: sourceContent,
+            p_return_url: returnUrl,
+            p_attribution: attribution,
+            p_communication_preference: communicationPreference,
+        }
+    );
 
-    if (!hasPotomacSupabasePublicConfig()) {
-        redirect("/command?status=configuration-needed");
-    }
-
-    const supabase = await createClient();
-    const { data: interest, error } = await supabase
-        .from("command_interest_requests")
-        .insert({
-        contact_name: contactName,
-        contact_email: contactEmail,
-        organization_name: organizationName,
-        title: title || null,
-        estimated_seats: estimatedSeats > 0 ? estimatedSeats : null,
-        use_case: useCase || null,
-        status: "new",
-        })
-        .select("id")
-        .single();
-
-    if (error) {
-        redirect("/command?status=submit-error");
-    }
-
-    let service;
-    try {
-        service = createServiceClient();
-    } catch {
-        redirect("/command?status=configuration-needed");
+    if (interestError || !interestId) {
+        const message = interestError?.message ?? "";
+        redirect(
+            `/command?status=${
+                /business or organization email/i.test(message)
+                    ? "business-email-required"
+                    : "submit-error"
+            }`
+        );
     }
 
     const sender = getOperationalEmailSender();
     const recipient = getOperationalEmailRecipient("meridian_interest");
-    const { data: deliveryEvent, error: deliveryEventError } = await service
-        .schema("private")
-        .from("outbound_email_delivery_events")
-        .insert({
-            command_interest_request_id: interest.id,
-            form_type: "meridian_interest",
-            provider: "resend",
-            sender,
-            recipient,
-            recipient_count: 1,
-            reply_to: contactEmail,
-            delivery_status: "queued",
-            retry_status: "not_requested",
-            quota_bucket: "operational",
-            priority: "operational",
-            idempotency_key: `meridian-interest:${interest.id}`,
-        })
-        .select("id")
-        .single();
+    const { data: deliveryEventId, error: eventError } = await supabase.rpc(
+        "create_meridian_delivery_event",
+        {
+            p_interest_id: interestId,
+            p_sender: sender,
+            p_recipient: recipient,
+            p_reply_to: contactEmail,
+        }
+    );
 
-    if (deliveryEventError || !deliveryEvent) {
+    if (eventError || !deliveryEventId) {
         redirect("/command?status=configuration-needed");
     }
 
     if (!hasValidResendFreePlanConfig()) {
-        await service
-            .schema("private")
-            .from("outbound_email_delivery_events")
-            .update({
-                delivery_status: "configuration_missing",
-                failure_reason: resendFreePlanConfigurationError(),
-                updated_at: new Date().toISOString(),
-            })
-            .eq("id", deliveryEvent.id);
+        await supabase.rpc("complete_meridian_delivery", {
+            p_event_id: deliveryEventId,
+            p_delivery_status: "configuration_missing",
+            p_provider_message_id: null,
+            p_failure_reason: resendFreePlanConfigurationError(),
+            p_provider_headers: {},
+            p_next_retry_at: null,
+        });
         redirect("/command?status=configuration-needed");
     }
 
-    const { data: rateData, error: rateError } = await service
-        .schema("private")
-        .rpc("claim_resend_send_rate");
-    const rateClaim = (rateData as Array<{ allowed: boolean; retry_at: string | null }> | null)?.[0];
-
-    if (rateError || !rateClaim?.allowed) {
-        await service
-            .schema("private")
-            .from("outbound_email_delivery_events")
-            .update({
-                delivery_status: "held",
-                retry_status: "retry_pending",
-                failure_reason: "Resend send-rate capacity is temporarily unavailable.",
-                next_retry_at: rateClaim?.retry_at ?? null,
-                updated_at: new Date().toISOString(),
-            })
-            .eq("id", deliveryEvent.id);
-        redirect("/command?status=delivery-pending");
-    }
-
-    const { data: quotaData, error: quotaError } = await service
-        .schema("private")
-        .rpc("claim_resend_free_quota", {
-            p_event_id: deliveryEvent.id,
-            p_recipient_count: 1,
-            p_is_operational: true,
-        });
-    const quotaClaim = (quotaData as ResendQuotaClaim[] | null)?.[0];
-
+    const { data: quotaData, error: quotaError } = await supabase.rpc(
+        "claim_meridian_delivery_quota",
+        { p_event_id: deliveryEventId }
+    );
+    const quotaClaim = (quotaData as MeridianQuotaClaim[] | null)?.[0];
     if (quotaError || !quotaClaim?.allowed) {
-        await service
-            .schema("private")
-            .from("outbound_email_delivery_events")
-            .update({
-                delivery_status: "held",
-                retry_status: "retry_pending",
-                failure_reason:
-                    quotaClaim?.hold_reason ?? "Resend quota check is unavailable.",
-                next_retry_at: quotaClaim?.retry_at ?? null,
-                updated_at: new Date().toISOString(),
-            })
-            .eq("id", deliveryEvent.id);
+        await supabase.rpc("complete_meridian_delivery", {
+            p_event_id: deliveryEventId,
+            p_delivery_status: "held",
+            p_provider_message_id: null,
+            p_failure_reason: quotaClaim?.hold_reason ?? "Resend quota check is unavailable.",
+            p_provider_headers: {},
+            p_next_retry_at: quotaClaim?.retry_at ?? null,
+        });
         redirect("/command?status=delivery-pending");
     }
 
@@ -171,47 +127,26 @@ export async function submitMeridianInterest(formData: FormData) {
         replyTo: contactEmail,
         text: [
             `Contact: ${contactName}`,
-            `Email: ${contactEmail}`,
+            `Verified account: ${gate.userId}`,
+            `Business email: ${contactEmail}`,
             `Organization: ${organizationName}`,
             `Title: ${title || "Not provided"}`,
             `Estimated seats: ${estimatedSeats > 0 ? estimatedSeats : "Not provided"}`,
             `Mission need: ${useCase || "Not provided"}`,
-            `Lead ID: ${interest.id}`,
+            `Source CTA: ${sourceCta || "Not provided"}`,
+            `Source content: ${sourceContent || "Not provided"}`,
+            `Return URL: ${returnUrl}`,
         ].join("\n"),
     });
 
-    await service
-        .schema("private")
-        .from("outbound_email_delivery_events")
-        .update({
-            provider_message_id: delivery.providerMessageId,
-            sender: delivery.sender,
-            recipient: delivery.recipient,
-            reply_to: contactEmail,
-            delivery_status: delivery.deliveryStatus,
-            retry_status:
-                delivery.deliveryStatus === "held" ? "retry_pending" : "not_requested",
-            failure_reason: delivery.failureReason,
-            provider_headers: delivery.providerHeaders,
-            next_retry_at: delivery.retryAt,
-            updated_at: new Date().toISOString(),
-        })
-        .eq("id", deliveryEvent.id);
-
-    await service.schema("private").rpc("complete_resend_free_quota", {
-        p_recipient_count: 1,
-        p_sent: delivery.deliveryStatus === "sent",
+    await supabase.rpc("complete_meridian_delivery", {
+        p_event_id: deliveryEventId,
+        p_delivery_status: delivery.deliveryStatus,
+        p_provider_message_id: delivery.providerMessageId,
+        p_failure_reason: delivery.failureReason,
+        p_provider_headers: delivery.providerHeaders,
+        p_next_retry_at: delivery.retryAt,
     });
 
-    if (delivery.deliveryStatus === "sent") {
-        redirect("/command?status=submitted");
-    }
-
-    redirect(
-        `/command?status=${
-            delivery.deliveryStatus === "configuration_missing"
-                ? "configuration-needed"
-                : "delivery-pending"
-        }`
-    );
+    redirect(`/command?status=${delivery.deliveryStatus === "sent" ? "submitted" : "delivery-pending"}`);
 }
