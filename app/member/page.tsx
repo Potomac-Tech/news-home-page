@@ -427,7 +427,7 @@ export default async function MemberPage() {
     const supabase = await createClient();
     const profileGate = await getProfileGateContext({ supabase, nextPath: "/member" });
     if (profileGate.state === "signed_out") redirect(profileGate.loginHref);
-    if (profileGate.state === "email_unverified") redirect("/request-access?tab=signin&next=%2Fmember");
+    if (profileGate.state === "email_unverified") redirect(profileGate.loginHref);
     if (profileGate.state === "profile_incomplete" && profileGate.profileHref) redirect(profileGate.profileHref);
     const claims = (await supabase.auth.getClaims()).data?.claims as AuthClaims | undefined;
     if (!claims?.sub) redirect("/request-access?tab=signin&next=%2Fmember");

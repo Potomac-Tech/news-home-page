@@ -416,28 +416,40 @@ function mapTier(value: string | null | undefined): SearchTier {
 export async function loadSearchResults({
     supabase,
     limit = 80,
+    publicOnly = false,
 }: {
     supabase?: SupabaseServerClient;
     limit?: number;
+    publicOnly?: boolean;
 } = {}): Promise<SearchResult[]> {
     if (!hasPotomacSupabasePublicConfig() || !supabase) {
-        return fallbackSearchResults;
+        return publicOnly
+            ? fallbackSearchResults.filter((result) => result.tier === "public")
+            : fallbackSearchResults;
     }
 
     try {
-        const { data, error } = await supabase
+        let query = supabase
             .from("intelligence_search_records")
             .select(
                 "id,source_kind,title,eyebrow,summary,snippet,route_path,visibility_tier,confidence_label,freshness_at,is_admin_pinned,source_count,keywords,metadata"
             )
             .eq("publication_status", "published")
-            .eq("is_search_enabled", true)
+            .eq("is_search_enabled", true);
+
+        if (publicOnly) {
+            query = query.eq("visibility_tier", "public");
+        }
+
+        const { data, error } = await query
             .order("is_admin_pinned", { ascending: false })
             .order("result_rank", { ascending: true })
             .limit(limit);
 
         if (error || !data?.length) {
-            return fallbackSearchResults;
+            return publicOnly
+                ? fallbackSearchResults.filter((result) => result.tier === "public")
+                : fallbackSearchResults;
         }
 
         return (data as Array<{
@@ -473,32 +485,46 @@ export async function loadSearchResults({
             isFallback: false,
         }));
     } catch {
-        return fallbackSearchResults;
+        return publicOnly
+            ? fallbackSearchResults.filter((result) => result.tier === "public")
+            : fallbackSearchResults;
     }
 }
 
 export async function loadCommandPaletteEntries({
     supabase,
+    publicOnly = false,
 }: {
     supabase?: SupabaseServerClient;
+    publicOnly?: boolean;
 } = {}): Promise<CommandPaletteEntry[]> {
     if (!hasPotomacSupabasePublicConfig() || !supabase) {
-        return fallbackCommandEntries;
+        return publicOnly
+            ? fallbackCommandEntries.filter((entry) => entry.tier === "public")
+            : fallbackCommandEntries;
     }
 
     try {
-        const { data, error } = await supabase
+        let query = supabase
             .from("intelligence_command_entries")
             .select(
                 "id,label,description,route_path,keyboard_shortcut,section_label,keywords,visibility_tier,is_admin_pinned"
             )
-            .eq("publication_status", "published")
+            .eq("publication_status", "published");
+
+        if (publicOnly) {
+            query = query.eq("visibility_tier", "public");
+        }
+
+        const { data, error } = await query
             .order("is_admin_pinned", { ascending: false })
             .order("admin_pin_rank", { ascending: true, nullsFirst: false })
             .limit(40);
 
         if (error || !data?.length) {
-            return fallbackCommandEntries;
+            return publicOnly
+                ? fallbackCommandEntries.filter((entry) => entry.tier === "public")
+                : fallbackCommandEntries;
         }
 
         return (data as Array<{
@@ -523,7 +549,9 @@ export async function loadCommandPaletteEntries({
             keywords: row.keywords ?? [],
         }));
     } catch {
-        return fallbackCommandEntries;
+        return publicOnly
+            ? fallbackCommandEntries.filter((entry) => entry.tier === "public")
+            : fallbackCommandEntries;
     }
 }
 

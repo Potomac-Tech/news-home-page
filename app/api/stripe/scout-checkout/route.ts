@@ -12,6 +12,20 @@ export async function POST(request: Request) {
     const supabase = await createClient();
     const profileGate = await getProfileGateContext({ supabase, nextPath: "/upgrade" });
 
+    if (profileGate.state === "email_unverified") {
+        return NextResponse.json(
+            { error: "Verify your email before starting Scout checkout." },
+            { status: 403 }
+        );
+    }
+
+    if (profileGate.state === "profile_incomplete") {
+        return NextResponse.json(
+            { error: "Complete your profile before starting Scout checkout." },
+            { status: 403 }
+        );
+    }
+
     if (profileGate.state !== "ready") {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

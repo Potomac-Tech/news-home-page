@@ -40,6 +40,10 @@ export async function GET(request: Request) {
             }
             return NextResponse.redirect(profileUrl);
         }
+
+        if (profileGate.state === "email_unverified") {
+            return NextResponse.redirect(new URL(profileGate.loginHref, requestUrl.origin));
+        }
     }
 
     return NextResponse.redirect(redirectUrl);

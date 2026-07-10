@@ -324,6 +324,7 @@ test("profile completion uses normalized member-owned data and gates the workspa
     const profileGate = read("lib/auth/profile-completion.ts");
     const profilePage = read("app/account/profile/complete/page.tsx");
     const profileForm = read("app/account/profile/complete/ProfileCompletionForm.tsx");
+    const verificationPage = read("app/account/verify/page.tsx");
     const memberPage = read("app/member/page.tsx");
     const protectedHelpers = [
         "lib/auth/article-access.ts",
@@ -341,11 +342,16 @@ test("profile completion uses normalized member-owned data and gates the workspa
         "lib/auth/lunar-market-intel.ts",
         "lib/auth/admin.ts",
         "lib/auth/org-admin.ts",
+        "lib/auth/company-universe.ts",
+        "lib/auth/editorial.ts",
+        "lib/auth/data-sources.ts",
+        "lib/auth/events.ts",
+        "lib/auth/sponsors.ts",
         "app/api/stripe/scout-checkout/route.ts",
     ].map(read).join("\n");
 
     assertIncludes(
-        migration + profileGate + profilePage + profileForm + memberPage,
+        migration + profileGate + profilePage + profileForm + verificationPage + memberPage,
         [
             "member_profile_completions",
             "enable row level security",
@@ -361,6 +367,9 @@ test("profile completion uses normalized member-owned data and gates the workspa
             "/account/profile/complete",
             "upsert",
             "email_confirmed_at",
+            "verificationRequiredHref",
+            "Verification required",
+            "Confirm your email to continue",
         ],
         "profile completion flow"
     );
@@ -373,6 +382,28 @@ test("profile completion uses normalized member-owned data and gates the workspa
         protectedHelpers,
         ["getProfileGateContext", "profile_incomplete", "email_unverified"],
         "protected access helpers"
+    );
+    assertIncludes(
+        profileGate + verificationPage + read("app/auth/callback/route.ts"),
+        ["email_unverified", "Check your inbox", "verificationRequiredHref", "/account/verify"],
+        "email verification handoff"
+    );
+});
+
+test("unverified and profile-incomplete users receive only public-safe search indexes", () => {
+    const searchData = read("app/_data/search.ts");
+    const searchPage = read("app/search/page.tsx");
+    const shell = read("app/_components/MigrationShell.tsx");
+
+    assertIncludes(
+        searchData + searchPage + shell,
+        [
+            "publicOnly",
+            'visibility_tier", "public"',
+            'profileGate?.state !== "ready"',
+            "getProfileGateContext",
+        ],
+        "public-safe search and command palette"
     );
 });
 

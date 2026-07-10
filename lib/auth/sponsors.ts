@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "../supabase/server";
+import { getProfileGateContext } from "./profile-completion";
 
 export type SponsorStaffContext = {
     supabase: Awaited<ReturnType<typeof createClient>>;
@@ -8,12 +9,17 @@ export type SponsorStaffContext = {
 
 export async function requireSponsorStaff(): Promise<SponsorStaffContext> {
     const supabase = await createClient();
-    const { data, error } = await supabase.auth.getClaims();
-    const userId = data?.claims?.sub;
-
-    if (error || !userId) {
-        redirect("/auth/login?next=/admin/sponsors");
+    const profileGate = await getProfileGateContext({
+        supabase,
+        nextPath: "/admin/sponsors",
+    });
+    if (profileGate.state === "signed_out" || profileGate.state === "email_unverified") {
+        redirect(profileGate.loginHref);
     }
+    if (profileGate.state === "profile_incomplete" && profileGate.profileHref) {
+        redirect(profileGate.profileHref);
+    }
+    const userId = profileGate.userId;
 
     const { data: role } = await supabase
         .from("member_role_assignments")

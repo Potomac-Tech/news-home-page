@@ -9,6 +9,7 @@ import {
     tierLabel,
     type SearchResult,
 } from "../_data/search";
+import { getProfileGateContext } from "../../lib/auth/profile-completion";
 
 export const dynamic = "force-dynamic";
 
@@ -166,7 +167,13 @@ export default async function SearchPage({
     const scope =
         params.scope && allowedScopes.has(params.scope) ? params.scope : "all";
     const supabase = await getSearchSupabaseClient();
-    const allResults = await loadSearchResults({ supabase });
+    const profileGate = supabase
+        ? await getProfileGateContext({ supabase, nextPath: "/search" })
+        : null;
+    const allResults = await loadSearchResults({
+        supabase,
+        publicOnly: profileGate?.state !== "ready",
+    });
     const visibleResults = searchResults({ results: allResults, query, scope });
     const sourceMode = allResults.some((result) => result.isFallback)
         ? "Fallback"

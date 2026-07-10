@@ -897,16 +897,16 @@ Blocked reason:
   - Verification: Added and applied Supabase migration `20260710053251_profile_completion_gate` with a normalized profile-completion table, explicit grants, own-row RLS policies, and staff-read policy. Added `/account/profile/complete`, member-owned profile upsert, verified-email checks, return-context support, callback profile handoff, and shared gates across articles, events, chat, forums, RFQs, saved work, alerts, marketplace, economy, uploads, developer tools, lunar terminal member views, administration, organization administration, and Scout checkout. `npm test` (12 tests), `npm run lint`, and `npm run build` passed. Cloudflare deployment `fcdf2d25-5475-44c1-954c-441b72149fa2` succeeded; anonymous production checks returned `200` for `/request-access` and `/events`, `307` to unified sign-in for `/account/profile/complete`, `/member`, and `/member/chat`, and `405` for a non-POST checkout request.
   - Blocked reason: None.
 
-- [ ] Task 081: Enforce email-verification and profile-completion gates for member and non-public content
+- [x] Task 081: Enforce email-verification and profile-completion gates for member and non-public content
   - Priority: P0
   - Requirement IDs: R-AUTH-001, R-AUTH-003
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Make verified email and completed profile the first gates before member-only content or signed-in intelligence app shells become visible.
   - Acceptance criteria: Shared auth/access helpers check Supabase email verification and profile completion before rendering member dashboards, `/tracker/launches`, full article bodies, paid intelligence, community/chat/forums/RFQ surfaces, saved work, alerts, uploads, admin dashboards, gated estimates, checkout, and personalized cards; email-unverified users see a verification-required state with resend/check-email guidance and public-safe CTAs; profile-incomplete users see a profile-completion-required state with `/account/profile/complete` CTA; public pages, `/request-access`, callback, logout, password recovery, account verification help, profile-completion help, and upgrade explainers remain accessible; route metadata, command palette, search results, server actions, API handlers, and RLS-facing helpers do not leak member content to email-unverified or profile-incomplete users; tests cover anonymous, email-unverified, profile-incomplete, verified/profile-complete generic authenticated, Explorer, Scout, Meridian/internal Command, staff, and admin cases.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Live verification depends on Supabase Auth configuration and seeded email/profile test users from Task 108; fixture-based tests can proceed earlier.
+  - Non-technical summary: Signed-in users now must verify their email and complete their profile before protected intelligence, member tools, administration, downloads, uploads, or checkout can load. Unverified users receive a dedicated confirmation screen, while search and the command palette show only public-safe entries until the profile is ready.
+  - Verification: `npm test` passed 13 checks, including profile-gate, callback-handoff, protected-helper, and public-safe search/command-palette regression coverage. `npm run lint` and `npm run build` passed. Production route verification follows deployment. Live role-by-role browser coverage requires the seeded verified, incomplete, and tiered fixture accounts planned in Task 108.
+  - Blocked reason: None. Full live fixture coverage remains scheduled under Task 108.
 
 - [ ] Task 082: Build email-verification UX, resend flow, and profile-completion handoff
   - Priority: P0

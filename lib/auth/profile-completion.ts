@@ -32,6 +32,10 @@ export function profileCompletionHref(nextPath: string) {
     return `/account/profile/complete?next=${encodeURIComponent(safeReturnPath(nextPath))}`;
 }
 
+export function verificationRequiredHref(nextPath: string) {
+    return `/account/verify?next=${encodeURIComponent(safeReturnPath(nextPath))}`;
+}
+
 export async function getProfileGateContext({
     supabase,
     nextPath,
@@ -41,10 +45,16 @@ export async function getProfileGateContext({
 }) {
     const { data: claimsData, error: claimsError } = await supabase.auth.getClaims();
     const userId = claimsData?.claims?.sub;
-    const loginHref = `/request-access?tab=signin&next=${encodeURIComponent(safeReturnPath(nextPath))}`;
+    const requestAccessHref = `/request-access?tab=signin&next=${encodeURIComponent(safeReturnPath(nextPath))}`;
 
     if (claimsError || !userId) {
-        return { state: "signed_out" as const, userId: null, loginHref, profileHref: null, profile: null };
+        return {
+            state: "signed_out" as const,
+            userId: null,
+            loginHref: requestAccessHref,
+            profileHref: null,
+            profile: null,
+        };
     }
 
     const { data: userData, error: userError } = await supabase.auth.getUser();
@@ -52,7 +62,7 @@ export async function getProfileGateContext({
         return {
             state: "email_unverified" as const,
             userId,
-            loginHref,
+            loginHref: verificationRequiredHref(nextPath),
             profileHref: null,
             profile: null,
         };
@@ -70,7 +80,7 @@ export async function getProfileGateContext({
         return {
             state: "profile_incomplete" as const,
             userId,
-            loginHref,
+            loginHref: requestAccessHref,
             profileHref: profileCompletionHref(nextPath),
             profile: null,
         };
@@ -79,7 +89,7 @@ export async function getProfileGateContext({
     return {
         state: "ready" as const,
         userId,
-        loginHref,
+        loginHref: requestAccessHref,
         profileHref: null,
         profile: data as ProfileCompletionRecord,
     };

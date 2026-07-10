@@ -33,9 +33,15 @@ export async function GET(
         nextPath: "/member/economy",
     });
 
-    if (access.state === "signed_out") {
+    if (access.state === "signed_out" || access.state === "email_unverified") {
         return NextResponse.redirect(
             new URL(access.loginHref, requestUrl.origin)
+        );
+    }
+
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        return NextResponse.redirect(
+            new URL(access.profileHref, requestUrl.origin)
         );
     }
 

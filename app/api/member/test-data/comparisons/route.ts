@@ -68,6 +68,14 @@ export async function POST(request: Request) {
         return jsonError("Sign in before running a comparison.", 401);
     }
 
+    if (access.state === "email_unverified") {
+        return jsonError("Verify your email before running a comparison.", 403);
+    }
+
+    if (access.state === "profile_incomplete") {
+        return jsonError("Complete your profile before running a comparison.", 403);
+    }
+
     if (!access.canUploadTestData || !access.userId) {
         return jsonError(
             "Scout or Command access is required for comparisons.",

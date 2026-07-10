@@ -7,6 +7,7 @@ import {
     getSearchSupabaseClient,
     loadCommandPaletteEntries,
 } from "../_data/search";
+import { getProfileGateContext } from "../../lib/auth/profile-completion";
 import { SearchCommandPalette } from "./SearchCommandPalette";
 
 const primaryNavItems = [
@@ -28,7 +29,13 @@ const footerNavItems = [
 
 export async function MigrationShell({ children }: { children: ReactNode }) {
     const supabase = await getSearchSupabaseClient();
-    const commandEntries = await loadCommandPaletteEntries({ supabase });
+    const profileGate = supabase
+        ? await getProfileGateContext({ supabase, nextPath: "/" })
+        : null;
+    const commandEntries = await loadCommandPaletteEntries({
+        supabase,
+        publicOnly: profileGate?.state !== "ready",
+    });
 
     return (
         <div className="min-h-screen bg-potomac-secondary text-potomac-cream">
