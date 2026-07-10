@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function ApplyPage() {
+export default function LegacySignupPage() {
     redirect("/request-access");
 }

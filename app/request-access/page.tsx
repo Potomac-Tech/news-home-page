@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { LoginForm } from "../auth/login/LoginForm";
 import { tierConfig } from "../_data/tiers";
+import { RequestAccessClient } from "./RequestAccessClient";
 
 export const metadata: Metadata = {
     title: "Request Access",
@@ -12,7 +11,13 @@ export const metadata: Metadata = {
     },
 };
 
-export default function RequestAccessPage() {
+export default async function RequestAccessPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ tab?: string; mode?: string }>;
+}) {
+    const params = await searchParams;
+
     return (
         <section className="bg-grid-pattern">
             <div className="mx-auto grid min-h-[calc(100vh-9rem)] w-full max-w-7xl items-center gap-10 px-4 py-20 md:grid-cols-[0.9fr_1.1fr] md:px-8">
@@ -28,22 +33,8 @@ export default function RequestAccessPage() {
                         secure sign-in link if you already have access, or
                         submit the free Explorer request for review.
                     </p>
-                    <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                        <Link
-                            href="/apply"
-                            className="bg-potomac-gold px-5 py-3 text-center font-mono text-[0.68rem] font-bold uppercase text-potomac-primary transition hover:bg-potomac-cream"
-                        >
-                            Request Explorer
-                        </Link>
-                        <Link
-                            href="/upgrade"
-                            className="border border-potomac-regolith/45 px-5 py-3 text-center font-mono text-[0.68rem] font-bold uppercase text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold"
-                        >
-                            Premium options
-                        </Link>
-                    </div>
                 </div>
-                <LoginForm />
+                <RequestAccessClient initialTab={params.tab} mode={params.mode} />
             </div>
         </section>
     );

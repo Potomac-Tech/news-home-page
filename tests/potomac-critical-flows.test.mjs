@@ -41,19 +41,26 @@ function escapeRegExp(value) {
 test("auth routes and proxy preserve Supabase login/session/logout behavior", () => {
     const loginPage = read("app/auth/login/page.tsx");
     const loginForm = read("app/auth/login/LoginForm.tsx");
+    const requestAccessPage = read("app/request-access/page.tsx");
+    const requestAccessClient = read("app/request-access/RequestAccessClient.tsx");
     const callbackRoute = read("app/auth/callback/route.ts");
     const logoutRoute = read("app/auth/logout/route.ts");
     const middleware = read("middleware.ts");
 
-    assertIncludes(loginPage + loginForm, [
-        "Supabase Auth",
+    assertIncludes(loginPage + loginForm + requestAccessPage + requestAccessClient, [
         "signInWithOtp",
         "emailRedirectTo",
+        "Sign up",
+        "Sign in",
+        "Explorer",
+        'tab: "signin"',
     ], "login flow");
     assertIncludes(callbackRoute, [
         "exchangeCodeForSession",
         "getSafeNextPath",
         "/member",
+        "source",
+        "redirectUrl",
     ], "auth callback");
     assertIncludes(logoutRoute, ["signOut", "/auth/login"], "logout route");
     assertIncludes(middleware, ["updateSession", "matcher"], "session middleware");
@@ -277,6 +284,39 @@ test("member workspace degrades safely when Supabase public configuration is abs
         "if (!hasPotomacSupabasePublicConfig())",
         "return <ConfigGate />",
     ], "member workspace configuration gate");
+});
+
+test("request access keeps Explorer signup, recovery, and return context in one gateway", () => {
+    const requestAccessPage = read("app/request-access/page.tsx");
+    const requestAccessClient = read("app/request-access/RequestAccessClient.tsx");
+    const applicationForm = read("app/apply/ApplicationForm.tsx");
+    const loginForm = read("app/auth/login/LoginForm.tsx");
+    const legacyApply = read("app/apply/page.tsx");
+    const legacyLogin = read("app/auth/login/page.tsx");
+
+    assertIncludes(
+        requestAccessPage + requestAccessClient + applicationForm + loginForm,
+        [
+            "Sign up",
+            "Sign in",
+            "Free membership selected",
+            "Explorer",
+            "signUp",
+            "membership_applications",
+            "signUpData.session",
+            "emailRedirectTo",
+            "resetPasswordForEmail",
+            "updateUser",
+            '"source", "campaign", "content", "tier"',
+            "upgrade?tier=",
+        ],
+        "request access gateway"
+    );
+    assertIncludes(
+        legacyApply + legacyLogin,
+        ["redirect(\"/request-access\")", "tab: \"signin\""],
+        "legacy access routes"
+    );
 });
 
 test("the enterprise display label is configurable without changing internal Command access", () => {
