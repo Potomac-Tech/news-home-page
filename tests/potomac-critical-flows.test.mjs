@@ -72,7 +72,7 @@ test("article gating and RBAC helpers use normalized role assignments", () => {
     const orgAdminAccess = read("lib/auth/org-admin.ts");
 
     assertIncludes(articleAccess, [
-        "getClaims",
+        "getProfileGateContext",
         "member_role_assignments",
         "rolesByTier",
         "canReadFullStory",
@@ -325,6 +325,24 @@ test("profile completion uses normalized member-owned data and gates the workspa
     const profilePage = read("app/account/profile/complete/page.tsx");
     const profileForm = read("app/account/profile/complete/ProfileCompletionForm.tsx");
     const memberPage = read("app/member/page.tsx");
+    const protectedHelpers = [
+        "lib/auth/article-access.ts",
+        "lib/auth/event-access.ts",
+        "lib/auth/member-chat.ts",
+        "lib/auth/member-forum.ts",
+        "lib/auth/rfq.ts",
+        "lib/auth/saved-work.ts",
+        "lib/auth/member-alerts.ts",
+        "lib/auth/data-marketplace.ts",
+        "lib/auth/test-data.ts",
+        "lib/auth/developer-platform.ts",
+        "lib/auth/economy.ts",
+        "lib/auth/lunar-missions.ts",
+        "lib/auth/lunar-market-intel.ts",
+        "lib/auth/admin.ts",
+        "lib/auth/org-admin.ts",
+        "app/api/stripe/scout-checkout/route.ts",
+    ].map(read).join("\n");
 
     assertIncludes(
         migration + profileGate + profilePage + profileForm + memberPage,
@@ -350,6 +368,11 @@ test("profile completion uses normalized member-owned data and gates the workspa
         profileGate + profileForm,
         /user_metadata|raw_user_meta_data/,
         "profile completion must not authorize from user-editable metadata"
+    );
+    assertIncludes(
+        protectedHelpers,
+        ["getProfileGateContext", "profile_incomplete", "email_unverified"],
+        "protected access helpers"
     );
 });
 

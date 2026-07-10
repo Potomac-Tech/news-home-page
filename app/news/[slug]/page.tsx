@@ -82,6 +82,7 @@ const anonymousAccess: ArticleAccessContext = {
     userId: null,
     roleId: null,
     loginHref: "/request-access?tab=signin",
+    profileHref: null,
 };
 
 function formatDate(value: string) {
@@ -315,6 +316,14 @@ function GatePanel({
                         className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
                     >
                         Sign in
+                    </Link>
+                ) : null}
+                {access.state === "profile_incomplete" && access.profileHref ? (
+                    <Link
+                        href={access.profileHref}
+                        className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
+                    >
+                        Complete profile
                     </Link>
                 ) : null}
                 <Link

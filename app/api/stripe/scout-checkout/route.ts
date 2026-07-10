@@ -4,18 +4,19 @@ import {
     createStripeClient,
     getScoutPriceId,
 } from "../../../../lib/stripe/server";
+import { getProfileGateContext } from "../../../../lib/auth/profile-completion";
 
 const SCOUT_ANNUAL_PRICE_USD = 25000;
 
 export async function POST(request: Request) {
     const supabase = await createClient();
-    const { data: claimsData, error: claimsError } =
-        await supabase.auth.getClaims();
-    const userId = claimsData?.claims?.sub;
+    const profileGate = await getProfileGateContext({ supabase, nextPath: "/upgrade" });
 
-    if (claimsError || !userId) {
+    if (profileGate.state !== "ready") {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = profileGate.userId;
+    const { data: claimsData } = await supabase.auth.getClaims();
 
     const { data: profile, error: profileError } = await supabase
         .from("member_profiles")
@@ -63,7 +64,7 @@ export async function POST(request: Request) {
     const stripe = createStripeClient();
     const priceId = getScoutPriceId();
     const origin = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(request.url).origin;
-    const claimsEmail = claimsData.claims.email;
+    const claimsEmail = claimsData?.claims.email;
     const customerEmail =
         profile.email ??
         (typeof claimsEmail === "string" ? claimsEmail : undefined);

@@ -108,10 +108,17 @@ export default async function MemberMissionsPage({
     }
 
     const supabase = await createClient();
-    const access = await getLunarMissionAccess({ supabase });
+    const access = await getLunarMissionAccess({
+        supabase,
+        nextPath: "/member/missions",
+    });
 
-    if (access.state === "anonymous" && !access.userId) {
-        redirect("/auth/login?next=/member/missions");
+    if (access.state === "anonymous" || access.state === "email_unverified") {
+        redirect(access.loginHref);
+    }
+
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        redirect(access.profileHref);
     }
 
     if (!access.canReadMemberDetails) {

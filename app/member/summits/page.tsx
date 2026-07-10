@@ -279,8 +279,11 @@ export default async function MemberSummitsPage() {
         nextPath: "/member/summits",
     });
 
-    if (access.state === "signed_out") {
+    if (access.state === "signed_out" || access.state === "email_unverified") {
         redirect(access.loginHref);
+    }
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        redirect(access.profileHref);
     }
 
     if (!access.canReadEventDetails) {

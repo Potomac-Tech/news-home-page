@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "../supabase/server";
+import { getProfileGateContext } from "./profile-completion";
 
 type OrganizationAdminContext = {
     supabase: Awaited<ReturnType<typeof createClient>>;
@@ -24,12 +25,17 @@ function uniqueOrganizationIds(...groups: OrganizationReference[][]) {
 
 export async function requireOrganizationAdmin(): Promise<OrganizationAdminContext> {
     const supabase = await createClient();
-    const { data, error } = await supabase.auth.getClaims();
-    const userId = data?.claims?.sub;
-
-    if (error || !userId) {
-        redirect("/auth/login?next=/organization");
+    const profileGate = await getProfileGateContext({
+        supabase,
+        nextPath: "/organization",
+    });
+    if (profileGate.state === "signed_out" || profileGate.state === "email_unverified") {
+        redirect(profileGate.loginHref);
     }
+    if (profileGate.state === "profile_incomplete" && profileGate.profileHref) {
+        redirect(profileGate.profileHref);
+    }
+    const userId = profileGate.userId;
 
     const now = new Date().toISOString();
 

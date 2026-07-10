@@ -76,10 +76,17 @@ function RecordRow({ record }: { record: LunarMarketRecord }) {
 
 export default async function MemberProcurementPage() {
     const supabase = await createClient();
-    const access = await getLunarMarketIntelAccess({ supabase });
+    const access = await getLunarMarketIntelAccess({
+        supabase,
+        nextPath: "/member/procurement",
+    });
 
-    if (!access.userId) {
-        redirect("/auth/login?next=/member/procurement");
+    if (access.state === "anonymous" || access.state === "email_unverified") {
+        redirect(access.loginHref);
+    }
+
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        redirect(access.profileHref);
     }
 
     const canReadPaid =

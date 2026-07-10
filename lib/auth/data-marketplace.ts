@@ -1,11 +1,13 @@
 import { createClient } from "../supabase/server";
+import { getProfileGateContext, type ProfileGateState } from "./profile-completion";
 
 export type DataMarketplaceAccessContext = {
     canReadDataMarketplace: boolean;
-    state: "signed_out" | "signed_in_locked" | "authorized";
+    state: Exclude<ProfileGateState, "ready"> | "signed_in_locked" | "authorized";
     userId: string | null;
     roleId: string | null;
     loginHref: string;
+    profileHref: string | null;
 };
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
@@ -25,19 +27,18 @@ export async function getDataMarketplaceAccessContext({
     supabase: SupabaseServerClient;
     nextPath: string;
 }): Promise<DataMarketplaceAccessContext> {
-    const loginHref = `/auth/login?next=${encodeURIComponent(nextPath)}`;
-    const { data, error } = await supabase.auth.getClaims();
-    const userId = data?.claims?.sub;
-
-    if (error || !userId) {
+    const profileGate = await getProfileGateContext({ supabase, nextPath });
+    if (profileGate.state !== "ready") {
         return {
             canReadDataMarketplace: false,
-            state: "signed_out",
-            userId: null,
+            state: profileGate.state,
+            userId: profileGate.userId,
             roleId: null,
-            loginHref,
+            loginHref: profileGate.loginHref,
+            profileHref: profileGate.profileHref,
         };
     }
+    const userId = profileGate.userId;
 
     const { data: role, error: roleError } = await supabase
         .from("member_role_assignments")
@@ -58,7 +59,8 @@ export async function getDataMarketplaceAccessContext({
             state: "signed_in_locked",
             userId,
             roleId: null,
-            loginHref,
+            loginHref: profileGate.loginHref,
+            profileHref: null,
         };
     }
 
@@ -67,6 +69,7 @@ export async function getDataMarketplaceAccessContext({
         state: "authorized",
         userId,
         roleId: role.role_id as string,
-        loginHref,
+        loginHref: profileGate.loginHref,
+        profileHref: null,
     };
 }

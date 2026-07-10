@@ -85,6 +85,7 @@ const anonymousAccess: EventAccessContext = {
     userId: null,
     roleId: null,
     loginHref: "/request-access?next=%2Fevents",
+    profileHref: null,
 };
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -245,7 +246,7 @@ async function loadEvents(): Promise<LoadedEvents> {
     const eventIds = ((data ?? []) as EventRow[]).map((event) => event.id);
     let detailsByEventId = new Map<string, EventCalendarDetails>();
 
-    if (eventIds.length && access.state !== "signed_out") {
+    if (eventIds.length && access.state === "authorized") {
         const { data: detailData, error: detailError } = await supabase
             .from("event_calendar_event_details")
             .select(
@@ -299,6 +300,14 @@ function MemberGate({
                         className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                     >
                         Sign in
+                    </Link>
+                ) : null}
+                {access.state === "profile_incomplete" && access.profileHref ? (
+                    <Link
+                        href={access.profileHref}
+                        className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
+                    >
+                        Complete profile
                     </Link>
                 ) : null}
                 <Link

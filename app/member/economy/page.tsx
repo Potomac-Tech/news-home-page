@@ -544,8 +544,11 @@ export default async function MemberEconomyPage() {
         nextPath: "/member/economy",
     });
 
-    if (access.state === "signed_out") {
+    if (access.state === "signed_out" || access.state === "email_unverified") {
         redirect(access.loginHref);
+    }
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        redirect(access.profileHref);
     }
 
     if (!access.canReadEconomyDashboard) {

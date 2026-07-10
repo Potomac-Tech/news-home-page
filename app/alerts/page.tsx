@@ -535,8 +535,11 @@ export default async function AlertsPage() {
         nextPath: "/alerts",
     });
 
-    if (access.state === "signed_out" || !access.userId) {
+    if (access.state === "signed_out" || access.state === "email_unverified" || !access.userId) {
         redirect(access.loginHref);
+    }
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        redirect(access.profileHref);
     }
 
     const dashboard = await loadMemberAlertsDashboard({

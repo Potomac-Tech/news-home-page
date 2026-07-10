@@ -1,12 +1,14 @@
 import { createClient } from "../supabase/server";
+import { getProfileGateContext, type ProfileGateState } from "./profile-completion";
 
 export type SavedWorkAccessContext = {
     canUseSavedWork: boolean;
     canManageOrganizationSavedWork: boolean;
-    state: "signed_out" | "signed_in_locked" | "authorized";
+    state: Exclude<ProfileGateState, "ready"> | "signed_in_locked" | "authorized";
     userId: string | null;
     roleId: string | null;
     loginHref: string;
+    profileHref: string | null;
 };
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
@@ -21,20 +23,19 @@ export async function getSavedWorkAccessContext({
     supabase: SupabaseServerClient;
     nextPath: string;
 }): Promise<SavedWorkAccessContext> {
-    const loginHref = `/auth/login?next=${encodeURIComponent(nextPath)}`;
-    const { data, error } = await supabase.auth.getClaims();
-    const userId = data?.claims?.sub;
-
-    if (error || !userId) {
+    const profileGate = await getProfileGateContext({ supabase, nextPath });
+    if (profileGate.state !== "ready") {
         return {
             canUseSavedWork: false,
             canManageOrganizationSavedWork: false,
-            state: "signed_out",
-            userId: null,
+            state: profileGate.state,
+            userId: profileGate.userId,
             roleId: null,
-            loginHref,
+            loginHref: profileGate.loginHref,
+            profileHref: profileGate.profileHref,
         };
     }
+    const userId = profileGate.userId;
 
     const { data: rolesData, error: roleError } = await supabase
         .from("member_role_assignments")
@@ -61,7 +62,8 @@ export async function getSavedWorkAccessContext({
             state: "signed_in_locked",
             userId,
             roleId: null,
-            loginHref,
+            loginHref: profileGate.loginHref,
+            profileHref: null,
         };
     }
 
@@ -72,7 +74,8 @@ export async function getSavedWorkAccessContext({
         state: "authorized",
         userId,
         roleId,
-        loginHref,
+        loginHref: profileGate.loginHref,
+        profileHref: null,
     };
 }
 
