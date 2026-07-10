@@ -1281,3 +1281,14 @@ Blocked reason:
   - Non-technical summary: Pending.
   - Verification: Not run yet.
   - Blocked reason: Depends on Tasks 077-114.
+
+- [ ] Task 116: Add lunar time display to the main page
+  - Priority: P1
+  - Requirement IDs: R-HOME-007
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Give public visitors a clear, reliable view of the current lunar reference time alongside UTC.
+  - Acceptance criteria: The main page shows a `Lunar Time` clock and corresponding UTC time using a documented, source-backed lunar reference-time calculation; it refreshes at least once per minute without layout shift; text labels explain the reference without claiming an unsupported local lunar civil timezone or mission-site time; the clock is keyboard and screen-reader accessible; failures render an approved unavailable state rather than a fabricated value; tests cover calculation formatting, UTC companion display, refresh behavior, unavailable state, reduced-motion/no-JavaScript fallback, and mobile/desktop layout.
+  - Non-technical summary: Pending.
+  - Verification: Not run yet.
+  - Blocked reason: The authoritative lunar reference-time source and calculation package or formula must be selected and documented before implementation; the display must not invent a lunar timezone.
