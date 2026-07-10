@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+import { getProfileGateContext } from "../../lib/auth/profile-completion";
 import { TerminalDashboardShell } from "../_components/TerminalDashboardShell";
 import { ScoutCheckoutButton } from "./ScoutCheckoutButton";
 import { loadPublicTickerItems } from "../_data/marketQuotes";
@@ -424,12 +425,12 @@ export default async function MemberPage() {
     }
 
     const supabase = await createClient();
-    const { data, error } = await supabase.auth.getClaims();
-    const claims = data?.claims as AuthClaims | undefined;
-
-    if (error || !claims?.sub) {
-        redirect("/auth/login?next=/member");
-    }
+    const profileGate = await getProfileGateContext({ supabase, nextPath: "/member" });
+    if (profileGate.state === "signed_out") redirect(profileGate.loginHref);
+    if (profileGate.state === "email_unverified") redirect("/request-access?tab=signin&next=%2Fmember");
+    if (profileGate.state === "profile_incomplete" && profileGate.profileHref) redirect(profileGate.profileHref);
+    const claims = (await supabase.auth.getClaims()).data?.claims as AuthClaims | undefined;
+    if (!claims?.sub) redirect("/request-access?tab=signin&next=%2Fmember");
 
     const [tickerItems, nexusStatus, jobAlerts, spaceWeatherSnapshots] =
         await Promise.all([

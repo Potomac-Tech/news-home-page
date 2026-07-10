@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getProfileGateContext } from "../../../lib/auth/profile-completion";
 import { createClient } from "../../../lib/supabase/server";
 
 function getSafeNextPath(nextPath: string | null) {
@@ -25,6 +26,20 @@ export async function GET(request: Request) {
     if (code) {
         const supabase = await createClient();
         await supabase.auth.exchangeCodeForSession(code);
+
+        const profileGate = await getProfileGateContext({
+            supabase,
+            nextPath: `${redirectUrl.pathname}${redirectUrl.search}`,
+        });
+
+        if (profileGate.state === "profile_incomplete" && profileGate.profileHref) {
+            const profileUrl = new URL(profileGate.profileHref, requestUrl.origin);
+            for (const key of ["source", "campaign", "content", "tier"]) {
+                const value = requestUrl.searchParams.get(key);
+                if (value) profileUrl.searchParams.set(key, value);
+            }
+            return NextResponse.redirect(profileUrl);
+        }
     }
 
     return NextResponse.redirect(redirectUrl);

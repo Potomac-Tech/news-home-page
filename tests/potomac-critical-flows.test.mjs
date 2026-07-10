@@ -319,6 +319,40 @@ test("request access keeps Explorer signup, recovery, and return context in one 
     );
 });
 
+test("profile completion uses normalized member-owned data and gates the workspace", () => {
+    const migration = readMigration("20260710053251_profile_completion_gate.sql");
+    const profileGate = read("lib/auth/profile-completion.ts");
+    const profilePage = read("app/account/profile/complete/page.tsx");
+    const profileForm = read("app/account/profile/complete/ProfileCompletionForm.tsx");
+    const memberPage = read("app/member/page.tsx");
+
+    assertIncludes(
+        migration + profileGate + profilePage + profileForm + memberPage,
+        [
+            "member_profile_completions",
+            "enable row level security",
+            "member_profile_completions_update_own",
+            "full_name",
+            "affiliation",
+            "role_title",
+            "country_code",
+            "timezone",
+            "primary_interest_areas",
+            "communication_preference",
+            "profile_incomplete",
+            "/account/profile/complete",
+            "upsert",
+            "email_confirmed_at",
+        ],
+        "profile completion flow"
+    );
+    assert.doesNotMatch(
+        profileGate + profileForm,
+        /user_metadata|raw_user_meta_data/,
+        "profile completion must not authorize from user-editable metadata"
+    );
+});
+
 test("the enterprise display label is configurable without changing internal Command access", () => {
     const tierConfig = read("app/_data/tiers.ts");
     const publicTierSurfaces = [
