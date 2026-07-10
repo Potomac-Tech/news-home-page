@@ -7,4 +7,5 @@
 !**/.env.example
 cloudflare-env.d.ts
 Supabase Token.txt
+Resend API.txt
 supabase/.temp/
