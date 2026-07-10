@@ -7,6 +7,7 @@
         "dev": "next dev -p 3001",
         "build": "next build --webpack",
         "extract:data-marketplace": "node scripts/data-market-extraction-placeholder.mjs",
+        "test:production-crawl": "node scripts/crawl-production.mjs",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "test": "node --test tests/potomac-critical-flows.test.mjs",
         "test:e2e": "npm run build && node --test tests/*.e2e.test.mjs",

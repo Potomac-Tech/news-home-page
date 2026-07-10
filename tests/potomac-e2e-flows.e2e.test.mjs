@@ -102,10 +102,7 @@ async function expectNoFrameworkOverlay(page, consoleMessages) {
         consoleMessages.filter(
             (message) =>
                 !message.includes("Download the React DevTools") &&
-                !message.includes("404") &&
-                !message.includes(
-                    "upgrade-insecure-requests' is ignored when delivered in a report-only policy"
-                )
+                !message.includes("404")
         ),
         []
     );
