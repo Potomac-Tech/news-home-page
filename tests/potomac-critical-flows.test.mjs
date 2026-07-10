@@ -407,6 +407,17 @@ test("unverified and profile-incomplete users receive only public-safe search in
     );
 });
 
+test("the shared shell remains available when optional Supabase navigation data fails", () => {
+    const shell = read("app/_components/MigrationShell.tsx");
+
+    assertIncludes(shell, [
+        "fallbackCommandEntries",
+        "try {",
+        "catch {",
+        "Navigation remains public and usable",
+    ], "navigation fallback");
+});
+
 test("verification resend is rate-limited, audited, and does not persist raw email", () => {
     const migration = readMigration("20260710151437_email_verification_resend_controls.sql");
     const resendRoute = read("app/api/auth/resend-verification/route.ts");

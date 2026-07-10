@@ -4,6 +4,7 @@ import { potomacBrand } from "../_data/brand";
 import { externalChannels } from "../_data/channels";
 import { trustRoutes } from "../_data/trust";
 import {
+    fallbackCommandEntries,
     getSearchSupabaseClient,
     loadCommandPaletteEntries,
 } from "../_data/search";
@@ -28,14 +29,23 @@ const footerNavItems = [
 ];
 
 export async function MigrationShell({ children }: { children: ReactNode }) {
-    const supabase = await getSearchSupabaseClient();
-    const profileGate = supabase
-        ? await getProfileGateContext({ supabase, nextPath: "/" })
-        : null;
-    const commandEntries = await loadCommandPaletteEntries({
-        supabase,
-        publicOnly: profileGate?.state !== "ready",
-    });
+    let profileGate = null;
+    let commandEntries = fallbackCommandEntries.filter(
+        (entry) => entry.tier === "public"
+    );
+
+    try {
+        const supabase = await getSearchSupabaseClient();
+        profileGate = supabase
+            ? await getProfileGateContext({ supabase, nextPath: "/" })
+            : null;
+        commandEntries = await loadCommandPaletteEntries({
+            supabase,
+            publicOnly: profileGate?.state !== "ready",
+        });
+    } catch {
+        // Navigation remains public and usable if an optional Supabase lookup fails.
+    }
 
     return (
         <div className="min-h-screen bg-potomac-secondary text-potomac-cream">
