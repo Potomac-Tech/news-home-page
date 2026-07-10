@@ -409,6 +409,7 @@ test("unverified and profile-incomplete users receive only public-safe search in
 
 test("the shared shell remains available when optional Supabase navigation data fails", () => {
     const shell = read("app/_components/MigrationShell.tsx");
+    const layout = read("app/layout.tsx");
 
     assertIncludes(shell, [
         "fallbackCommandEntries",
@@ -416,6 +417,11 @@ test("the shared shell remains available when optional Supabase navigation data 
         "catch {",
         "Navigation remains public and usable",
     ], "navigation fallback");
+    assert.match(
+        layout,
+        /export const dynamic = "force-dynamic"/,
+        "the session-aware shared layout must not be statically rendered"
+    );
 });
 
 test("verification resend is rate-limited, audited, and does not persist raw email", () => {

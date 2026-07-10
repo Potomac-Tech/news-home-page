@@ -3,6 +3,9 @@ import "./globals.css";
 import { MigrationShell } from "./_components/MigrationShell";
 import { siteConfig } from "./_data/site";
 
+// The shared shell reads the Supabase session cookie for member-aware navigation.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
     metadataBase: new URL(siteConfig.url),
     title: {
