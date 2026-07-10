@@ -14,11 +14,13 @@ const statusMessages: Record<string, string> = {
         "Inquiry storage is not configured in this environment. Try again after deployment configuration is complete.",
     "submit-error":
         "The inquiry could not be stored. Try again or contact Cabeus Explorer through an approved support path.",
+    "delivery-pending":
+        "Your inquiry is recorded and awaiting delivery review. Cabeus Explorer will follow up directly.",
 };
 
 export function CommandInterestForm({ status }: CommandInterestFormProps) {
     const message = status ? statusMessages[status] : undefined;
-    const isError = status && status !== "submitted";
+    const isError = status && !["submitted", "delivery-pending"].includes(status);
 
     return (
         <form action={submitMeridianInterest} className="glass-card rounded p-6">

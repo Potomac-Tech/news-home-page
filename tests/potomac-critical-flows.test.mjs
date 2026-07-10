@@ -439,6 +439,32 @@ test("verification resend is rate-limited, audited, and does not persist raw ema
     );
 });
 
+test("operational Resend email stays server-only, auditable, and safe on delivery failure", () => {
+    const transport = read("lib/email/resend.ts");
+    const action = read("app/command/actions.ts");
+    const migration = readMigration("20260710181949_outbound_email_delivery_audit.sql");
+    const environment = read(".env.example");
+
+    assertIncludes(transport + action + migration + environment, [
+        'import "server-only"',
+        "RESEND_API_KEY",
+        "RESEND_FROM_EMAIL",
+        "info@potomacdb.com",
+        "https://api.resend.com/emails",
+        "reply_to",
+        "outbound_email_delivery_events",
+        "provider_message_id",
+        "configuration_missing",
+        "delivery-pending",
+        "RESEND_MERIDIAN_TO_EMAIL",
+    ], "operational Resend transport");
+    assert.doesNotMatch(
+        transport + action + environment,
+        /NEXT_PUBLIC_RESEND|[REVOKED_RESEND_KEY_REMOVED]/,
+        "Resend credentials must not be public or committed"
+    );
+});
+
 test("the enterprise display label is configurable without changing internal Command access", () => {
     const tierConfig = read("app/_data/tiers.ts");
     const publicTierSurfaces = [
