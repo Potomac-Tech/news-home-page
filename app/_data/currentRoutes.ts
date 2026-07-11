@@ -55,6 +55,11 @@ export const currentRoutes = [
         note: "Staff-only production content submission, approval, asset, and deployment-readiness workflow.",
     },
     {
+        href: "/admin/carousel",
+        source: "app/admin/carousel/page.tsx",
+        note: "Staff-only homepage carousel inventory, ranking, preview, publication, and expiration workflow.",
+    },
+    {
         href: "/news/vipc-grant-winner",
         source: "app/news/[slug]/page.tsx",
         note: "Migrated article route in the production Next.js app.",

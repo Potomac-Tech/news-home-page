@@ -1018,16 +1018,16 @@ Blocked reason:
   - Verification: `npm test` passed (24 tests); `npm run test:content-expiration`, `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Migration `promotional_content_auto_expiration` was applied to canonical Supabase project `xlpkdoeldtlhearqajat`; remote verification confirmed one daily `04:17 UTC` cron job, zero missing CTA expiration dates, zero expired published submissions, and a maintenance result of zero records due for retirement. Supabase advisors reported only the expected informational notice that the revoked private expiration-audit table has no client RLS policies.
   - Blocked reason: None.
 
-- [ ] Task 092: Add homepage top-story carousel schema and editor/admin controls
+- [x] Task 092: Add homepage top-story carousel schema and editor/admin controls
   - Priority: P0
   - Requirement IDs: R-HOME-001, R-HOME-002, R-CONTENT-001
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Store and manage the hero carousel as editorial inventory rather than a static landing-page block.
   - Acceptance criteria: Schema supports 3-5 active slides, latest reviewed CMS story auto-selection, editor/admin pinning and ranking, required/optional status, schedule windows, required expiration, audience mode, tier, visual asset, alt text, CTA label/route, citation/source note, freshness timestamp, audit log, and preview state; default public CTA is `Read the brief`; slide types include anonymous teaser, signed-in editorial story, custom intelligence card, and paid-tier teaser; unverified and profile-incomplete users cannot receive member-only slides; any editor/admin can publish, unpublish, reorder, and expire slides.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on existing editorial CMS tables from Tasks 015-016.
+  - Non-technical summary: Editors now have a governed homepage carousel inventory with draft, preview, publication, ranking, pinning, required-slide, audience, tier, source, image, freshness, and expiration controls. Empty positions can be filled from the newest published CMS stories, while member-only slides are unavailable until email verification and profile completion are confirmed.
+  - Verification: `npm test` passed (25 tests); `npm run test:content-expiration`, `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Migration `homepage_carousel_inventory` was applied to canonical Supabase project `xlpkdoeldtlhearqajat`; remote checks confirmed both tables, three slide policies, three triggers, one daily expiration cron job, and a maintenance result with zero slides due for expiration. Supabase security advisors reported no carousel-related finding.
+  - Blocked reason: None.
 
 - [ ] Task 093: Build rotating homepage hero carousel UI
   - Priority: P0

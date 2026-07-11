@@ -881,3 +881,61 @@ test("promotional content expires across publishing, loaders, and scheduled main
         "must suppress expired content",
     ], "promotional release gate");
 });
+
+test("homepage carousel inventory is audited, gated, ranked, and auto-filled from CMS", () => {
+    const migration = readMigration("20260711201025_homepage_carousel_inventory.sql");
+    const loader = read("app/_data/homepageCarousel.ts");
+    const actions = read("app/admin/carousel/actions.ts");
+    const page = read("app/admin/carousel/page.tsx");
+
+    assertIncludes(migration, [
+        "public.homepage_carousel_slides",
+        "public.homepage_carousel_audit",
+        "anonymous_teaser",
+        "signed_in_editorial_story",
+        "custom_intelligence_card",
+        "paid_tier_teaser",
+        "auto_latest",
+        "is_pinned",
+        "display_rank",
+        "is_required",
+        "content_visibility",
+        "audience_mode",
+        "minimum_tier",
+        "visual_asset_url",
+        "visual_asset_alt",
+        "Read the brief",
+        "citation_url",
+        "source_note",
+        "freshness_at",
+        "expires_at",
+        "homepage carousel supports no more than five active slides",
+        "private.has_verified_complete_profile",
+        "Verified complete members read member carousel",
+        "carousel_slide",
+    ], "carousel schema and access controls");
+    assertIncludes(loader, [
+        "loadHomepageCarousel",
+        "emailVerified",
+        "profileComplete",
+        '.eq("content_visibility", "public_teaser")',
+        '.eq("status", "published")',
+        '.gt("expires_at", now)',
+        'id: `auto:${String(article.id)}`',
+        "Latest published CMS story auto-selection.",
+        'ctaLabel: "Read the brief"',
+        ".slice(0, 5)",
+    ], "carousel selection contract");
+    assertIncludes(actions + page, [
+        "createCarouselSlide",
+        "previewCarouselSlide",
+        "publishCarouselSlide",
+        "unpublishCarouselSlide",
+        "expireCarouselSlide",
+        "reorderCarouselSlide",
+        "3-5 active",
+        "Auto latest CMS story",
+        "Required slide",
+        "/api/content-assets/",
+    ], "carousel staff controls");
+});
