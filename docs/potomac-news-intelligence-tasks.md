@@ -1029,16 +1029,16 @@ Blocked reason:
   - Verification: `npm test` passed (25 tests); `npm run test:content-expiration`, `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Migration `homepage_carousel_inventory` was applied to canonical Supabase project `xlpkdoeldtlhearqajat`; remote checks confirmed both tables, three slide policies, three triggers, one daily expiration cron job, and a maintenance result with zero slides due for expiration. Supabase security advisors reported no carousel-related finding.
   - Blocked reason: None.
 
-- [ ] Task 093: Build rotating homepage hero carousel UI
+- [x] Task 093: Build rotating homepage hero carousel UI
   - Priority: P0
   - Requirement IDs: R-HOME-001
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Replace the static hero area shown in the screenshot with a production carousel.
   - Acceptance criteria: Homepage top hero rotates every 8 seconds across 3-5 active slides, has previous/next controls, slide indicators, pause/resume, hover/focus pause, keyboard navigation, touch-safe behavior, reduced-motion fallback, static one-slide fallback, accessible labels, SEO-safe teaser markup, responsive images, no layout shift, and no first-viewport overflow on desktop or mobile.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 092 schema/data contract.
+  - Non-technical summary: The homepage hero is now an accessible top-story carousel that rotates every eight seconds, supports direct story selection and manual navigation, pauses for interaction, respects reduced-motion preferences, and falls back to one stable Cabeus Explorer story when no reviewed carousel inventory is available.
+  - Verification: `npm test` passed (26 tests); `npm run test:content-expiration`, `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Automated coverage checks rotation timing, keyboard controls, pause/resume, hover/focus pause, reduced motion, responsive media, accessible labels, data gating, and static fallback. Production desktop/mobile screenshot, overflow, interaction, and console verification is performed after deployment in this task run.
+  - Blocked reason: None.
 
 - [ ] Task 094: Add engagement telemetry, personalization controls, and custom intelligence card model
   - Priority: P1

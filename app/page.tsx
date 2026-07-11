@@ -9,6 +9,7 @@ import {
 import { loadPublicTickerItems } from "./_data/marketQuotes";
 import { SponsorUnit } from "./_components/SponsorUnit";
 import { EconomySummaryWidget } from "./_components/EconomySummaryWidget";
+import { HomepageCarousel } from "./_components/HomepageCarousel";
 import {
     loadSponsorUnits,
     sponsorPlacementKeys,
@@ -24,6 +25,11 @@ import {
 import { tierConfig } from "./_data/tiers";
 import { createClient } from "../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../lib/supabase/config";
+import { getProfileGateContext } from "../lib/auth/profile-completion";
+import {
+    loadHomepageCarousel,
+    type HomepageCarouselSlide,
+} from "./_data/homepageCarousel";
 
 export const dynamic = "force-dynamic";
 
@@ -311,6 +317,39 @@ export default async function HomePage() {
     ]);
     const featuredStory = stories[0] ?? fallbackStories[0];
     const latestStories = stories.slice(1).length ? stories.slice(1) : fallbackStories.slice(1);
+    let carouselSlides: HomepageCarouselSlide[] = [];
+    if (hasPotomacSupabasePublicConfig()) {
+        try {
+            const supabase = await createClient();
+            const gate = await getProfileGateContext({ supabase, nextPath: "/" });
+            carouselSlides = await loadHomepageCarousel(supabase, {
+                emailVerified: gate.state === "ready",
+                profileComplete: gate.state === "ready",
+            });
+        } catch {
+            carouselSlides = [];
+        }
+    }
+    if (!carouselSlides.length) {
+        carouselSlides = [{
+            id: "homepage-static-fallback",
+            articleId: null,
+            slideType: "anonymous_teaser",
+            title: potomacBrand.identity.name,
+            summary: featuredStory.summary || siteConfig.description,
+            visualAssetUrl: potomacBrand.assets.cabeusHero,
+            visualAssetAlt: "Lunar industrial base under a crescent moon",
+            ctaLabel: "Read the brief",
+            ctaRoute: featuredStory.href,
+            minimumTier: "public",
+            isRequired: true,
+            isPinned: true,
+            displayRank: 0,
+            sourceNote: "Static homepage fallback.",
+            freshnessAt: featuredStory.publishedAt,
+            expiresAt: new Date(Date.now() + 14 * 86_400_000).toISOString(),
+        }];
+    }
     const homepageSponsorUnits = [
         sponsorUnits.get(sponsorPlacementKeys.homepageLeadRail)!,
         sponsorUnits.get(sponsorPlacementKeys.marketModuleBand)!,
@@ -350,63 +389,17 @@ export default async function HomePage() {
                     __html: jsonLdScript(headlineItemListJsonLd),
                 }}
             />
-            <section className="relative overflow-hidden border-b border-potomac-regolith/20 bg-potomac-primary">
-                <img
-                    src={potomacBrand.assets.cabeusHero}
-                    alt="Lunar industrial base under a crescent moon"
-                    className="absolute inset-0 h-full w-full object-cover object-[68%_44%]"
-                />
-                <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(13,17,20,0.98)_0%,rgba(13,17,20,0.88)_34%,rgba(13,17,20,0.48)_62%,rgba(13,17,20,0.12)_100%)]" />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,17,20,0.2)_0%,rgba(13,17,20,0.28)_58%,rgba(13,17,20,0.96)_100%)]" />
+            <HomepageCarousel slides={carouselSlides} />
 
-                <div className="relative mx-auto flex min-h-[560px] w-full max-w-[92rem] flex-col justify-between px-4 py-12 md:px-8 lg:py-16">
-                    <div className="max-w-3xl">
-                        <p className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
-                            {potomacBrand.identity.name} / Brand system active
-                        </p>
-                        <h1 className="mt-5 font-serif text-5xl uppercase leading-[0.95] text-white md:text-7xl">
-                            {potomacBrand.identity.essence}
-                        </h1>
-                        <div className="industrial-divider mt-7" />
-                        <p className="mt-6 max-w-2xl text-lg leading-8 text-potomac-cream/76">
-                            Actionable intelligence. Operational context.
-                            Commercial advantage for teams building, investing,
-                            and operating in cislunar markets.
-                        </p>
-                        <div className="mt-8 flex flex-wrap gap-3">
-                            <Link
-                                href="/news"
-                                className="bg-potomac-gold px-5 py-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-primary transition hover:bg-potomac-cream"
-                            >
-                                Explore intelligence
-                            </Link>
-                            <Link
-                                href="/request-access?next=/member/economy"
-                                className="border border-potomac-regolith/45 px-5 py-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold"
-                            >
-                                View readiness tracker
-                            </Link>
+            <section aria-label="Lunar economy activity" className="border-b border-potomac-regolith/20 bg-potomac-primary/90">
+                <div className="mx-auto grid w-full max-w-[92rem] grid-cols-2 px-4 md:grid-cols-5 md:px-8">
+                    {intelligenceStats.map((item) => (
+                        <div key={item.label} className="min-w-0 border-b border-r border-potomac-regolith/20 p-4 last:border-r-0 md:border-b-0">
+                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-regolith">{item.label}</p>
+                            <p className="mt-2 font-serif text-2xl uppercase text-white md:text-3xl">{item.value}</p>
+                            <p className="mt-1 font-mono text-[0.64rem] uppercase text-emerald-200/70">+ {item.detail}</p>
                         </div>
-                    </div>
-
-                    <div className="mt-12 grid border border-potomac-regolith/20 bg-potomac-primary/78 backdrop-blur-sm sm:grid-cols-2 lg:grid-cols-5">
-                        {intelligenceStats.map((item) => (
-                            <div
-                                key={item.label}
-                                className="border-b border-r border-potomac-regolith/20 p-4 last:border-r-0 sm:[&:nth-child(2n)]:border-r-0 lg:border-b-0 lg:[&:nth-child(2n)]:border-r lg:[&:nth-child(5)]:border-r-0"
-                            >
-                                <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-regolith">
-                                    {item.label}
-                                </p>
-                                <p className="mt-2 font-serif text-3xl uppercase text-white">
-                                    {item.value}
-                                </p>
-                                <p className="mt-1 font-mono text-[0.64rem] uppercase text-emerald-200/70">
-                                    + {item.detail}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
+                    ))}
                 </div>
             </section>
 

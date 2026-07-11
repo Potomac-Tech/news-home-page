@@ -939,3 +939,40 @@ test("homepage carousel inventory is audited, gated, ranked, and auto-filled fro
         "/api/content-assets/",
     ], "carousel staff controls");
 });
+
+test("homepage carousel UI rotates accessibly with a stable static fallback", () => {
+    const component = read("app/_components/HomepageCarousel.tsx");
+    const homepage = read("app/page.tsx");
+
+    assertIncludes(component, [
+        'const rotationMs = 8_000',
+        'aria-roledescription="carousel"',
+        'aria-roledescription="slide"',
+        'aria-label="Top lunar intelligence stories"',
+        'role="tablist"',
+        'aria-selected={index === activeIndex}',
+        'event.key === "ArrowLeft"',
+        'event.key === "ArrowRight"',
+        'event.key === " "',
+        "prefers-reduced-motion: reduce",
+        "onMouseEnter",
+        "onFocusCapture",
+        "Pause rotation",
+        "Resume rotation",
+        "Previous story",
+        "Next story",
+        'sizes="100vw"',
+        'loading={index === 0 ? "eager" : "lazy"}',
+        "motion-reduce:transition-none",
+        "min-h-[500px]",
+    ], "accessible rotating carousel");
+    assertIncludes(homepage, [
+        "loadHomepageCarousel",
+        "getProfileGateContext",
+        'id: "homepage-static-fallback"',
+        'ctaLabel: "Read the brief"',
+        "<HomepageCarousel slides={carouselSlides} />",
+        'aria-label="Lunar economy activity"',
+    ], "homepage carousel integration");
+    assert.doesNotMatch(homepage, /Brand system active/);
+});
