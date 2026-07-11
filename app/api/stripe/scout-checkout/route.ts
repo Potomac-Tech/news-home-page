@@ -4,13 +4,18 @@ import {
     createStripeClient,
     getScoutPriceId,
 } from "../../../../lib/stripe/server";
-import { getProfileGateContext } from "../../../../lib/auth/profile-completion";
+import { getProfileGateContext, safeReturnPath } from "../../../../lib/auth/profile-completion";
 
 const SCOUT_ANNUAL_PRICE_USD = 25000;
 
 export async function POST(request: Request) {
+    const body = await request.json().catch(() => ({}));
+    const returnUrl = safeReturnPath(
+        typeof body?.return_url === "string" ? body.return_url : null,
+        "/member"
+    );
     const supabase = await createClient();
-    const profileGate = await getProfileGateContext({ supabase, nextPath: "/upgrade" });
+    const profileGate = await getProfileGateContext({ supabase, nextPath: `/upgrade?next=${encodeURIComponent(returnUrl)}` });
 
     if (profileGate.state === "email_unverified") {
         return NextResponse.json(
@@ -93,8 +98,8 @@ export async function POST(request: Request) {
         ],
         customer_email: customerEmail,
         client_reference_id: userId,
-        success_url: `${origin}/member?checkout=scout_success&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${origin}/member?checkout=scout_cancelled`,
+        success_url: `${origin}${returnUrl}?checkout=scout_success&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}${returnUrl}?checkout=scout_cancelled`,
         metadata: {
             user_id: userId,
             tier: "scout",

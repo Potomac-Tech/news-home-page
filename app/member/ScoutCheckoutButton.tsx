@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export function ScoutCheckoutButton() {
+export function ScoutCheckoutButton({ returnUrl = "/member" }: { returnUrl?: string }) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -12,6 +12,8 @@ export function ScoutCheckoutButton() {
 
         const response = await fetch("/api/stripe/scout-checkout", {
             method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ return_url: returnUrl }),
         });
         const payload = (await response.json()) as {
             url?: string;

@@ -28,6 +28,8 @@ export default async function UpgradePage({ searchParams }: UpgradePageProps) {
     const gate = await getProfileGateContext({ supabase, nextPath: upgradeUrl });
     if (gate.state === "signed_out" || gate.state === "email_unverified") redirect(gate.loginHref);
     if (gate.state === "profile_incomplete" && gate.profileHref) redirect(gate.profileHref);
+    const { data: commandRole } = await supabase.from("member_role_assignments").select("id").eq("user_id", gate.userId).eq("role_id", "command_user").or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`).limit(1).maybeSingle();
+    if (requestedTier === "meridian" && commandRole) redirect(returnUrl);
     const commandHref = `/command?next=${encodeURIComponent(returnUrl)}${source ? `&source=${encodeURIComponent(source)}` : ""}${content ? `&content=${encodeURIComponent(content)}` : ""}${campaign ? `&campaign=${encodeURIComponent(campaign)}` : ""}`;
 
     return (
@@ -58,7 +60,7 @@ export default async function UpgradePage({ searchParams }: UpgradePageProps) {
                         <p className="mt-5 text-sm leading-6 text-potomac-cream/70">
                             {tierConfig.scout.description}
                         </p>
-                        {requestedTier === "scout" ? <div className="mt-6"><ScoutCheckoutButton /></div> : <Link href={upgradeUrl.replace("tier=meridian", "tier=scout")} className="mt-6 inline-flex rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream">Choose Scout</Link>}
+                        {requestedTier === "scout" ? <div className="mt-6"><ScoutCheckoutButton returnUrl={returnUrl} /></div> : <Link href={upgradeUrl.replace("tier=meridian", "tier=scout")} className="mt-6 inline-flex rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream">Choose Scout</Link>}
                     </article>
                     <article className="glass-card rounded p-6">
                         <h2 className="font-serif text-3xl text-white">

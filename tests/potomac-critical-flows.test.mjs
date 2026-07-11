@@ -565,8 +565,9 @@ test("Meridian inquiry requires a completed member and retains the contract-only
 test("upgrade handoff preserves premium context and separates Scout checkout from Meridian", () => {
     const upgrade = read("app/upgrade/page.tsx");
     const checkout = read("app/member/ScoutCheckoutButton.tsx");
+    const checkoutRoute = read("app/api/stripe/scout-checkout/route.ts");
 
-    assertIncludes(upgrade + checkout, [
+    assertIncludes(upgrade + checkout + checkoutRoute, [
         "tier?: string",
         "source?: string",
         "content?: string",
@@ -578,6 +579,9 @@ test("upgrade handoff preserves premium context and separates Scout checkout fro
         "ScoutCheckoutButton",
         "commandHref",
         "tier=meridian",
+        "command_user",
+        "return_url",
+        "success_url",
     ], "premium upgrade handoff");
     assert.doesNotMatch(
         upgrade,
