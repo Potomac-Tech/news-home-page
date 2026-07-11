@@ -985,16 +985,16 @@ Blocked reason:
   - Verification: `npm test` passed (21 tests); `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Migration `strategic_product_inquiries` was applied to canonical Supabase project `xlpkdoeldtlhearqajat`; remote checks confirmed the inquiry table, private rate limiter, outbound-email audit link, and three delivery RPCs. Supabase advisors reported only the expected informational notice that the revoked private rate-limit table has no client RLS policies. Live delivery uses the configured Resend sender and is covered by the existing release checks in Tasks 112-114.
   - Blocked reason: None.
 
-- [ ] Task 089: Replace sponsor/social placeholders with UDRI, Pathfinder, and Source CTA surfaces
+- [x] Task 089: Replace sponsor/social placeholders with UDRI, Pathfinder, and Source CTA surfaces
   - Priority: P0
   - Requirement IDs: R-ADS-001, R-SOCIAL-001, R-HOME-003, R-INQUIRY-001
   - Supersedes: Former Task 098, Task 020, Task 023, Task 024
   - Superseded by: None.
   - Goal: Replace incomplete modules with approved strategic CTAs.
   - Acceptance criteria: UDRI house ad uses `https://i.ytimg.com/vi/WSLxeLhlth4/maxresdefault.jpg` as the placeholder visual until approved copy/assets exist; CTA label is `Learn more`; CTA routes to `/request-access` until a final UDRI destination is approved; ad is labeled as a house ad/sponsor module without implying a paid campaign; Pathfinder CTA uses CEO-provided image and copy `Find the landing site`, `Pathfinder`, and `An impact-emplaced lunar sensor that survives hard landing independent of a lander and finds the best landing sites.` with route `/pathfinder/inquire`; Source CTA uses CEO-provided image and copy `Deliver data for building`, `Source`, and `A persistent lunar garage and rover designed for at least one year of operation to fully characterize the site in preparation for construction.` with route `/source/inquire`; approved Substack, podcast, and LinkedIn links remain when configured with real destination URLs; X, unapproved social channels, fake URLs, and launch-pending social modules do not render.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 087 for managed assets and Task 088 for inquiry forms.
+  - Non-technical summary: Public sponsor spaces now show the approved UDRI house ad, Pathfinder offer, or Source offer with their correct images, descriptions, and destinations. LinkedIn remains live; Substack and podcast links appear only after a verified destination is configured, and no X or launch-pending placeholder is shown.
+  - Verification: `npm test` passed (22 tests); `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Canonical Supabase currently has no active sponsor campaign rows overriding the reviewed fallback units. Repository and web checks confirmed the approved LinkedIn URL but found no reliable Cabeus Explorer/Potomac Substack or podcast destination, so those channels remain hidden rather than using invented URLs.
+  - Blocked reason: None.
 
 - [ ] Task 090: Build admin content submission, approval, and deployment-readiness dashboard
   - Priority: P0

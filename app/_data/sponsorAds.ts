@@ -18,6 +18,7 @@ export type SponsorAdUnit = {
     label: string;
     sponsorName: string;
     sponsorWebsiteUrl?: string;
+    ctaLabel?: string;
     campaignName: string;
     creativeUrl?: string;
     creativeAltText: string;
@@ -71,7 +72,9 @@ const fallbackSponsorUnits: Record<string, SponsorAdUnit> = {
         label: "House ad",
         sponsorName: "UDRI radioisotope power systems briefing",
         sponsorWebsiteUrl: "/request-access?source=udri-house-ad",
+        ctaLabel: "Learn more",
         campaignName: "Approved house campaign",
+        creativeUrl: "https://i.ytimg.com/vi/WSLxeLhlth4/maxresdefault.jpg",
         creativeAltText: "UDRI lunar power briefing",
         note: "Learn more about lunar radioisotope power work through Cabeus Explorer access.",
         isDirectSold: false,
@@ -80,26 +83,28 @@ const fallbackSponsorUnits: Record<string, SponsorAdUnit> = {
         placementKey: sponsorPlacementKeys.marketModuleBand,
         placementName: "Potomac Pathfinder CTA",
         surface: "Markets band",
-        label: "Potomac Pathfinder",
-        sponsorName: "Pathfinder hardware and mission planning",
-        sponsorWebsiteUrl: "/pathfinder/inquire",
+        label: "Pathfinder",
+        sponsorName: "Find the landing site",
+        sponsorWebsiteUrl: "/pathfinder/inquire?source=homepage-pathfinder-cta",
+        ctaLabel: "Ask about Pathfinder",
         campaignName: "Approved product CTA",
         creativeUrl: "/hardware-pathfinder-05122026.png",
         creativeAltText: "Potomac Pathfinder hardware CTA",
-        note: "Route mission and hardware planning interest into the Pathfinder inquiry workflow.",
+        note: "An impact-emplaced lunar sensor that survives hard landing independent of a lander and finds the best landing sites.",
         isDirectSold: false,
     },
     [sponsorPlacementKeys.articleSidebar]: {
         placementKey: sponsorPlacementKeys.articleSidebar,
         placementName: "Potomac Source CTA",
         surface: "Public article sidebar",
-        label: "Potomac Source",
-        sponsorName: "Source dataset and documentation support",
-        sponsorWebsiteUrl: "/source/inquire",
+        label: "Source",
+        sponsorName: "Deliver data for building",
+        sponsorWebsiteUrl: "/source/inquire?source=article-source-cta",
+        ctaLabel: "Ask about Source",
         campaignName: "Approved product CTA",
         creativeUrl: "/hardware-source-10162025.png",
         creativeAltText: "Potomac Source data CTA",
-        note: "Capture data, citation, and source-management inquiries through the Source workflow.",
+        note: "A persistent lunar garage and rover designed for at least one year of operation to fully characterize the site in preparation for construction.",
         isDirectSold: false,
     },
     [sponsorPlacementKeys.eventSidebar]: {
@@ -109,7 +114,9 @@ const fallbackSponsorUnits: Record<string, SponsorAdUnit> = {
         label: "House ad",
         sponsorName: "UDRI lunar systems briefing",
         sponsorWebsiteUrl: "/request-access?source=udri-event-house-ad",
+        ctaLabel: "Learn more",
         campaignName: "Approved house campaign",
+        creativeUrl: "https://i.ytimg.com/vi/WSLxeLhlth4/maxresdefault.jpg",
         creativeAltText: "UDRI lunar systems briefing",
         note: "Open an account request for UDRI-related lunar systems briefing access.",
         isDirectSold: false,
@@ -186,6 +193,7 @@ function directUnit({
             campaignPlacement.utm_campaign
         ),
         campaignName: campaign.name,
+        ctaLabel: "Learn more",
         creativeUrl: campaignPlacement.creative_url ?? undefined,
         creativeAltText:
             campaignPlacement.creative_alt_text ??

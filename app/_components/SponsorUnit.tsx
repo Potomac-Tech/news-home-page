@@ -53,6 +53,11 @@ export function SponsorUnit({ unit, variant = "compact" }: SponsorUnitProps) {
             <p className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-potomac-cream/50">
                 {unit.campaignName}
             </p>
+            {unit.sponsorWebsiteUrl && unit.ctaLabel ? (
+                <span className="mt-5 inline-flex border border-potomac-gold/55 px-4 py-2 font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
+                    {unit.ctaLabel}
+                </span>
+            ) : null}
         </>
     );
     const className =

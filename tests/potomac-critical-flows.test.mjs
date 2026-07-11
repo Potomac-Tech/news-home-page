@@ -761,3 +761,35 @@ test("strategic product inquiries persist and audit before quota-aware Resend de
     ], "Explorer signup default");
     assert.doesNotMatch(action + form, /mailto:|NEXT_PUBLIC_RESEND|RESEND_API_KEY/);
 });
+
+test("public sponsor and social surfaces use only approved CTA content", () => {
+    const sponsorData = read("app/_data/sponsorAds.ts");
+    const sponsorUnit = read("app/_components/SponsorUnit.tsx");
+    const channels = read("app/_data/channels.ts");
+
+    assertIncludes(sponsorData + sponsorUnit, [
+        "https://i.ytimg.com/vi/WSLxeLhlth4/maxresdefault.jpg",
+        'label: "House ad"',
+        'ctaLabel: "Learn more"',
+        "/request-access?source=udri-house-ad",
+        "/request-access?source=udri-event-house-ad",
+        "Find the landing site",
+        "An impact-emplaced lunar sensor that survives hard landing independent of a lander and finds the best landing sites.",
+        "/hardware-pathfinder-05122026.png",
+        "/pathfinder/inquire?source=homepage-pathfinder-cta",
+        "Deliver data for building",
+        "A persistent lunar garage and rover designed for at least one year of operation to fully characterize the site in preparation for construction.",
+        "/hardware-source-10162025.png",
+        "/source/inquire?source=article-source-cta",
+    ], "approved strategic CTA surfaces");
+    assertIncludes(channels, [
+        'id: "substack"',
+        'id: "podcast"',
+        'id: "linkedin"',
+        "https://www.linkedin.com/company/cabeus-explorer",
+        "NEXT_PUBLIC_SUBSTACK_URL",
+        "NEXT_PUBLIC_PODCAST_URL",
+        "verifiedChannelUrl",
+    ], "approved external channels");
+    assert.doesNotMatch(channels, /twitter|x\.com|launch pending|example\.com/i);
+});
