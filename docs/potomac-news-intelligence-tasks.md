@@ -974,16 +974,16 @@ Blocked reason:
   - Verification: `npm test` passed (20 tests); `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Migration `cta_asset_storage_pipeline` was applied to canonical Supabase project `xlpkdoeldtlhearqajat`; remote verification returned 3 reviewed assets and confirmed the Storage bucket is private. Supabase security advisors reported no new finding for this implementation; existing unrelated project findings remain.
   - Blocked reason: None.
 
-- [ ] Task 088: Build strategic CTA inquiry forms and auth handoff
+- [x] Task 088: Build strategic CTA inquiry forms and auth handoff
   - Priority: P0
   - Requirement IDs: R-INQUIRY-001, R-INQUIRY-002, R-ADS-001, R-AUTH-002
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Route strategic product interest and account access through the correct paths.
   - Acceptance criteria: `/pathfinder/inquire` and `/source/inquire` render product-specific inquiry forms using approved Pathfinder/Source visual language; forms capture name, email, organization, role/title, product interest, message, CTA source, consent/communication preference, and attribution; submissions write to Supabase with staff review status, source CTA metadata, notification/audit hooks, and server-side Resend Free delivery using `info@potomacdb.com` as the default sender/from and destination, with quota preflight and queued/delayed handling; UDRI `Learn more` and generic account access CTAs route to `/request-access`; `/request-access` opens on the Sign Up tab, defaults Sign Up to free Explorer, allows any verified email domain for Explorer, and hands off to email verification and profile completion before member content becomes visible.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Supabase form table or lead schema and final CTA imagery from Task 087.
+  - Non-technical summary: Pathfinder and Source now have dedicated inquiry forms with their approved imagery and product-specific questions. Each inquiry is recorded for staff review before email delivery, preserves where the visitor came from, and clearly separates product interest from free Explorer membership signup.
+  - Verification: `npm test` passed (21 tests); `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Migration `strategic_product_inquiries` was applied to canonical Supabase project `xlpkdoeldtlhearqajat`; remote checks confirmed the inquiry table, private rate limiter, outbound-email audit link, and three delivery RPCs. Supabase advisors reported only the expected informational notice that the revoked private rate-limit table has no client RLS policies. Live delivery uses the configured Resend sender and is covered by the existing release checks in Tasks 112-114.
+  - Blocked reason: None.
 
 - [ ] Task 089: Replace sponsor/social placeholders with UDRI, Pathfinder, and Source CTA surfaces
   - Priority: P0

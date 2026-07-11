@@ -699,3 +699,65 @@ test("Pathfinder and Source CTA assets require review before private storage del
         "/hardware-source-10162025.png",
     ], "reviewed CTA repository fallbacks");
 });
+
+test("strategic product inquiries persist and audit before quota-aware Resend delivery", () => {
+    const migration = readMigration("20260711080954_strategic_product_inquiries.sql");
+    const action = read("app/strategic-inquiry-actions.ts");
+    const form = read("app/_components/StrategicInquiryForm.tsx");
+    const pathfinder = read("app/pathfinder/inquire/page.tsx");
+    const source = read("app/source/inquire/page.tsx");
+    const sponsorAds = read("app/_data/sponsorAds.ts");
+    const requestAccess = read("app/request-access/RequestAccessClient.tsx");
+
+    assertIncludes(migration, [
+        "public.strategic_product_inquiries",
+        "private.strategic_inquiry_rate_limits",
+        "review_status",
+        "notification_status",
+        "source_cta",
+        "attribution",
+        "communication_preference",
+        "strategic_inquiry_id",
+        "submit_strategic_product_inquiry",
+        "claim_strategic_inquiry_delivery",
+        "complete_strategic_inquiry_delivery",
+        "private.claim_resend_free_quota",
+        "info@potomacdb.com",
+    ], "strategic inquiry persistence and delivery audit");
+    assertIncludes(action + form, [
+        "sendOperationalEmail",
+        "hasValidResendFreePlanConfig",
+        "product_follow_up_approved",
+        "contact_name",
+        "contact_email",
+        "organization_name",
+        "role_title",
+        "product_interest",
+        "message",
+        "source_cta",
+        "attribution",
+        "delivery-pending",
+        "/request-access",
+    ], "strategic inquiry forms");
+    assertIncludes(pathfinder, [
+        "/hardware-pathfinder-05122026.png",
+        "Find the landing site",
+        'product="pathfinder"',
+    ], "Pathfinder inquiry page");
+    assertIncludes(source, [
+        "/hardware-source-10162025.png",
+        "Deliver data for building",
+        'product="source"',
+    ], "Source inquiry page");
+    assertIncludes(sponsorAds, [
+        "/request-access?source=udri-house-ad",
+        "/request-access?source=udri-event-house-ad",
+    ], "UDRI account handoff");
+    assertIncludes(requestAccess, [
+        'type AccessTab = "signup" | "signin"',
+        'value === "signin" ? "signin" : "signup"',
+        "Free membership selected",
+        "any email domain",
+    ], "Explorer signup default");
+    assert.doesNotMatch(action + form, /mailto:|NEXT_PUBLIC_RESEND|RESEND_API_KEY/);
+});
