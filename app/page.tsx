@@ -111,7 +111,7 @@ const membershipTiers = [
         price: `${tierConfig.scout.price}/user/year`,
         detail: "Paid professional intelligence for deeper lunar market workflows.",
         features: ["Everything in Explorer", "Exports and alerts", "Advanced dashboards"],
-        href: "/upgrade?tier=scout",
+        href: "/upgrade?tier=scout&source=homepage&content=membership&object=scout&next=%2Fmember&campaign=homepage-tiers",
         cta: "Upgrade",
     },
     {
@@ -119,7 +119,7 @@ const membershipTiers = [
         price: tierConfig.enterprise.price,
         detail: "Organization-level intelligence through manual review and contract discussion.",
         features: ["Everything in Scout", "Private briefings", "Team access"],
-        href: "/upgrade?tier=meridian",
+        href: "/upgrade?tier=meridian&source=homepage&content=membership&object=meridian&next=%2Fmember&campaign=homepage-tiers",
         cta: "Discuss access",
     },
 ];

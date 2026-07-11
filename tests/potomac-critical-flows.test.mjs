@@ -564,10 +564,14 @@ test("Meridian inquiry requires a completed member and retains the contract-only
 
 test("upgrade handoff preserves premium context and separates Scout checkout from Meridian", () => {
     const upgrade = read("app/upgrade/page.tsx");
+    const upgradeAnalytics = read("app/upgrade/UpgradeAnalytics.tsx");
     const checkout = read("app/member/ScoutCheckoutButton.tsx");
     const checkoutRoute = read("app/api/stripe/scout-checkout/route.ts");
+    const checkoutAnalytics = read("app/_components/CheckoutAnalytics.tsx");
+    const meridianForm = read("app/command/CommandInterestForm.tsx");
+    const premiumLinks = [read("app/page.tsx"), read("app/companies/page.tsx"), read("app/companies/[slug]/page.tsx"), read("app/news/[slug]/page.tsx")].join("\n");
 
-    assertIncludes(upgrade + checkout + checkoutRoute, [
+    assertIncludes(upgrade + upgradeAnalytics + checkout + checkoutRoute + checkoutAnalytics + meridianForm, [
         "tier?: string",
         "source?: string",
         "content?: string",
@@ -582,7 +586,19 @@ test("upgrade handoff preserves premium context and separates Scout checkout fro
         "command_user",
         "return_url",
         "success_url",
+        "premium_click_source",
+        "upgrade_impression",
+        "scout_checkout_start",
+        "scout_checkout_success",
+        "scout_checkout_failure",
+        "meridian_contract_discussion_start",
+        "meridian_lead_submission",
+        "meridian_email_sent",
+        "meridian_email_failed",
+        "meridian_email_queued",
+        "return_to_content",
     ], "premium upgrade handoff");
+    assertIncludes(premiumLinks, ["source=homepage", "source=companies", "source=company-profile", "source=article", "content=", "object=", "next="], "premium CTA context");
     assert.doesNotMatch(
         upgrade,
         /mailto:|invoice|payment-provider/i,

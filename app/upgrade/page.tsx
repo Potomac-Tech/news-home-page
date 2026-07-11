@@ -5,6 +5,7 @@ import { tierConfig } from "../_data/tiers";
 import { createClient } from "../../lib/supabase/server";
 import { getProfileGateContext, safeReturnPath } from "../../lib/auth/profile-completion";
 import { ScoutCheckoutButton } from "../member/ScoutCheckoutButton";
+import { UpgradeAnalytics } from "./UpgradeAnalytics";
 
 export const metadata: Metadata = {
     title: "Upgrade",
@@ -34,6 +35,7 @@ export default async function UpgradePage({ searchParams }: UpgradePageProps) {
 
     return (
         <section className="bg-grid-pattern">
+            <UpgradeAnalytics tier={requestedTier} source={source} content={content} objectId={object} campaign={campaign} />
             <div className="mx-auto min-h-[calc(100vh-9rem)] w-full max-w-7xl px-4 py-16 md:px-8">
                 <div className="max-w-4xl">
                     <p className="text-xs font-bold uppercase tracking-[0.22em] text-potomac-gold">

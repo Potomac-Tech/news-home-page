@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { trackAnalyticsEvent } from "../../lib/platform/baseline";
 
 export function ScoutCheckoutButton({ returnUrl = "/member" }: { returnUrl?: string }) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     async function startCheckout() {
+        trackAnalyticsEvent({ name: "scout_checkout_start", route: "/upgrade", tier: "scout", metadata: { returnUrl } });
         setIsLoading(true);
         setError(null);
 
@@ -21,6 +23,7 @@ export function ScoutCheckoutButton({ returnUrl = "/member" }: { returnUrl?: str
         };
 
         if (!response.ok || !payload.url) {
+            trackAnalyticsEvent({ name: "scout_checkout_failure", route: "/upgrade", tier: "scout", metadata: { returnUrl, status: response.status } });
             setError(payload.error ?? "Unable to start Scout checkout.");
             setIsLoading(false);
             return;

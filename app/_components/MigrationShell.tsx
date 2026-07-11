@@ -10,6 +10,7 @@ import {
 } from "../_data/search";
 import { getProfileGateContext } from "../../lib/auth/profile-completion";
 import { SearchCommandPalette } from "./SearchCommandPalette";
+import { CheckoutAnalytics } from "./CheckoutAnalytics";
 
 const primaryNavItems = [
     { href: "/news", label: "Intelligence" },
@@ -49,6 +50,7 @@ export async function MigrationShell({ children }: { children: ReactNode }) {
 
     return (
         <div className="min-h-screen bg-potomac-secondary text-potomac-cream">
+            <CheckoutAnalytics />
             <header className="sticky top-0 z-40 border-b border-potomac-regolith/25 bg-potomac-primary/95 backdrop-blur-xl">
                 <div className="mx-auto flex w-full max-w-[92rem] flex-col gap-4 px-4 py-3 md:px-8 lg:flex-row lg:items-center lg:justify-between">
                     <Link href="/" className="flex min-w-0 items-center gap-3">

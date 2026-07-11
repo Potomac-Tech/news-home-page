@@ -1,5 +1,9 @@
+"use client";
+
+import { useEffect } from "react";
 import { submitMeridianInterest } from "./actions";
 import { tierConfig } from "../_data/tiers";
+import { trackAnalyticsEvent } from "../../lib/platform/baseline";
 
 type CommandInterestFormProps = {
     status?: string;
@@ -40,8 +44,21 @@ export function CommandInterestForm({
     const message = status ? statusMessages[status] : undefined;
     const isError = status && !["submitted", "delivery-pending"].includes(status);
 
+    useEffect(() => {
+        if (!status) return;
+        if (status === "submitted" || status === "delivery-pending") {
+            trackAnalyticsEvent({ name: "meridian_lead_submission", route: "/command", tier: "command", metadata: { status, source: sourceCta ?? null } });
+        }
+        trackAnalyticsEvent({
+            name: status === "submitted" ? "meridian_email_sent" : status === "delivery-pending" ? "meridian_email_queued" : "meridian_email_failed",
+            route: "/command",
+            tier: "command",
+            metadata: { status, source: sourceCta ?? null },
+        });
+    }, [sourceCta, status]);
+
     return (
-        <form action={submitMeridianInterest} className="glass-card rounded p-6">
+        <form action={submitMeridianInterest} onSubmit={() => trackAnalyticsEvent({ name: "meridian_contract_discussion_start", route: "/command", tier: "command", metadata: { source: sourceCta ?? null } })} className="glass-card rounded p-6">
             <input type="hidden" name="source_cta" value={sourceCta ?? ""} />
             <input type="hidden" name="source_content" value={sourceContent ?? ""} />
             <input type="hidden" name="return_url" value={returnUrl} />

@@ -290,9 +290,11 @@ export function generateStaticParams() {
 function GatePanel({
     access,
     tier,
+    slug,
 }: {
     access: ArticleAccessContext;
     tier: ArticleAccessTier;
+    slug: string;
 }) {
     const tierLabel = accessTierLabel(tier);
 
@@ -333,7 +335,7 @@ function GatePanel({
                     Request Explorer access
                 </Link>
                 <Link
-                    href="/upgrade?tier=meridian"
+                    href={`/upgrade?tier=meridian&source=article&content=news&object=${encodeURIComponent(slug)}&next=${encodeURIComponent(`/news/${slug}`)}`}
                     className="rounded border border-white/15 px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold"
                 >
                     {tierConfig.enterprise.publicName} access
@@ -477,7 +479,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             </div>
                         </section>
                     ) : (
-                        <GatePanel access={access} tier={article.accessTier} />
+                        <GatePanel access={access} tier={article.accessTier} slug={article.slug} />
                     )}
                 </main>
 

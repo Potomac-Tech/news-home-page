@@ -85,7 +85,7 @@ function Metric({
     );
 }
 
-function LockedPanel({ tier }: { tier: LunarCompanyTier }) {
+function LockedPanel({ tier, slug }: { tier: LunarCompanyTier; slug: string }) {
     return (
         <section className="glass-card rounded p-6">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
@@ -101,13 +101,13 @@ function LockedPanel({ tier }: { tier: LunarCompanyTier }) {
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
                 <Link
-                    href="/upgrade"
+                    href={`/upgrade?tier=scout&source=company-profile&content=company&object=${encodeURIComponent(slug)}&next=${encodeURIComponent(`/companies/${slug}`)}`}
                     className="rounded bg-potomac-gold px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                 >
                     View upgrade paths
                 </Link>
                 <Link
-                    href="/upgrade?tier=meridian"
+                    href={`/upgrade?tier=meridian&source=company-profile&content=company&object=${encodeURIComponent(slug)}&next=${encodeURIComponent(`/companies/${slug}`)}`}
                     className="rounded border border-potomac-gold/50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                 >
                     Meridian access
@@ -615,7 +615,7 @@ export default async function CompanyDetailPage({
                             ) : null}
                         </section>
                     ) : (
-                        <LockedPanel tier={company.visibilityTier} />
+                        <LockedPanel tier={company.visibilityTier} slug={company.slug} />
                     )}
 
                     <CompanyDetails company={company} access={accessFlags} />
