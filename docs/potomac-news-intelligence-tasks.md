@@ -996,15 +996,15 @@ Blocked reason:
   - Verification: `npm test` passed (22 tests); `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Canonical Supabase currently has no active sponsor campaign rows overriding the reviewed fallback units. Repository and web checks confirmed the approved LinkedIn URL but found no reliable Cabeus Explorer/Potomac Substack or podcast destination, so those channels remain hidden rather than using invented URLs.
   - Blocked reason: None.
 
-- [ ] Task 090: Build admin content submission, approval, and deployment-readiness dashboard
+- [x] Task 090: Build admin content submission, approval, and deployment-readiness dashboard
   - Priority: P0
   - Requirement IDs: R-CONTENT-001, R-CONTENT-002, R-HOME-002, R-ADS-001, R-CONTRACT-001
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Provide the operating workflow needed to avoid Codex-authored production placeholders.
   - Acceptance criteria: Editor/admin dashboard supports submissions for homepage slides, carousel visuals, tracker rows, source citations, house ads, Pathfinder/Source CTAs, space/lunar contract awards, and public empty states; one editor/admin approval is sufficient; Supabase Storage image uploads support validation and alt text; scheduled auto-expiration is required by default with 14-day carousel, 30-day CTA/house-ad, and 7-day weekly tracker promotional defaults; publishing blocks missing citations, assets, destinations, or expiration metadata; Codex cannot mark production content seeding complete by inventing final copy.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
+  - Non-technical summary: Editors now have one dashboard for submitting and reviewing homepage, tracker, source, advertising, strategic CTA, contract-award, and empty-state content. It shows readiness problems, keeps uploaded images private, requires a named human content source, and prevents incomplete or unapproved material from being published.
+  - Verification: `npm test` passed (23 tests); `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Migration `content_submission_readiness_dashboard` was applied to canonical Supabase project `xlpkdoeldtlhearqajat`; remote checks confirmed both tables, two enforcement/audit triggers, RLS, and a private Storage bucket. Supabase security advisors reported no finding for this implementation.
   - Blocked reason: None.
 
 - [ ] Task 091: Enforce required scheduled auto-expiration for carousel, CTA, house-ad, and promotional content

@@ -793,3 +793,51 @@ test("public sponsor and social surfaces use only approved CTA content", () => {
     ], "approved external channels");
     assert.doesNotMatch(channels, /twitter|x\.com|launch pending|example\.com/i);
 });
+
+test("content readiness dashboard blocks unowned or incomplete production submissions", () => {
+    const migration = readMigration("20260711140953_content_submission_readiness_dashboard.sql");
+    const actions = read("app/admin/content/actions.ts");
+    const page = read("app/admin/content/page.tsx");
+
+    assertIncludes(migration, [
+        "public.content_submissions",
+        "public.content_submission_audit",
+        "content-submissions",
+        "homepage_slide",
+        "carousel_visual",
+        "tracker_row",
+        "source_citation",
+        "house_ad",
+        "pathfinder_cta",
+        "source_cta",
+        "contract_award",
+        "public_empty_state",
+        "copy_owner_confirmed",
+        "content_origin",
+        "readiness_issues",
+        "citation_required",
+        "destination_required",
+        "expiration_required",
+        "reviewed_asset_required",
+        "editor approval is required before publication",
+    ], "content readiness schema");
+    assert.doesNotMatch(migration, /codex|automation_authored/);
+    assertIncludes(actions + page, [
+        "createContentSubmission",
+        "approveContentSubmission",
+        "rejectContentSubmission",
+        "publishContentSubmission",
+        "validateCtaImageFile",
+        "readImageDimensions",
+        "copy_owner_confirmed",
+        "CEO provided",
+        "Editor authored",
+        "Submit for review",
+        "Deployment ready",
+    ], "content readiness administration");
+    assertIncludes(actions, [
+        'contentType === "tracker_row" ? 7',
+        '["homepage_slide", "carousel_visual"].includes(contentType) ? 14',
+        ": 30",
+    ], "default expiration windows");
+});

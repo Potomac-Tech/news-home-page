@@ -50,6 +50,11 @@ export const currentRoutes = [
         note: "Staff-only sponsor, placement, campaign, discount, and reporting workflow.",
     },
     {
+        href: "/admin/content",
+        source: "app/admin/content/page.tsx",
+        note: "Staff-only production content submission, approval, asset, and deployment-readiness workflow.",
+    },
+    {
         href: "/news/vipc-grant-winner",
         source: "app/news/[slug]/page.tsx",
         note: "Migrated article route in the production Next.js app.",

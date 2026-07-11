@@ -7,11 +7,13 @@ export type EditorialStaffContext = {
     userId: string;
 };
 
-export async function requireEditorialStaff(): Promise<EditorialStaffContext> {
+export async function requireEditorialStaff(
+    nextPath = "/admin/editorial"
+): Promise<EditorialStaffContext> {
     const supabase = await createClient();
     const profileGate = await getProfileGateContext({
         supabase,
-        nextPath: "/admin/editorial",
+        nextPath,
     });
     if (profileGate.state === "signed_out" || profileGate.state === "email_unverified") {
         redirect(profileGate.loginHref);
