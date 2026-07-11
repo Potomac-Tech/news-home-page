@@ -260,17 +260,28 @@ test("RLS migrations cover protected critical tables and avoid user-editable met
 });
 
 test("workspace remains pinned to the canonical Potomac Supabase project", () => {
+    const config = read("lib/supabase/config.ts");
     const files = [
         read(".mcp.json"),
         read("docs/codex-automation-memory.md"),
-        read("lib/supabase/config.ts"),
+        config,
     ].join("\n");
 
     assert.match(files, /xlpkdoeldtlhearqajat/, "canonical project ref should be present");
     assert.doesNotMatch(
-        read("lib/supabase/config.ts"),
+        config,
         /nwoluvjdojzayozyzlob/,
         "runtime config should not reference the wrong Supabase project"
+    );
+    assertIncludes(config, [
+        "POTOMAC_SUPABASE_URL",
+        "POTOMAC_SUPABASE_PUBLISHABLE_KEY",
+        "process.env.NEXT_PUBLIC_SUPABASE_URL ?? POTOMAC_SUPABASE_URL",
+    ], "browser-safe Supabase build defaults");
+    assert.doesNotMatch(
+        config,
+        /Missing NEXT_PUBLIC_SUPABASE_URL/,
+        "browser builds should not fail when Cloudflare injects public config at runtime"
     );
 });
 
