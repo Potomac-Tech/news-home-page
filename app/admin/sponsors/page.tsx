@@ -7,8 +7,11 @@ import {
     createSponsor,
     updateCampaign,
     updateCampaignPlacement,
+    selectCtaAsset,
+    updateCtaAssetReview,
     updatePlacement,
     updateSponsor,
+    uploadCtaAsset,
 } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -86,6 +89,23 @@ type CampaignPlacement = {
     reporting_url: string | null;
     utm_campaign: string | null;
     notes: string | null;
+    updated_at: string;
+};
+
+type CtaAsset = {
+    id: string;
+    product: "pathfinder" | "source";
+    display_name: string;
+    storage_object_path: string | null;
+    repo_fallback_url: string | null;
+    mime_type: string;
+    file_size_bytes: number;
+    width_px: number;
+    height_px: number;
+    alt_text: string;
+    attribution_note: string;
+    review_status: string;
+    expires_at: string | null;
     updated_at: string;
 };
 
@@ -883,10 +903,26 @@ export default async function SponsorInventoryAdminPage() {
         throw new Error(campaignPlacementError.message);
     }
 
+    const { data: ctaAssetData, error: ctaAssetError } = await supabase
+        .from("cta_assets")
+        .select("id,product,display_name,storage_object_path,repo_fallback_url,mime_type,file_size_bytes,width_px,height_px,alt_text,attribution_note,review_status,expires_at,updated_at")
+        .order("product", { ascending: true })
+        .order("updated_at", { ascending: false });
+
+    if (ctaAssetError) {
+        throw new Error(ctaAssetError.message);
+    }
+
     const sponsors = (sponsorData ?? []) as Sponsor[];
     const placements = (placementData ?? []) as Placement[];
     const campaigns = (campaignData ?? []) as Campaign[];
     const campaignPlacements = (campaignPlacementData ?? []) as CampaignPlacement[];
+    const ctaAssets = (ctaAssetData ?? []) as CtaAsset[];
+    const reviewedCtaAssets = ctaAssets.filter(
+        (asset) =>
+            asset.review_status === "reviewed" &&
+            (!asset.expires_at || new Date(asset.expires_at) > new Date())
+    );
     const sponsorsById = new Map(
         sponsors.map((sponsor) => [sponsor.id, sponsor])
     );
@@ -947,6 +983,106 @@ export default async function SponsorInventoryAdminPage() {
                         value={String(campaignPlacements.length)}
                         detail="Booked placement line items"
                     />
+                </div>
+
+                <div className="mt-12 grid gap-6 xl:grid-cols-2">
+                    <form
+                        action={uploadCtaAsset}
+                        encType="multipart/form-data"
+                        className="glass-card rounded p-6"
+                    >
+                        <h2 className="font-serif text-2xl text-white">CTA Image Upload</h2>
+                        <p className="mt-2 text-sm leading-6 text-potomac-cream/65">
+                            Upload CEO-approved Pathfinder or Source artwork. New files remain draft until reviewed.
+                        </p>
+                        <div className="mt-6 grid gap-5 md:grid-cols-2">
+                            <div>
+                                <FieldLabel>Product</FieldLabel>
+                                <select name="product" className={inputClass}>
+                                    <option value="pathfinder">Pathfinder</option>
+                                    <option value="source">Source</option>
+                                </select>
+                            </div>
+                            <div>
+                                <FieldLabel>Display name</FieldLabel>
+                                <input required name="display_name" className={inputClass} />
+                            </div>
+                            <div className="md:col-span-2">
+                                <FieldLabel>Image file</FieldLabel>
+                                <input required name="image" type="file" accept="image/png,image/jpeg,image/webp" className={inputClass} />
+                            </div>
+                            <div className="md:col-span-2">
+                                <FieldLabel>Alt text</FieldLabel>
+                                <input required minLength={12} name="alt_text" className={inputClass} />
+                            </div>
+                            <div className="md:col-span-2">
+                                <FieldLabel>Attribution / source note</FieldLabel>
+                                <textarea required name="attribution_note" rows={2} className={textareaClass} />
+                            </div>
+                            <div>
+                                <FieldLabel>Expiration</FieldLabel>
+                                <input required name="expires_at" type="datetime-local" className={inputClass} />
+                            </div>
+                        </div>
+                        <button type="submit" className="mt-6 rounded bg-potomac-gold px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-primary">
+                            Upload draft
+                        </button>
+                    </form>
+
+                    <form action={selectCtaAsset} className="glass-card rounded p-6">
+                        <h2 className="font-serif text-2xl text-white">Select Reviewed CTA</h2>
+                        <p className="mt-2 text-sm leading-6 text-potomac-cream/65">
+                            Attach a reviewed, unexpired asset to an existing campaign flight.
+                        </p>
+                        <div className="mt-6">
+                            <FieldLabel>Campaign flight</FieldLabel>
+                            <select required name="campaign_placement_id" className={inputClass} defaultValue="">
+                                <option value="" disabled>Select flight</option>
+                                {campaignPlacements.map((flight) => (
+                                    <option key={flight.id} value={flight.id}>
+                                        {campaigns.find((item) => item.id === flight.campaign_id)?.name ?? flight.id}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="mt-5">
+                            <FieldLabel>Reviewed asset</FieldLabel>
+                            <select required name="asset_id" className={inputClass} defaultValue="">
+                                <option value="" disabled>Select asset</option>
+                                {reviewedCtaAssets.map((asset) => (
+                                    <option key={asset.id} value={asset.id}>
+                                        {statusLabel(asset.product)}: {asset.display_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <button type="submit" className="mt-6 rounded bg-potomac-gold px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-primary">
+                            Apply asset
+                        </button>
+                    </form>
+                </div>
+
+                <div className="mt-12 space-y-4">
+                    <h2 className="font-serif text-3xl text-white">CTA Asset Review</h2>
+                    {ctaAssets.map((asset) => (
+                        <form key={asset.id} action={updateCtaAssetReview} className="glass-card grid gap-4 rounded p-5 lg:grid-cols-6">
+                            <input type="hidden" name="asset_id" value={asset.id} />
+                            <div className="lg:col-span-2">
+                                <p className="text-xs font-bold uppercase text-potomac-gold">{asset.product}</p>
+                                <p className="mt-1 text-white">{asset.display_name}</p>
+                                <p className="mt-1 text-xs text-potomac-cream/55">{asset.width_px} x {asset.height_px} · {(asset.file_size_bytes / 1024 / 1024).toFixed(1)} MB</p>
+                            </div>
+                            <input required minLength={12} name="alt_text" defaultValue={asset.alt_text} className={inputClass} aria-label={`${asset.display_name} alt text`} />
+                            <input required name="attribution_note" defaultValue={asset.attribution_note} className={inputClass} aria-label={`${asset.display_name} attribution`} />
+                            <select name="review_status" defaultValue={asset.review_status} className={inputClass} aria-label={`${asset.display_name} review status`}>
+                                {['draft', 'reviewed', 'rejected', 'archived'].map((status) => <option key={status} value={status}>{statusLabel(status)}</option>)}
+                            </select>
+                            <div>
+                                <input name="expires_at" type="datetime-local" defaultValue={toDateTimeLocal(asset.expires_at)} className={inputClass} aria-label={`${asset.display_name} expiration`} />
+                                <button type="submit" className="mt-3 rounded border border-potomac-gold px-4 py-2 text-xs font-bold uppercase text-potomac-gold">Save review</button>
+                            </div>
+                        </form>
+                    ))}
                 </div>
 
                 <div className="mt-12 grid gap-6 xl:grid-cols-2">

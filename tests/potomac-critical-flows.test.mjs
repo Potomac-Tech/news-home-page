@@ -656,3 +656,46 @@ test("the enterprise display label is configurable without changing internal Com
         "public tier surfaces must use the configured enterprise display name"
     );
 });
+
+test("Pathfinder and Source CTA assets require review before private storage delivery", () => {
+    const migration = readMigration("20260711050951_cta_asset_storage_pipeline.sql");
+    const actions = read("app/admin/sponsors/actions.ts");
+    const adminPage = read("app/admin/sponsors/page.tsx");
+    const assetRoute = read("app/api/cta-assets/[id]/route.ts");
+    const sponsorAds = read("app/_data/sponsorAds.ts");
+
+    assertIncludes(migration, [
+        "cta-assets",
+        "public.cta_assets",
+        "file_size_limit",
+        "allowed_mime_types",
+        "review_status",
+        "expires_at",
+        "alt_text",
+        "attribution_note",
+        "Public can read reviewed CTA image objects",
+        "/hardware-pathfinder-05122026.png",
+        "/hardware-source-10162025.png",
+        "/Source Rendering.png",
+    ], "CTA asset schema");
+    assert.match(migration, /'cta-assets',\s*'cta-assets',\s*false/);
+    assertIncludes(actions + adminPage, [
+        "uploadCtaAsset",
+        "validateCtaImageFile",
+        "readImageDimensions",
+        "updateCtaAssetReview",
+        "selectCtaAsset",
+        'review_status: "draft"',
+        "multipart/form-data",
+    ], "CTA asset administration");
+    assertIncludes(assetRoute, [
+        '.eq("review_status", "reviewed")',
+        "expires_at",
+        ".download(",
+        "X-Content-Type-Options",
+    ], "reviewed CTA asset delivery");
+    assertIncludes(sponsorAds, [
+        "/hardware-pathfinder-05122026.png",
+        "/hardware-source-10162025.png",
+    ], "reviewed CTA repository fallbacks");
+});

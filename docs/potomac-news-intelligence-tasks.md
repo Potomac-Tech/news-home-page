@@ -963,16 +963,16 @@ Blocked reason:
   - Verification: `npm test` passed (19 tests); `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Tests cover account-state gates, tier separation, context preservation, Command return routing, Scout checkout return URLs, Meridian no-payment rules, and all required upgrade analytics event hooks.
   - Blocked reason: None. Live Stripe payment completion and production Resend sender verification remain release-environment checks in Tasks 112-114 rather than implementation blockers.
 
-- [ ] Task 087: Add Supabase Storage asset pipeline for Pathfinder and Source CTA images
+- [x] Task 087: Add Supabase Storage asset pipeline for Pathfinder and Source CTA images
   - Priority: P0
   - Requirement IDs: R-ADS-001, R-CONTENT-001
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Store and serve the CEO-provided Pathfinder and Source CTA images safely.
   - Acceptance criteria: Supabase Storage bucket/folder and admin upload/select controls support Pathfinder and Source CTA images; uploads validate file type, size, dimensions, alt text, attribution/source note, review status, and expiration metadata; existing CEO-provided images are added as reviewed assets or repo fallbacks with stable paths; no generic replacement art appears.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Supabase Storage configuration and the attached assets being available in the repo or upload workflow.
+  - Non-technical summary: Pathfinder and Source now have a governed image library where approved staff can upload artwork, review it, set expiration dates, and attach only reviewed images to campaign placements. The three CEO-provided images remain available as stable reviewed fallbacks.
+  - Verification: `npm test` passed (20 tests); `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Migration `cta_asset_storage_pipeline` was applied to canonical Supabase project `xlpkdoeldtlhearqajat`; remote verification returned 3 reviewed assets and confirmed the Storage bucket is private. Supabase security advisors reported no new finding for this implementation; existing unrelated project findings remain.
+  - Blocked reason: None.
 
 - [ ] Task 088: Build strategic CTA inquiry forms and auth handoff
   - Priority: P0
