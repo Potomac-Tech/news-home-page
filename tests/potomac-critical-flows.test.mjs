@@ -841,3 +841,43 @@ test("content readiness dashboard blocks unowned or incomplete production submis
         ": 30",
     ], "default expiration windows");
 });
+
+test("promotional content expires across publishing, loaders, and scheduled maintenance", () => {
+    const migration = readMigration("20260711171028_promotional_content_auto_expiration.sql");
+    const sponsorData = read("app/_data/sponsorAds.ts");
+    const contentLoader = read("app/_data/contentSubmissions.ts");
+    const contentRoute = read("app/api/content-assets/[id]/route.ts");
+    const ctaActions = read("app/admin/sponsors/actions.ts");
+    const releaseCheck = read("scripts/check-promotional-expiration.mjs");
+
+    assertIncludes(migration, [
+        "pg_cron",
+        "expiration_exception_reason",
+        "expiration_exception_approved_by",
+        "expiration_window_exceeded",
+        "when new.content_type = 'tracker_row' then 7",
+        "when new.content_type in ('homepage_slide', 'carousel_visual') then 14",
+        "else 30",
+        "private.promotional_expiration_audit",
+        "private.expire_promotional_content",
+        "expire-promotional-content-daily",
+        "status = 'expired'",
+        "review_status = 'archived'",
+        "Public reads active published content submissions",
+        "Public reads active published content assets",
+    ], "promotional expiration enforcement");
+    assertIncludes(sponsorData + contentLoader + contentRoute + ctaActions, [
+        "fallbackPromotionalContentReviewedAt",
+        "expiresAt",
+        "activeFallbackUnit",
+        '.gt("expires_at", timestamp)',
+        '.gt("expires_at", now)',
+        "Reviewed CTA assets require an expiration date.",
+    ], "application expiration enforcement");
+    assertIncludes(releaseCheck, [
+        "All four reviewed strategic fallback units require expiration",
+        "Promotional fallback expired",
+        "exceeds the 30-day window",
+        "must suppress expired content",
+    ], "promotional release gate");
+});

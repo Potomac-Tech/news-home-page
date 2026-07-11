@@ -1007,16 +1007,16 @@ Blocked reason:
   - Verification: `npm test` passed (23 tests); `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Migration `content_submission_readiness_dashboard` was applied to canonical Supabase project `xlpkdoeldtlhearqajat`; remote checks confirmed both tables, two enforcement/audit triggers, RLS, and a private Storage bucket. Supabase security advisors reported no finding for this implementation.
   - Blocked reason: None.
 
-- [ ] Task 091: Enforce required scheduled auto-expiration for carousel, CTA, house-ad, and promotional content
+- [x] Task 091: Enforce required scheduled auto-expiration for carousel, CTA, house-ad, and promotional content
   - Priority: P0
   - Requirement IDs: R-CONTENT-002
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Ensure required expiration dates are enforced consistently, not only captured in admin forms.
   - Acceptance criteria: Admin publishing actions block carousel slides, UDRI house ads, Pathfinder CTAs, Source CTAs, weekly tracker promotional modules, and public promotional content when required `expires_at` metadata is missing; default expiration windows are 14 days for carousel slides, 30 days for CTAs and house ads, and 7 days for weekly tracker promotional modules; render loaders suppress expired content even if a status flag was not updated; scheduled maintenance auto-unpublishes eligible content silently and records audit events without MVP admin alerts; release checks fail when expired promotional content still renders, required expiration metadata is missing, or default windows are exceeded without an exception.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 090 dashboard fields and Tasks 089 and 092 content schemas.
+  - Non-technical summary: Promotional material now has enforced freshness windows, disappears from public loaders when expired, and is silently retired by a daily maintenance job with an audit record. Editors can document a human-approved exception, while release checks stop expired or overlong fallback campaigns from shipping.
+  - Verification: `npm test` passed (24 tests); `npm run test:content-expiration`, `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Migration `promotional_content_auto_expiration` was applied to canonical Supabase project `xlpkdoeldtlhearqajat`; remote verification confirmed one daily `04:17 UTC` cron job, zero missing CTA expiration dates, zero expired published submissions, and a maintenance result of zero records due for retirement. Supabase advisors reported only the expected informational notice that the revoked private expiration-audit table has no client RLS policies.
+  - Blocked reason: None.
 
 - [ ] Task 092: Add homepage top-story carousel schema and editor/admin controls
   - Priority: P0

@@ -24,6 +24,7 @@ export type SponsorAdUnit = {
     creativeAltText: string;
     note: string;
     isDirectSold: boolean;
+    expiresAt?: string;
 };
 
 type PlacementRow = {
@@ -64,6 +65,9 @@ type SponsorRow = {
     website_url: string | null;
 };
 
+export const fallbackPromotionalContentReviewedAt =
+    "2026-07-11T00:00:00.000Z";
+
 const fallbackSponsorUnits: Record<string, SponsorAdUnit> = {
     [sponsorPlacementKeys.homepageLeadRail]: {
         placementKey: sponsorPlacementKeys.homepageLeadRail,
@@ -78,6 +82,7 @@ const fallbackSponsorUnits: Record<string, SponsorAdUnit> = {
         creativeAltText: "UDRI lunar power briefing",
         note: "Learn more about lunar radioisotope power work through Cabeus Explorer access.",
         isDirectSold: false,
+        expiresAt: "2026-08-10T00:00:00.000Z",
     },
     [sponsorPlacementKeys.marketModuleBand]: {
         placementKey: sponsorPlacementKeys.marketModuleBand,
@@ -92,6 +97,7 @@ const fallbackSponsorUnits: Record<string, SponsorAdUnit> = {
         creativeAltText: "Potomac Pathfinder hardware CTA",
         note: "An impact-emplaced lunar sensor that survives hard landing independent of a lander and finds the best landing sites.",
         isDirectSold: false,
+        expiresAt: "2026-08-10T00:00:00.000Z",
     },
     [sponsorPlacementKeys.articleSidebar]: {
         placementKey: sponsorPlacementKeys.articleSidebar,
@@ -106,6 +112,7 @@ const fallbackSponsorUnits: Record<string, SponsorAdUnit> = {
         creativeAltText: "Potomac Source data CTA",
         note: "A persistent lunar garage and rover designed for at least one year of operation to fully characterize the site in preparation for construction.",
         isDirectSold: false,
+        expiresAt: "2026-08-10T00:00:00.000Z",
     },
     [sponsorPlacementKeys.eventSidebar]: {
         placementKey: sponsorPlacementKeys.eventSidebar,
@@ -120,6 +127,7 @@ const fallbackSponsorUnits: Record<string, SponsorAdUnit> = {
         creativeAltText: "UDRI lunar systems briefing",
         note: "Open an account request for UDRI-related lunar systems briefing access.",
         isDirectSold: false,
+        expiresAt: "2026-08-10T00:00:00.000Z",
     },
 };
 
@@ -135,6 +143,14 @@ function genericFallbackUnit(placementKey: string): SponsorAdUnit {
         note: "This placement is intentionally empty until an approved source-backed campaign is active.",
         isDirectSold: false,
     };
+}
+
+function activeFallbackUnit(placementKey: string, now: Date) {
+    const fallback =
+        fallbackSponsorUnits[placementKey] ?? genericFallbackUnit(placementKey);
+    return fallback.expiresAt && new Date(fallback.expiresAt) <= now
+        ? genericFallbackUnit(placementKey)
+        : fallback;
 }
 
 function withTrackingUrl(url: string | null, utmCampaign: string | null) {
@@ -200,16 +216,18 @@ function directUnit({
             `${sponsor.name} sponsor creative`,
         note: placement.description,
         isDirectSold: true,
+        expiresAt: `${campaignPlacement.ends_at}T23:59:59.999Z`,
     };
 }
 
 export async function loadSponsorUnits(placementKeys: string[]) {
     const requestedPlacementKeys = [...new Set(placementKeys)];
-    const todayIsoDate = new Date().toISOString().slice(0, 10);
+    const now = new Date();
+    const todayIsoDate = now.toISOString().slice(0, 10);
     const fallbackUnits = new Map(
         requestedPlacementKeys.map((placementKey) => [
             placementKey,
-            fallbackSponsorUnits[placementKey] ?? genericFallbackUnit(placementKey),
+            activeFallbackUnit(placementKey, now),
         ])
     );
 

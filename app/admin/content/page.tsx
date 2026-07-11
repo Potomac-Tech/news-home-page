@@ -81,6 +81,7 @@ export default async function ContentReadinessAdminPage() {
                         <label className="text-xs font-bold uppercase tracking-[0.15em] text-potomac-gold md:col-span-2">Source note<textarea required name="source_note" rows={2} className={inputClass} /></label>
                         <Field name="scheduled_at" title="Schedule" type="datetime-local" />
                         <Field name="expires_at" title="Expiration override" type="datetime-local" />
+                        <Field name="expiration_exception_reason" title="Expiration exception reason" />
                         <label className="text-xs font-bold uppercase tracking-[0.15em] text-potomac-gold">Image asset<input name="asset" type="file" accept="image/png,image/jpeg,image/webp" className={inputClass} /></label>
                         <Field name="asset_alt_text" title="Image alt text" />
                         <label className="flex items-start gap-3 text-sm text-potomac-cream/75 md:col-span-2"><input required name="copy_owner_confirmed" type="checkbox" className="mt-1 h-4 w-4 accent-potomac-gold" /><span>I confirm this production copy came from the named content owner and was not invented by automation.</span></label>

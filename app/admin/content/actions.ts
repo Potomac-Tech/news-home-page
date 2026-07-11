@@ -105,6 +105,10 @@ export async function createContentSubmission(formData: FormData) {
             ? new Date(required(formData, "scheduled_at")).toISOString()
             : null,
         expires_at: expiration(formData, contentType),
+        expiration_exception_reason: optional(formData, "expiration_exception_reason"),
+        expiration_exception_approved_by: optional(formData, "expiration_exception_reason")
+            ? userId
+            : null,
         submitted_by: userId,
         ...assetFields,
     });

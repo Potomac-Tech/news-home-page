@@ -511,12 +511,16 @@ export async function updateCtaAssetReview(formData: FormData) {
         "draft",
         "asset review status"
     );
+    const expiresAt = getOptionalTimestamp(formData, "expires_at");
+    if (reviewStatus === "reviewed" && !expiresAt) {
+        throw new Error("Reviewed CTA assets require an expiration date.");
+    }
     const { error } = await supabase
         .from("cta_assets")
         .update({
             alt_text: getRequiredString(formData, "alt_text"),
             attribution_note: getRequiredString(formData, "attribution_note"),
-            expires_at: getOptionalTimestamp(formData, "expires_at"),
+            expires_at: expiresAt,
             review_status: reviewStatus,
             reviewed_by: reviewStatus === "reviewed" ? userId : null,
             reviewed_at: reviewStatus === "reviewed" ? new Date().toISOString() : null,
