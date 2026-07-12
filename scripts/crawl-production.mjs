@@ -10,8 +10,10 @@ const edgeExecutable =
 const maxPages = Number(process.env.CRAWL_MAX_PAGES ?? 60);
 const issues = [];
 const visited = new Set();
-const queued = new Set([baseUrl.href]);
-const queue = [baseUrl.href];
+const seedPaths = (process.env.CRAWL_SEED_PATHS ?? "").split(",").map((path) => path.trim()).filter(Boolean);
+const seedUrls = [baseUrl.href, ...seedPaths.map((path) => new URL(path, baseUrl).href)];
+const queued = new Set(seedUrls);
+const queue = [...seedUrls];
 
 function recordIssue(kind, detail, pageUrl) {
     const key = `${kind}|${detail}|${pageUrl}`;
