@@ -27,6 +27,7 @@ import { createClient } from "../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../lib/supabase/config";
 import { getProfileGateContext } from "../lib/auth/profile-completion";
 import {
+    loadCarouselViewer,
     loadHomepageCarousel,
     type HomepageCarouselSlide,
 } from "./_data/homepageCarousel";
@@ -322,10 +323,8 @@ export default async function HomePage() {
         try {
             const supabase = await createClient();
             const gate = await getProfileGateContext({ supabase, nextPath: "/" });
-            carouselSlides = await loadHomepageCarousel(supabase, {
-                emailVerified: gate.state === "ready",
-                profileComplete: gate.state === "ready",
-            });
+            const carouselViewer = await loadCarouselViewer(supabase, gate.state, gate.userId);
+            carouselSlides = await loadHomepageCarousel(supabase, carouselViewer);
         } catch {
             carouselSlides = [];
         }

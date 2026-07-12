@@ -1051,16 +1051,16 @@ Blocked reason:
   - Verification: `npm run lint`, `npm test` (33 tests), `npx tsc --noEmit`, and `npm run build` passed. Canonical Supabase migrations applied successfully; live verification found owner-scoped RLS policies, both telemetry/resolver RPCs, the daily retention job, audit storage, and organization foreign-key indexes. Security/performance advisors reported no new finding on these tables. Cloudflare version `5d889f8a-3d77-493f-b67f-96eeb62f11ca` deployed successfully; the production Playwright crawl visited 60 internal routes and reported zero console, CSP, 404, 500, or navigation issues.
   - Blocked reason: None.
 
-- [ ] Task 095: Build membership-aware carousel resolver, teaser logic, and fallback behavior
+- [x] Task 095: Build membership-aware carousel resolver, teaser logic, and fallback behavior
   - Priority: P0
   - Requirement IDs: R-HOME-004, R-HOME-006, R-AUTH-001, R-UPGRADE-001
   - Supersedes: Former Task 105
   - Superseded by: None.
   - Goal: Serve the right carousel mix and fallback logic for anonymous, unverified, profile-incomplete, Explorer, Scout, Meridian/internal Command, and staff users.
   - Acceptance criteria: Anonymous users see published story teaser slides plus `/request-access` CTAs; unverified signed-in users see public-safe teasers plus email verification prompts; verified/profile-incomplete users see public-safe teasers plus `/account/profile/complete` prompts; verified/profile-complete users see reviewed editorial stories and custom intelligence cards when personalization is enabled; Explorer users see at least one Scout or Meridian teaser when eligible reviewed content exists, with paid articles prioritized first; Scout and internal Command users see paid intelligence/custom cards rather than repetitive upgrade prompts; premium clicks route to `/upgrade`; personalization can override optional editor picks after 5 qualifying 90-day events; disabled personalization falls back to latest reviewed stories, required editor picks, paid-article teaser priority, and non-personalized tier cards; structured data exposes only public teaser content; tests cover anonymous, unverified, profile-incomplete, verified generic, Explorer, Scout, Meridian/internal Command, staff, sufficient-history, insufficient-history, and disabled-personalization states. Disabled personalization falls back to latest reviewed stories, required editor/admin picks, paid-article teaser priority for Explorer users, and non-personalized tier cards; tests cover enabled, disabled, no-history, sufficient-history, anonymous, unverified, profile-incomplete, Explorer, Scout, and Meridian/internal Command states.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 092-094 and Tasks 080-081 access helpers.
+  - Non-technical summary: The homepage carousel now adapts safely to each visitor. Public visitors receive join prompts, members with incomplete setup receive the correct next step, Explorer members see eligible upgrade previews, and paid or staff audiences receive intelligence suited to their access without repetitive sales prompts. Required editorial stories remain protected, while optional stories can be personalized only after sufficient activity.
+  - Verification: `npm run lint`, `npm test` (44 tests), `npx tsc --noEmit`, and `npm run build` passed. Resolver fixtures cover anonymous, unverified, profile-incomplete, Explorer, Scout, Meridian/internal Command, staff, sufficient-history, insufficient-history, no-history, and disabled-personalization states. Production deployment and browser crawl are recorded in the follow-up verification commit.
+  - Blocked reason: None.
 
 - [ ] Task 096: Add weekly launch and mission tracker schema
   - Priority: P0

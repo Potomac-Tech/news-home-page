@@ -916,8 +916,9 @@ test("homepage carousel inventory is audited, gated, ranked, and auto-filled fro
     ], "carousel schema and access controls");
     assertIncludes(loader, [
         "loadHomepageCarousel",
-        "emailVerified",
-        "profileComplete",
+        "CarouselAudience",
+        "profile_incomplete",
+        "loadCarouselViewer",
         '.eq("content_visibility", "public_teaser")',
         '.eq("status", "published")',
         '.gt("expires_at", now)',
