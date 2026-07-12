@@ -1084,16 +1084,16 @@ Blocked reason:
   - Verification: `npm run lint`, `npm test` (52 tests), `npx tsc --noEmit`, and `npm run build` passed. Current source URLs and usage constraints were checked against official/API documentation. The migration applied to canonical Supabase project `xlpkdoeldtlhearqajat`; live verification found 12 sources, 7 approved records, 5 pending records, job ownership on all 12, and publication-guard triggers on tracker entries, citations, and values. Cloudflare version `fe2eed11-38f4-4c63-9a2d-5cfd8d5a5c5f` deployed after one transient Wrangler retry; the production Playwright crawl traversed 60 internal routes and reported zero console, CSP, 404, 500, or navigation issues.
   - Blocked reason: None.
 
-- [ ] Task 098: Implement weekly launch and mission ingestion plus review workflow
+- [x] Task 098: Implement weekly launch and mission ingestion plus review workflow
   - Priority: P0
   - Requirement IDs: R-MISSION-006, R-MISSION-009
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Populate the tracker from approved sources without inventing unreviewed data.
   - Acceptance criteria: Ingestion uses Launch Library 2 where practical, official operator/customer/NASA/Space Force/agency pages for validation, Spaceflight Now/Next Spaceflight cross-checks, and procurement/award/company/SEC/official contracting records for value evidence; de-duplicates launches and milestones; handles slips, scrubs, holds, no-earlier-than dates, status changes, and source conflicts; flags lunar/cislunar relevance; creates draft rows requiring one editor/admin approval except automated source-reviewed `No launches this week` states; stores ingestion run ID, source check timestamp, confidence, and audit events.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: External source calls may be blocked until provider/API access and scheduled-job environment are configured.
+  - Non-technical summary: Cabeus Explorer now has a review-first weekly ingestion pipeline. It identifies lunar launches, removes duplicates, tracks schedule and status changes, queues official and commercial cross-checks, flags source conflicts, and keeps new records in draft until one editor or administrator approves them. A source-reviewed empty week can publish automatically without inventing a launch.
+  - Verification: `npm run lint`, `npm test` (57 tests), `npx tsc --noEmit`, fixture dry-run ingestion, and a live Launch Library 2 dry run passed. The migration applied to canonical Supabase project `xlpkdoeldtlhearqajat`; live verification found five workflow tables, six RLS policies, six lineage columns, and the editor/admin review RPC. Supabase security advisors reported no new finding for these workflow tables. Production build, deployment, and browser crawl are recorded in the follow-up verification commit.
+  - Blocked reason: None.
 
 - [ ] Task 099: Build weekly launch and mission tracker UI
   - Priority: P0
