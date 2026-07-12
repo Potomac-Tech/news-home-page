@@ -7,7 +7,7 @@ const loader = readFileSync("app/_data/weeklyLaunchTracker.ts", "utf8");
 const migration = readFileSync("supabase/migrations/20260712170947_global_weekly_tracker_visibility.sql", "utf8");
 
 test("weekly tracker enforces verification and profile completion before loading data", () => {
-    for (const token of ["getLunarMissionAccess", "access.loginHref", "access.profileHref", "canReadMemberDetails", "/request-access"]) assert.ok(page.includes(token));
+    for (const token of ["getWeeklyTrackerAccess", "access.loginHref", "access.profileHref", "canReadBasic", "/request-access"]) assert.ok(page.includes(token));
 });
 test("weekly tracker defaults global and provides a prominent lunar filter", () => {
     assert.ok(page.includes("All global"));

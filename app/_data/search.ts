@@ -124,18 +124,18 @@ const fallbackSearchResults: SearchResult[] = [
     {
         id: "missions",
         kind: "lunar_mission",
-        title: "Launch and Spacecraft Tracker",
-        eyebrow: "Missions",
+        title: "Launches & Missions",
+        eyebrow: "Launches & Missions",
         summary:
             "Lunar launches, spacecraft, landers, payloads, and satellites with status and source freshness.",
         snippet: "Includes Artemis, CLPS, lunar spacecraft, landers, satellites, and payloads.",
-        href: "/launches",
-        tier: "explorer",
+        href: "/tracker/launches",
+        tier: "public",
         confidenceLabel: "medium",
         freshnessAt: "2026-06-30T12:00:00.000Z",
         isPinned: true,
         sourceCount: 1,
-        keywords: ["launches", "spacecraft", "landers", "satellites", "CLPS"],
+        keywords: ["launches", "missions", "spacecraft", "landers", "satellites", "CLPS"],
         isFallback: true,
     },
     {

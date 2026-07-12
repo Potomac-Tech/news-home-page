@@ -1117,16 +1117,16 @@ Blocked reason:
   - Verification: `npm run lint`, `npm test` (65 tests), `npx tsc --noEmit`, and `npm run build` passed. The migration applied to canonical Supabase project `xlpkdoeldtlhearqajat`; a live query executed as the anonymous database role returned zero analyst estimates and zero cited values lacking editorial disclosure. Tests also confirm estimate fields are absent from public metadata, search, sitemap, and prefetch surfaces. Cloudflare version `79384541-f064-4385-a226-f98b8f61681b` deployed successfully; the 60-route production Playwright crawl explicitly visited both tracker modes and the tracker upgrade path and reported zero console, CSP, 404, 500, or navigation issues.
   - Blocked reason: None.
 
-- [ ] Task 101: Connect and normalize Launches & Missions access, navigation, search, alerts, and exports
+- [x] Task 101: Connect and normalize Launches & Missions access, navigation, search, alerts, and exports
   - Priority: P0
   - Requirement IDs: R-HOME-005, R-NAV-001, R-MISSION-004, R-SEARCH-001, R-ALERT-001, R-API-001
   - Supersedes: Former Task 106
   - Superseded by: None.
   - Goal: Make `/tracker/launches` a broader signed-in tracker app with consistent Launches & Missions labeling, access gates, search, alerts, and export hooks.
   - Acceptance criteria: `/tracker/launches` blocks anonymous, email-unverified, and profile-incomplete users from the app shell; any verified/profile-complete account can view the basic app shell without approved Explorer status; Scout/Command-only value estimates, methodology, export, API, advanced filters, and alert features remain gated; member dashboard, account navigation, command palette, search results, breadcrumbs, route metadata, and terminal shell use `Launches & Missions`; search exposes only public-safe snippets to unverified/profile-incomplete states; alerts/watchlists/export hooks respect tier and profile gates. `/tracker/launches` blocks anonymous, unverified signed-in, and profile-incomplete users from member content but allows any authenticated account with verified email and completed profile to load the app shell; approved Explorer status is not required for basic tracker access; Scout/Command-only estimate values and methodology remain gated; member dashboard, account navigation, command palette, search results, breadcrumbs, and route metadata use the exact label `Launches & Missions`; the homepage metric can remain labeled `Launches Tracked`; tests cover anonymous redirect/gate, unverified authenticated verification prompt, profile-incomplete completion prompt, generic verified/profile-complete authenticated access, Explorer access, Scout/Command estimate unlock, and public-safe teaser behavior.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 099-100, Tasks 063-070, and fixture users from Task 108 for full role coverage.
+  - Non-technical summary: Launches & Missions is now a connected verified-account application rather than an isolated page. Any verified user with a completed profile can open the basic tracker, while Scout and Meridian/internal Command members receive advanced filters, watchlists, alerts, CSV export, API handoff, and protected estimate details. Navigation, account, terminal, search, command palette, and member workspace labels now agree.
+  - Verification: `npm run lint`, `npm test` (70 tests), `npx tsc --noEmit`, and `npm run build` passed. The tracker-specific access migration applied to canonical Supabase project `xlpkdoeldtlhearqajat`; tests cover anonymous, unverified, profile-incomplete, generic verified/profile-complete, Explorer, Scout, Command, staff, public-safe search, paid tools, export authorization, and exact label normalization. Production deployment and browser crawl are recorded in the follow-up verification commit.
+  - Blocked reason: None.
 
 - [ ] Task 102: Update homepage Launches Tracked card and handoff behavior
   - Priority: P0

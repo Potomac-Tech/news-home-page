@@ -21,11 +21,13 @@ export function localMonday(now: Date, timeZone: string) {
     return localDate.toISOString().slice(0, 10);
 }
 
-export async function loadWeeklyTracker({ supabase, weekStart, lunarOnly }: { supabase: SupabaseServerClient; weekStart: string; lunarOnly: boolean }) {
+export async function loadWeeklyTracker({ supabase, weekStart, lunarOnly, status, confidence }: { supabase: SupabaseServerClient; weekStart: string; lunarOnly: boolean; status?: string | null; confidence?: string | null }) {
     let query = supabase.from("weekly_lunar_tracker_entries")
         .select("id,event_type,title,scheduled_at,launch_provider,vehicle,mission_name,customer_payload,launch_site,event_location,target_orbit_location,status,schedule_confidence,is_lunar_or_cislunar,source_checked_at,last_reviewed_at")
         .eq("week_start_local", weekStart).order("scheduled_at", { ascending: true, nullsFirst: false });
     if (lunarOnly) query = query.eq("is_lunar_or_cislunar", true);
+    if (status) query = query.eq("status", status);
+    if (confidence) query = query.eq("schedule_confidence", confidence);
     const { data: entries, error } = await query;
     if (error) throw new Error(error.message);
     const ids = (entries ?? []).map((entry) => entry.id);

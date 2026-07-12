@@ -31,6 +31,11 @@ const accountLinks = [
         detail: `Review ${tierConfig.enterprise.publicName} organization seats and entitlements.`,
     },
     {
+        href: "/tracker/launches",
+        label: "Launches & Missions",
+        detail: "Open the verified-account weekly operations tracker.",
+    },
+    {
         href: "/pricing",
         label: "Pricing",
         detail: `Compare Explorer, Scout, and ${tierConfig.enterprise.publicName} access.`,

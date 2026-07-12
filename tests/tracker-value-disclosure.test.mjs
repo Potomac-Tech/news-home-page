@@ -20,7 +20,7 @@ test("public exact values and ranges require editorial and source approval", () 
 test("Explorer receives the required upgrade CTA while paid tiers receive returned methodology", () => {
     assert.ok(page.includes("Sign up or Log In for More Details"));
     assert.ok(page.includes("/upgrade?tier=scout"));
-    assert.ok(page.includes("access.canReadScoutDetails"));
+    assert.ok(page.includes("access.canUsePremiumTools"));
     assert.ok(loader.includes("estimate_methodology"));
     assert.ok(page.includes("Methodology:"));
 });

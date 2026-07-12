@@ -40,6 +40,11 @@ export const currentRoutes = [
         note: "Public dataset catalog with NASA/science archives, Cabeus Explorer proprietary entries, source metadata, availability, tier, sample, and demo indicators.",
     },
     {
+        href: "/tracker/launches",
+        source: "app/tracker/launches/page.tsx",
+        note: "Verified-profile Launches & Missions weekly tracker with Scout/Meridian tools and RLS-gated values.",
+    },
+    {
         href: "/member/summits",
         source: "app/member/summits/page.tsx",
         note: "Member-gated internal summit tracker with upcoming summit and past-event summary views.",

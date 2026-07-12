@@ -20,10 +20,10 @@ export const terminalModules: TerminalModule[] = [
     },
     {
         id: "launches",
-        label: "Launches",
-        href: "/launches",
-        summary: "Upcoming lunar launch windows, vehicles, operators, and status.",
-        status: "live",
+        label: "Launches & Missions",
+        href: "/tracker/launches",
+        summary: "Verified-account weekly global and lunar launch and mission operations.",
+        status: "member",
         section: "Missions",
     },
     {
