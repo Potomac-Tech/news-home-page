@@ -1040,16 +1040,16 @@ Blocked reason:
   - Verification: `npm test` passed (26 tests); `npm run test:content-expiration`, `npm run lint`, `npx tsc --noEmit`, and `npm run build` passed. Automated coverage checks rotation timing, keyboard controls, pause/resume, hover/focus pause, reduced motion, responsive media, accessible labels, data gating, and static fallback. Production desktop/mobile screenshot, overflow, interaction, and console verification is performed after deployment in this task run.
   - Blocked reason: None.
 
-- [ ] Task 094: Add engagement telemetry, personalization controls, and custom intelligence card model
+- [x] Task 094: Add engagement telemetry, personalization controls, and custom intelligence card model
   - Priority: P1
   - Requirement IDs: R-HOME-006, R-WATCH-001, R-TRUST-001
   - Supersedes: Former Task 105
   - Superseded by: None.
   - Goal: Track engagement, store personalization preferences, and support explainable custom intelligence cards without disabling required analytics.
   - Acceptance criteria: Telemetry records privacy-safe engagement signals for verified/profile-complete signed-in users over a rolling 90-day window, including article reads, searches, saved work, watchlists, tracker rows, company/profile views, alerts, paid articles, datasets, exports, and CTA clicks; resolver produces explainable card reasons; personalization threshold defaults to 5 qualifying events; account preferences disable behavior-based ranking only and do not disable analytics or engagement collection; data model respects organization/privacy boundaries and RLS. Account settings include a personalization toggle that controls homepage/custom-card ranking only; disabled users receive latest reviewed stories, required editor/admin picks, paid-article teaser priority for Explorer users, and non-personalized tier cards; sufficient-history threshold is at least 5 qualifying events by default; personalization only applies to verified/profile-complete users; analytics and logs record the preference without using disabled users' behavior for ranking; tests cover enabled, disabled, no-history, sufficient-history, anonymous, unverified, profile-incomplete, Explorer, Scout, and Meridian/internal Command states.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on account preference storage, telemetry schema, and RLS verification from Task 108. Fixture-based preference and ranking tests can proceed earlier.
+  - Non-technical summary: Members can now choose whether recent activity ranks their homepage intelligence without stopping required analytics. Verified members receive privacy-bounded 90-day activity history and explainable custom-card recommendations after at least five qualifying actions, while everyone else receives reviewed, tier-appropriate fallback content.
+  - Verification: `npm run lint`, `npm test` (33 tests), and `npx tsc --noEmit` passed. Canonical Supabase migrations applied successfully; live verification found four owner-scoped RLS policies, both telemetry/resolver RPCs, the daily retention job, and organization foreign-key indexes. Security/performance advisors reported no new finding on these tables. Production build and browser crawl are recorded in the deployment commit for this task.
+  - Blocked reason: None.
 
 - [ ] Task 095: Build membership-aware carousel resolver, teaser logic, and fallback behavior
   - Priority: P0

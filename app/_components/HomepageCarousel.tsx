@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { HomepageCarouselSlide } from "../_data/homepageCarousel";
+import { trackAnalyticsEvent } from "../../lib/platform/baseline";
 
 const rotationMs = 8_000;
 
@@ -87,6 +88,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                             </p>
                             <Link
                                 href={slide.ctaRoute}
+                                onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel", slideId: slide.id } })}
                                 className="mt-7 inline-flex min-h-11 items-center bg-potomac-gold px-5 py-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-primary transition hover:bg-potomac-cream"
                             >
                                 {slide.ctaLabel}

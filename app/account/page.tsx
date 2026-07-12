@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { tierConfig } from "../_data/tiers";
+import { createClient } from "../../lib/supabase/server";
+import { getProfileGateContext } from "../../lib/auth/profile-completion";
+import { updatePersonalizationPreference } from "./actions";
 
 export const metadata: Metadata = {
     title: "Account",
@@ -59,7 +62,20 @@ const accountLinks = [
     },
 ];
 
-export default function AccountPage() {
+export default async function AccountPage() {
+    let personalizationEnabled = true;
+    let canPersonalize = false;
+    try {
+        const supabase = await createClient();
+        const gate = await getProfileGateContext({ supabase, nextPath: "/account" });
+        canPersonalize = gate.state === "ready";
+        if (canPersonalize) {
+            const { data } = await supabase.from("member_personalization_preferences").select("behavior_ranking_enabled").maybeSingle();
+            personalizationEnabled = data?.behavior_ranking_enabled ?? true;
+        }
+    } catch {
+        canPersonalize = false;
+    }
     return (
         <section className="bg-grid-pattern">
             <div className="mx-auto min-h-[calc(100vh-9rem)] w-full max-w-7xl px-4 py-16 md:px-8">
@@ -76,6 +92,21 @@ export default function AccountPage() {
                         access, and {tierConfig.enterprise.publicName} inquiry paths.
                     </p>
                 </div>
+                {canPersonalize ? (
+                    <form action={updatePersonalizationPreference} className="mt-10 border border-potomac-gold/35 p-5">
+                        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                            <div>
+                                <h2 className="font-serif text-2xl text-white">Homepage personalization</h2>
+                                <p className="mt-2 max-w-2xl text-sm leading-6 text-potomac-cream/70">Use recent Cabeus Explorer activity to rank homepage intelligence cards. Analytics collection continues when this setting is off.</p>
+                            </div>
+                            <label className="flex min-h-11 items-center gap-3 font-mono text-xs font-bold uppercase text-potomac-cream">
+                                <input name="behaviorRanking" type="checkbox" defaultChecked={personalizationEnabled} className="h-5 w-5 accent-potomac-gold" />
+                                Behavior ranking
+                            </label>
+                        </div>
+                        <button type="submit" className="mt-5 min-h-11 bg-potomac-gold px-5 py-3 font-mono text-xs font-bold uppercase text-potomac-primary">Save preference</button>
+                    </form>
+                ) : null}
                 <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {accountLinks.map((link) => (
                         <Link
