@@ -1073,16 +1073,16 @@ Blocked reason:
   - Verification: `npm run lint`, `npm test` (48 tests), `npx tsc --noEmit`, and `npm run build` passed. Both migrations applied to canonical Supabase project `xlpkdoeldtlhearqajat`; live verification found 65 tracker fields, 10 RLS policies, the tier helper, and audit/update triggers. Foreign-key indexes were added for tracker source and user references. Cloudflare version `7e56bd4f-9453-4b8f-9902-567a0da52d68` deployed successfully; the production Playwright crawl traversed 60 internal routes and reported zero console, CSP, 404, 500, or navigation issues.
   - Blocked reason: None.
 
-- [ ] Task 097: Seed launch, mission, and value source registry entries
+- [x] Task 097: Seed launch, mission, and value source registry entries
   - Priority: P0
   - Requirement IDs: R-MISSION-006, R-DATAOPS-001
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Give the tracker approved source entries instead of free-form URLs.
   - Acceptance criteria: Source registry includes Launch Library 2, official NASA/Space Force/operator/customer pages, Spaceflight Now, Next Spaceflight, procurement/award sources, SEC/company sources where relevant, and official contracting records; each source includes owner, URL, terms/license review status, refresh frequency, parser/job owner, citation requirements, quality score, confidence, and analyst review state; unapproved sources cannot publish tracker rows.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 068 source registry schema and legal/license review where required.
+  - Non-technical summary: The tracker now has a governed list of 12 launch, mission, contracting, spending, company, and cross-check sources. Seven official or clearly licensed sources are approved for publication; five commercial or operator sources remain visibly pending legal/terms review and cannot publish tracker content.
+  - Verification: `npm run lint`, `npm test` (52 tests), and `npx tsc --noEmit` passed. Current source URLs and usage constraints were checked against official/API documentation. The migration applied to canonical Supabase project `xlpkdoeldtlhearqajat`; live verification found 12 sources, 7 approved records, 5 pending records, job ownership on all 12, and publication-guard triggers on tracker entries, citations, and values. Production build, deployment, and browser crawl are recorded in the follow-up verification commit.
+  - Blocked reason: None.
 
 - [ ] Task 098: Implement weekly launch and mission ingestion plus review workflow
   - Priority: P0

@@ -10,7 +10,7 @@
         "test:production-crawl": "node scripts/crawl-production.mjs",
         "test:content-expiration": "node scripts/check-promotional-expiration.mjs",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "test": "node --test tests/potomac-critical-flows.test.mjs tests/personalization-resolver.test.mjs tests/carousel-membership-resolver.test.mjs tests/weekly-lunar-tracker-schema.test.mjs",
+        "test": "node --test tests/potomac-critical-flows.test.mjs tests/personalization-resolver.test.mjs tests/carousel-membership-resolver.test.mjs tests/weekly-lunar-tracker-schema.test.mjs tests/lunar-tracker-source-registry.test.mjs",
         "test:e2e": "npm run build && node --test tests/*.e2e.test.mjs",
         "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
         "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
