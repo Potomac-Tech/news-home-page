@@ -1062,16 +1062,16 @@ Blocked reason:
   - Verification: `npm run lint`, `npm test` (44 tests), `npx tsc --noEmit`, and `npm run build` passed. Resolver fixtures cover anonymous, unverified, profile-incomplete, Explorer, Scout, Meridian/internal Command, staff, sufficient-history, insufficient-history, no-history, and disabled-personalization states. Cloudflare version `c586c122-a350-4252-9a46-a37606d6063b` deployed successfully; the production Playwright crawl traversed 60 internal routes and reported zero console, CSP, 404, 500, or navigation issues.
   - Blocked reason: None.
 
-- [ ] Task 096: Add weekly launch and mission tracker schema
+- [x] Task 096: Add weekly launch and mission tracker schema
   - Priority: P0
   - Requirement IDs: R-MISSION-004, R-MISSION-005, R-MISSION-007, R-MISSION-008, R-LUNAR-001
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Store weekly launch and mission milestone data with source-backed value fields.
   - Acceptance criteria: Schema supports Monday-Sunday local week windows with UTC fallback, launch/milestone type, launch provider, vehicle, mission, customer/payload, launch site/location, target/orbit/mission location, status, schedule confidence, lunar/cislunar flag, source citations, source registry IDs, last-reviewed timestamp, value state, exact cited value, cited range, analyst estimate, estimate methodology, estimate confidence, gated visibility, reviewer, and audit log.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on source registry trust layer from Task 068.
+  - Non-technical summary: Cabeus Explorer can now store a Monday-through-Sunday lunar activity schedule with launches and mission milestones, approved source citations, review status, schedule confidence, and carefully separated public or membership-gated value information. Every editorial change is retained in an audit history.
+  - Verification: `npm run lint`, `npm test` (48 tests), and `npx tsc --noEmit` passed. Both migrations applied to canonical Supabase project `xlpkdoeldtlhearqajat`; live verification found 65 tracker fields, 10 RLS policies, the tier helper, and audit/update triggers. Foreign-key indexes were added for tracker source and user references. Production build, deployment, and browser crawl are recorded in the follow-up verification commit.
+  - Blocked reason: None.
 
 - [ ] Task 097: Seed launch, mission, and value source registry entries
   - Priority: P0
