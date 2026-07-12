@@ -1106,16 +1106,16 @@ Blocked reason:
   - Verification: `npm run lint`, `npm test` (61 tests), `npx tsc --noEmit`, and `npm run build` passed. The visibility migration applied to canonical Supabase project `xlpkdoeldtlhearqajat`, enabling member-visible global rows while preserving the lunar filter and RLS-separated values/citations. Tests cover auth/profile redirects, global and lunar modes, required card fields, empty states, and server-only entitled data loading. Cloudflare version `65e019e9-c910-40de-8d64-a837a8c169f0` deployed successfully; the production Playwright crawl explicitly visited both tracker modes and reported zero console, CSP, 404, 500, or navigation issues. A bounded 12-route rerun exited cleanly after the full crawl's outer wrapper timed out during cleanup with an empty issue list.
   - Blocked reason: None.
 
-- [ ] Task 100: Add contract value visibility and estimate-methodology gates
+- [x] Task 100: Add contract value visibility and estimate-methodology gates
   - Priority: P0
   - Requirement IDs: R-MISSION-005, R-UPGRADE-001
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Prevent premium value estimates from leaking while still showing public cited values where allowed.
   - Acceptance criteria: Value states are exact cited value, cited range, analyst estimate, and not disclosed; exact cited values/ranges can display publicly only when source license/editorial settings allow; analyst estimates and methodology are visible only to Scout/Command; non-entitled views show `Sign up or Log In for More Details` and route to `/upgrade`; account-required states route through `/request-access`; profile-incomplete users complete `/account/profile/complete` before premium checkout or member content; tests confirm no estimate leakage in HTML, API payloads, metadata, search snippets, structured data, exports, or prefetched payloads.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 087-101 and paid-tier test users from Task 108.
+  - Non-technical summary: Contract values now follow enforceable disclosure rules. Reviewed cited values may be shown when their source and editor approve public use, while Potomac analyst estimates and methodology remain available only to Scout and Meridian/internal Command members. Explorer members receive a clear upgrade path instead of a blank or leaked estimate.
+  - Verification: `npm run lint`, `npm test` (65 tests), and `npx tsc --noEmit` passed. The migration applied to canonical Supabase project `xlpkdoeldtlhearqajat`; a live query executed as the anonymous database role returned zero analyst estimates and zero cited values lacking editorial disclosure. Tests also confirm estimate fields are absent from public metadata, search, sitemap, and prefetch surfaces. Production build, deployment, and browser crawl are recorded in the follow-up verification commit.
+  - Blocked reason: None.
 
 - [ ] Task 101: Connect and normalize Launches & Missions access, navigation, search, alerts, and exports
   - Priority: P0

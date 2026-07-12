@@ -8,7 +8,7 @@ export type WeeklyTrackerRow = {
     customerPayload: string | null; launchSite: string | null; eventLocation: string | null;
     target: string; status: string; confidence: string; isLunar: boolean;
     sourceCheckedAt: string | null; reviewedAt: string | null;
-    value: { state: string; currency: string; exact: number | null; low: number | null; high: number | null; estimate: number | null; confidence: string | null } | null;
+    value: { state: string; currency: string; exact: number | null; low: number | null; high: number | null; estimate: number | null; confidence: string | null; methodology: string | null } | null;
     citations: Array<{ title: string; url: string; retrievedAt: string }>;
 };
 
@@ -32,7 +32,7 @@ export async function loadWeeklyTracker({ supabase, weekStart, lunarOnly }: { su
     if (!ids.length) return [];
     const [{ data: citations }, { data: values }] = await Promise.all([
         supabase.from("weekly_lunar_tracker_sources").select("tracker_entry_id,citation_title,citation_url,retrieved_at").in("tracker_entry_id", ids).order("is_primary", { ascending: false }),
-        supabase.from("weekly_lunar_tracker_values").select("tracker_entry_id,value_state,currency_code,exact_cited_value,cited_range_low,cited_range_high,analyst_estimate,estimate_confidence").in("tracker_entry_id", ids),
+        supabase.from("weekly_lunar_tracker_values").select("tracker_entry_id,value_state,currency_code,exact_cited_value,cited_range_low,cited_range_high,analyst_estimate,estimate_confidence,estimate_methodology").in("tracker_entry_id", ids),
     ]);
     return (entries ?? []).map((entry): WeeklyTrackerRow => {
         const value = values?.find((candidate) => candidate.tracker_entry_id === entry.id);
@@ -42,7 +42,7 @@ export async function loadWeeklyTracker({ supabase, weekStart, lunarOnly }: { su
             customerPayload: entry.customer_payload, launchSite: entry.launch_site, eventLocation: entry.event_location,
             target: entry.target_orbit_location, status: entry.status, confidence: entry.schedule_confidence,
             isLunar: entry.is_lunar_or_cislunar, sourceCheckedAt: entry.source_checked_at, reviewedAt: entry.last_reviewed_at,
-            value: value ? { state: value.value_state, currency: value.currency_code, exact: value.exact_cited_value, low: value.cited_range_low, high: value.cited_range_high, estimate: value.analyst_estimate, confidence: value.estimate_confidence } : null,
+            value: value ? { state: value.value_state, currency: value.currency_code, exact: value.exact_cited_value, low: value.cited_range_low, high: value.cited_range_high, estimate: value.analyst_estimate, confidence: value.estimate_confidence, methodology: value.estimate_methodology } : null,
             citations: (citations ?? []).filter((citation) => citation.tracker_entry_id === entry.id).map((citation) => ({ title: citation.citation_title, url: citation.citation_url, retrievedAt: citation.retrieved_at })),
         };
     });
