@@ -37,7 +37,7 @@ function status(value = "") {
 export function normalizeLaunch(item, sourceId, runId, checkedAt) {
     const mission = item.mission ?? {};
     const text = [item.name, mission.name, mission.description, mission.type, mission.orbit?.name].filter(Boolean).join(" ");
-    if (!lunarTerms.test(text)) return null;
+    const isLunarOrCislunar = lunarTerms.test(text);
     const scheduledAt = item.net ?? item.window_start ?? null;
     const statusValue = status(item.status?.name);
     return {
@@ -49,9 +49,9 @@ export function normalizeLaunch(item, sourceId, runId, checkedAt) {
         customer_payload: mission.agencies?.map((agency) => agency.name).join(", ") || null,
         launch_site: [item.pad?.name, item.pad?.location?.name].filter(Boolean).join(" / ") || "Site pending review",
         event_location: item.pad?.location?.name ?? null,
-        target_orbit_location: mission.orbit?.name ?? "Lunar/cislunar destination pending review",
+        target_orbit_location: mission.orbit?.name ?? "Destination pending review",
         status: statusValue, schedule_confidence: item.probability >= 90 ? "high" : "medium",
-        is_lunar_or_cislunar: true, publication_status: "draft", visibility: "member",
+        is_lunar_or_cislunar: isLunarOrCislunar, publication_status: "draft", visibility: "member",
         primary_source_id: sourceId, external_source_key: String(item.id), ingestion_run_id: runId,
         source_checked_at: checkedAt, source_conflict: false,
         schedule_change_type: /scrub/.test(item.status?.name?.toLowerCase() ?? "") ? "scrub" : /hold/.test(item.status?.name?.toLowerCase() ?? "") ? "hold" : "new",

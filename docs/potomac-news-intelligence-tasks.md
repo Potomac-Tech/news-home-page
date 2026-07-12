@@ -1095,16 +1095,16 @@ Blocked reason:
   - Verification: `npm run lint`, `npm test` (57 tests), `npx tsc --noEmit`, `npm run build`, fixture dry-run ingestion, and a live Launch Library 2 dry run passed. The migration applied to canonical Supabase project `xlpkdoeldtlhearqajat`; live verification found five workflow tables, six RLS policies, six lineage columns, and the editor/admin review RPC. Supabase security advisors reported no new finding for these workflow tables. Cloudflare version `ae483749-b8c2-4ab4-b2a1-5d7e07150dd6` deployed successfully; the production Playwright crawl traversed 60 internal routes and reported zero console, CSP, 404, 500, or navigation issues.
   - Blocked reason: None.
 
-- [ ] Task 099: Build weekly launch and mission tracker UI
+- [x] Task 099: Build weekly launch and mission tracker UI
   - Priority: P0
   - Requirement IDs: R-MISSION-004, R-MISSION-008
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Give users an operational weekly view of launches and mission milestones.
   - Acceptance criteria: `/tracker/launches` renders only for verified/profile-complete signed-in users; anonymous users route to `/request-access`, unverified users to email verification, and profile-incomplete users to `/account/profile/complete`; view defaults to all/global launches for the user's Monday-Sunday local week; one-click lunar/cislunar filter is prominent; cards/table show UTC and local time, provider, vehicle, mission, customer/payload, launch site, target/orbit/location, milestone type, status, value state, citations, confidence, freshness, and review timestamp; empty weeks show the automated source-reviewed `No launches this week` state when applicable; mobile view has no horizontal overflow.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 096-098 and Tasks 080-081 access helpers.
+  - Non-technical summary: Approved members now have a weekly operations screen for launches and mission milestones. It defaults to the complete global schedule, switches to lunar and cislunar activity in one click, shows local and UTC timing with reviewed sources and confidence, and clearly distinguishes a verified empty week from an unfinished review.
+  - Verification: `npm run lint`, `npm test` (61 tests), and `npx tsc --noEmit` passed. The visibility migration applied to canonical Supabase project `xlpkdoeldtlhearqajat`, enabling member-visible global rows while preserving the lunar filter and RLS-separated values/citations. Tests cover auth/profile redirects, global and lunar modes, required card fields, empty states, and server-only entitled data loading. Production build, deployment, and browser crawl are recorded in the follow-up verification commit.
+  - Blocked reason: None.
 
 - [ ] Task 100: Add contract value visibility and estimate-methodology gates
   - Priority: P0

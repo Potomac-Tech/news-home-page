@@ -478,10 +478,10 @@ export default async function MemberPage() {
                             Economy dashboard
                         </Link>
                         <Link
-                            href="/member/missions"
+                            href="/tracker/launches"
                             className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                         >
-                            Mission tracker
+                            Weekly launch tracker
                         </Link>
                         <Link
                             href="/pricing"
