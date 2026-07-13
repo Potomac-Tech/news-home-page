@@ -1201,9 +1201,9 @@ Blocked reason:
   - Superseded by: None.
   - Goal: Prove the completed database-backed requirements against the real Potomac Supabase project.
   - Acceptance criteria: Remote migration history for project `xlpkdoeldtlhearqajat` is reconciled; all production-intended migrations are applied or explicitly skipped; `20260701201833_seed_local_test_users.sql` is skipped unless explicitly approved for remote; Explorer, Scout, Command, organization admin, editor, analyst, and admin role journeys are seeded or otherwise available; RLS read/write checks cover article bodies, search, saved work, alerts, chat, forums, RFQs, lunar missions, procurement, regulatory records, companies, calculators, datasets, uploads, API/export tables, and audit logs; results are documented without exposing secrets.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Requires canonical project database credentials, runtime Supabase keys, and seeded or approved test users for `xlpkdoeldtlhearqajat`; never use `nwoluvjdojzayozyzlob`.
+  - Non-technical summary: Migration reconciliation and the structural security audit are complete. All 73 local migration names are represented in production. The audit also found that the local shared-password test-user seed had previously reached production; those four users and their test organization were immediately removed through a tracked remediation migration. Every representative table across the 17 required data areas has RLS and the expected read/write policy structure.
+  - Verification: Confirmed 73 matching named local/remote migrations plus five older unnamed production records. Verified zero remaining deterministic seed users and zero remaining seed organizations. The production role model contains every required role, and the structural RLS query passed all 17 required areas. Detailed non-secret results are in `docs/supabase-production-verification.md`.
+  - Blocked reason: Authenticated role journeys remain unverified because canonical production currently has zero approved profiles, zero active role assignments, and zero active organization memberships after removal of the unsafe local seed. Provision dedicated, uniquely credentialed QA accounts for Explorer, Scout, Command/organization admin, editor, analyst, and admin through normal Auth and approval flows; do not reapply `20260701201833_seed_local_test_users.sql`.
 
 - [ ] Task 109: Add production trust, telemetry, accessibility, and performance enforcement
   - Priority: P0
