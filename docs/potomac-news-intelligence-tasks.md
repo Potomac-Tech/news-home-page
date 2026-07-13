@@ -1172,16 +1172,16 @@ Blocked reason:
   - Verification: `npm run lint`, `npm test` (90 tests), `npx tsc --noEmit`, and `npm run build` passed. Canonical Supabase migration `production_member_alert_evaluator` applied to `xlpkdoeldtlhearqajat`; RLS, service-only quota RPCs, encrypted Vault entries, run audit storage, and active `*/15 * * * *` Supabase Cron job were verified. Cloudflare server secrets include `SUPABASE_SECRET_KEY` and `ALERT_EVALUATOR_SECRET` without public prefixes. A live Vault-backed `pg_net` invocation completed with a clean audit row and zero active rules, so no real member email was sent. Cloudflare version `247052bd-9d0a-459b-a596-a208b820ad23` deployed successfully; the production Playwright crawl visited 60 internal routes with zero console, CSP, 404, 500, or navigation issues. The protected endpoint returned `401` without its bearer token.
   - Blocked reason: None.
 
-- [ ] Task 106: Make member alert email digest-first under Resend Free limits
+- [x] Task 106: Make member alert email digest-first under Resend Free limits
   - Priority: P1
   - Requirement IDs: R-ALERT-001, R-EMAIL-003, R-EMAIL-004
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Preserve useful member alerts while preventing routine notifications from consuming the free daily email budget.
   - Acceptance criteria: Member alert emails default to digest delivery instead of one email per alert; high-priority alerts can request immediate delivery only when reserved quota remains; quiet hours and notification preferences are respected; in-app alert feed and unread badges update regardless of email status; when the email budget is low or exhausted, alerts stay in app and queue for the next digest window instead of failing publicly; admin/config controls define digest cadence, maximum daily alert emails, per-user daily cap, and priority thresholds; unsubscribe/preference links remain present where email is sent; tests cover digest grouping, instant-alert reserve use, quota exhaustion, in-app fallback, per-user caps, quiet hours, and preference changes.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 105 alert evaluator and Task 084 quota ledger. Fixture-based digest and in-app fallback tests can proceed earlier.
+  - Non-technical summary: Routine member alerts are now combined into scheduled lunar intelligence digests instead of sending one email for every update. Urgent alerts can send immediately only while their reserved capacity and the Free-plan budget remain; otherwise every alert stays visible in app and waits safely for the next digest. Admins can adjust digest timing, daily and per-member caps, urgent reserve, priority threshold, budget buffer, and digest size.
+  - Verification: `npm run lint`, `npm test` (96 tests), `npx tsc --noEmit`, and `npm run build` passed. Fixture tests cover digest grouping, urgent immediate reserve, reserve exhaustion, low-budget fallback, per-member caps, quiet hours, scheduling, preferences, and in-app independence. Canonical Supabase migration `member_alert_digest_delivery` applied to `xlpkdoeldtlhearqajat`; default policy values, admin-only RLS, digest queue index, and service-role-only runtime budget RPC were verified. The deployed Vault-backed evaluator returned HTTP 200 with no errors, and both scheduled and manual production runs completed cleanly without active alert rules or member sends. Cloudflare version `3d483bfe-52d9-4d3e-bd76-162b0ddee5df` deployed successfully. The broad production crawl visited 60 routes and reported zero issues before the shell timing boundary; a focused 12-route rerun, including `/admin/email`, `/alerts`, and `/member/saved-work`, exited successfully with zero console, CSP, 404, 500, or navigation issues.
+  - Blocked reason: None.
 
 - [ ] Task 107: Build runtime paid API, export jobs, and webhook delivery
   - Priority: P1
