@@ -1128,16 +1128,16 @@ Blocked reason:
   - Verification: `npm run lint`, `npm test` (70 tests), `npx tsc --noEmit`, and `npm run build` passed. The tracker-specific access migration applied to canonical Supabase project `xlpkdoeldtlhearqajat`; tests cover anonymous, unverified, profile-incomplete, generic verified/profile-complete, Explorer, Scout, Command, staff, public-safe search, paid tools, export authorization, and exact label normalization. Cloudflare version `3940a52e-1f63-4c14-a1fe-3858bc0ebc05` deployed successfully; the 60-route production Playwright crawl explicitly visited tracker, search, terminal, account, alerts, developer, and saved-work handoffs with zero console, CSP, 404, 500, or navigation issues. The unauthenticated CSV endpoint returned `401` as required.
   - Blocked reason: None.
 
-- [ ] Task 102: Update homepage Launches Tracked card and handoff behavior
+- [x] Task 102: Update homepage Launches Tracked card and handoff behavior
   - Priority: P0
   - Requirement IDs: R-HOME-005, R-MISSION-004
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Turn the current homepage metric into a useful entry point to `/tracker/launches`.
   - Acceptance criteria: Homepage `Launches Tracked` card shows current reviewed count, source freshness, and lunar/cislunar subset count; verified/profile-complete users click through to `/tracker/launches` with week/timezone/filter context; signed-out users see a public teaser and `/request-access` CTA; unverified users see a verify-email CTA; profile-incomplete users route to `/account/profile/complete`; premium value/export/estimate clicks route to `/upgrade`; no dead link or static placeholder metric remains.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 087-101.
+  - Non-technical summary: The homepage Launches Tracked card now reports the current reviewed weekly count, lunar/cislunar subset, and source freshness instead of a fixed placeholder. Its primary action adapts to sign-in, email verification, profile completion, or ready-member state, and its paid value/export action goes through the Scout upgrade workflow.
+  - Verification: `npm run lint`, `npm test` (74 tests), and `npx tsc --noEmit` passed. The public-safe aggregate RPC applied to canonical Supabase project `xlpkdoeldtlhearqajat`; the live current-week result correctly returned zero reviewed rows and no freshness rather than invented data. Tests cover approved-source aggregation, removal of the static `26` count, every auth/profile handoff, preserved week/timezone context, and premium upgrade routing. Production build, deployment, and browser crawl are recorded in the follow-up verification commit.
+  - Blocked reason: None.
 
 - [ ] Task 103: Add New Contract Awards module schema and ingestion workflow
   - Priority: P0

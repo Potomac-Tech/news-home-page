@@ -26,7 +26,7 @@ function money(row: Awaited<ReturnType<typeof loadWeeklyTracker>>[number]) {
     return format(row.value.estimate);
 }
 
-export default async function WeeklyLaunchTrackerPage({ searchParams }: { searchParams: Promise<{ filter?: string; status?: string; confidence?: string }> }) {
+export default async function WeeklyLaunchTrackerPage({ searchParams }: { searchParams: Promise<{ filter?: string; status?: string; confidence?: string; week?: string; timezone?: string }> }) {
     if (!hasPotomacSupabasePublicConfig()) redirect("/request-access?tab=signin&next=%2Ftracker%2Flaunches");
     const supabase = await createClient();
     const access = await getWeeklyTrackerAccess({ supabase });
@@ -38,8 +38,9 @@ export default async function WeeklyLaunchTrackerPage({ searchParams }: { search
     const status = access.canUsePremiumTools && ["planned","confirmed","delayed","scrubbed","success"].includes(params.status ?? "") ? params.status! : null;
     const confidence = access.canUsePremiumTools && ["low","medium","high","official"].includes(params.confidence ?? "") ? params.confidence! : null;
     const { data: profile } = await supabase.from("member_profile_completions").select("timezone").eq("user_id", access.userId!).maybeSingle();
-    const timeZone = profile?.timezone || "UTC";
-    const weekStart = localMonday(new Date(), timeZone);
+    const timeZone = params.timezone === profile?.timezone ? params.timezone : profile?.timezone || "UTC";
+    const defaultWeekStart = localMonday(new Date(), timeZone);
+    const weekStart = /^\d{4}-\d{2}-\d{2}$/.test(params.week ?? "") && new Date(`${params.week}T00:00:00Z`).getUTCDay() === 1 ? params.week! : defaultWeekStart;
     const weekEnd = new Date(new Date(`${weekStart}T00:00:00Z`).getTime() + 6 * 86_400_000).toISOString().slice(0, 10);
     const [rows, emptyState] = await Promise.all([loadWeeklyTracker({ supabase, weekStart, lunarOnly, status, confidence }), loadWeeklyEmptyState({ supabase, weekStart, lunarOnly })]);
 

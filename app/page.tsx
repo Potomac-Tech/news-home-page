@@ -31,6 +31,7 @@ import {
     loadHomepageCarousel,
     type HomepageCarouselSlide,
 } from "./_data/homepageCarousel";
+import { loadHomepageLaunchSummary, type HomepageLaunchSummary } from "./_data/homepageLaunchSummary";
 
 export const dynamic = "force-dynamic";
 
@@ -73,7 +74,7 @@ const intelligenceStats = [
     { label: "Active projects", value: "142", detail: "8 this week" },
     { label: "Supply nodes", value: "87", detail: "5 this week" },
     { label: "Power capacity", value: "3.42 GW", detail: "120 MW watch" },
-    { label: "Launches tracked", value: "26", detail: "2 this week" },
+    { label: "Launches tracked", value: "-", detail: "Reviewed weekly feed" },
     { label: "Investment signals", value: "$9.6B", detail: "$138M this week" },
 ];
 
@@ -319,12 +320,22 @@ export default async function HomePage() {
     const featuredStory = stories[0] ?? fallbackStories[0];
     const latestStories = stories.slice(1).length ? stories.slice(1) : fallbackStories.slice(1);
     let carouselSlides: HomepageCarouselSlide[] = [];
+    let launchSummary: HomepageLaunchSummary = { reviewedCount: 0, lunarCount: 0, freshnessAt: null, weekStart: "", timeZone: "UTC" };
+    let launchHref = "/request-access?next=%2Ftracker%2Flaunches";
+    let launchCta = "Request access";
     if (hasPotomacSupabasePublicConfig()) {
         try {
             const supabase = await createClient();
             const gate = await getProfileGateContext({ supabase, nextPath: "/" });
             const carouselViewer = await loadCarouselViewer(supabase, gate.state, gate.userId);
             carouselSlides = await loadHomepageCarousel(supabase, carouselViewer);
+            const timeZone = gate.state === "ready" ? gate.profile.timezone : "UTC";
+            launchSummary = await loadHomepageLaunchSummary(supabase, timeZone);
+            const trackerContext = `week=${encodeURIComponent(launchSummary.weekStart)}&timezone=${encodeURIComponent(timeZone)}`;
+            if (gate.state === "ready") { launchHref = `/tracker/launches?${trackerContext}`; launchCta = "Open tracker"; }
+            else if (gate.state === "email_unverified") { launchHref = `/account/verify?next=${encodeURIComponent(`/tracker/launches?${trackerContext}`)}`; launchCta = "Verify email"; }
+            else if (gate.state === "profile_incomplete") { launchHref = `/account/profile/complete?next=${encodeURIComponent(`/tracker/launches?${trackerContext}`)}`; launchCta = "Complete profile"; }
+            else { launchHref = `/request-access?next=${encodeURIComponent(`/tracker/launches?${trackerContext}`)}`; }
         } catch {
             carouselSlides = [];
         }
@@ -395,8 +406,7 @@ export default async function HomePage() {
                     {intelligenceStats.map((item) => (
                         <div key={item.label} className="min-w-0 border-b border-r border-potomac-regolith/20 p-4 last:border-r-0 md:border-b-0">
                             <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-regolith">{item.label}</p>
-                            <p className="mt-2 font-serif text-2xl uppercase text-white md:text-3xl">{item.value}</p>
-                            <p className="mt-1 font-mono text-[0.64rem] uppercase text-emerald-200/70">+ {item.detail}</p>
+                            {item.label === "Launches tracked" ? <><p className="mt-2 font-serif text-2xl uppercase text-white md:text-3xl">{launchSummary.reviewedCount}</p><p className="mt-1 font-mono text-[0.64rem] uppercase text-emerald-200/70">{launchSummary.lunarCount} lunar / cislunar</p><p className="mt-1 font-mono text-[0.58rem] uppercase text-potomac-regolith">Freshness: {launchSummary.freshnessAt ? new Date(launchSummary.freshnessAt).toLocaleString() : "Awaiting reviewed source"}</p><div className="mt-3 flex flex-wrap gap-3"><Link prefetch={false} href={launchHref} className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold hover:text-potomac-cream">{launchCta}</Link><Link prefetch={false} href="/upgrade?tier=scout&source=homepage&content=launch-tools&next=%2Ftracker%2Flaunches" className="font-mono text-[0.62rem] font-bold uppercase text-potomac-cream/60 hover:text-potomac-gold">Values & exports</Link></div></> : <><p className="mt-2 font-serif text-2xl uppercase text-white md:text-3xl">{item.value}</p><p className="mt-1 font-mono text-[0.64rem] uppercase text-emerald-200/70">+ {item.detail}</p></>}
                         </div>
                     ))}
                 </div>
