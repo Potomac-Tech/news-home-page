@@ -1,0 +1,25 @@
+[
+    {
+        "id": "lunar-award-001",
+        "title": "Lunar surface power demonstration contract award",
+        "description": "Delivery and operation of a lunar surface power system for Artemis missions.",
+        "award_date": "2026-07-01",
+        "effective_date": "2026-08-01",
+        "option_exercise_date": "2027-07-01",
+        "customer_name": "NASA",
+        "vendor_name": "Example Lunar Systems",
+        "program_name": "Artemis Surface Power",
+        "award_vehicle": "Firm-fixed-price contract",
+        "amount": 125000000,
+        "citation_url": "https://www.nasa.gov/example-lunar-award"
+    },
+    {
+        "id": "generic-defense-001",
+        "title": "Aircraft sustainment services award",
+        "description": "Depot maintenance for conventional aircraft.",
+        "award_date": "2026-07-02",
+        "customer_name": "Department of Defense",
+        "vendor_name": "Example Aerospace"
+    }
+]
+

@@ -1139,16 +1139,16 @@ Blocked reason:
   - Verification: `npm run lint`, `npm test` (74 tests), `npx tsc --noEmit`, and `npm run build` passed. The public-safe aggregate RPC applied to canonical Supabase project `xlpkdoeldtlhearqajat`; the live current-week result correctly returned zero reviewed rows and no freshness rather than invented data. Tests cover approved-source aggregation, removal of the static `26` count, every auth/profile handoff, preserved week/timezone context, and premium upgrade routing. Cloudflare version `c3d70921-6019-496a-861f-13806fa65c09` deployed successfully; the 60-route production Playwright crawl explicitly visited the homepage metric, tracker context, request-access, verification, profile-completion, and premium upgrade paths and reported zero console, CSP, 404, 500, or navigation issues.
   - Blocked reason: None.
 
-- [ ] Task 103: Add New Contract Awards module schema and ingestion workflow
+- [x] Task 103: Add New Contract Awards module schema and ingestion workflow
   - Priority: P0
   - Requirement IDs: R-CONTRACT-001, R-DATAOPS-001
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Track space/lunar contract awards separately from launches and mission operations.
   - Acceptance criteria: Schema supports only space/lunar-relevant awards, award date as primary date, future effective date and option-exercise date as secondary fields, customer, vendor, program, award vehicle, amount, value state, citations, confidence, source registry IDs, reviewer, reviewed timestamp, audit log, and tier visibility; ingestion/review excludes general aerospace/defense awards unless directly space/lunar relevant; one editor/admin approval is sufficient.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on source registry entries from Task 097.
+  - Non-technical summary: Added a separate, review-first contract-awards pipeline that keeps only directly space- or lunar-relevant awards, records award parties and dates, protects premium values by membership tier, and preserves citations and a complete change history. Automated imports create drafts only, and one editor or administrator must approve an award before publication.
+  - Verification: Passed 81 automated tests, ESLint, TypeScript, fixture ingestion, and production build. Applied both migrations to Supabase project `xlpkdoeldtlhearqajat`; confirmed all seven module tables have RLS, anonymous reads return no unpublished awards or values, the review RPC is not anonymous, approved USAspending/SAM.gov/SEC registry sources exist, and Supabase advisors report no Task 103 security or performance findings beyond expected new-index unused notices before production data exists.
+  - Blocked reason: None.
 
 - [ ] Task 104: Build New Contract Awards tracker module UI
   - Priority: P0
