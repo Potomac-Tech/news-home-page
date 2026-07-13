@@ -482,7 +482,15 @@ function FeedPanel({ feedItems }: { feedItems: MemberAlertFeedItem[] }) {
 function DeliveryPanel({ events }: { events: MemberAlertDeliveryEvent[] }) {
     return (
         <section className="glass-card rounded p-5">
-            <h2 className="font-serif text-2xl text-white">Delivery Audit</h2>
+            <div className="flex items-center justify-between gap-4">
+                <h2 className="font-serif text-2xl text-white">Delivery Audit</h2>
+                <Link
+                    href="/member/saved-work#notification-preferences"
+                    className="text-xs font-bold uppercase tracking-[0.12em] text-potomac-gold hover:text-potomac-cream"
+                >
+                    Preferences
+                </Link>
+            </div>
             <div className="mt-5 grid gap-3">
                 {events.length ? (
                     events.map((event) => (

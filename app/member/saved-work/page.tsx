@@ -701,7 +701,11 @@ function PreferencesPanel({
 
     return (
         <section className="grid gap-5 lg:grid-cols-2">
-            <form action={saveNotificationPreference} className="glass-card rounded p-5">
+            <form
+                id="notification-preferences"
+                action={saveNotificationPreference}
+                className="glass-card scroll-mt-24 rounded p-5"
+            >
                 <h2 className="font-serif text-2xl text-white">
                     Notification Settings
                 </h2>
