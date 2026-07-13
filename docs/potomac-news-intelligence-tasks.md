@@ -1150,16 +1150,16 @@ Blocked reason:
   - Verification: Passed 81 automated tests, ESLint, TypeScript, fixture ingestion, and production build. Applied both migrations to Supabase project `xlpkdoeldtlhearqajat`; confirmed all seven module tables have RLS, anonymous reads return no unpublished awards or values, the review RPC is security-invoker and not anonymous, approved USAspending/SAM.gov/SEC registry sources exist, and Supabase advisors report no Task 103 security or performance findings beyond expected new-index unused notices before production data exists. Cloudflare deployment `413295ed-9ca5-4538-bb80-80b138445634` completed, and the production browser crawl visited 60 routes with no console, request, HTTP, or CSP issues.
   - Blocked reason: None.
 
-- [ ] Task 104: Build New Contract Awards tracker module UI
+- [x] Task 104: Build New Contract Awards tracker module UI
   - Priority: P0
   - Requirement IDs: R-CONTRACT-001, R-MISSION-005
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Show contract awards as a separate operational module.
   - Acceptance criteria: Module shows only space/lunar-relevant awards; each card includes award date as primary date plus future effective date and option-exercise date as secondary fields when available, customer, vendor, program, amount/value state, confidence, source citations, reviewer, and last-reviewed timestamp; general aerospace/defense awards are excluded unless directly space/lunar relevant; same value visibility rules as Task 100 apply; signed-out users get public teasers and `/request-access`; unverified users see verification prompts; profile-incomplete users route to `/account/profile/complete`; non-entitled users route to `/upgrade` for premium details.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Task 103.
+  - Non-technical summary: Added a dedicated New Contract Awards terminal that separates reviewed space and lunar awards from launch operations and legacy procurement records. Visitors can see public-safe context, Explorer members can open reviewed briefs, and Scout/Meridian members can receive premium values and methodology when those records are published for their tier.
+  - Verification: Passed 85 automated tests, ESLint, TypeScript, and production build. Confirmed `/tracker/contracts` is included in the Next.js route manifest; the canonical Supabase project currently contains no reviewed contract-award rows, and anonymous RLS checks return zero awards, values, and citations, so the route renders a reviewed empty state without fabricated records or leaked premium values.
+  - Blocked reason: None.
 
 - [ ] Task 105: Implement production alert evaluation and email delivery
   - Priority: P1

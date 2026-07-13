@@ -23,6 +23,7 @@ const primaryNavItems = [
 const footerNavItems = [
     { href: "/terminal", label: "Terminal" },
     { href: "/tracker/launches", label: "Launches & Missions" },
+    { href: "/tracker/contracts", label: "Contract Awards" },
     { href: "/procurement", label: "Procurement" },
     { href: "/regulatory", label: "Regulatory" },
     { href: "/calculators", label: "Calculators" },

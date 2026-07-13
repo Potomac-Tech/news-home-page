@@ -50,10 +50,10 @@ export default async function WeeklyLaunchTrackerPage({ searchParams }: { search
                 <p className="font-mono text-xs font-bold uppercase text-potomac-gold">Member terminal / Launches & Missions</p>
                 <div className="mt-4 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
                     <div><h1 className="font-serif text-4xl uppercase text-white md:text-6xl">Launches & Missions</h1><p className="mt-3 text-sm text-potomac-cream/70">{weekStart} through {weekEnd} / Local week with UTC reference</p></div>
-                    <nav aria-label="Tracker filter" className="flex w-full max-w-md border border-potomac-gold/30 p-1">
+                    <div className="grid w-full max-w-md gap-3"><nav aria-label="Operational trackers" className="grid grid-cols-2 border border-potomac-gold/30 p-1"><span aria-current="page" className="flex min-h-11 items-center justify-center bg-potomac-gold px-3 text-center font-mono text-xs font-bold uppercase text-potomac-primary">Launches &amp; Missions</span><Link href="/tracker/contracts" className="flex min-h-11 items-center justify-center px-3 text-center font-mono text-xs font-bold uppercase text-potomac-cream">Contract Awards</Link></nav><nav aria-label="Tracker filter" className="flex border border-potomac-gold/30 p-1">
                         <Link href="/tracker/launches" className={`flex min-h-11 flex-1 items-center justify-center px-3 font-mono text-xs font-bold uppercase ${!lunarOnly ? "bg-potomac-gold text-potomac-primary" : "text-potomac-cream"}`}>All global</Link>
                         <Link href="/tracker/launches?filter=lunar" className={`flex min-h-11 flex-1 items-center justify-center px-3 font-mono text-xs font-bold uppercase ${lunarOnly ? "bg-potomac-gold text-potomac-primary" : "text-potomac-cream"}`}>Lunar / cislunar</Link>
-                    </nav>
+                    </nav></div>
                 </div>
             </div>
         </header>

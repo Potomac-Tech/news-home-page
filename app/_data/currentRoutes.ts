@@ -45,6 +45,11 @@ export const currentRoutes = [
         note: "Verified-profile Launches & Missions weekly tracker with Scout/Meridian tools and RLS-gated values.",
     },
     {
+        href: "/tracker/contracts",
+        source: "app/tracker/contracts/page.tsx",
+        note: "Public-safe and verified-profile New Contract Awards tracker with RLS-gated values, citations, and review metadata.",
+    },
+    {
         href: "/member/summits",
         source: "app/member/summits/page.tsx",
         note: "Member-gated internal summit tracker with upcoming summit and past-event summary views.",

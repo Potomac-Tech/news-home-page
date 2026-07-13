@@ -35,6 +35,14 @@ export const terminalModules: TerminalModule[] = [
         section: "Missions",
     },
     {
+        id: "contract-awards",
+        label: "New Contract Awards",
+        href: "/tracker/contracts",
+        summary: "Reviewed space and lunar contract awards with cited value evidence.",
+        status: "member",
+        section: "Markets",
+    },
+    {
         id: "procurement",
         label: "Procurement",
         href: "/procurement",
