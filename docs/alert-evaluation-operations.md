@@ -11,9 +11,13 @@
 
 - Deterministic deduplication prevents the same source update from creating duplicate feed entries.
 - In-app notices appear in the Alerts Center and update its unread count.
-- Email delivery uses the existing Resend Free quota and rate governor. Held or failed sends are retried with backoff up to five attempts.
+- Routine email is grouped into one digest per member and delivery window. The default window is daily at 13:00 UTC, with up to 20 items per digest.
+- Urgent alerts can send immediately only while the configured immediate reserve and alert budget remain. Otherwise they join the next digest without affecting the in-app notice.
+- Email delivery uses the existing Resend Free quota and rate governor. Held, low-budget, per-member-cap, or failed sends remain queued for a later digest; individual delivery retries stop after five attempts.
 - Notification preferences can disable a channel or object category. Quiet hours defer email until the member's local quiet period ends.
 - Every evaluator run is recorded in `member_alert_evaluation_runs`. Each channel attempt is visible in `member_alert_delivery_events`; provider-level audit remains in `private.outbound_email_delivery_events`.
+
+Admins manage digest cadence, UTC send hour, daily alert email cap, per-member cap, immediate reserve, priority threshold, low-budget buffer, and maximum digest size at `/admin/email`.
 
 ## Preference Management
 

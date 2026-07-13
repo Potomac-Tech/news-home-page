@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { requireAdmin } from "../../../lib/auth/admin";
+import { updateMemberAlertEmailConfig } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -40,8 +41,27 @@ type DeliveryEvent = {
 
 type EmailOperationsPayload = {
     config: QuotaConfig | null;
+    alert_config: AlertEmailConfig | null;
+    alert_queue: AlertQueue;
     usage: QuotaUsage[];
     events: DeliveryEvent[];
+};
+
+type AlertEmailConfig = {
+    digest_cadence_hours: number;
+    digest_send_hour_utc: number;
+    max_daily_alert_emails: number;
+    per_user_daily_email_cap: number;
+    instant_daily_reserve: number;
+    instant_priority_threshold: "info" | "watch" | "urgent";
+    low_budget_buffer: number;
+    max_digest_items: number;
+};
+
+type AlertQueue = {
+    digest_items: number;
+    immediate_items: number;
+    suppressed_items: number;
 };
 
 function formatDate(value: string | null) {
@@ -56,7 +76,7 @@ export default async function AdminEmailOperationsPage() {
         throw new Error("Email operations data is unavailable.");
     }
 
-    const { config, usage, events } = data as EmailOperationsPayload;
+    const { config, alert_config: alertConfig, alert_queue: alertQueue, usage, events } = data as EmailOperationsPayload;
     const daily = usage.find((row) => row.period_kind === "daily");
     const monthly = usage.find((row) => row.period_kind === "monthly");
     const queued = events.filter((event) => event.delivery_status === "queued" || event.delivery_status === "held");
@@ -77,6 +97,36 @@ export default async function AdminEmailOperationsPage() {
                     <Metric label="Operational reserve" value={`${config?.operational_daily_reserve ?? 10} / day`} detail={`${config?.operational_monthly_reserve ?? 300} / month`} />
                     <Metric label="Queue health" value={`${queued.length} held`} detail={`${failed.length} failed in recent activity`} />
                 </div>
+
+                {alertConfig ? (
+                    <form action={updateMemberAlertEmailConfig} className="mt-10 border border-white/10 bg-black/20 p-5">
+                        <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+                            <div>
+                                <p className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">Member alert policy</p>
+                                <h2 className="mt-2 font-serif text-2xl text-white">Digest and priority controls</h2>
+                                <p className="mt-2 text-sm text-potomac-cream/60">
+                                    Queue: {alertQueue?.digest_items ?? 0} digest, {alertQueue?.immediate_items ?? 0} immediate, {alertQueue?.suppressed_items ?? 0} suppressed today.
+                                </p>
+                            </div>
+                            <button type="submit" className="border border-potomac-gold px-4 py-3 text-xs font-bold uppercase tracking-[0.14em] text-potomac-gold hover:bg-potomac-gold hover:text-black">Save policy</button>
+                        </div>
+                        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                            <NumberField name="digest_cadence_hours" label="Digest cadence (hours)" value={alertConfig.digest_cadence_hours} min={1} max={168} />
+                            <NumberField name="digest_send_hour_utc" label="Send hour (UTC)" value={alertConfig.digest_send_hour_utc} min={0} max={23} />
+                            <NumberField name="max_daily_alert_emails" label="Daily alert email cap" value={alertConfig.max_daily_alert_emails} min={1} max={90} />
+                            <NumberField name="per_user_daily_email_cap" label="Per-member daily cap" value={alertConfig.per_user_daily_email_cap} min={1} max={10} />
+                            <NumberField name="instant_daily_reserve" label="Immediate daily reserve" value={alertConfig.instant_daily_reserve} min={0} max={20} />
+                            <NumberField name="low_budget_buffer" label="Low-budget buffer" value={alertConfig.low_budget_buffer} min={0} max={50} />
+                            <NumberField name="max_digest_items" label="Items per digest" value={alertConfig.max_digest_items} min={1} max={50} />
+                            <label className="grid gap-2 text-xs font-bold uppercase tracking-[0.12em] text-potomac-cream/60">
+                                Immediate threshold
+                                <select name="instant_priority_threshold" defaultValue={alertConfig.instant_priority_threshold} className="border border-white/15 bg-black/40 px-3 py-2 text-sm normal-case text-white">
+                                    <option value="info">Info</option><option value="watch">Watch</option><option value="urgent">Urgent</option>
+                                </select>
+                            </label>
+                        </div>
+                    </form>
+                ) : null}
 
                 <div className="mt-10 grid gap-4 text-sm text-potomac-cream/75 md:grid-cols-3">
                     <div className="border border-white/10 p-4">Plan: Free only</div>
@@ -110,4 +160,8 @@ export default async function AdminEmailOperationsPage() {
 
 function Metric({ label, value, detail }: { label: string; value: string; detail: string }) {
     return <article className="border border-white/10 bg-black/20 p-5"><p className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">{label}</p><p className="mt-3 text-2xl font-semibold text-white">{value}</p><p className="mt-2 text-xs text-potomac-cream/55">{detail}</p></article>;
+}
+
+function NumberField({ name, label, value, min, max }: { name: string; label: string; value: number; min: number; max: number }) {
+    return <label className="grid gap-2 text-xs font-bold uppercase tracking-[0.12em] text-potomac-cream/60">{label}<input name={name} type="number" defaultValue={value} min={min} max={max} className="border border-white/15 bg-black/40 px-3 py-2 text-sm font-normal text-white" /></label>;
 }
