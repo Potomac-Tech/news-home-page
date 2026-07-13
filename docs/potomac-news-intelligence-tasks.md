@@ -1161,16 +1161,16 @@ Blocked reason:
   - Verification: Passed 85 automated tests, ESLint, TypeScript, and production build. Confirmed `/tracker/contracts` is included in the Next.js route manifest; the canonical Supabase project currently contains no reviewed contract-award rows, and anonymous RLS checks return zero awards, values, and citations, so the route renders a reviewed empty state without fabricated records or leaked premium values. Cloudflare deployment `7878bfd6-d9af-4747-aa1a-64a7c3424f23` completed; the production browser crawl visited 60 routes with no console, request, HTTP, or CSP issues, and desktop plus 390px mobile screenshots showed no overlap or horizontal overflow.
   - Blocked reason: None.
 
-- [ ] Task 105: Implement production alert evaluation and email delivery
+- [x] Task 105: Implement production alert evaluation and email delivery
   - Priority: P1
   - Requirement IDs: R-ALERT-001, R-EMAIL-001, R-EMAIL-004
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Complete R-ALERT-001 beyond the current alerts-center and delivery-hook scaffold.
   - Acceptance criteria: Scheduled alert evaluation runs against watched companies, missions, procurements, regulatory records, datasets, events, marketplace records, and Command intelligence; in-app alert feed and unread badges are updated by the evaluator; email notifications are sent through a configured provider; member notification preferences and quiet hours are respected; delivery retries, failures, and audit logs are visible; unsubscribe or preference-management paths are documented and tested.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Requires email provider configuration, scheduling/runtime environment, and live or seeded member alert data.
+  - Non-technical summary: Member alerts now run automatically every 15 minutes across watched companies, missions, procurements, regulatory records, datasets, events, marketplace requests and offers, and Command intelligence. Updates appear in the in-app feed, email delivery honors member preferences and quiet hours, and failed or quota-held messages are retried with visible audit history and a direct preferences/unsubscribe path.
+  - Verification: `npm run lint`, `npm test` (90 tests), `npx tsc --noEmit`, and `npm run build` passed. Canonical Supabase migration `production_member_alert_evaluator` applied to `xlpkdoeldtlhearqajat`; RLS, service-only quota RPCs, encrypted Vault entries, run audit storage, and active `*/15 * * * *` Supabase Cron job were verified. Cloudflare server secrets include `SUPABASE_SECRET_KEY` and `ALERT_EVALUATOR_SECRET` without public prefixes. A live Vault-backed `pg_net` invocation completed with a clean audit row and zero active rules, so no real member email was sent. Cloudflare version `247052bd-9d0a-459b-a596-a208b820ad23` deployed successfully; the production Playwright crawl visited 60 internal routes with zero console, CSP, 404, 500, or navigation issues. The protected endpoint returned `401` without its bearer token.
+  - Blocked reason: None.
 
 - [ ] Task 106: Make member alert email digest-first under Resend Free limits
   - Priority: P1
