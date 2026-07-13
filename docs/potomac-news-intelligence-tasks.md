@@ -1183,16 +1183,16 @@ Blocked reason:
   - Verification: `npm run lint`, `npm test` (96 tests), `npx tsc --noEmit`, and `npm run build` passed. Fixture tests cover digest grouping, urgent immediate reserve, reserve exhaustion, low-budget fallback, per-member caps, quiet hours, scheduling, preferences, and in-app independence. Canonical Supabase migration `member_alert_digest_delivery` applied to `xlpkdoeldtlhearqajat`; default policy values, admin-only RLS, digest queue index, and service-role-only runtime budget RPC were verified. The deployed Vault-backed evaluator returned HTTP 200 with no errors, and both scheduled and manual production runs completed cleanly without active alert rules or member sends. Cloudflare version `3d483bfe-52d9-4d3e-bd76-162b0ddee5df` deployed successfully. The broad production crawl visited 60 routes and reported zero issues before the shell timing boundary; a focused 12-route rerun, including `/admin/email`, `/alerts`, and `/member/saved-work`, exited successfully with zero console, CSP, 404, 500, or navigation issues.
   - Blocked reason: None.
 
-- [ ] Task 107: Build runtime paid API, export jobs, and webhook delivery
+- [x] Task 107: Build runtime paid API, export jobs, and webhook delivery
   - Priority: P1
   - Requirement IDs: R-API-001
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Complete R-API-001 beyond the current Scout/Command developer-platform scaffold.
   - Acceptance criteria: Versioned API routes authenticate developer API keys, enforce Scout/Command scopes and usage limits, write usage/audit logs, and return documented errors; CSV/PDF export requests create and process export jobs with downloadable results; webhook subscriptions deliver signed event payloads with retry/backoff and delivery logs; developer documentation reflects the live endpoints; tests cover authentication, quotas, exports, and webhook delivery behavior.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Requires runtime API design decisions, worker/scheduler environment, signing secret management, and live or seeded paid-member data.
+  - Non-technical summary: Scout and Command members now have a production-ready developer service for lunar intelligence. It supports secure API keys, membership and usage limits, downloadable CSV/PDF/JSON exports, and signed Command webhook notifications with automatic retries. A public reference page explains the live endpoints, while private files and signing secrets remain protected in Supabase Storage and Vault.
+  - Verification: Passed 100 automated tests, ESLint, TypeScript, and the Next.js production build. Applied and queried both migrations on canonical Supabase project `xlpkdoeldtlhearqajat`; confirmed the service-only authorization RPC, private export bucket, Vault column, six active endpoint catalog records, two configured worker secrets, and five-minute Cron schedule. Cloudflare deployment `859ef0f8-e15d-4307-82e6-b2aabfe7a0ce` serves the documentation page with HTTP 200 and returns the documented JSON HTTP 401 for an unauthenticated API request. A signed Supabase-to-Cloudflare worker invocation returned HTTP 200 with no queued failures. The production Playwright crawl visited 60 internal routes with no console, network, CSP, or routing issues. Supabase security advisors reported no new finding tied to these developer-platform changes; existing informational private-schema notices remain outside this task.
+  - Blocked reason: None.
 
 - [ ] Task 108: Verify canonical remote Supabase migrations and role journeys
   - Priority: P0
