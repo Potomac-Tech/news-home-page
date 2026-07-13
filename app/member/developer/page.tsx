@@ -235,6 +235,12 @@ function EndpointCatalog({ endpoints }: { endpoints: DeveloperEndpoint[] }) {
                 <h2 className="mt-2 font-serif text-3xl text-white">
                     Versioned intelligence APIs
                 </h2>
+                <Link
+                    href="/docs/developer-api"
+                    className="mt-3 inline-flex text-xs font-bold uppercase tracking-[0.14em] text-potomac-gold hover:text-potomac-cream"
+                >
+                    Developer API reference
+                </Link>
             </div>
             <div className="mt-5 grid gap-4">
                 {endpoints.map((endpoint) => (
