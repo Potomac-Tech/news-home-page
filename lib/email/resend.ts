@@ -1,5 +1,7 @@
 import "server-only";
 
+import { classifyResendQuotaHold } from "./resend-response";
+
 export type OperationalEmailFormType =
     | "meridian_interest"
     | "pathfinder_inquiry"
@@ -110,11 +112,7 @@ export async function sendOperationalEmail({
             })
         );
         const providerCode = payload?.name ?? "";
-        const isQuotaHold =
-            response.status === 429 ||
-            /daily_quota_exceeded|monthly_quota_exceeded|rate_limit_exceeded/i.test(
-                providerCode
-            );
+        const quotaHoldReason = classifyResendQuotaHold(response.status, providerCode);
         const retryAfter = Number(response.headers.get("retry-after"));
         const retryAt = Number.isFinite(retryAfter) && retryAfter > 0
             ? new Date(Date.now() + retryAfter * 1000).toISOString()
@@ -122,12 +120,12 @@ export async function sendOperationalEmail({
 
         if (!response.ok || !payload?.id) {
             return {
-                deliveryStatus: isQuotaHold ? "held" : "failed",
+                deliveryStatus: quotaHoldReason ? "held" : "failed",
                 providerMessageId: null,
                 sender,
                 recipient,
                 failureReason:
-                    payload?.message ?? payload?.name ?? `Resend returned ${response.status}.`,
+                    payload?.message ?? quotaHoldReason ?? payload?.name ?? `Resend returned ${response.status}.`,
                 providerHeaders,
                 retryAt,
             };

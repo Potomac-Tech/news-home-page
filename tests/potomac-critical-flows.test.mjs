@@ -499,11 +499,12 @@ test("Resend Free quota governor reserves capacity before sending and exposes an
     const adminMigration = readMigration("20260710184638_admin_resend_email_operations_rpc.sql");
     const quota = read("lib/email/resend-quota.ts");
     const transport = read("lib/email/resend.ts");
+    const responseClassifier = read("lib/email/resend-response.ts");
     const action = read("app/command/actions.ts");
     const adminPage = read("app/admin/email/page.tsx");
     const environment = read(".env.example");
 
-    assertIncludes(migration + rateMigration + adminMigration + quota + transport + action + adminPage + environment, [
+    assertIncludes(migration + rateMigration + adminMigration + quota + transport + responseClassifier + action + adminPage + environment, [
         "daily_soft_cap integer not null default 90",
         "monthly_soft_cap integer not null default 2700",
         "daily_hard_cap integer not null default 100",

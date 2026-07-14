@@ -196,7 +196,7 @@ test("public article teaser shows citations and member-gated full story", { time
             .getByRole("article")
             .getByRole("link", { name: /^Sign in$/i })
             .click();
-        await page.waitForURL(/\/auth\/login\?next=%2Fnews%2Fvipc-grant-winner/);
+        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fnews%2Fvipc-grant-winner/);
         await assertVisibleText(page, "Sign in");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
@@ -216,7 +216,7 @@ test("Explorer article unlock journey redirects signed-out readers to login", { 
             .getByRole("article")
             .getByRole("link", { name: /^Sign in$/i })
             .click();
-        await page.waitForURL(/\/auth\/login\?next=%2Fnews%2Fvipc-grant-winner/);
+        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fnews%2Fvipc-grant-winner/);
         await assertVisibleText(page, "Sign in");
         await assertVisibleText(page, "Magic link");
         await assertVisibleText(page, "Password");
@@ -234,9 +234,9 @@ test("Scout dashboard path is browser-reachable and protected", { timeout: 60000
             waitUntil: "domcontentloaded",
         });
 
-        await page.waitForURL(/\/auth\/login\?next=%2Fmember%2Fdeveloper/);
+        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fmember%2Fdeveloper/);
         await assertVisibleText(page, "Sign in");
-        await assertVisibleText(page, "Member access");
+        await assertVisibleText(page, "Start with free Explorer access");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
         await closePage(page);
@@ -245,9 +245,9 @@ test("Scout dashboard path is browser-reachable and protected", { timeout: 60000
 
 test("chat, forums, and RFQs expose their access gates without blank screens", { timeout: 60000 }, async () => {
     const routes = [
-        ["/member/chat", "Member access"],
-        ["/member/forums", "Member access"],
-        ["/member/rfqs", "Member access"],
+        ["/member/chat", "Start with free Explorer access"],
+        ["/member/forums", "Start with free Explorer access"],
+        ["/member/rfqs", "Start with free Explorer access"],
     ];
 
     for (const [route, detail] of routes) {
@@ -257,7 +257,7 @@ test("chat, forums, and RFQs expose their access gates without blank screens", {
             await page.goto(`${baseUrl}${route}`, {
                 waitUntil: "domcontentloaded",
             });
-            await page.waitForURL(/\/auth\/login\?next=%2Fmember%2F/);
+            await page.waitForURL(/\/request-access\?tab=signin&next=%2Fmember%2F/);
             await assertVisibleText(page, "Sign in");
             await assertVisibleText(page, detail);
             await expectNoFrameworkOverlay(page, consoleMessages);
@@ -292,28 +292,23 @@ test("lunar terminal navigation exposes the core intelligence modules", { timeou
     }
 });
 
-test("Meridian public and admin flows render the request path and admin protection", { timeout: 60000 }, async () => {
+test("Meridian public and protected flows preserve the approved access path", { timeout: 60000 }, async () => {
     const { page, consoleMessages } = await newPage();
 
     try {
-        await page.goto(`${baseUrl}/command`, { waitUntil: "domcontentloaded" });
-        await assertVisibleText(page, "Meridian Access");
-        await assertVisibleText(page, "Request Meridian access");
+        await page.goto(`${baseUrl}/pricing`, { waitUntil: "domcontentloaded" });
+        await assertVisibleText(page, "Explorer, Scout, and Meridian access");
+        await assertVisibleText(page, "request Meridian");
 
-        await page.getByLabel("Contact name").fill("Automation Reviewer");
-        await page.getByLabel("Business email").fill("reviewer@example.com");
-        await page.getByLabel("Organization").fill("Potomac Automation");
-        await page.getByLabel("Title").fill("Program Lead");
-        await page.getByLabel("Estimated seats").fill("12");
-        await page
-            .getByLabel("Mission need")
-            .fill("Validate Meridian request intake.");
+        await page.goto(`${baseUrl}/command`, { waitUntil: "domcontentloaded" });
+        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fcommand/);
+        await assertVisibleText(page, "Sign in");
 
         await page.goto(`${baseUrl}/admin/command`, {
             waitUntil: "domcontentloaded",
         });
         await page.waitForURL(
-            /\/auth\/login\?next=(%2F|\/)admin(%2F|\/)applications/
+            /\/request-access\?tab=signin&next=(%2F|\/)admin(%2F|\/)applications/
         );
         await assertVisibleText(page, "Sign in");
         await expectNoFrameworkOverlay(page, consoleMessages);
