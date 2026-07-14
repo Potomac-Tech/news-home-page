@@ -1212,9 +1212,9 @@ Blocked reason:
   - Superseded by: None.
   - Goal: Complete R-TRUST-001 beyond baseline pages and documented hooks.
   - Acceptance criteria: Accessibility checks run in CI for key public/member/admin routes; analytics events are connected to a production provider with consent-aware behavior; managed logs, metrics, traces, and error reporting are configured; Core Web Vitals and route performance budgets are measured and reported; API rate limiting is enforced in middleware or infrastructure; Supabase performance advisor warnings are triaged and either fixed or explicitly accepted with rationale.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Requires production analytics/observability provider choices, CI/runtime configuration, and a deliberate RLS performance-hardening pass.
+  - Non-technical summary: Consent-aware analytics, managed Cloudflare logs, redacted error reporting, automated accessibility and speed checks, API rate limits, and a 30-day telemetry retention policy are implemented. Database indexing gaps identified by Supabase were closed. Cloudflare tracing remains off because it can create usage charges and requires explicit approval.
+  - Verification: Build, TypeScript, lint, and 104 automated tests passed. Playwright checked five public/member/admin routes at mobile and desktop widths with zero serious or critical accessibility violations, no horizontal overflow, and all FCP, LCP, CLS, JavaScript, and document-size budgets passing. The Supabase performance advisor rerun reports zero unindexed foreign keys; remaining prelaunch optimization notices and rationale are recorded in `docs/operational-quality-controls.md`.
+  - Blocked reason: Cloudflare tracing is billable as of March 1, 2026. Explicit approval and a sampling rate are required before enabling it; all non-billable acceptance criteria are implemented.
 
 - [ ] Task 110: Add source, citation, gating, and no-placeholder QA release checks
   - Priority: P0

@@ -15,9 +15,9 @@ export default {
                 },
             },
             fontFamily: {
-                sans: ['"Source Sans 3"', "sans-serif"],
-                serif: ['"Oswald"', "Arial Narrow", "sans-serif"],
-                mono: ['"IBM Plex Mono"', "monospace"],
+                sans: ["var(--font-source-sans)", "sans-serif"],
+                serif: ["var(--font-oswald)", "Arial Narrow", "sans-serif"],
+                mono: ["var(--font-ibm-plex-mono)", "monospace"],
             },
             backgroundImage: {
                 "grid-pattern":

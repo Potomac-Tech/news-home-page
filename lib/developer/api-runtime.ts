@@ -21,6 +21,7 @@ const errorMessages: Record<string, string> = {
     scope_not_allowed: "This API key is not scoped for the requested endpoint.",
     tier_not_entitled: "This endpoint requires a higher membership tier.",
     monthly_quota_exceeded: "The monthly API quota has been exhausted.",
+    per_minute_rate_exceeded: "Too many requests were received for this API key. Retry after one minute.",
 };
 
 function apiError(code: string, status: number, requestId: string) {
@@ -43,6 +44,17 @@ export async function claimDeveloperRequest(request: Request, endpointKey: strin
     const rawKey = suppliedKey(request);
     const keyHash = rawKey ? createHash("sha256").update(rawKey).digest("hex") : "";
     const supabase = createServiceClient();
+    const { data: minuteAllowed, error: minuteError } = await supabase.rpc(
+        "claim_developer_api_minute",
+        { p_key_hash: keyHash, p_request_id: requestId, p_limit: 120 }
+    );
+    if (minuteError) {
+        console.error("Developer API minute-rate claim failed", minuteError);
+        return { response: apiError("authorization_unavailable", 503, requestId), claim: null, requestId };
+    }
+    if (minuteAllowed === false) {
+        return { response: apiError("per_minute_rate_exceeded", 429, requestId), claim: null, requestId };
+    }
     const { data, error } = await supabase.rpc("claim_developer_api_request", {
         p_key_hash: keyHash,
         p_endpoint_key: endpointKey,

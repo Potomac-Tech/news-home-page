@@ -2,45 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { cookieCategories } from "../../_data/trust";
-
-type CookiePreferences = {
-    preferences: boolean;
-    analytics: boolean;
-};
-
-const storageKey = "potomac-cookie-preferences";
-
-function readPreferences(): CookiePreferences {
-    if (typeof window === "undefined") {
-        return {
-            preferences: false,
-            analytics: false,
-        };
-    }
-
-    try {
-        const stored = window.localStorage.getItem(storageKey);
-
-        if (!stored) {
-            return {
-                preferences: false,
-                analytics: false,
-            };
-        }
-
-        const parsed = JSON.parse(stored) as Partial<CookiePreferences>;
-
-        return {
-            preferences: Boolean(parsed.preferences),
-            analytics: Boolean(parsed.analytics),
-        };
-    } catch {
-        return {
-            preferences: false,
-            analytics: false,
-        };
-    }
-}
+import {
+    consentChangedEvent,
+    cookiePreferenceStorageKey,
+    readCookiePreferences,
+    type CookiePreferences,
+} from "../../../lib/platform/consent";
 
 export function CookiePreferenceControl() {
     const [preferences, setPreferences] = useState<CookiePreferences>({
@@ -50,12 +17,18 @@ export function CookiePreferenceControl() {
     const [savedAt, setSavedAt] = useState<string | null>(null);
 
     useEffect(() => {
-        setPreferences(readPreferences());
+        setPreferences(readCookiePreferences());
     }, []);
 
     function savePreferences(nextPreferences: CookiePreferences) {
         setPreferences(nextPreferences);
-        window.localStorage.setItem(storageKey, JSON.stringify(nextPreferences));
+        window.localStorage.setItem(
+            cookiePreferenceStorageKey,
+            JSON.stringify(nextPreferences)
+        );
+        window.dispatchEvent(
+            new CustomEvent(consentChangedEvent, { detail: nextPreferences })
+        );
         setSavedAt(new Date().toLocaleString());
     }
 

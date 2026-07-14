@@ -10,9 +10,10 @@
         "ingest:weekly-lunar": "node scripts/ingest-weekly-lunar-tracker.mjs",
         "ingest:contract-awards": "node scripts/ingest-contract-awards.mjs",
         "test:production-crawl": "node scripts/crawl-production.mjs",
+        "test:quality": "node scripts/audit-production-quality.mjs",
         "test:content-expiration": "node scripts/check-promotional-expiration.mjs",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "test": "node --test tests/potomac-critical-flows.test.mjs tests/personalization-resolver.test.mjs tests/carousel-membership-resolver.test.mjs tests/weekly-lunar-tracker-schema.test.mjs tests/lunar-tracker-source-registry.test.mjs tests/weekly-lunar-ingestion.test.mjs tests/weekly-launch-tracker-ui.test.mjs tests/tracker-value-disclosure.test.mjs tests/launches-missions-integration.test.mjs tests/homepage-launch-summary.test.mjs tests/contract-awards-workflow.test.mjs tests/contract-awards-ui.test.mjs tests/production-alert-evaluator.test.mjs tests/member-alert-digest-policy.test.mjs tests/developer-api-runtime.test.mjs",
+        "test": "node --test tests/potomac-critical-flows.test.mjs tests/personalization-resolver.test.mjs tests/carousel-membership-resolver.test.mjs tests/weekly-lunar-tracker-schema.test.mjs tests/lunar-tracker-source-registry.test.mjs tests/weekly-lunar-ingestion.test.mjs tests/weekly-launch-tracker-ui.test.mjs tests/tracker-value-disclosure.test.mjs tests/launches-missions-integration.test.mjs tests/homepage-launch-summary.test.mjs tests/contract-awards-workflow.test.mjs tests/contract-awards-ui.test.mjs tests/production-alert-evaluator.test.mjs tests/member-alert-digest-policy.test.mjs tests/developer-api-runtime.test.mjs tests/operational-quality-controls.test.mjs",
         "test:e2e": "npm run build && node --test tests/*.e2e.test.mjs",
         "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
         "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
@@ -29,6 +30,7 @@
         "stripe": "^22.2.3"
     },
     "devDependencies": {
+        "@axe-core/playwright": "4.12.1",
         "@playwright/test": "^1.61.1",
         "@types/node": "^25.0.3",
         "@types/react": "^18.2.43",

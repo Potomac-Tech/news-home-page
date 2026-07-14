@@ -98,7 +98,7 @@ export function SearchCommandPalette({ entries = [] }: SearchCommandPaletteProps
                 aria-expanded={open}
             >
                 Search
-                <span className="ml-2 hidden rounded border border-white/10 px-1.5 py-0.5 text-[0.62rem] text-potomac-cream/45 sm:inline">
+                <span className="ml-2 hidden rounded border border-white/10 px-1.5 py-0.5 text-[0.62rem] text-potomac-cream/65 sm:inline">
                     Ctrl K
                 </span>
             </button>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { potomacBrand } from "../_data/brand";
 import { externalChannels } from "../_data/channels";
 import { trustRoutes } from "../_data/trust";
@@ -30,7 +30,7 @@ const footerNavItems = [
     { href: "/member", label: "Member workspace" },
 ];
 
-export async function MigrationShell({ children }: { children: ReactNode }) {
+async function MemberAwareSearchPalette() {
     let profileGate = null;
     let commandEntries = fallbackCommandEntries.filter(
         (entry) => entry.tier === "public"
@@ -49,13 +49,22 @@ export async function MigrationShell({ children }: { children: ReactNode }) {
         // Navigation remains public and usable if an optional Supabase lookup fails.
     }
 
+    return <SearchCommandPalette entries={commandEntries} />;
+}
+
+const publicCommandEntries = fallbackCommandEntries.filter(
+    (entry) => entry.tier === "public"
+);
+
+export function MigrationShell({ children }: { children: ReactNode }) {
+
     return (
         <div className="min-h-screen bg-potomac-secondary text-potomac-cream">
             <CheckoutAnalytics />
             <header className="sticky top-0 z-40 border-b border-potomac-regolith/25 bg-potomac-primary/95 backdrop-blur-xl">
-                <div className="mx-auto flex w-full max-w-[92rem] flex-col gap-4 px-4 py-3 md:px-8 lg:flex-row lg:items-center lg:justify-between">
+                <div className="site-header-inner mx-auto flex min-h-[13.25rem] w-full max-w-[92rem] flex-col gap-4 px-4 py-3 md:px-8 lg:h-[5.875rem] lg:min-h-0 lg:flex-row lg:items-center lg:justify-between">
                     <Link href="/" className="flex min-w-0 items-center gap-3">
-                        <span className="relative h-12 w-16 overflow-hidden border border-potomac-regolith/45 bg-potomac-secondary">
+                        <span className="relative h-12 w-16 shrink-0 overflow-hidden border border-potomac-regolith/45 bg-potomac-secondary">
                             <img
                                 src={potomacBrand.assets.logo}
                                 alt="Cabeus Explorer lunar industrial mark"
@@ -75,7 +84,7 @@ export async function MigrationShell({ children }: { children: ReactNode }) {
                     <div className="flex flex-col gap-3 lg:items-end">
                         <nav
                             aria-label="Primary navigation"
-                            className="flex flex-wrap items-center gap-x-5 gap-y-3 pb-1 lg:justify-end"
+                            className="flex flex-wrap items-center gap-x-5 gap-y-3 pb-1 lg:flex-nowrap lg:justify-end"
                         >
                             {primaryNavItems.map((item) => (
                                 <Link
@@ -86,7 +95,15 @@ export async function MigrationShell({ children }: { children: ReactNode }) {
                                     {item.label}
                                 </Link>
                             ))}
-                            <SearchCommandPalette entries={commandEntries} />
+                            <Suspense
+                                fallback={
+                                    <SearchCommandPalette
+                                        entries={publicCommandEntries}
+                                    />
+                                }
+                            >
+                                <MemberAwareSearchPalette />
+                            </Suspense>
                             <Link
                                 href="/request-access?tab=signin"
                                 className="shrink-0 border border-potomac-regolith/45 px-4 py-2 font-mono text-[0.68rem] font-bold uppercase text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold"
@@ -125,7 +142,7 @@ export async function MigrationShell({ children }: { children: ReactNode }) {
                                 <Link
                                     key={route.href}
                                     href={route.href}
-                                    className="font-mono text-[0.68rem] font-semibold uppercase text-potomac-cream/45 transition hover:text-potomac-gold"
+                                    className="font-mono text-[0.68rem] font-semibold uppercase text-potomac-cream/65 transition hover:text-potomac-gold"
                                 >
                                     {route.label}
                                 </Link>
@@ -158,7 +175,7 @@ export async function MigrationShell({ children }: { children: ReactNode }) {
                                 <span className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
                                     {channel.label}
                                 </span>
-                                <span className="mt-2 block font-mono text-[0.65rem] uppercase text-potomac-cream/45">
+                                <span className="mt-2 block font-mono text-[0.65rem] uppercase text-potomac-cream/65">
                                     {channel.status}
                                 </span>
                                 <span className="mt-3 block text-sm leading-5 text-potomac-cream/70">
