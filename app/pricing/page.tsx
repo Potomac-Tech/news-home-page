@@ -213,7 +213,12 @@ export default function PricingPage() {
                             Member workspace
                         </Link>
                     </div>
-                    <div className="mt-7 overflow-x-auto">
+                    <div
+                        className="mt-7 overflow-x-auto"
+                        role="region"
+                        aria-label="Membership feature comparison"
+                        tabIndex={0}
+                    >
                         <table className="min-w-[48rem] w-full border-collapse text-left text-sm">
                             <thead>
                                 <tr className="border-b border-white/10 text-xs uppercase tracking-[0.14em] text-potomac-cream/45">

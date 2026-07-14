@@ -32,10 +32,21 @@ jobs:
             sleep 1
           done
           npm run test:quality
+      - name: Content, gating, and release readiness
+        run: |
+          npm run test:content-expiration
+          npm run test:release
       - name: Upload quality report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: quality-audit
           path: .tmp/quality-audit.json
+          if-no-files-found: warn
+      - name: Upload release readiness report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-readiness-audit
+          path: .tmp/release-readiness-audit.json
           if-no-files-found: warn
