@@ -59,6 +59,9 @@ async function checkSourceContracts() {
         "app/command/CommandInterestForm.tsx",
         "supabase/migrations/20260710185238_meridian_authenticated_inquiry_workflow.sql",
         "scripts/check-promotional-expiration.mjs",
+        "lib/content/production-import.ts",
+        "app/admin/content/actions.ts",
+        "supabase/migrations/20260714202917_production_content_import_workflow.sql",
     ].map(async (path) => [path, await source(path)])));
 
     requirePattern(files["app/_data/tiers.ts"], /enterprisePublicName[^=]*=\s*"Meridian"/, "app/_data/tiers.ts", "Public enterprise label must remain Meridian.");
@@ -96,6 +99,9 @@ async function checkSourceContracts() {
     requirePattern(files["app/command/actions.ts"], /replyTo:/, "app/command/actions.ts", "Meridian inquiry must set a safe Reply-To.");
     forbidPattern(`${files["app/command/actions.ts"]}\n${files["app/command/CommandInterestForm.tsx"]}`, /mailto:|stripe|checkout|invoice|payment-provider/i, "app/command", "Meridian inquiry exposes a forbidden payment or mailto workflow.");
     forbidPattern(`${files["lib/email/resend.ts"]}\n${files["lib/email/resend-quota.ts"]}`, paidResendPattern, "lib/email", "Paid Resend feature language found in the runtime email implementation.");
+    requirePattern(files["lib/content/production-import.ts"], /placeholder_copy_prohibited[\s\S]*reviewed_asset_reference_required/, "lib/content/production-import.ts", "Production imports must reject placeholder copy and missing reviewed assets.");
+    requirePattern(files["app/admin/content/actions.ts"], /license_status === "approved"[\s\S]*analyst_review_state === "approved"[\s\S]*publication_status === "published"/, "app/admin/content/actions.ts", "Production imports must require approved source-registry records.");
+    requirePattern(files["supabase/migrations/20260714202917_production_content_import_workflow.sql"], /enable row level security/g, "production content import migration", "Production import audit tables must use RLS.");
 }
 
 function safeInternalUrl(href) {

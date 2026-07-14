@@ -35,6 +35,7 @@ jobs:
       - name: Content, gating, and release readiness
         run: |
           npm run test:content-expiration
+          node --test tests/production-content-import.test.mjs
           npm run test:release
       - name: Upload quality report
         if: always()
