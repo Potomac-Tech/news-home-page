@@ -35,9 +35,13 @@ test("CI enforces accessibility, overflow, and Core Web Vitals budgets", () => {
     assert.match(workflow, /playwright install --with-deps chromium/);
 });
 
-test("Cloudflare managed logs are enabled without billable tracing", () => {
+test("Cloudflare logs and traces use the approved one-percent budget guard", () => {
     const wrangler = read("wrangler.jsonc");
+    const guard = read("workers/observability-budget-guard/src/policy.mjs");
     assert.match(wrangler, /"observability"/);
     assert.match(wrangler, /"logs"/);
-    assert.doesNotMatch(wrangler, /"traces"/);
+    assert.match(wrangler, /"traces"/);
+    assert.equal((wrangler.match(/"head_sampling_rate": 0\.01/g) ?? []).length, 2);
+    assert.match(guard, /reduceAt: 190_000/);
+    assert.match(guard, /pauseAt: 199_000/);
 });

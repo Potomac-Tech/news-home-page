@@ -12,6 +12,7 @@
         "test:production-crawl": "node scripts/crawl-production.mjs",
         "test:quality": "node scripts/audit-production-quality.mjs",
         "test:content-expiration": "node scripts/check-promotional-expiration.mjs",
+        "test:observability-budget": "node --test tests/cloudflare-observability-budget.test.mjs",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "test": "node --test tests/potomac-critical-flows.test.mjs tests/personalization-resolver.test.mjs tests/carousel-membership-resolver.test.mjs tests/weekly-lunar-tracker-schema.test.mjs tests/lunar-tracker-source-registry.test.mjs tests/weekly-lunar-ingestion.test.mjs tests/weekly-launch-tracker-ui.test.mjs tests/tracker-value-disclosure.test.mjs tests/launches-missions-integration.test.mjs tests/homepage-launch-summary.test.mjs tests/contract-awards-workflow.test.mjs tests/contract-awards-ui.test.mjs tests/production-alert-evaluator.test.mjs tests/member-alert-digest-policy.test.mjs tests/developer-api-runtime.test.mjs tests/operational-quality-controls.test.mjs",
         "test:e2e": "npm run build && node --test tests/*.e2e.test.mjs",

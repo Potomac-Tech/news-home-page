@@ -1,0 +1,23 @@
+{
+    "$schema": "../../node_modules/wrangler/config-schema.json",
+    "name": "cabeus-observability-budget-guard",
+    "main": "src/index.mjs",
+    "compatibility_date": "2026-07-14",
+    "keep_vars": true,
+    "triggers": {
+        "crons": ["*/5 * * * *"]
+    },
+    "vars": {
+        "CLOUDFLARE_ACCOUNT_ID": "2491244ab83d2260e4b5226bcb79967a",
+        "TARGET_SCRIPT_NAME": "cabeus-explorer"
+    },
+    "kv_namespaces": [
+        {
+            "binding": "OBSERVABILITY_STATE",
+            "id": "483ee6af4ecd4bf0bc6fa33cb53e04fa"
+        }
+    ],
+    "observability": {
+        "enabled": false
+    }
+}

@@ -18,14 +18,38 @@ days every day at 04:17 UTC.
 
 ## Logs, Errors, And Traces
 
-Cloudflare managed Worker logs are enabled at 100 percent sampling in
+Cloudflare managed Worker logs and traces are enabled at one percent sampling in
 `wrangler.jsonc`. The telemetry endpoint emits structured request outcomes, and
 the global error boundary captures a redacted client error when consent exists.
 
-Cloudflare tracing is intentionally not enabled. Cloudflare documents tracing
-as billable from March 1, 2026, with each span counted as an observability event.
-Enabling it requires explicit cost approval and a chosen sampling rate:
-<https://developers.cloudflare.com/workers/observability/traces/>.
+Cloudflare counts persisted logs and trace spans against one shared
+observability allowance. The `cabeus-observability-budget-guard` Worker checks
+the target Worker's current UTC-day event count every five minutes and applies
+the following cost guardrails through Cloudflare's script-settings API:
+
+| Daily events | Logs | Traces | State |
+| ---: | ---: | ---: | --- |
+| 0-189,999 | 1% | 1% | Normal |
+| 190,000-194,999 | 0.5% | 0.5% | Reduced |
+| 195,000-198,999 | 0.1% | 0.1% | Critical |
+| 199,000+ | Off | Off | Paused |
+
+The reduction thresholds use each UTC day's event count. Reaching 199,000
+creates a persistent monthly pause in the guard's private KV namespace; the
+pause expires at the next UTC calendar-month boundary. The guard fails closed
+by attempting to pause both signals if its usage query fails. Its own Cloudflare
+observability is disabled so its checks do not consume the shared allowance.
+The control token is stored only as the guard Worker's encrypted
+`CLOUDFLARE_OBSERVABILITY_TOKEN` secret and has only Workers Observability Write
+and Workers Scripts Edit access for the Cabeus account. `keep_vars` preserves
+that dashboard-managed secret across later Wrangler deployments.
+
+Cloudflare tracing and the shared event model are documented at
+<https://developers.cloudflare.com/workers/observability/traces/>. The telemetry
+query and script-settings endpoints are documented at
+<https://developers.cloudflare.com/api/resources/workers/subresources/observability/subresources/telemetry/methods/query/>
+and
+<https://developers.cloudflare.com/api/resources/workers/subresources/scripts/subresources/settings/methods/edit/>.
 
 ## CI Accessibility And Performance
 
