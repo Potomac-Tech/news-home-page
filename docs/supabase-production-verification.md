@@ -1,6 +1,6 @@
 # Supabase Production Verification
 
-Verified 2026-07-13 against the canonical project `xlpkdoeldtlhearqajat`. The retired project reference was not used.
+Verified 2026-07-14 against the canonical project `xlpkdoeldtlhearqajat`. The retired project reference was not used.
 
 ## Migration reconciliation
 
@@ -41,15 +41,21 @@ The production catalog was queried through `pg_class` and `pg_policies`. Every r
 
 This is a structural policy check, not a substitute for authenticated browser and Data API tests under each role.
 
-## Role journey status
+## Authenticated role journeys
 
-The production role model defines `member`, `scout`, `command_user`, `org_admin`, `editor`, `analyst`, and `admin` access. At verification time, production contained:
+Six dedicated QA identities now cover Explorer, Scout, Command/organization admin, editor, analyst, and admin. Each identity was created through Supabase Auth with a unique random credential, auto-confirmed in the canonical dashboard, assigned an approved profile and completed profile record, and given only the normalized roles and entitlements required for its persona. The Command identity belongs to a non-billable QA organization with an active organization-level Command entitlement. The Scout and Command entitlements expire after 30 days so stale test access does not remain open indefinitely.
 
-- zero approved member profiles;
-- zero active role assignments; and
-- zero active organization memberships.
+Credentials were held only for the active QA session, then the sessions were revoked and the in-memory values were cleared. They are not stored in the repository, migration history, task documentation, user metadata, or any `NEXT_PUBLIC_*` value. The unsafe deterministic local seed remains removed and must not be reapplied.
 
-Therefore, no secret-free, non-destructive authenticated accounts were available for the required role-by-role read/write journey tests. This portion remains blocked pending approved QA identities for Explorer, Scout, Command/organization admin, editor, analyst, and admin. Test accounts should use unique credentials, non-deliverable or controlled Potomac addresses, and explicit cleanup/rotation ownership.
+Authenticated Data API verification completed successfully:
+
+- All six personas signed in through the canonical Auth API.
+- Each persona could read its own approved profile, completed-profile record, normalized role assignments, and applicable entitlement under RLS.
+- The suite issued 102 authenticated read requests: every persona queried the representative table for each of the 17 required protected areas, with no HTTP or PostgREST failures.
+- The suite issued 25 allowed and denied write checks covering article bodies, search, saved work, alerts, direct chat, forums, RFQs, lunar missions, procurement, regulatory records, companies, calculators, datasets, test-data uploads, developer API keys, developer exports, and audit logs. All 25 matched the expected policy decision.
+- Explorer was denied paid saved-work, alert, RFQ, upload, developer-platform, and Scout-calculator writes. Scout was allowed the corresponding paid-owner workflows. Members could write only to prepared conversations and forums in which they had access. Editor, analyst, and admin writes were accepted only on their intended staff surfaces.
+- Draft RFQ creation was verified with `return=minimal`; draft rows are intentionally not selectable through the RFQ read policy, so `return=representation` correctly does not expose the new row.
+- All temporary articles, messages, posts, RFQs, saved work, alerts, uploads, API/export records, calculator records, intelligence records, and audit events created by the suite were removed. A final cleanup query returned zero remaining temporary content rows.
 
 ## Completed production checks
 
