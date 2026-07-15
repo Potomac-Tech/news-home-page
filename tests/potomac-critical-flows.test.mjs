@@ -57,10 +57,14 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
     ], "login flow");
     assertIncludes(callbackRoute, [
         "exchangeCodeForSession",
+        "createServerClient",
         "getSafeNextPath",
         "/member",
         "source",
         "redirectUrl",
+        "response.cookies.set",
+        "profileResponse.cookies.set",
+        "loginResponse.cookies.set",
     ], "auth callback");
     assertIncludes(logoutRoute, ["signOut", "/auth/login"], "logout route");
     assertIncludes(middleware, ["updateSession", "matcher"], "session middleware");
