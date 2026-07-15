@@ -120,7 +120,7 @@ export default async function ContractAwardsPage() {
                     </p>
                     <div className="mt-4 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
                         <div>
-                            <h1 className="font-serif text-4xl uppercase text-white md:text-6xl">
+                            <h1 className="whitespace-nowrap font-serif text-3xl leading-tight uppercase text-white sm:text-4xl md:text-6xl">
                                 New Contract Awards
                             </h1>
                             <p className="mt-3 max-w-3xl text-sm leading-6 text-potomac-cream/70">
@@ -252,4 +252,3 @@ export default async function ContractAwardsPage() {
         </main>
     );
 }
-
