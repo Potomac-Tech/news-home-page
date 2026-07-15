@@ -36,6 +36,7 @@ jobs:
         run: |
           npm run test:content-expiration
           node --test tests/production-content-import.test.mjs
+          npm run test:email-operations
           npm run test:release
       - name: Upload quality report
         if: always()
@@ -50,4 +51,11 @@ jobs:
         with:
           name: release-readiness-audit
           path: .tmp/release-readiness-audit.json
+          if-no-files-found: warn
+      - name: Upload email operations report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: email-operations-audit
+          path: .tmp/email-operations-audit.json
           if-no-files-found: warn
