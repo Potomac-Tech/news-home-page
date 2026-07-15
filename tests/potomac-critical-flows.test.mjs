@@ -45,6 +45,7 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
     const requestAccessClient = read("app/request-access/RequestAccessClient.tsx");
     const callbackRoute = read("app/auth/callback/route.ts");
     const logoutRoute = read("app/auth/logout/route.ts");
+    const memberPage = read("app/member/page.tsx");
     const middleware = read("middleware.ts");
 
     assertIncludes(loginPage + loginForm + requestAccessPage + requestAccessClient, [
@@ -67,6 +68,11 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
         "loginResponse.cookies.set",
     ], "auth callback");
     assertIncludes(logoutRoute, ["signOut", "/auth/login"], "logout route");
+    assert.match(
+        memberPage,
+        /href="\/auth\/logout"\s+prefetch=\{false\}/,
+        "logout navigation must not prefetch a session-revoking GET"
+    );
     assertIncludes(middleware, ["updateSession", "matcher"], "session middleware");
 });
 
