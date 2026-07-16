@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
 import test from "node:test";
 
@@ -33,6 +34,30 @@ function assertIncludes(haystack, needles, label) {
         );
     }
 }
+
+test("tracked files contain no live-looking Resend API keys", () => {
+    const trackedFiles = execFileSync("git", ["ls-files", "-z"], {
+        cwd: root,
+        encoding: "utf8",
+    })
+        .split("\0")
+        .filter(Boolean);
+
+    for (const path of trackedFiles) {
+        let content;
+        try {
+            content = read(path);
+        } catch {
+            continue;
+        }
+
+        assert.doesNotMatch(
+            content,
+            /\bre_[A-Za-z0-9_]{20,}\b/,
+            `${path} must not contain a Resend API key`
+        );
+    }
+});
 
 function escapeRegExp(value) {
     return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -498,7 +523,7 @@ test("operational Resend email stays server-only, auditable, and safe on deliver
     ], "operational Resend transport");
     assert.doesNotMatch(
         transport + action + environment,
-        /NEXT_PUBLIC_RESEND|[REVOKED_RESEND_KEY_REMOVED]/,
+        /NEXT_PUBLIC_RESEND|\bre_[A-Za-z0-9_]{20,}\b/,
         "Resend credentials must not be public or committed"
     );
 });
