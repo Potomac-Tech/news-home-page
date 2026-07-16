@@ -1271,16 +1271,16 @@ Blocked reason:
   - Verification: Deployed Cloudflare version `bb459005-4861-465c-b521-24f15a232c51` to `https://cabeus-explorer.jake-249.workers.dev/`. The nine-route live release audit passed with zero placeholder, branding, tier, source-link, accessibility, Meridian-payment, email-routing, or gated-route issues. The production quality audit passed 16 route/viewport combinations across eight critical routes with zero serious/critical accessibility violations, no overflow, and all FCP, LCP, CLS, JavaScript, and document-size budgets within limits. It initially detected mobile `/tracker/contracts` CLS of `0.192`; stabilizing the heading reduced local CLS to `0.058`, and the deployed audit passed. `npm run test:e2e` passed all six public teaser, Explorer gate, Scout gate, community, terminal, and Meridian browser flows. Four full-page desktop/mobile screenshots of the homepage and Contract Awards route were generated and visually reviewed with no overlap or framing defects. The production crawler visited 60 internal destinations with no console, network, CSP, runtime, or interaction failures. Task 113 supplies the live canonical Supabase auth, profile-complete protected navigation, Meridian business-email, Resend Free, Reply-To, provider-ID, lead/audit, and no-auto-entitlement evidence. Rollback references are prior Cloudflare version `d0ca9ca7-7806-4f06-9201-da6b930b6829` and prior code commit `6336ee9`.
   - Blocked reason: None.
 
-- [ ] Task 115: Prepare release-readiness checklist for operational launch
+- [x] Task 115: Prepare release-readiness checklist for operational launch
   - Priority: P0
   - Requirement IDs: R-DEPLOY-001, R-QA-002, R-CONTENT-001
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Give Codex and editors a final checklist before considering the website operational.
   - Acceptance criteria: Production checklist confirms approved content owner, one editor/admin approver, reviewed CMS stories, carousel slides, tracker data or no-launch state, New Contract Awards data or reviewed empty state, UDRI/Pathfinder/Source CTA assets, approved Substack/podcast/LinkedIn destination URLs where configured, `/request-access`, `/upgrade`, and `/account/profile/complete` routes, source registry entries, expiration metadata, Supabase Storage assets, email-verification behavior, profile-completion behavior, premium upgrade routing, member gates, Scout checkout configuration, Meridian server-side inquiry path with simple personal-domain denylist validation, Resend Free-plan account configuration, Free-plan quota governor, queue/defer behavior, admin usage/queue view, Resend email delivery to/from `info@potomacdb.com`, and no Stripe, online checkout, self-serve invoice, public payment, `mailto:` workflow, payment-provider placeholder, paid Resend plan, or overage configuration, analytics events, no X or unapproved social placeholders, no placeholders, rollback commit, and post-deploy smoke tests.
-  - Non-technical summary: Pending.
-  - Verification: Not run yet.
-  - Blocked reason: Depends on Tasks 077-114.
+  - Non-technical summary: Added a single go/no-go launch playbook that assigns release owners and walks editors and operators through content, branding, membership, Scout and Meridian, Resend Free safeguards, analytics, deployment checks, post-release smoke testing, and rollback.
+  - Verification: Confirmed `docs/production-launch-checklist.md` includes every acceptance-criteria topic, the canonical Supabase project, named approval fields, local and production verification commands, the approved Cloudflare log-sampling thresholds, and rollback fields. Task 114 supplied current live evidence: lint, 123 tests, build, 6 E2E tests, 9-route release audit, 16 viewport quality checks, and a 60-route production crawl all passed for Cloudflare version `bb459005-4861-465c-b521-24f15a232c51`; `git diff --check` also passed for this documentation change.
+  - Blocked reason: None.
 
 - [ ] Task 116: Add lunar time display to the main page
   - Priority: P1
