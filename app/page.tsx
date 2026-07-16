@@ -10,6 +10,7 @@ import { loadPublicTickerItems } from "./_data/marketQuotes";
 import { SponsorUnit } from "./_components/SponsorUnit";
 import { EconomySummaryWidget } from "./_components/EconomySummaryWidget";
 import { HomepageCarousel } from "./_components/HomepageCarousel";
+import { LunarTimeClock } from "./_components/LunarTimeClock";
 import {
     loadSponsorUnits,
     sponsorPlacementKeys,
@@ -400,6 +401,7 @@ export default async function HomePage() {
                 }}
             />
             <HomepageCarousel slides={carouselSlides} />
+            <LunarTimeClock initialUtcIso={new Date().toISOString()} />
 
             <section aria-label="Lunar economy activity" className="border-b border-potomac-regolith/20 bg-potomac-primary/90">
                 <div className="mx-auto grid w-full max-w-[92rem] grid-cols-2 px-4 md:grid-cols-5 md:px-8">
