@@ -53,6 +53,15 @@ const nextConfig = {
                 source: "/(.*)",
                 headers: securityHeaders,
             },
+            {
+                source: "/api/member/nexus/handoff",
+                headers: [
+                    {
+                        key: "Referrer-Policy",
+                        value: "no-referrer",
+                    },
+                ],
+            },
         ];
     },
 };

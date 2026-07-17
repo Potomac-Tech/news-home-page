@@ -127,6 +127,66 @@ test("article gating and RBAC helpers use normalized role assignments", () => {
     );
 });
 
+test("Nexus handoff maps approved Cabeus memberships without client role escalation", () => {
+    const nexusAccess = read("lib/auth/nexus.ts");
+    const handoffRoute = read("app/api/member/nexus/handoff/route.ts");
+    const memberPage = read("app/member/page.tsx");
+    const nexusPage = read("app/nexus/page.tsx");
+    const nextConfig = read("next.config.mjs");
+    const migration = readMigration(
+        "20260717104836_sync_cabeus_members_to_nexus_roles.sql"
+    );
+
+    assertIncludes(nexusAccess, [
+        "https://nexus-explore.potomacdb.com/0auth",
+        'return "base_user"',
+        'return "premium_user"',
+        'return "superior_user"',
+        "member_role_assignments",
+        "entitlements",
+        'storedRole === "admin"',
+        "canOpenNexus",
+    ], "Nexus membership resolver");
+    assertIncludes(handoffRoute, [
+        "getProfileGateContext",
+        "loadNexusAccessStatus",
+        "auth.admin.generateLink",
+        'type: "magiclink"',
+        "NEXUS_AUTH_URL",
+        "POTOMAC_SUPABASE_URL",
+        'actionUrl.pathname !== "/auth/v1/verify"',
+        "private, no-store",
+        "no-referrer",
+    ], "Nexus one-time handoff");
+    assertIncludes(memberPage + nexusPage, [
+        "/api/member/nexus/handoff",
+        "Open Nexus",
+        "Nexus role",
+    ], "Nexus member navigation");
+    assertIncludes(nextConfig, [
+        "/api/member/nexus/handoff",
+        'value: "no-referrer"',
+    ], "Nexus handoff response headers");
+    assertIncludes(migration, [
+        "private.resolve_nexus_profile_role",
+        "private.sync_nexus_profile_role",
+        "'base_user'::public.profile_role",
+        "'premium_user'::public.profile_role",
+        "'superior_user'::public.profile_role",
+        "public.profiles.role <> 'admin'::public.profile_role",
+        "sync_nexus_role_from_member_profile",
+        "sync_nexus_role_from_assignment",
+        "sync_nexus_role_from_entitlement",
+        "revoke insert, update on public.profiles from anon, authenticated",
+        "grant update (",
+    ], "Nexus role synchronization migration");
+    assert.doesNotMatch(
+        handoffRoute,
+        /searchParams\.set\([^\n]*(?:token|secret)|NEXT_PUBLIC_SUPABASE.*SECRET/i,
+        "Nexus handoff must not append reusable credentials to its destination"
+    );
+});
+
 test("Stripe billing webhook preserves Scout entitlement activation controls", () => {
     const webhook = read("app/api/stripe/webhook/route.ts");
     const checkout = read("app/api/stripe/scout-checkout/route.ts");

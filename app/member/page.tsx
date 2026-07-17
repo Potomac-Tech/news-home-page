@@ -20,7 +20,12 @@ import {
     summarizeSpaceWeatherMetrics,
     type SpaceWeatherSnapshot,
 } from "../_data/spaceWeather";
-import { publicTierName, tierConfig } from "../_data/tiers";
+import { tierConfig } from "../_data/tiers";
+import {
+    NEXUS_AUTH_URL,
+    loadNexusAccessStatus,
+    type NexusAccessStatus,
+} from "../../lib/auth/nexus";
 
 export const dynamic = "force-dynamic";
 
@@ -32,158 +37,6 @@ type AuthClaims = {
     sub?: string;
     email?: string;
 };
-
-type NexusAccessStatus = {
-    label: string;
-    detail: string;
-    roleLabel: string;
-    entitlementLabel: string;
-    canOpenPlaceholder: boolean;
-};
-
-type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
-
-const nexusPlaceholderUrl = "https://nexus-explore.potomacdb.com";
-const nexusRolePriority = [
-    "admin",
-    "analyst",
-    "editor",
-    "command_user",
-    "scout",
-    "member",
-];
-
-function roleLabel(roleId: string | null | undefined) {
-    if (!roleId) {
-        return "No active role";
-    }
-
-    if (roleId === "command_user") {
-        return publicTierName(roleId);
-    }
-
-    return roleId
-        .split("_")
-        .filter(Boolean)
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(" ");
-}
-
-async function loadNexusAccessStatus(
-    supabase: SupabaseServerClient,
-    userId: string
-): Promise<NexusAccessStatus> {
-    try {
-        const now = new Date().toISOString();
-        const [rolesResult, entitlementResult] = await Promise.all([
-            supabase
-                .from("member_role_assignments")
-                .select("role_id")
-                .eq("user_id", userId)
-                .in("role_id", nexusRolePriority)
-                .or(`expires_at.is.null,expires_at.gt.${now}`),
-            supabase
-                .from("entitlements")
-                .select("tier,status,ends_at")
-                .eq("user_id", userId)
-                .eq("status", "active")
-                .or(`ends_at.is.null,ends_at.gt.${now}`)
-                .order("starts_at", { ascending: false })
-                .limit(1)
-                .maybeSingle(),
-        ]);
-
-        if (rolesResult.error) {
-            throw new Error(rolesResult.error.message);
-        }
-
-        const roles = ((rolesResult.data ?? []) as Array<{ role_id: string }>).map(
-            (role) => role.role_id
-        );
-        const activeRole =
-            nexusRolePriority.find((role) => roles.includes(role)) ?? null;
-        const entitlement = entitlementResult.error
-            ? null
-            : (entitlementResult.data as
-                  | { tier: string; status: string; ends_at: string | null }
-                  | null);
-        const entitlementLabel = entitlement
-            ? `${roleLabel(entitlement.tier)} ${entitlement.status}`
-            : "No active paid entitlement";
-        const canOpenPlaceholder = Boolean(
-            activeRole &&
-                ["admin", "analyst", "editor", "command_user", "scout"].includes(
-                    activeRole
-                )
-        );
-
-        if (activeRole === "command_user") {
-            return {
-                label: `${tierConfig.enterprise.publicName} recognized`,
-                detail:
-                    `${tierConfig.enterprise.publicName} access is active. The Nexus handoff opens without an SSO token exchange.`,
-                roleLabel: roleLabel(activeRole),
-                entitlementLabel,
-                canOpenPlaceholder,
-            };
-        }
-
-        if (activeRole === "scout") {
-            return {
-                label: "Scout recognized",
-                detail:
-                    "Scout role is active. Nexus production SSO remains a future integration step.",
-                roleLabel: roleLabel(activeRole),
-                entitlementLabel,
-                canOpenPlaceholder,
-            };
-        }
-
-        if (
-            activeRole === "admin" ||
-            activeRole === "analyst" ||
-            activeRole === "editor"
-        ) {
-            return {
-                label: "Staff preview",
-                detail:
-                    "Staff role is active for review of the Nexus handoff placeholder.",
-                roleLabel: roleLabel(activeRole),
-                entitlementLabel,
-                canOpenPlaceholder,
-            };
-        }
-
-        if (activeRole === "member") {
-            return {
-                label: "Explorer active",
-                detail:
-                    `Explorer access is active. Nexus access is reserved for Scout, ${tierConfig.enterprise.publicName}, and staff roles.`,
-                roleLabel: roleLabel(activeRole),
-                entitlementLabel,
-                canOpenPlaceholder: false,
-            };
-        }
-
-        return {
-            label: "Access pending",
-            detail:
-                "No approved Nexus-eligible role was found for this account yet.",
-            roleLabel: "Pending",
-            entitlementLabel,
-            canOpenPlaceholder: false,
-        };
-    } catch {
-        return {
-            label: "Status unavailable",
-            detail:
-                "Nexus access status could not be loaded from the member access tables.",
-            roleLabel: "Unknown",
-            entitlementLabel: "Unknown",
-            canOpenPlaceholder: false,
-        };
-    }
-}
 
 function NexusAccessCard({ status }: { status: NexusAccessStatus }) {
     return (
@@ -201,29 +54,33 @@ function NexusAccessCard({ status }: { status: NexusAccessStatus }) {
             </p>
             <dl className="mt-5 space-y-3 text-sm text-potomac-cream/65">
                 <div className="flex justify-between gap-4 border-t border-white/10 pt-3">
-                    <dt>Role</dt>
-                    <dd className="text-white">{status.roleLabel}</dd>
+                    <dt>Membership</dt>
+                    <dd className="text-white">{status.membershipLabel}</dd>
+                </div>
+                <div className="flex justify-between gap-4 border-t border-white/10 pt-3">
+                    <dt>Nexus role</dt>
+                    <dd className="text-white">{status.nexusRoleLabel}</dd>
                 </div>
                 <div className="flex justify-between gap-4 border-t border-white/10 pt-3">
                     <dt>Entitlement</dt>
                     <dd className="text-white">{status.entitlementLabel}</dd>
                 </div>
                 <div className="border-t border-white/10 pt-3">
-                    <dt>Placeholder</dt>
+                    <dt>Destination</dt>
                     <dd className="mt-1 break-all text-white">
-                        nexus-explore.potomacdb.com
+                        {NEXUS_AUTH_URL}
                     </dd>
                 </div>
             </dl>
             <div className="mt-5 flex flex-wrap gap-3">
-                {status.canOpenPlaceholder ? (
+                {status.canOpenNexus ? (
                     <a
-                        href={nexusPlaceholderUrl}
+                        href="/api/member/nexus/handoff"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="rounded bg-potomac-gold px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                     >
-                        Nexus placeholder
+                        Open Nexus
                     </a>
                 ) : (
                     <Link
