@@ -573,7 +573,7 @@ function ReadingListPanel({ items }: { items: MemberReadingListItem[] }) {
                             name="title"
                             required
                             maxLength={180}
-                            placeholder="VIPC grant brief"
+                            placeholder="Artemis market brief"
                             className={inputClassName}
                         />
                     </Field>
@@ -582,7 +582,7 @@ function ReadingListPanel({ items }: { items: MemberReadingListItem[] }) {
                             name="object_slug"
                             required
                             maxLength={120}
-                            placeholder="vipc-grant-winner"
+                            placeholder="nasa-lunar-delivery-awards-2028"
                             className={inputClassName}
                         />
                     </Field>
@@ -590,7 +590,7 @@ function ReadingListPanel({ items }: { items: MemberReadingListItem[] }) {
                         <input
                             name="route_path"
                             required
-                            placeholder="/news/vipc-grant-winner"
+                            placeholder="/news/nasa-lunar-delivery-awards-2028"
                             className={inputClassName}
                         />
                     </Field>

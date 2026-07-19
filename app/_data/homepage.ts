@@ -27,48 +27,37 @@ export type MarketModule = {
 
 export const fallbackStories: HomeStory[] = [
     {
-        title: "VIPC backs Cabeus Explorer's lunar intelligence platform",
+        title: "Starlink optical terminals move into the Artemis communications stack",
         summary:
-            "The grant supports Cabeus Explorer's work turning lunar mission, market, and technology signals into a member-ready intelligence product.",
+            "NASA will add two Starlink mini laser terminals to Orion for high-volume imagery during Artemis III.",
         snippet:
-            "Public readers can follow the company milestone while the CMS-backed article system prepares richer member-only analysis.",
-        href: "/news/vipc-grant-winner",
-        publishedAt: "2026-05-18",
+            "Strategic impact: commercial relay infrastructure is moving deeper into mission architectures, expanding the market for terminals, data transport, processing, and operational intelligence.",
+        href: "/news/artemis-iii-starlink-optical-relay",
+        publishedAt: "2026-07-16",
         accessTier: "Explorer",
-        sourceLabel: "Company brief",
+        sourceLabel: "NASA | Strategic analysis",
     },
     {
-        title: "Lunar data rights move into the mission-planning stack",
+        title: "Artemis III hardware stacking raises the visibility of execution risk",
         summary:
-            "Government contracts, private payloads, and downstream analytics are converging around who can use surface data first.",
+            "NASA has begun stacking solid rocket booster segments for the 2027 orbital test campaign.",
         snippet:
-            "Cabeus Explorer is tracking procurement signals, data addenda, and emerging exclusivity windows for members.",
-        href: "/news",
-        publishedAt: "2026-06-12",
-        accessTier: "Scout",
-        sourceLabel: "Market watch",
+            "Strategic impact: hardware progress is positive, but Orion, docking, SLS, and commercial lander interfaces remain connected schedule and supply-chain dependencies.",
+        href: "/news/artemis-iii-hardware-stacking",
+        publishedAt: "2026-07-13",
+        accessTier: "Explorer",
+        sourceLabel: "NASA | Program watch",
     },
     {
-        title: "Surface resource pricing needs confidence labels",
+        title: "Nearly $600 million expands the commercial lunar delivery pipeline",
         summary:
-            "Proxy prices are useful only when the assumptions, source cadence, and uncertainty are visible to analysts.",
+            "NASA awarded four late-2028 deliveries across Astrobotic, Firefly Aerospace, and Intuitive Machines.",
         snippet:
-            "The public brief explains the model boundary; paid dashboards will expose the source table and version history.",
-        href: "/news",
-        publishedAt: "2026-06-07",
-        accessTier: "Scout",
-        sourceLabel: "Method note",
-    },
-    {
-        title: `${tierConfig.enterprise.publicName} teams need early mission-intelligence workflows`,
-        summary:
-            "Organization-level lunar programs need briefings, analyst support, and controlled access to near-real-time findings.",
-        snippet:
-            `The ${tierConfig.enterprise.publicName} workflow is being shaped around reviewed organizations, seats, and manual internal entitlement grants.`,
-        href: "/command",
-        publishedAt: "2026-06-03",
-        accessTier: tierConfig.enterprise.publicName,
-        sourceLabel: "Access brief",
+            "Market impact: direct lander revenue is paired with future demand signals for power, imaging, communications, navigation, and repeat surface datasets.",
+        href: "/news/nasa-lunar-delivery-awards-2028",
+        publishedAt: "2026-06-30",
+        accessTier: "Explorer",
+        sourceLabel: "NASA | Market analysis",
     },
 ];
 

@@ -122,7 +122,7 @@ function normalizeAccessTier(value: string | null | undefined): HomeStory["acces
 }
 
 function articleHref(slug: string) {
-    return slug === "vipc-grant-winner" ? `/news/${slug}` : "/news";
+    return `/news/${slug}`;
 }
 
 async function getHomepageStories(): Promise<HomeStory[]> {

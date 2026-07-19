@@ -70,8 +70,18 @@ export const currentRoutes = [
         note: "Staff-only homepage carousel inventory, ranking, preview, publication, and expiration workflow.",
     },
     {
-        href: "/news/vipc-grant-winner",
+        href: "/news/nasa-lunar-delivery-awards-2028",
         source: "app/news/[slug]/page.tsx",
-        note: "Migrated article route in the production Next.js app.",
+        note: "Market and strategic analysis of NASA's 2028 commercial lunar delivery awards.",
+    },
+    {
+        href: "/news/artemis-iii-starlink-optical-relay",
+        source: "app/news/[slug]/page.tsx",
+        note: "Strategic analysis of commercial optical communications in the Artemis architecture.",
+    },
+    {
+        href: "/news/artemis-iii-hardware-stacking",
+        source: "app/news/[slug]/page.tsx",
+        note: "Program and supply-chain analysis of Artemis III hardware stacking.",
     },
 ] as const;

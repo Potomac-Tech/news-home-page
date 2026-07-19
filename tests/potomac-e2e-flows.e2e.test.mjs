@@ -179,11 +179,11 @@ test("public article teaser shows citations and member-gated full story", { time
     const { page, consoleMessages } = await newPage();
 
     try {
-        await page.goto(`${baseUrl}/news/vipc-grant-winner`, {
+        await page.goto(`${baseUrl}/news/nasa-lunar-delivery-awards-2028`, {
             waitUntil: "domcontentloaded",
         });
 
-        assert.match(await page.title(), /VIPC Launch Grant/i);
+        assert.match(await page.title(), /NASA commits nearly \$600 million/i);
         await assertVisibleText(page, "Public summary");
         await assertVisibleText(page, "Public intro");
         await assertVisibleText(page, "Source Citations");
@@ -196,7 +196,7 @@ test("public article teaser shows citations and member-gated full story", { time
             .getByRole("article")
             .getByRole("link", { name: /^Sign in$/i })
             .click();
-        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fnews%2Fvipc-grant-winner/);
+        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fnews%2Fnasa-lunar-delivery-awards-2028/);
         await assertVisibleText(page, "Sign in");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
@@ -208,7 +208,7 @@ test("Explorer article unlock journey redirects signed-out readers to login", { 
     const { page, consoleMessages } = await newPage();
 
     try {
-        await page.goto(`${baseUrl}/news/vipc-grant-winner`, {
+        await page.goto(`${baseUrl}/news/nasa-lunar-delivery-awards-2028`, {
             waitUntil: "domcontentloaded",
         });
 
@@ -216,7 +216,7 @@ test("Explorer article unlock journey redirects signed-out readers to login", { 
             .getByRole("article")
             .getByRole("link", { name: /^Sign in$/i })
             .click();
-        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fnews%2Fvipc-grant-winner/);
+        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fnews%2Fnasa-lunar-delivery-awards-2028/);
         await assertVisibleText(page, "Sign in");
         await assertVisibleText(page, "Magic link");
         await assertVisibleText(page, "Password");
