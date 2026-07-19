@@ -135,6 +135,24 @@ const allFallbackSearchResults: SearchResult[] = [
         isFallback: true,
     },
     {
+        id: "space-industrialist-week-2026",
+        kind: "event",
+        title: "Space Industrialist Week",
+        eyebrow: "September 2026 | Save the date",
+        summary:
+            "A new gathering for leading figures across the space and lunar industries, featuring the inaugural Cabeus Games.",
+        snippet:
+            "Dates, venue, participants, and attendance information will be announced as details are confirmed.",
+        href: "/events",
+        tier: "public",
+        confidenceLabel: "medium",
+        freshnessAt: "2026-07-19T16:00:00.000Z",
+        isPinned: true,
+        sourceCount: 1,
+        keywords: ["Space Industrialist Week", "Cabeus Games", "September", "lunar industry", "space industry"],
+        isFallback: true,
+    },
+    {
         id: "missions",
         kind: "lunar_mission",
         title: "Launches & Missions",

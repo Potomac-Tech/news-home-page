@@ -120,6 +120,10 @@ function formatDate(value: string) {
 }
 
 function formatDateRange(event: EventCalendarRecord) {
+    if (event.dateLabel) {
+        return event.dateLabel;
+    }
+
     const startsAt = formatDate(event.startsAt);
 
     if (!event.endsAt) {

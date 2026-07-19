@@ -26,6 +26,7 @@ export type EventCalendarRecord = {
     location: string;
     timezone: string;
     startsAt: string;
+    dateLabel?: string;
     endsAt?: string | null;
     publicSummary: string;
     publicTeaser: string;
@@ -36,101 +37,59 @@ export type EventCalendarRecord = {
 
 export const fallbackEvents: EventCalendarRecord[] = [
     {
-        slug: "lunar-surface-markets-roundtable",
-        title: "Lunar Surface Markets Roundtable",
-        eventType: "roundtable",
+        slug: "potomac-space-investment-forum-2026",
+        title: "Space Investment Forum",
+        eventType: "forum",
         accessTier: "member",
-        organizer: "Cabeus Explorer",
-        location: "Washington, DC",
+        organizer: "Potomac Database Systems and Meet the Future",
+        location: "Cosmos Club, Washington, DC",
         timezone: "America/New_York",
-        startsAt: "2026-07-16T14:00:00-04:00",
-        endsAt: "2026-07-16T17:00:00-04:00",
+        startsAt: "2026-07-21T09:45:00-04:00",
+        endsAt: "2026-07-21T12:00:00-04:00",
         publicSummary:
-            "A focused roundtable on near-term lunar surface services, data rights, and commercial demand signals.",
+            "An invitation-only forum for leaders in investment, government, industry, and national security focused on American leadership in space.",
         publicTeaser:
-            "Public readers can track the theme and timing. Approved members receive the attendee brief, source links, and follow-up notes when available.",
+            "The featured conversation and agenda connect Artemis, cislunar infrastructure, defense, workforce, capital allocation, and data intelligence.",
         publicAgenda: [
-            "Surface operations demand",
-            "Mission data rights",
-            "Customer and sponsor signals",
+            "American strength in space",
+            "Lunar and cislunar infrastructure",
+            "Capital allocation and investment trends",
         ],
-        publishedAt: "2026-06-20T12:00:00-04:00",
+        publishedAt: "2026-07-19T12:00:00-04:00",
         details: {
             memberDetails:
-                "Member packet covers participating company categories, recent public procurement signals, and questions for analysts to pressure-test during the roundtable.",
-            registrationUrl: "https://potomacdb.com/apply",
-            contactEmail: "events@potomacdb.com",
+                "The main forum runs from 9:45 a.m. to noon for approximately 50 curated guests. Jim Bridenstine and retired Brig. Gen. Damon Feltman will lead the featured conversation.",
+            contactEmail: "kevcirilli@gmail.com",
             sourceLinks: [
                 {
-                    label: "Briefing source",
-                    title: "Cabeus Explorer lunar intelligence event tracker",
-                    url: "https://potomacdb.com/events",
+                    label: "Event invitation",
+                    title: "Space Investment Forum",
+                    url: "/potomac-space-investment-forum.jpg",
                 },
             ],
-            preparationNotes:
-                "Review current lunar surface services briefs before attending.",
+            preparationNotes: "Invitation only. Business attire.",
         },
     },
     {
-        slug: "cislunar-supply-chain-briefing",
-        title: "Cislunar Supply Chain Briefing",
-        eventType: "briefing",
+        slug: "space-industrialist-week-2026",
+        title: "Space Industrialist Week",
+        eventType: "industry_week",
         accessTier: "member",
         organizer: "Cabeus Explorer",
-        location: "Virtual",
+        location: "Venue to be announced",
         timezone: "America/New_York",
-        startsAt: "2026-08-06T11:00:00-04:00",
-        endsAt: "2026-08-06T12:15:00-04:00",
+        startsAt: "2026-09-01T09:00:00-04:00",
+        dateLabel: "September 2026 | Dates to be announced",
         publicSummary:
-            "A virtual briefing on procurement timing, payload capacity, and supplier watchlist development for lunar programs.",
+            "A new gathering for leading figures across the space and lunar industries, featuring the inaugural Cabeus Games.",
         publicTeaser:
-            "The public calendar shows the briefing theme. Members unlock source-backed preparation notes and registration details.",
+            "Save the date for September. Program dates, venue, participants, and attendance information will be announced as they are confirmed.",
         publicAgenda: [
-            "Supplier watchlist setup",
-            "Payload capacity indicators",
-            "Procurement timing signals",
+            "Space and lunar industry leadership",
+            "Industrial strategy and collaboration",
+            "Inaugural Cabeus Games",
         ],
-        publishedAt: "2026-06-20T12:00:00-04:00",
-        details: {
-            memberDetails:
-                "Member detail includes the supplier-screening worksheet, source watchlist framing, and analyst questions for procurement teams.",
-            registrationUrl: "https://potomacdb.com/apply",
-            virtualUrl: "Member portal link pending",
-            contactEmail: "events@potomacdb.com",
-            sourceLinks: [],
-            preparationNotes:
-                "Bring current program timing assumptions and known supplier dependencies.",
-        },
-    },
-    {
-        slug: "mission-data-rights-workshop",
-        title: "Mission Data Rights Workshop",
-        eventType: "workshop",
-        accessTier: "member",
-        organizer: "Cabeus Explorer",
-        location: "Member-only",
-        timezone: "America/New_York",
-        startsAt: "2026-09-10T13:00:00-04:00",
-        endsAt: "2026-09-10T16:00:00-04:00",
-        publicSummary:
-            "A member workshop on how mission contracts, data addenda, and downstream analytics shape lunar data access.",
-        publicTeaser:
-            "Public readers can follow the topic. Approved members receive the methodology packet and workshop logistics.",
-        publicAgenda: [
-            "Mission contract structure",
-            "Data exclusivity windows",
-            "Analyst methodology notes",
-        ],
-        publishedAt: "2026-06-20T12:00:00-04:00",
-        details: {
-            memberDetails:
-                "The workshop packet covers NASA-paid mission-cost benchmarks, addendum treatment, and how Cabeus Explorer labels confidence across data-rights assumptions.",
-            registrationUrl: "https://potomacdb.com/apply",
-            contactEmail: "events@potomacdb.com",
-            sourceLinks: [],
-            preparationNotes:
-                "Members should review their internal data-use assumptions before the workshop.",
-        },
+        publishedAt: "2026-07-19T12:00:00-04:00",
     },
 ];
 

@@ -85,18 +85,11 @@ export const eventTeasers: EventTeaser[] = [
         memberNote: "Featured discussion covers Artemis, cislunar infrastructure, investment, defense, workforce, and intelligence.",
     },
     {
-        name: "Cislunar Supply Chain Briefing",
-        date: "Aug 06",
-        location: "Virtual",
-        publicNote: "Procurement and payload-capacity themes.",
-        memberNote: "Scout+ follow-up includes supplier watchlist assumptions.",
-    },
-    {
-        name: "Mission Data Rights Workshop",
-        date: "Sep 10",
-        location: "Member-only",
-        publicNote: "Registration interest opens after agenda approval.",
-        memberNote: `${tierConfig.enterprise.publicName} attendees receive a tailored pre-read.`,
+        name: "Space Industrialist Week",
+        date: "Sep 2026",
+        location: "Details forthcoming",
+        publicNote: "Leading figures from the space and lunar industries will convene for a new industry gathering.",
+        memberNote: "The program will include the inaugural Cabeus Games; dates, venue, and participant details are forthcoming.",
     },
 ];
 
