@@ -12,16 +12,32 @@ const issues = [];
 
 const routeSpecs = [
     { path: "/", kind: "public" },
+    { path: "/terminal", kind: "public" },
+    { path: "/search", kind: "public" },
     { path: "/news", kind: "public" },
-    { path: "/tracker/contracts", kind: "public" },
+    { path: "/events", kind: "public" },
+    { path: "/datasets", kind: "public" },
+    { path: "/calculators", kind: "public" },
     { path: "/pricing", kind: "enterprise" },
     { path: "/upgrade", kind: "gated-enterprise" },
     { path: "/command", kind: "gated-enterprise" },
     { path: "/request-access", kind: "public" },
     { path: "/member", kind: "gated" },
     { path: "/tracker/launches", kind: "gated" },
+    { path: "/alerts", kind: "gated" },
+    { path: "/account", kind: "public-safe-gate" },
+    { path: "/nexus", kind: "public-safe-gate" },
+    { path: "/team", kind: "public" },
+    { path: "/legal/terms", kind: "public" },
+    { path: "/legal/privacy", kind: "public" },
+    { path: "/spacecraft", kind: "hidden" },
+    { path: "/companies", kind: "hidden" },
+    { path: "/procurement", kind: "hidden" },
+    { path: "/regulatory", kind: "hidden" },
+    { path: "/tracker/contracts", kind: "hidden" },
+    { path: "/member/marketplace", kind: "hidden" },
 ];
-const placeholderPattern = /\b(lorem ipsum|coming soon|launch pending|placeholder content|replace me)\b|https?:\/\/(?:www\.)?example\.com/i;
+const placeholderPattern = /\b(lorem ipsum|coming soon|launch pending|placeholder content|replace me|queued for review|representative record)\b|curated quote feed not connected|commodity setup queued|https?:\/\/(?:www\.)?example\.com/i;
 const oldTierPattern = /\$(?:1,495|3,495|7,495)\b|\bProfessional membership\b|\bEnterprise membership\b/i;
 const paidResendPattern = /pay[- ]as[- ]you[- ]go|dedicated[- ]ip|marketing[- ]broadcast|paid[- ]add[- ]on/i;
 
@@ -152,8 +168,9 @@ async function checkRenderedRoutes() {
             if (seriousViolations.length) pageIssues.push(`Accessibility: ${seriousViolations.map((violation) => `${violation.id} (${violation.nodes.length}) targets ${violation.nodes.slice(0, 4).map((node) => node.target.join(" ")).join("; ")}`).join(", ")}.`);
             if (spec.kind.includes("enterprise") && anchors.some((anchor) => /^mailto:/i.test(anchor.href))) pageIssues.push("Meridian route exposes a mailto workflow.");
             if (spec.kind.includes("enterprise") && /\bMeridian\s+(?:checkout|invoice|payment)|(?:checkout|invoice|payment)\s+for\s+Meridian\b/i.test(bodyText)) pageIssues.push("Meridian route exposes a self-serve payment workflow.");
+            if (spec.kind === "hidden" && finalUrl.pathname !== "/terminal") pageIssues.push(`Hidden route ended at ${finalUrl.pathname} instead of /terminal.`);
             if (spec.kind.includes("gated") && !["/request-access", "/account/profile/complete"].includes(finalUrl.pathname)) pageIssues.push(`Anonymous gated route ended at ${finalUrl.pathname}.`);
-            if (!spec.kind.includes("gated") && finalUrl.pathname !== requested.pathname) pageIssues.push(`Public route redirected to ${finalUrl.pathname}.`);
+            if (spec.kind !== "hidden" && !spec.kind.includes("gated") && finalUrl.pathname !== requested.pathname) pageIssues.push(`Public route redirected to ${finalUrl.pathname}.`);
 
             for (const anchor of anchors) {
                 if (/^(?:#|javascript:)/i.test(anchor.href)) pageIssues.push(`Unsafe or placeholder link: ${anchor.text || anchor.href}.`);

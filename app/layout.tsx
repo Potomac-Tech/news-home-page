@@ -11,18 +11,18 @@ export const dynamic = "force-dynamic";
 const sourceSans = Source_Sans_3({
     subsets: ["latin"],
     variable: "--font-source-sans",
-    display: "swap",
+    display: "optional",
 });
 const oswald = Oswald({
     subsets: ["latin"],
     variable: "--font-oswald",
-    display: "swap",
+    display: "optional",
 });
 const ibmPlexMono = IBM_Plex_Mono({
     subsets: ["latin"],
     weight: ["400", "500", "600", "700"],
     variable: "--font-ibm-plex-mono",
-    display: "swap",
+    display: "optional",
 });
 
 export const metadata: Metadata = {

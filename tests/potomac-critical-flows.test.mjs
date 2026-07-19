@@ -187,6 +187,53 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
     );
 });
 
+test("production tracker ingestion is authenticated, scheduled, cited, and review-gated", () => {
+    const ingestion = read("lib/trackers/production-ingestion.ts");
+    const route = read("app/api/internal/trackers/ingest/route.ts");
+    const migration = readMigration(
+        "20260719143000_schedule_production_tracker_ingestion.sql"
+    );
+    const contractMigration = readMigration(
+        "20260719183500_schedule_usaspending_contract_ingestion.sql"
+    );
+    assertIncludes(ingestion, [
+        "ll.thespacedevs.com/2.3.0/launches/upcoming/",
+        "services.swpc.noaa.gov/products",
+        "api.usaspending.gov/api/v2/search/spending_by_award/",
+        "weekly_lunar_ingestion_runs",
+        "weekly_lunar_tracker_sources",
+        'publication_status: "draft"',
+        "source_checked_at",
+        "freshness_status",
+        "createServiceClient",
+    ], "production tracker ingestion");
+    assertIncludes(route, [
+        "TRACKER_INGESTION_SECRET",
+        "timingSafeEqual",
+        'value === "launches"',
+        'value === "space-weather"',
+        'value === "contract-awards"',
+        '"Cache-Control": "no-store"',
+    ], "tracker ingestion endpoint");
+    assertIncludes(migration, [
+        "production_tracker_ingestion_url",
+        "production_tracker_ingestion_secret",
+        "ingest-launch-library-2",
+        "ingest-noaa-space-weather",
+        "private.invoke_production_tracker_ingestion",
+    ], "tracker ingestion schedules");
+    assertIncludes(contractMigration, [
+        "ingest-usaspending-contract-awards",
+        "contract-awards",
+        "private.invoke_production_tracker_ingestion",
+    ], "contract ingestion schedule");
+    assert.doesNotMatch(
+        ingestion + route + migration + contractMigration,
+        /SUPABASE_SERVICE_ROLE_KEY\s*=|TRACKER_INGESTION_SECRET\s*=|Bearer [A-Za-z0-9_-]{20,}/,
+        "tracker ingestion secrets must not be committed"
+    );
+});
+
 test("Stripe billing webhook preserves Scout entitlement activation controls", () => {
     const webhook = read("app/api/stripe/webhook/route.ts");
     const checkout = read("app/api/stripe/scout-checkout/route.ts");

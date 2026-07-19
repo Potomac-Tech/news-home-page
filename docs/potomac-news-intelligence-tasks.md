@@ -1303,3 +1303,47 @@ Blocked reason:
   - Non-technical summary: Approved Explorer, Scout, and Meridian members can now open Potomac Nexus from Cabeus Explorer with the same account. Their access is translated to the correct Nexus tier, while existing Nexus administrators retain staff access.
   - Verification: Applied the canonical Supabase role-sync migration with 8 mapped members and 0 role mismatches; confirmed members cannot update their own Nexus role. Cabeus TypeScript, lint, production build, and all 132 automated tests passed. Nexus production build and GitHub/Cloudflare checks passed in PRs 20 and 21. Deployed Cabeus Worker version `f9eb707f-29a6-45ea-acef-67eb15c1109e`, added the exact Nexus `/0auth` URL to the canonical Supabase Auth redirect allowlist, and completed a live browser handoff to the Nexus interface with no console errors.
   - Blocked reason: None.
+
+- [ ] Task 118: Enforce July 21 launch visibility and remove production placeholders
+  - Priority: P0
+  - Requirement IDs: R-LAUNCH-001, R-HOME-003, R-CONTENT-001, R-SCOPE-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Make every discoverable launch surface source-backed, approved, and accurately labeled by Tuesday, July 21, 2026.
+  - Acceptance criteria: Implement the decisions in `docs/launch-readiness-2026-07-21.md`; hide unready modules from navigation, terminal, search, command palette, sitemap, structured data, and anonymous/member discovery; direct unready routes return a reviewed unavailable response or staff-only review surface; remove representative, sample, queued, planned, and placeholder records from production rendering; expand the release audit to every discoverable public route and critical member route; record content-owner and editor/admin approvals.
+  - Non-technical summary: A conservative launch policy now hides empty company, spacecraft, procurement, regulatory, marketplace, and contract-award pages until approved content is available. Unsupported homepage statistics, readiness scores, supply-chain graphics, and ticker placeholders were removed; public datasets are limited to source-backed NASA and USGS records.
+  - Verification: All 133 automated tests, lint, TypeScript, and the production build passed. The expanded production release crawler checked 25 public, gated, and hidden routes with zero issues. Mobile and desktop event quality checks passed with zero layout shift, no accessibility violations, and no overflow after font stabilization.
+  - Blocked reason: Awaiting the content owner's approval of the conservative hide list and a named editor/admin approver; stock ticker remains hidden pending a licensed quote provider.
+
+- [x] Task 119: Put launch, space-weather, and contract-award API trackers into production
+  - Priority: P0
+  - Requirement IDs: R-MISSION-004, R-MISSION-006, R-CONTRACT-001, R-SPACEWEATHER-001
+  - Supersedes: Manual-only tracker ingestion scripts.
+  - Superseded by: None.
+  - Goal: Replace stale or empty tracker fallbacks with scheduled, auditable production ingestion.
+  - Acceptance criteria: Add authenticated internal ingestion endpoints and Supabase Cron jobs for Launch Library 2 and NOAA SWPC; add USAspending v2 candidate-award ingestion as draft-only; pin all writes to `xlpkdoeldtlhearqajat`; store run status, source retrieval/check timestamps, counts, failures, citations, and confidence; prevent overlapping runs and duplicate records; enforce freshness/unavailable states; keep award and launch publication behind the existing editor review rules; run each job successfully in production and verify resulting rows, cron history, endpoint authentication, UI freshness, and failure behavior.
+  - Non-technical summary: Live scheduled feeds now monitor lunar launch activity, NOAA space weather, and new federal lunar contracts. Automated launch and contract records remain unpublished until editorial review, while current NOAA conditions publish with freshness timestamps.
+  - Verification: Canonical Supabase project `xlpkdoeldtlhearqajat` has active Cron jobs for Launch Library 2 hourly, NOAA SWPC every 15 minutes, and USAspending daily at 06:23 UTC. Launch runs completed with eight records checked and zero lunar-relevant launches in the current window; NOAA updated four snapshots through 2026-07-19 19:45 UTC; USAspending completed with ten candidates, six relevant records, 12 total draft awards, 12 citations, and 12 exact cited-value records. The private endpoint returned `401` without its bearer secret, all 133 tests passed, and Cloudflare version `2a3c1deb-6fad-43bd-92d6-8bba237ab681` deployed successfully.
+  - Blocked reason: None.
+
+- [ ] Task 120: Populate and approve launch content inventory
+  - Priority: P0
+  - Requirement IDs: R-LAUNCH-001, R-HOME-003, R-CONTENT-001, R-CONTENT-002
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Replace local fallback stories, events, companies, missions, datasets, and commodity records with approved production content where those modules will launch.
+  - Acceptance criteria: Content owner selects the launch inventory; an editor/admin approves every published record; all records have citations, freshness/review timestamps, audience tier, confidence, and expiration where required; no zero-row module falls back to invented or representative content; omitted modules remain hidden under Task 118.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason: Requires content-owner inventory and named editor/admin approval.
+
+- [ ] Task 121: Run and sign the July 21 production release
+  - Priority: P0
+  - Requirement IDs: R-TRUST-001, R-HOME-003, R-AUTH-001
+  - Supersedes: None.
+  - Superseded by: None.
+  - Goal: Produce a defensible GO or NO-GO decision for the July 21 release.
+  - Acceptance criteria: Complete `docs/production-launch-checklist.md`; record release and rollback commits and Cloudflare versions; pass lint, tests, build, expanded release audit, quality audit, E2E role journeys, production crawl, tracker freshness checks, Supabase Cron checks, Resend checks, and mobile/desktop visual review; obtain content-owner, editor/admin, and technical approvals; deploy only on GO.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason: Depends on Tasks 118-120 and named approvals.

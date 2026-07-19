@@ -4,11 +4,10 @@ import test from "node:test";
 
 const page = readFileSync("app/tracker/contracts/page.tsx", "utf8");
 const loader = readFileSync("app/_data/contractAwards.ts", "utf8");
-const launchTracker = readFileSync("app/tracker/launches/page.tsx", "utf8");
 const nav = readFileSync("app/_components/MigrationShell.tsx", "utf8");
 const member = readFileSync("app/member/page.tsx", "utf8");
-const search = readFileSync("app/_data/search.ts", "utf8");
-const terminal = readFileSync("app/_data/terminal.ts", "utf8");
+const visibility = readFileSync("app/_data/launchVisibility.ts", "utf8");
+const middleware = readFileSync("middleware.ts", "utf8");
 
 test("contract awards route exposes required reviewed operational fields", () => {
     for (const token of ["New Contract Awards", "Awarded", "Effective date", "Option exercise", "Customer", "Vendor", "Program", "Award vehicle", "Amount / value state", "Confidence", "Reviewer:", "Last reviewed:", "citation.url"]) assert.ok(page.includes(token), `missing ${token}`);
@@ -29,7 +28,10 @@ test("auth and premium states route to required flows without leaking values", (
     assert.ok(page.includes("Sign up or Log In for More Details"));
 });
 
-test("contract awards module is discoverable from tracker, shell, member, search, and terminal", () => {
-    for (const source of [launchTracker, nav, member, search, terminal]) assert.ok(source.includes("/tracker/contracts"));
+test("contract awards stay hidden from launch navigation until reviewed content is published", () => {
+    assert.ok(visibility.includes('"/tracker/contracts"'));
+    assert.ok(visibility.includes('"contract-awards"'));
+    assert.ok(middleware.includes("isHiddenLaunchPath"));
+    assert.doesNotMatch(nav, /href:\s*"\/tracker\/contracts"/);
+    assert.doesNotMatch(member, /href="\/tracker\/contracts"/);
 });
-

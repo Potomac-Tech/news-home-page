@@ -23,11 +23,10 @@ export default function TerminalPage() {
                             Cabeus Explorer lunar industry terminal
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
-                            A news-first terminal shell for lunar launches,
-                            spacecraft, landers, procurements, regulatory
-                            movement, company profiles, economy intelligence,
-                            datasets, marketplace workflows, events,
-                            calculators, alerts, and member account paths.
+                            A news-first terminal for reviewed lunar launch
+                            activity, economy intelligence, public datasets,
+                            events, calculators, alerts, community tools, and
+                            member account paths.
                         </p>
                     </div>
                 </div>

@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
     title: "Search",
     description:
-        "Global Cabeus Explorer terminal search for articles, events, companies, missions, datasets, procurement, regulatory records, methodology sources, and modules.",
+        "Search Cabeus Explorer articles, events, public datasets, methodology sources, calculators, and live modules.",
     alternates: {
         canonical: "/search",
     },
@@ -54,7 +54,7 @@ function SearchForm({ query, scope }: { query: string; scope: string }) {
                 id="global-search"
                 name="q"
                 defaultValue={query}
-                placeholder="Search articles, companies, missions, datasets, procurement..."
+                placeholder="Search articles, events, datasets, and methodology..."
                 className="min-h-12 rounded border border-white/15 bg-potomac-primary/80 px-4 py-3 text-sm text-white outline-none transition placeholder:text-potomac-cream/40 focus:border-potomac-gold"
             />
             <label className="sr-only" htmlFor="search-scope">

@@ -3,7 +3,6 @@ import Link from "next/link";
 import {
     eventTeasers,
     fallbackStories,
-    marketModules,
     type HomeStory,
 } from "./_data/homepage";
 import { loadPublicTickerItems } from "./_data/marketQuotes";
@@ -60,51 +59,10 @@ type EditorialArticleRow = {
     published_at: string | null;
 };
 
-type ReadinessItem = {
-    label: string;
-    value: number;
-    detail: string;
-};
-
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "2-digit",
 });
-
-const intelligenceStats = [
-    { label: "Active projects", value: "142", detail: "8 this week" },
-    { label: "Supply nodes", value: "87", detail: "5 this week" },
-    { label: "Power capacity", value: "3.42 GW", detail: "120 MW watch" },
-    { label: "Launches tracked", value: "-", detail: "Reviewed weekly feed" },
-    { label: "Investment signals", value: "$9.6B", detail: "$138M this week" },
-];
-
-const readinessTrackers: ReadinessItem[] = [
-    { label: "Infrastructure", value: 68, detail: "surface construction" },
-    { label: "Power", value: 72, detail: "reactors and storage" },
-    { label: "Logistics", value: 64, detail: "launch and transfer" },
-    { label: "Manufacturing", value: 57, detail: "in-situ materials" },
-    { label: "Robotics", value: 71, detail: "autonomy and handling" },
-    { label: "Workforce", value: 62, detail: "mission operators" },
-];
-
-const supplyNodes = [
-    {
-        label: "L2 microreactor program",
-        status: "Power",
-        detail: "Milestone and supplier review active",
-    },
-    {
-        label: "Cislunar propellant depots",
-        status: "Logistics",
-        detail: "Capacity assumptions under analyst watch",
-    },
-    {
-        label: "Regolith-to-metal pilots",
-        status: "Manufacturing",
-        detail: "Scale-up status mapped by readiness",
-    },
-];
 
 const membershipTiers = [
     {
@@ -282,32 +240,6 @@ function StoryCard({ story }: { story: HomeStory }) {
     );
 }
 
-function ReadinessCard({ item }: { item: ReadinessItem }) {
-    return (
-        <article className="border border-potomac-regolith/20 bg-potomac-primary/64 p-4">
-            <div className="flex items-start justify-between gap-4">
-                <div>
-                    <p className="font-mono text-[0.68rem] font-bold uppercase text-potomac-regolith">
-                        {item.label}
-                    </p>
-                    <p className="mt-1 text-xs uppercase text-potomac-cream/45">
-                        {item.detail}
-                    </p>
-                </div>
-                <span className="font-mono text-sm font-bold text-white">
-                    {item.value}%
-                </span>
-            </div>
-            <div className="mt-4 h-2 bg-potomac-secondary">
-                <div
-                    className="h-full bg-potomac-gold"
-                    style={{ width: `${item.value}%` }}
-                />
-            </div>
-        </article>
-    );
-}
-
 export default async function HomePage() {
     const [stories, sponsorUnits, tickerItems, economySummary] = await Promise.all([
         getHomepageStories(),
@@ -404,18 +336,24 @@ export default async function HomePage() {
             <LunarTimeClock initialUtcIso={new Date().toISOString()} />
 
             <section aria-label="Lunar economy activity" className="border-b border-potomac-regolith/20 bg-potomac-primary/90">
-                <div className="mx-auto grid w-full max-w-[92rem] grid-cols-2 px-4 md:grid-cols-5 md:px-8">
-                    {intelligenceStats.map((item) => (
-                        <div key={item.label} className="min-w-0 border-b border-r border-potomac-regolith/20 p-4 last:border-r-0 md:border-b-0">
-                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-regolith">{item.label}</p>
-                            {item.label === "Launches tracked" ? <><p className="mt-2 font-serif text-2xl uppercase text-white md:text-3xl">{launchSummary.reviewedCount}</p><p className="mt-1 font-mono text-[0.64rem] uppercase text-emerald-200/70">{launchSummary.lunarCount} lunar / cislunar</p><p className="mt-1 font-mono text-[0.58rem] uppercase text-potomac-regolith">Freshness: {launchSummary.freshnessAt ? new Date(launchSummary.freshnessAt).toLocaleString() : "Awaiting reviewed source"}</p><div className="mt-3 flex flex-wrap gap-3"><Link prefetch={false} href={launchHref} className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold hover:text-potomac-cream">{launchCta}</Link><Link prefetch={false} href="/upgrade?tier=scout&source=homepage&content=launch-tools&next=%2Ftracker%2Flaunches" className="font-mono text-[0.62rem] font-bold uppercase text-potomac-cream/60 hover:text-potomac-gold">Values & exports</Link></div></> : <><p className="mt-2 font-serif text-2xl uppercase text-white md:text-3xl">{item.value}</p><p className="mt-1 font-mono text-[0.64rem] uppercase text-emerald-200/70">+ {item.detail}</p></>}
+                <div className="mx-auto w-full max-w-[92rem] px-4 py-4 md:px-8">
+                    <div className="flex flex-wrap items-center justify-between gap-4 border border-potomac-regolith/20 bg-potomac-secondary/45 p-4">
+                        <div>
+                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-regolith">Reviewed launches tracked</p>
+                            <p className="mt-2 font-serif text-2xl uppercase text-white md:text-3xl">{launchSummary.reviewedCount}</p>
+                            <p className="mt-1 font-mono text-[0.64rem] uppercase text-emerald-200/70">{launchSummary.lunarCount} lunar / cislunar</p>
+                            <p className="mt-1 font-mono text-[0.58rem] uppercase text-potomac-regolith">Freshness: {launchSummary.freshnessAt ? new Date(launchSummary.freshnessAt).toLocaleString() : "No reviewed launch records in the current window"}</p>
                         </div>
-                    ))}
+                        <div className="flex flex-wrap gap-3">
+                            <Link prefetch={false} href={launchHref} className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold hover:text-potomac-cream">{launchCta}</Link>
+                            <Link prefetch={false} href="/upgrade?tier=scout&source=homepage&content=launch-tools&next=%2Ftracker%2Flaunches" className="font-mono text-[0.62rem] font-bold uppercase text-potomac-cream/60 hover:text-potomac-gold">Values & exports</Link>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <section className="border-b border-potomac-regolith/20 bg-potomac-primary/82">
-                <div className="mx-auto grid w-full max-w-[92rem] gap-8 px-4 py-10 md:px-8 lg:grid-cols-[1.18fr_0.82fr]">
+                <div className="mx-auto w-full max-w-[92rem] px-4 py-10 md:px-8">
                     <div>
                         <SectionHeading
                             eyebrow="Top stories"
@@ -448,23 +386,7 @@ export default async function HomePage() {
                             </article>
 
                             <div className="grid gap-4">
-                                {supplyNodes.map((node) => (
-                                    <article
-                                        key={node.label}
-                                        className="border border-potomac-regolith/20 bg-potomac-primary/72 p-4"
-                                    >
-                                        <p className="font-mono text-[0.65rem] font-bold uppercase text-potomac-gold">
-                                            {node.status}
-                                        </p>
-                                        <h3 className="mt-2 font-serif text-xl uppercase leading-snug text-white">
-                                            {node.label}
-                                        </h3>
-                                        <p className="mt-2 text-sm leading-6 text-potomac-cream/60">
-                                            {node.detail}
-                                        </p>
-                                    </article>
-                                ))}
-                                <div className="border border-potomac-regolith/20 bg-potomac-primary/72 p-4">
+                                {tickerItems.length ? <div className="border border-potomac-regolith/20 bg-potomac-primary/72 p-4">
                                     <p className="font-mono text-[0.65rem] font-bold uppercase text-potomac-gold">
                                         Briefing ticker
                                     </p>
@@ -486,62 +408,11 @@ export default async function HomePage() {
                                             </div>
                                         ))}
                                     </div>
-                                </div>
+                                </div> : null}
                             </div>
                         </div>
                     </div>
 
-                    <aside className="border border-potomac-regolith/20 bg-potomac-secondary/64 p-5">
-                        <div className="flex items-center justify-between gap-4">
-                            <h2 className="font-serif text-2xl uppercase text-white">
-                                Supply chain map
-                            </h2>
-                            <Link
-                                href="/companies"
-                                className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold hover:text-potomac-cream"
-                            >
-                                View map
-                            </Link>
-                        </div>
-                        <div className="relative mt-5 h-72 overflow-hidden border border-potomac-regolith/20 bg-potomac-primary">
-                            <img
-                                src={potomacBrand.assets.cabeusHero}
-                                alt=""
-                                className="absolute inset-0 h-full w-full object-cover object-[74%_48%] opacity-25"
-                            />
-                            <div className="absolute left-8 top-16 h-32 w-32 rounded-full border border-potomac-regolith/35 bg-potomac-primary/60" />
-                            <div className="absolute right-10 top-10 h-44 w-44 rounded-full border border-potomac-gold/35" />
-                            <div className="absolute right-24 top-24 h-16 w-16 rounded-full border border-potomac-regolith/60 bg-potomac-cream/15" />
-                            <div className="absolute left-[39%] top-[42%] h-px w-44 -rotate-12 bg-potomac-gold/45" />
-                            <div className="absolute left-[48%] top-[30%] h-px w-32 rotate-12 bg-potomac-regolith/35" />
-                            <span className="absolute left-[33%] top-[43%] h-3 w-3 border border-potomac-gold bg-potomac-primary" />
-                            <span className="absolute right-[24%] top-[28%] h-3 w-3 border border-potomac-gold bg-potomac-primary" />
-                            <span className="absolute right-[14%] top-[47%] h-3 w-3 border border-potomac-gold bg-potomac-primary" />
-                            <span className="absolute right-[32%] bottom-[24%] h-3 w-3 border border-potomac-regolith bg-potomac-primary" />
-                            <div className="absolute bottom-4 left-4 right-4 grid grid-cols-2 gap-2 font-mono text-[0.62rem] uppercase text-potomac-cream/56">
-                                <span>Supply node</span>
-                                <span>In transit</span>
-                                <span>High priority</span>
-                                <span>Disruption risk</span>
-                            </div>
-                        </div>
-                    </aside>
-                </div>
-            </section>
-
-            <section className="border-b border-potomac-regolith/20 bg-potomac-secondary/70">
-                <div className="mx-auto w-full max-w-[92rem] px-4 py-10 md:px-8">
-                    <SectionHeading
-                        eyebrow="Readiness tracker"
-                        title="Operational context by sector"
-                        description="Compact progress signals help members compare infrastructure, logistics, power, manufacturing, robotics, and workforce maturity without losing sight of source confidence."
-                        action={{ href: "/request-access?next=/member/economy", label: "Open tracker" }}
-                    />
-                    <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-                        {readinessTrackers.map((item) => (
-                            <ReadinessCard key={item.label} item={item} />
-                        ))}
-                    </div>
                 </div>
             </section>
 
@@ -607,29 +478,8 @@ export default async function HomePage() {
                         title="Commercial advantage with model discipline"
                         description="The public surface shows which intelligence modules are active without exposing paid methodology, model assumptions, or member-only source detail."
                     />
-                    <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,0.75fr)]">
+                    <div className="mt-6">
                         <EconomySummaryWidget summary={economySummary} />
-                        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
-                            {marketModules.map((module) => (
-                                <article
-                                    key={module.label}
-                                    className="border border-potomac-regolith/20 bg-potomac-secondary/60 p-5"
-                                >
-                                    <p className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
-                                        {module.cadence}
-                                    </p>
-                                    <h3 className="mt-4 font-serif text-2xl uppercase text-white">
-                                        {module.value}
-                                    </h3>
-                                    <p className="mt-2 font-mono text-[0.68rem] font-semibold uppercase text-potomac-cream/55">
-                                        {module.label}
-                                    </p>
-                                    <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                                        {module.detail}
-                                    </p>
-                                </article>
-                            ))}
-                        </div>
                     </div>
                 </div>
             </section>

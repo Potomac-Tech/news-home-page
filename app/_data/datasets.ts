@@ -130,7 +130,7 @@ const sourceColumns = [
 
 const fallbackRetrievedAt = "2026-06-29T13:00:00.000Z";
 
-export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
+const allFallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
     {
         id: "fallback-nasa-pds-lunar-ode",
         dataset_key: "nasa-pds-lunar-ode",
@@ -561,6 +561,10 @@ export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         ],
     },
 ];
+
+export const fallbackDatasetCatalogEntries = allFallbackDatasetCatalogEntries.filter(
+    (entry) => entry.dataset_kind === "public_science"
+);
 
 function groupSourcesByDataset(sources: DatasetCatalogSource[]) {
     const groups = new Map<string, DatasetCatalogSource[]>();

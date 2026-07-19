@@ -9,7 +9,7 @@ export type TerminalModule = {
     section: "News" | "Missions" | "Markets" | "Workspace";
 };
 
-export const terminalModules: TerminalModule[] = [
+const allTerminalModules: TerminalModule[] = [
     {
         id: "news",
         label: "Lunar news",
@@ -140,6 +140,10 @@ export const terminalModules: TerminalModule[] = [
     },
 ];
 
+export const terminalModules = allTerminalModules.filter(
+    (module) => !hiddenLaunchModuleIds.has(module.id)
+);
+
 export const terminalHeaderItems = terminalModules.filter((module) =>
     [
         "news",
@@ -168,3 +172,4 @@ export function terminalStatusLabel(status: TerminalModuleStatus) {
 
     return "Planned";
 }
+import { hiddenLaunchModuleIds } from "./launchVisibility";

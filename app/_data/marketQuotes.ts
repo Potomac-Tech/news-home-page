@@ -24,37 +24,6 @@ type QuoteRow = {
     price_change_percent: number | null;
 };
 
-export const fallbackTickerItems: TickerItem[] = [
-    {
-        symbol: "TOP20",
-        label: "Public company ranking",
-        value: "Pending",
-        detail: "Curated quote feed not connected",
-        trend: "flat",
-    },
-    {
-        symbol: "DATA",
-        label: "Mission data rights",
-        value: "Watching",
-        detail: "Member brief",
-        trend: "flat",
-    },
-    {
-        symbol: "PRXY",
-        label: "Resource proxy model",
-        value: "20 assets",
-        detail: "Commodity setup queued",
-        trend: "flat",
-    },
-    {
-        symbol: "CMD",
-        label: "Command intelligence",
-        value: "Org-level",
-        detail: "Manual access",
-        trend: "flat",
-    },
-];
-
 function formatPrice(value: number, currencyCode: string) {
     return new Intl.NumberFormat("en-US", {
         style: "currency",
@@ -97,7 +66,7 @@ function quoteToTickerItem(quote: QuoteRow): TickerItem {
 
 export async function loadPublicTickerItems(limit = 4): Promise<TickerItem[]> {
     if (!hasPotomacSupabasePublicConfig()) {
-        return fallbackTickerItems.slice(0, limit);
+        return [];
     }
 
     try {
@@ -113,7 +82,7 @@ export async function loadPublicTickerItems(limit = 4): Promise<TickerItem[]> {
             .limit(60);
 
         if (error || !data?.length) {
-            return fallbackTickerItems.slice(0, limit);
+            return [];
         }
 
         const seenCompanies = new Set<string>();
@@ -132,10 +101,8 @@ export async function loadPublicTickerItems(limit = 4): Promise<TickerItem[]> {
             }
         }
 
-        return tickerItems.length
-            ? tickerItems
-            : fallbackTickerItems.slice(0, limit);
+        return tickerItems;
     } catch {
-        return fallbackTickerItems.slice(0, limit);
+        return [];
     }
 }

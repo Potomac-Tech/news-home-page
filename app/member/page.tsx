@@ -342,23 +342,10 @@ export default async function MemberPage() {
                             Launches & Missions
                         </Link>
                         <Link
-                            href="/tracker/contracts"
-                            prefetch={false}
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Contract Awards
-                        </Link>
-                        <Link
                             href="/pricing"
                             className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                         >
                             Compare tiers
-                        </Link>
-                        <Link
-                            href="/member/marketplace"
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Data marketplace
                         </Link>
                         <Link
                             href="/member/chat"
@@ -379,22 +366,10 @@ export default async function MemberPage() {
                             RFQs
                         </Link>
                         <Link
-                            href="/member/procurement"
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Procurement hub
-                        </Link>
-                        <Link
                             href="/member/saved-work"
                             className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                         >
                             Saved work
-                        </Link>
-                        <Link
-                            href="/companies"
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Company directory
                         </Link>
                         <Link
                             href="/member/test-data"
@@ -416,7 +391,7 @@ export default async function MemberPage() {
                     <NexusAccessCard status={nexusStatus} />
                     <JobAlertsCard alerts={jobAlerts} />
                     <SpaceWeatherCard snapshots={spaceWeatherSnapshots} />
-                    <section className="glass-card h-fit rounded p-6">
+                    {tickerItems.length ? <section className="glass-card h-fit rounded p-6">
                         <div className="border-b border-white/10 pb-4">
                             <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
                                 Delayed quotes
@@ -458,7 +433,7 @@ export default async function MemberPage() {
                                 </div>
                             ))}
                         </div>
-                    </section>
+                    </section> : null}
                 </aside>
             </div>
             <TerminalDashboardShell

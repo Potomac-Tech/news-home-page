@@ -14,7 +14,6 @@ import { CheckoutAnalytics } from "./CheckoutAnalytics";
 
 const primaryNavItems = [
     { href: "/news", label: "Intelligence" },
-    { href: "/companies", label: "Sectors" },
     { href: "/datasets", label: "Data Tools" },
     { href: "/pricing", label: "Membership" },
     { href: "/team", label: "About" },
@@ -23,9 +22,6 @@ const primaryNavItems = [
 const footerNavItems = [
     { href: "/terminal", label: "Terminal" },
     { href: "/tracker/launches", label: "Launches & Missions" },
-    { href: "/tracker/contracts", label: "Contract Awards" },
-    { href: "/procurement", label: "Procurement" },
-    { href: "/regulatory", label: "Regulatory" },
     { href: "/calculators", label: "Calculators" },
     { href: "/member", label: "Member workspace" },
 ];

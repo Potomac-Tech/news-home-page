@@ -1,6 +1,7 @@
 import { createClient } from "../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
 import { publicTierName, tierConfig } from "./tiers";
+import { isHiddenLaunchPath } from "./launchVisibility";
 
 export type SearchTier = "public" | "explorer" | "scout" | "command" | "staff";
 
@@ -55,20 +56,14 @@ export const searchScopes = [
     { value: "all", label: "All" },
     { value: "article", label: "Articles" },
     { value: "event", label: "Events" },
-    { value: "company", label: "Companies" },
-    { value: "lunar_mission", label: "Missions" },
     { value: "dataset", label: "Datasets" },
-    { value: "data_request", label: "Requests" },
-    { value: "data_offer", label: "Offers" },
     { value: "job", label: "Jobs" },
-    { value: "procurement", label: "Procurement" },
-    { value: "regulatory_record", label: "Regulatory" },
     { value: "methodology_source", label: "Methodology" },
     { value: "dashboard_module", label: "Modules" },
     { value: "calculator", label: "Calculators" },
 ] as const;
 
-const fallbackSearchResults: SearchResult[] = [
+const allFallbackSearchResults: SearchResult[] = [
     {
         id: "terminal",
         kind: "dashboard_module",
@@ -293,7 +288,11 @@ const fallbackSearchResults: SearchResult[] = [
     },
 ];
 
-export const fallbackCommandEntries: CommandPaletteEntry[] = [
+const fallbackSearchResults = allFallbackSearchResults.filter(
+    (result) => !isHiddenLaunchPath(result.href)
+);
+
+const allFallbackCommandEntries: CommandPaletteEntry[] = [
     {
         id: "open-search",
         label: "Open search",
@@ -359,6 +358,10 @@ export const fallbackCommandEntries: CommandPaletteEntry[] = [
         keywords: ["calculators", "planning"],
     },
 ];
+
+export const fallbackCommandEntries = allFallbackCommandEntries.filter(
+    (entry) => !isHiddenLaunchPath(entry.href)
+);
 
 const tierRank: Record<SearchTier, number> = {
     public: 0,
@@ -483,7 +486,7 @@ export async function loadSearchResults({
             source_count: number | null;
             keywords: string[] | null;
             metadata: Record<string, unknown> | null;
-        }>).map((row) => ({
+        }>).filter((row) => !isHiddenLaunchPath(row.route_path)).map((row) => ({
             id: row.id,
             kind: row.source_kind,
             title: row.title,
@@ -553,7 +556,7 @@ export async function loadCommandPaletteEntries({
             keywords: string[] | null;
             visibility_tier: string | null;
             is_admin_pinned: boolean;
-        }>).map((row) => ({
+        }>).filter((row) => !isHiddenLaunchPath(row.route_path)).map((row) => ({
             id: row.id,
             label: row.label,
             description: row.description ?? "",
