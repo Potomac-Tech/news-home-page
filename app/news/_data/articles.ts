@@ -27,6 +27,38 @@ export type ArticleRecord = {
 
 export const fallbackArticles: ArticleRecord[] = [
     {
+        slug: "potomac-space-investment-forum-2026",
+        title: "Space Investment Forum convenes leaders in capital, industry, and national security",
+        dek: "Potomac Database Systems and Meet the Future will host an invitation-only forum in Washington on July 21 focused on investment, infrastructure, and American leadership in space.",
+        summary:
+            "The Space Investment Forum will bring approximately 50 curated guests to the Cosmos Club on Tuesday, July 21, for a discussion spanning Artemis, cislunar infrastructure, defense, workforce, capital allocation, and intelligence.",
+        keyPoints: [
+            "The invitation-only main forum runs from 9:45 a.m. to noon at the Cosmos Club in Washington, D.C.",
+            "Jim Bridenstine and retired Brig. Gen. Damon Feltman will lead a featured conversation on American strength in space.",
+            "The agenda connects lunar and cislunar infrastructure with capital formation, national security, workforce, data, and strategic decision-making.",
+        ],
+        intro:
+            "Senior leaders from investment, government, industry, and national security will meet in Washington for a focused discussion on the capital, innovation, and partnerships needed to strengthen the U.S. space industrial base. The forum is co-hosted by Jake Matthews, CEO of Potomac Database Systems, and Kevin Cirilli, founder of Meet the Future.",
+        teaser:
+            "The member brief outlines the featured speakers, agenda themes, and why cislunar infrastructure, capital allocation, and data intelligence are converging as strategic priorities.",
+        publishedAt: "2026-07-19",
+        accessTier: "member",
+        heroImageUrl: "/potomac-space-investment-forum.jpg",
+        heroImageAlt: "Invitation for the July 21, 2026 Space Investment Forum at the Cosmos Club in Washington",
+        citations: [
+            {
+                label: "Event invitation",
+                title: "Space Investment Forum",
+                publisher: "Potomac Database Systems and Meet the Future",
+                url: "/potomac-space-investment-forum.jpg",
+                summary:
+                    "Official event invitation listing the date, venue, hosts, speakers, partners, and discussion topics.",
+            },
+        ],
+        fallbackBody:
+            "The Space Investment Forum is scheduled for Tuesday, July 21, 2026, at the Cosmos Club, 2121 Massachusetts Avenue NW in Washington, D.C. The invitation-only main forum will run from 9:45 a.m. to noon for approximately 50 curated guests. Business attire is requested.\n\nThe featured conversation, American Strength in Space: Capital, Industry, and Strategic Competition, will include Jim Bridenstine, former NASA administrator and CEO of Quantum Space, and retired Brig. Gen. Damon Feltman, CEO of the Space Force Association.\n\nDiscussion topics include Artemis and the next era of human exploration; integrated space defense; lunar and cislunar infrastructure; space-sector workforce development; capital allocation and investment trends; and the role of data and intelligence in decision-making. These subjects increasingly intersect: mission demand depends on appropriations and private capital, while infrastructure investment depends on credible schedules, customers, operating data, and national priorities.\n\nThe forum is presented in partnership with Meet the Future, the Space Force Association, Quantum Space, Potomac Database Systems, and PSW Science. Questions about the invitation may be directed to the contact listed on the official event invitation.",
+    },
+    {
         slug: "nasa-lunar-delivery-awards-2028",
         title: "NASA commits nearly $600 million to four more lunar deliveries",
         dek: "New awards to Astrobotic, Firefly Aerospace, and Intuitive Machines expand the funded lunar-delivery pipeline and expose the next infrastructure demand signals.",

@@ -8,6 +8,8 @@ export type HomeStory = {
     publishedAt: string;
     accessTier: "Explorer" | "Scout" | (typeof tierConfig.enterprise)["publicName"];
     sourceLabel: string;
+    imageUrl?: string;
+    imageAlt?: string;
 };
 
 export type EventTeaser = {
@@ -26,6 +28,19 @@ export type MarketModule = {
 };
 
 export const fallbackStories: HomeStory[] = [
+    {
+        title: "Space Investment Forum brings capital and strategic space leaders to Washington",
+        summary:
+            "Potomac Database Systems and Meet the Future will convene an invitation-only forum at the Cosmos Club on July 21.",
+        snippet:
+            "The agenda connects Artemis, cislunar infrastructure, national security, workforce, capital allocation, and data intelligence with a featured conversation led by Jim Bridenstine and retired Brig. Gen. Damon Feltman.",
+        href: "/news/potomac-space-investment-forum-2026",
+        publishedAt: "2026-07-19",
+        accessTier: "Explorer",
+        sourceLabel: "Upcoming event | Washington, D.C.",
+        imageUrl: "/potomac-space-investment-forum.jpg",
+        imageAlt: "Invitation for the July 21, 2026 Space Investment Forum",
+    },
     {
         title: "Starlink optical terminals move into the Artemis communications stack",
         summary:
@@ -63,11 +78,11 @@ export const fallbackStories: HomeStory[] = [
 
 export const eventTeasers: EventTeaser[] = [
     {
-        name: "Lunar Surface Markets Roundtable",
-        date: "Jul 16",
+        name: "Space Investment Forum",
+        date: "Jul 21",
         location: "Washington, DC",
-        publicNote: "Public agenda preview and speaker themes.",
-        memberNote: "Member packet will include company notes and source links.",
+        publicNote: "Invitation-only forum on leadership, capital, innovation, and orbit.",
+        memberNote: "Featured discussion covers Artemis, cislunar infrastructure, investment, defense, workforce, and intelligence.",
     },
     {
         name: "Cislunar Supply Chain Briefing",

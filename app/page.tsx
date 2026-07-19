@@ -364,9 +364,13 @@ export default async function HomePage() {
                         <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(18rem,0.92fr)]">
                             <article className="border border-potomac-regolith/20 bg-potomac-secondary/72">
                                 <img
-                                    src={potomacBrand.assets.cabeusHero}
-                                    alt="Lunar surface construction site"
-                                    className="h-56 w-full object-cover object-[68%_55%]"
+                                    src={featuredStory.imageUrl ?? potomacBrand.assets.cabeusHero}
+                                    alt={featuredStory.imageAlt ?? "Lunar surface construction site"}
+                                    className={`h-72 w-full bg-potomac-primary ${
+                                        featuredStory.imageUrl
+                                            ? "object-contain"
+                                            : "object-cover object-[68%_55%]"
+                                    }`}
                                 />
                                 <div className="p-5">
                                     <StoryMeta story={featuredStory} />

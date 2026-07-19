@@ -422,7 +422,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         <img
                             src={article.heroImageUrl}
                             alt={article.heroImageAlt}
-                            className="h-72 w-full rounded object-cover"
+                            className={`h-72 w-full rounded bg-potomac-primary ${
+                                article.slug === "potomac-space-investment-forum-2026"
+                                    ? "object-contain"
+                                    : "object-cover"
+                            }`}
                         />
                         <figcaption className="mt-4 text-sm leading-6 text-potomac-cream/60">
                             {article.summary}

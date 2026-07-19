@@ -70,6 +70,11 @@ export const currentRoutes = [
         note: "Staff-only homepage carousel inventory, ranking, preview, publication, and expiration workflow.",
     },
     {
+        href: "/news/potomac-space-investment-forum-2026",
+        source: "app/news/[slug]/page.tsx",
+        note: "Upcoming Space Investment Forum preview with official invitation artwork and member-gated context.",
+    },
+    {
         href: "/news/nasa-lunar-delivery-awards-2028",
         source: "app/news/[slug]/page.tsx",
         note: "Market and strategic analysis of NASA's 2028 commercial lunar delivery awards.",

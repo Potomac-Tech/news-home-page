@@ -82,6 +82,24 @@ const allFallbackSearchResults: SearchResult[] = [
         isFallback: true,
     },
     {
+        id: "space-investment-forum-article",
+        kind: "article",
+        title: "Space Investment Forum convenes leaders in capital, industry, and national security",
+        eyebrow: "Upcoming event",
+        summary:
+            "Preview of the July 21 invitation-only forum hosted by Potomac Database Systems and Meet the Future in Washington.",
+        snippet:
+            "The agenda spans Artemis, cislunar infrastructure, defense, workforce, capital allocation, and data intelligence.",
+        href: "/news/potomac-space-investment-forum-2026",
+        tier: "public",
+        confidenceLabel: "high",
+        freshnessAt: "2026-07-19T12:00:00.000Z",
+        isPinned: true,
+        sourceCount: 1,
+        keywords: ["Space Investment Forum", "Potomac", "MTF", "Jim Bridenstine", "Damon Feltman", "Cosmos Club"],
+        isFallback: true,
+    },
+    {
         id: "lunar-delivery-awards-article",
         kind: "article",
         title: "NASA commits nearly $600 million to four more lunar deliveries",
