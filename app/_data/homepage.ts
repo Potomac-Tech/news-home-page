@@ -51,6 +51,8 @@ export const fallbackStories: HomeStory[] = [
         publishedAt: "2026-07-16",
         accessTier: "Explorer",
         sourceLabel: "NASA | Strategic analysis",
+        imageUrl: "/Nexus Screenshot.png",
+        imageAlt: "Lunar intelligence communications dashboard",
     },
     {
         title: "Artemis III hardware stacking raises the visibility of execution risk",
@@ -62,6 +64,8 @@ export const fallbackStories: HomeStory[] = [
         publishedAt: "2026-07-13",
         accessTier: "Explorer",
         sourceLabel: "NASA | Program watch",
+        imageUrl: "/cabeus-lunar-industrial-hero.png",
+        imageAlt: "Lunar industrial base and mission infrastructure",
     },
     {
         title: "Nearly $600 million expands the commercial lunar delivery pipeline",
@@ -73,6 +77,8 @@ export const fallbackStories: HomeStory[] = [
         publishedAt: "2026-06-30",
         accessTier: "Explorer",
         sourceLabel: "NASA | Market analysis",
+        imageUrl: "/Source Rendering.png",
+        imageAlt: "Cabeus Explorer lunar surface data system",
     },
 ];
 

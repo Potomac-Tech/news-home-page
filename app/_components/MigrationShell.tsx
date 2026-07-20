@@ -13,10 +13,13 @@ import { SearchCommandPalette } from "./SearchCommandPalette";
 import { CheckoutAnalytics } from "./CheckoutAnalytics";
 
 const primaryNavItems = [
-    { href: "/news", label: "Intelligence" },
-    { href: "/datasets", label: "Data Tools" },
-    { href: "/pricing", label: "Membership" },
-    { href: "/team", label: "About" },
+    { href: "/news", label: "News" },
+    { href: "/tracker/launches", label: "Launches" },
+    { href: "/companies", label: "Companies" },
+    { href: "/procurement", label: "Procurement" },
+    { href: "/regulatory", label: "Policy" },
+    { href: "/datasets", label: "Data" },
+    { href: "/events", label: "Events" },
 ];
 
 const footerNavItems = [
@@ -58,9 +61,14 @@ export function MigrationShell({ children }: { children: ReactNode }) {
         <div className="min-h-screen bg-potomac-secondary text-potomac-cream">
             <CheckoutAnalytics />
             <header className="sticky top-0 z-40 border-b border-potomac-regolith/25 bg-potomac-primary/95 backdrop-blur-xl">
-                <div className="site-header-inner mx-auto flex min-h-[13.25rem] w-full max-w-[92rem] flex-col gap-4 px-4 py-3 md:px-8 lg:h-[5.875rem] lg:min-h-0 lg:flex-row lg:items-center lg:justify-between">
-                    <Link href="/" className="flex min-w-0 items-center gap-3">
-                        <span className="relative h-12 w-16 shrink-0 overflow-hidden border border-potomac-regolith/45 bg-potomac-secondary">
+                <div className="mx-auto w-full max-w-[92rem] px-4 md:px-8">
+                    <div className="grid min-h-20 grid-cols-[1fr_auto] items-center gap-4 py-3 lg:grid-cols-[1fr_auto_1fr]">
+                        <div className="hidden items-center gap-3 font-mono text-[0.62rem] font-semibold uppercase text-potomac-regolith lg:flex">
+                            <span className="h-2 w-2 bg-potomac-gold" />
+                            <span>Lunar industry intelligence</span>
+                        </div>
+                        <Link href="/" className="flex min-w-0 items-center gap-3 lg:justify-center">
+                        <span className="relative h-11 w-14 shrink-0 overflow-hidden border border-potomac-regolith/45 bg-potomac-secondary">
                             <img
                                 src={potomacBrand.assets.logo}
                                 alt="Cabeus Explorer lunar industrial mark"
@@ -69,51 +77,58 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                             <span className="absolute inset-0 border border-black/50" />
                         </span>
                         <span className="min-w-0">
-                            <span className="block font-serif text-xl font-semibold uppercase leading-none text-white md:text-2xl">
+                            <span className="block font-serif text-xl font-semibold uppercase leading-none text-white md:text-3xl">
                                 {potomacBrand.identity.name}
                             </span>
                             <span className="mt-1 block font-mono text-[0.68rem] uppercase text-potomac-regolith">
                                 {potomacBrand.identity.tagline}
                             </span>
                         </span>
-                    </Link>
-                    <div className="flex flex-col gap-3 lg:items-end">
-                        <nav
-                            aria-label="Primary navigation"
-                            className="flex flex-wrap items-center gap-x-5 gap-y-3 pb-1 lg:flex-nowrap lg:justify-end"
-                        >
-                            {primaryNavItems.map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className="shrink-0 font-mono text-[0.68rem] font-semibold uppercase text-potomac-cream/75 transition hover:text-potomac-gold"
-                                >
-                                    {item.label}
-                                </Link>
-                            ))}
-                            <Suspense
-                                fallback={
-                                    <SearchCommandPalette
-                                        entries={publicCommandEntries}
-                                    />
-                                }
-                            >
+                        </Link>
+                        <div className="flex items-center justify-end gap-2">
+                            <Suspense fallback={<SearchCommandPalette entries={publicCommandEntries} />}>
                                 <MemberAwareSearchPalette />
                             </Suspense>
                             <Link
                                 href="/request-access?tab=signin"
-                                className="shrink-0 border border-potomac-regolith/45 px-4 py-2 font-mono text-[0.68rem] font-bold uppercase text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold"
+                                className="hidden shrink-0 border border-potomac-regolith/45 px-3 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold sm:inline-flex"
                             >
                                 Sign in
                             </Link>
                             <Link
                                 href="/request-access"
-                                className="shrink-0 bg-potomac-gold px-4 py-2 font-mono text-[0.68rem] font-bold uppercase text-potomac-primary transition hover:bg-potomac-cream"
+                                className="hidden shrink-0 bg-potomac-gold px-3 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-primary transition hover:bg-potomac-cream md:inline-flex"
                             >
-                                Join Explorer
+                                Join
                             </Link>
-                        </nav>
+                        </div>
                     </div>
+                    <nav
+                        aria-label="Primary navigation"
+                        className="hidden items-center justify-center gap-7 border-t border-potomac-regolith/15 py-3 lg:flex"
+                    >
+                            {primaryNavItems.map((item) => (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    className="shrink-0 font-mono text-[0.66rem] font-semibold uppercase text-potomac-cream/75 transition hover:text-potomac-gold"
+                                >
+                                    {item.label}
+                                </Link>
+                            ))}
+                    </nav>
+                    <details className="border-t border-potomac-regolith/15 lg:hidden">
+                        <summary className="cursor-pointer py-3 font-mono text-[0.66rem] font-bold uppercase text-potomac-gold">
+                            Sections
+                        </summary>
+                        <nav aria-label="Mobile navigation" className="grid grid-cols-2 gap-px border-t border-potomac-regolith/15 bg-potomac-regolith/15 pb-px">
+                            {primaryNavItems.map((item) => (
+                                <Link key={item.href} href={item.href} className="bg-potomac-primary px-3 py-3 font-mono text-[0.66rem] font-semibold uppercase text-potomac-cream/75">
+                                    {item.label}
+                                </Link>
+                            ))}
+                        </nav>
+                    </details>
                 </div>
             </header>
             <main>{children}</main>

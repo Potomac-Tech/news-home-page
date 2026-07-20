@@ -219,22 +219,26 @@ function StoryMeta({ story }: { story: HomeStory }) {
 
 function StoryCard({ story }: { story: HomeStory }) {
     return (
-        <article className="border border-potomac-regolith/20 bg-potomac-primary/72 p-5">
+        <article className="flex min-w-0 flex-col border-l border-potomac-regolith/25 px-5 first:border-l-0 first:pl-0">
             <StoryMeta story={story} />
-            <h3 className="mt-4 font-serif text-2xl uppercase leading-snug text-white">
+            <h3 className="mt-3 font-serif text-2xl uppercase leading-snug text-white">
                 {story.title}
             </h3>
             <p className="mt-3 text-sm leading-6 text-potomac-cream/72">
                 {story.summary}
             </p>
-            <p className="mt-4 border-l border-potomac-gold/45 pl-4 text-sm leading-6 text-potomac-cream/56">
-                {story.snippet}
-            </p>
+            {story.imageUrl ? (
+                <img
+                    src={story.imageUrl}
+                    alt={story.imageAlt ?? ""}
+                    className="mt-5 h-44 w-full bg-potomac-primary object-cover"
+                />
+            ) : null}
             <Link
                 href={story.href}
-                className="mt-6 inline-flex border border-potomac-gold/45 px-4 py-2 font-mono text-[0.68rem] font-bold uppercase text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+                className="mt-5 inline-flex self-start font-mono text-[0.68rem] font-bold uppercase text-potomac-gold hover:text-potomac-cream"
             >
-                Read brief
+                Read brief →
             </Link>
         </article>
     );
@@ -278,10 +282,10 @@ export default async function HomePage() {
             id: "homepage-static-fallback",
             articleId: null,
             slideType: "anonymous_teaser",
-            title: potomacBrand.identity.name,
+            title: featuredStory.title,
             summary: featuredStory.summary || siteConfig.description,
-            visualAssetUrl: potomacBrand.assets.cabeusHero,
-            visualAssetAlt: "Lunar industrial base under a crescent moon",
+            visualAssetUrl: featuredStory.imageUrl ?? potomacBrand.assets.cabeusHero,
+            visualAssetAlt: featuredStory.imageAlt ?? "Lunar industrial base under a crescent moon",
             ctaLabel: "Read the brief",
             ctaRoute: featuredStory.href,
             minimumTier: "public",
@@ -292,6 +296,29 @@ export default async function HomePage() {
             freshnessAt: featuredStory.publishedAt,
             expiresAt: new Date(Date.now() + 14 * 86_400_000).toISOString(),
         }];
+    } else {
+        const editorialLead: HomepageCarouselSlide = {
+            id: "homepage-editorial-lead",
+            articleId: null,
+            slideType: "morning_read",
+            title: featuredStory.title,
+            summary: featuredStory.summary || siteConfig.description,
+            visualAssetUrl: featuredStory.imageUrl ?? potomacBrand.assets.cabeusHero,
+            visualAssetAlt: featuredStory.imageAlt ?? "Lunar industrial base under a crescent moon",
+            ctaLabel: "Read the brief",
+            ctaRoute: featuredStory.href,
+            minimumTier: "public",
+            isRequired: true,
+            isPinned: true,
+            displayRank: 0,
+            sourceNote: "Current homepage editorial lead.",
+            freshnessAt: featuredStory.publishedAt,
+            expiresAt: new Date(Date.now() + 14 * 86_400_000).toISOString(),
+        };
+        carouselSlides = [
+            editorialLead,
+            ...carouselSlides.filter((slide) => slide.ctaRoute !== editorialLead.ctaRoute),
+        ].slice(0, 5);
     }
     const homepageSponsorUnits = [
         sponsorUnits.get(sponsorPlacementKeys.homepageLeadRail)!,
@@ -332,157 +359,109 @@ export default async function HomePage() {
                     __html: jsonLdScript(headlineItemListJsonLd),
                 }}
             />
-            <HomepageCarousel slides={carouselSlides} />
             <LunarTimeClock initialUtcIso={new Date().toISOString()} />
 
-            <section aria-label="Lunar economy activity" className="border-b border-potomac-regolith/20 bg-potomac-primary/90">
-                <div className="mx-auto w-full max-w-[92rem] px-4 py-4 md:px-8">
-                    <div className="flex flex-wrap items-center justify-between gap-4 border border-potomac-regolith/20 bg-potomac-secondary/45 p-4">
+            <section className="border-b border-potomac-regolith/20 bg-potomac-cream text-potomac-primary">
+                <div className="mx-auto grid w-full max-w-[92rem] lg:grid-cols-[17rem_minmax(0,1fr)_19rem]">
+                    <aside className="order-2 border-potomac-primary/15 px-5 py-8 lg:order-1 lg:border-r lg:py-10">
+                        <div className="flex items-center justify-between border-b border-potomac-primary/20 pb-4">
+                            <h2 className="font-serif text-2xl uppercase">Recent stories</h2>
+                            <Link href="/news" className="font-mono text-[0.62rem] font-bold uppercase text-potomac-oxide">All</Link>
+                        </div>
                         <div>
-                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-regolith">Reviewed launches tracked</p>
-                            <p className="mt-2 font-serif text-2xl uppercase text-white md:text-3xl">{launchSummary.reviewedCount}</p>
-                            <p className="mt-1 font-mono text-[0.64rem] uppercase text-emerald-200/70">{launchSummary.lunarCount} lunar / cislunar</p>
-                            <p className="mt-1 font-mono text-[0.58rem] uppercase text-potomac-regolith">Freshness: {launchSummary.freshnessAt ? new Date(launchSummary.freshnessAt).toLocaleString() : "No reviewed launch records in the current window"}</p>
+                            {latestStories.slice(0, 4).map((story) => (
+                                <article key={`recent-${story.title}`} className="border-b border-potomac-primary/15 py-5">
+                                    <p className="font-mono text-[0.6rem] font-bold uppercase text-potomac-oxide">{story.sourceLabel}</p>
+                                    <Link href={story.href} className="mt-2 block font-serif text-lg uppercase leading-5 hover:text-potomac-oxide">{story.title}</Link>
+                                    <time dateTime={story.publishedAt} className="mt-3 block font-mono text-[0.6rem] uppercase text-potomac-primary/55">{formatDate(story.publishedAt)}</time>
+                                </article>
+                            ))}
                         </div>
-                        <div className="flex flex-wrap gap-3">
-                            <Link prefetch={false} href={launchHref} className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold hover:text-potomac-cream">{launchCta}</Link>
-                            <Link prefetch={false} href="/upgrade?tier=scout&source=homepage&content=launch-tools&next=%2Ftracker%2Flaunches" className="font-mono text-[0.62rem] font-bold uppercase text-potomac-cream/60 hover:text-potomac-gold">Values & exports</Link>
-                        </div>
+                    </aside>
+
+                    <div className="order-1 bg-potomac-primary lg:order-2">
+                        <HomepageCarousel slides={carouselSlides} />
+                    </div>
+
+                    <aside className="order-3 space-y-4 border-potomac-primary/15 px-5 py-8 lg:border-l lg:py-10">
+                        <section className="border border-potomac-primary/20 p-5">
+                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-oxide">Cabeus in your inbox</p>
+                            <h2 className="mt-3 font-serif text-2xl uppercase">The lunar brief</h2>
+                            <p className="mt-3 text-sm leading-5 text-potomac-primary/70">Headlines, program movement, and lunar market intelligence for approved members.</p>
+                            <Link href="/request-access" className="mt-5 inline-flex bg-potomac-gold px-4 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-primary">Join Explorer</Link>
+                        </section>
+                        <section className="border border-potomac-gold/55 bg-potomac-regolith/15 p-5">
+                            <p className="font-serif text-2xl uppercase">Cabeus Scout</p>
+                            <p className="mt-3 text-sm leading-5 text-potomac-primary/70">Research, proprietary datasets, alerts, exports, and advanced lunar dashboards.</p>
+                            <Link href="/pricing" className="mt-5 inline-flex font-mono text-[0.64rem] font-bold uppercase text-potomac-oxide">Get access →</Link>
+                        </section>
+                        <section className="border border-potomac-primary/20 p-5">
+                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-oxide">Next gathering</p>
+                            <h2 className="mt-3 font-serif text-xl uppercase">{eventTeasers[0]?.name}</h2>
+                            <p className="mt-2 font-mono text-[0.6rem] uppercase text-potomac-primary/55">{eventTeasers[0]?.date} · {eventTeasers[0]?.location}</p>
+                            <p className="mt-3 text-sm leading-5 text-potomac-primary/70">{eventTeasers[0]?.publicNote}</p>
+                            <Link href="/events" className="mt-4 inline-flex font-mono text-[0.64rem] font-bold uppercase text-potomac-oxide">Event calendar →</Link>
+                        </section>
+                    </aside>
+                </div>
+            </section>
+
+            <section aria-label="Lunar economy activity" className="border-b border-potomac-regolith/20 bg-potomac-primary">
+                <div className="mx-auto flex w-full max-w-[92rem] flex-col gap-4 px-4 py-4 md:px-8 lg:flex-row lg:items-center lg:justify-between">
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                        <span className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Mission pulse</span>
+                        <span className="font-serif text-xl uppercase text-white">{launchSummary.reviewedCount} reviewed</span>
+                        <span className="font-mono text-[0.62rem] uppercase text-emerald-200/70">{launchSummary.lunarCount} lunar / cislunar</span>
+                        <span className="font-mono text-[0.58rem] uppercase text-potomac-regolith">
+                            {launchSummary.freshnessAt
+                                ? `Updated ${new Date(launchSummary.freshnessAt).toLocaleString()}`
+                                : "No reviewed records in the current window"}
+                        </span>
+                        {tickerItems.map((item) => (
+                            <span key={item.symbol} className="font-mono text-[0.62rem] uppercase text-potomac-cream/65"><strong className="text-potomac-gold">{item.symbol}</strong> {item.value}</span>
+                        ))}
+                    </div>
+                    <div className="flex gap-4">
+                        <Link prefetch={false} href={launchHref} className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">{launchCta}</Link>
+                        <Link prefetch={false} href="/upgrade?tier=scout&source=homepage&content=launch-tools&next=%2Ftracker%2Flaunches" className="font-mono text-[0.62rem] font-bold uppercase text-potomac-cream/60">Values & exports</Link>
                     </div>
                 </div>
             </section>
 
-            <section className="border-b border-potomac-regolith/20 bg-potomac-primary/82">
+            <section className="border-b border-potomac-regolith/20 bg-potomac-secondary">
                 <div className="mx-auto w-full max-w-[92rem] px-4 py-10 md:px-8">
-                    <div>
-                        <SectionHeading
-                            eyebrow="Top stories"
-                            title="Industrial signals moving now"
-                            description="A concise public surface for the program, infrastructure, supply-chain, and capital movements that shape the lunar economy."
-                            action={{ href: "/news", label: "View all stories" }}
-                        />
-                        <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(18rem,0.92fr)]">
-                            <article className="border border-potomac-regolith/20 bg-potomac-secondary/72">
-                                <img
-                                    src={featuredStory.imageUrl ?? potomacBrand.assets.cabeusHero}
-                                    alt={featuredStory.imageAlt ?? "Lunar surface construction site"}
-                                    className={`h-72 w-full bg-potomac-primary ${
-                                        featuredStory.imageUrl
-                                            ? "object-contain"
-                                            : "object-cover object-[68%_55%]"
-                                    }`}
-                                />
-                                <div className="p-5">
-                                    <StoryMeta story={featuredStory} />
-                                    <h3 className="mt-4 font-serif text-3xl uppercase leading-tight text-white">
-                                        {featuredStory.title}
-                                    </h3>
-                                    <p className="mt-4 text-sm leading-6 text-potomac-cream/72">
-                                        {featuredStory.summary}
-                                    </p>
-                                    <Link
-                                        href={featuredStory.href}
-                                        className="mt-6 inline-flex bg-potomac-gold px-4 py-2 font-mono text-[0.68rem] font-bold uppercase text-potomac-primary transition hover:bg-potomac-cream"
-                                    >
-                                        Lead brief
-                                    </Link>
-                                </div>
-                            </article>
-
-                            <div className="grid gap-4">
-                                {tickerItems.length ? <div className="border border-potomac-regolith/20 bg-potomac-primary/72 p-4">
-                                    <p className="font-mono text-[0.65rem] font-bold uppercase text-potomac-gold">
-                                        Briefing ticker
-                                    </p>
-                                    <div className="mt-3 space-y-3">
-                                        {tickerItems.map((item) => (
-                                            <div
-                                                key={item.symbol}
-                                                className="grid grid-cols-[3.5rem_1fr_auto] items-center gap-3 border-t border-potomac-regolith/15 pt-3"
-                                            >
-                                                <span className="font-mono text-xs font-bold text-potomac-gold">
-                                                    {item.symbol}
-                                                </span>
-                                                <span className="text-sm text-potomac-cream/70">
-                                                    {item.label}
-                                                </span>
-                                                <span className="text-right font-mono text-xs font-bold text-white">
-                                                    {item.value}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div> : null}
-                            </div>
-                        </div>
+                    <div className="flex items-end justify-between border-b border-potomac-regolith/25 pb-4">
+                        <h2 className="font-serif text-3xl uppercase text-white">Top reads</h2>
+                        <Link href="/news" className="font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">Latest intelligence →</Link>
                     </div>
-
-                </div>
-            </section>
-
-            <section className="mx-auto grid w-full max-w-[92rem] gap-8 px-4 py-10 md:px-8 lg:grid-cols-[minmax(0,1fr)_24rem]">
-                <div>
-                    <SectionHeading
-                        eyebrow="Latest intelligence"
-                        title="Full briefs for approved members"
-                        description="Public snippets keep the market surface visible while members unlock full bodies, citations, source tables, and analyst notes."
-                    />
-                    <div className="mt-6 grid gap-5 md:grid-cols-2">
-                        {latestStories.map((story) => (
-                            <StoryCard key={`${story.title}-${story.publishedAt}`} story={story} />
+                    <div className="mt-6 grid gap-y-8 md:grid-cols-3">
+                        {latestStories.slice(0, 3).map((story) => (
+                            <StoryCard key={`top-${story.title}`} story={story} />
                         ))}
                     </div>
                 </div>
-
-                <aside>
-                    <div className="flex items-center justify-between gap-4">
-                        <h2 className="font-serif text-2xl uppercase text-white">
-                            Event signals
-                        </h2>
-                        <Link
-                            href="/events"
-                            className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold hover:text-potomac-cream"
-                        >
-                            Calendar
-                        </Link>
-                    </div>
-                    <div className="mt-5 space-y-4">
-                        {eventTeasers.map((event) => (
-                            <article
-                                key={event.name}
-                                className="border border-potomac-regolith/20 bg-potomac-primary/64 p-5"
-                            >
-                                <div className="flex items-start justify-between gap-4">
-                                    <h3 className="font-serif text-xl uppercase leading-6 text-white">
-                                        {event.name}
-                                    </h3>
-                                    <span className="border border-potomac-gold/35 px-3 py-1 font-mono text-[0.65rem] font-bold uppercase text-potomac-gold">
-                                        {event.date}
-                                    </span>
-                                </div>
-                                <p className="mt-2 font-mono text-[0.65rem] uppercase text-potomac-cream/45">
-                                    {event.location}
-                                </p>
-                                <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                                    {event.publicNote}
-                                </p>
-                                <p className="mt-3 border-l border-white/15 pl-3 text-sm leading-6 text-potomac-cream/55">
-                                    {event.memberNote}
-                                </p>
-                            </article>
-                        ))}
-                    </div>
-                </aside>
             </section>
 
-            <section className="border-y border-potomac-regolith/20 bg-potomac-primary/78">
+            <section className="border-b border-potomac-regolith/20 bg-potomac-primary/78">
                 <div className="mx-auto w-full max-w-[92rem] px-4 py-10 md:px-8">
-                    <SectionHeading
-                        eyebrow="Markets and models"
-                        title="Commercial advantage with model discipline"
-                        description="The public surface shows which intelligence modules are active without exposing paid methodology, model assumptions, or member-only source detail."
-                    />
-                    <div className="mt-6">
+                    <div className="flex items-end justify-between border-b border-potomac-regolith/25 pb-4">
+                        <div>
+                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Lunar desk</p>
+                            <h2 className="mt-2 font-serif text-3xl uppercase text-white">To the Moon</h2>
+                        </div>
+                        <Link href="/events" className="font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">All events →</Link>
+                    </div>
+                    <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.72fr)]">
+                        <div className="grid gap-y-6 md:grid-cols-2">
+                            {eventTeasers.map((event) => (
+                                <article key={event.name} className="border-l border-potomac-regolith/25 px-5 first:border-l-0 first:pl-0">
+                                    <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">{event.date} · {event.location}</p>
+                                    <h3 className="mt-3 font-serif text-2xl uppercase text-white">{event.name}</h3>
+                                    <p className="mt-3 text-sm leading-6 text-potomac-cream/70">{event.publicNote}</p>
+                                    <p className="mt-3 text-sm leading-6 text-potomac-cream/50">{event.memberNote}</p>
+                                </article>
+                            ))}
+                        </div>
                         <EconomySummaryWidget summary={economySummary} />
                     </div>
                 </div>

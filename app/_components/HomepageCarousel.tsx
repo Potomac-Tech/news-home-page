@@ -54,7 +54,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                 if (event.key === "ArrowRight") { event.preventDefault(); move(1); }
                 if (event.key === " ") { event.preventDefault(); setPaused((value) => !value); }
             }}
-            className="relative min-h-[500px] overflow-hidden border-b border-potomac-regolith/20 bg-potomac-primary outline-none md:min-h-[580px]"
+            className="relative min-h-[500px] overflow-hidden bg-potomac-primary outline-none [min-height:760px]"
         >
             {slides.map((slide, index) => (
                 <article
@@ -62,7 +62,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                     aria-roledescription="slide"
                     aria-label={`${index + 1} of ${count}`}
                     aria-hidden={index !== activeIndex}
-                    className={`absolute inset-0 transition-opacity duration-500 motion-reduce:transition-none ${index === activeIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
+                    className={`absolute inset-0 grid grid-rows-[minmax(0,1fr)_13rem] transition-opacity duration-500 motion-reduce:transition-none md:grid-rows-[minmax(0,1fr)_18rem] ${index === activeIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
                 >
                     <img
                         src={slide.visualAssetUrl}
@@ -70,20 +70,22 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                         loading={index === 0 ? "eager" : "lazy"}
                         fetchPriority={index === 0 ? "high" : "auto"}
                         sizes="100vw"
-                        className="absolute inset-0 h-full w-full object-cover object-[68%_44%]"
+                        className={`col-start-1 row-start-2 h-full w-full bg-potomac-primary ${
+                            slide.visualAssetUrl.includes("space-investment-forum")
+                                ? "object-contain"
+                                : "object-cover"
+                        }`}
                     />
-                    <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(13,17,20,0.98)_0%,rgba(13,17,20,0.9)_38%,rgba(13,17,20,0.35)_75%,rgba(13,17,20,0.16)_100%)]" />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,17,20,0.18)_0%,rgba(13,17,20,0.3)_60%,rgba(13,17,20,0.92)_100%)]" />
-                    <div className="relative mx-auto flex min-h-[500px] w-full max-w-[92rem] items-center px-4 pb-36 pt-8 md:min-h-[580px] md:px-8 md:pb-28 md:pt-10">
-                        <div className="max-w-3xl">
+                    <div className="col-start-1 row-start-1 min-h-[500px] px-5 pb-6 pt-8 lg:px-8 lg:pt-10">
+                        <div>
                             <p className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
                                 Cabeus Explorer / {slide.slideType.replaceAll("_", " ")}
                             </p>
-                            <h1 className="mt-5 max-w-[16ch] font-serif text-4xl uppercase leading-[1.02] text-white sm:text-5xl md:text-7xl">
+                            <h1 className="mt-5 max-w-[18ch] font-serif text-4xl uppercase leading-[1.04] text-white">
                                 {slide.title}
                             </h1>
                             <div className="industrial-divider mt-6 h-px w-40" />
-                            <p className="mt-5 max-w-2xl text-base leading-7 text-potomac-cream/80 md:text-lg md:leading-8">
+                            <p className="mt-5 max-w-2xl text-base leading-7 text-potomac-cream/80">
                                 {slide.summary}
                             </p>
                             <Link
@@ -98,7 +100,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                 </article>
             ))}
 
-            <div className="absolute bottom-4 left-0 right-0 z-20 mx-auto flex w-full max-w-[92rem] flex-col items-start justify-between gap-2 px-4 sm:bottom-5 sm:flex-row sm:items-center sm:gap-4 md:px-8">
+            <div className="absolute bottom-4 left-0 right-0 z-20 flex items-center justify-between gap-3 px-5 lg:px-8">
                 <div className="flex items-center gap-2" role="tablist" aria-label="Choose story">
                     {slides.map((slide, index) => (
                         <button

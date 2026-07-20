@@ -48,9 +48,6 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <head>
-                <style>{`.site-header-inner{min-height:13.25rem}@media(min-width:1024px){.site-header-inner{height:5.875rem}}`}</style>
-            </head>
             <body className={`${sourceSans.variable} ${oswald.variable} ${ibmPlexMono.variable}`}>
                 <ConsentTelemetry />
                 <MigrationShell>{children}</MigrationShell>
