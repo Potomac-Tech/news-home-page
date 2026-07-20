@@ -361,19 +361,19 @@ export default async function HomePage() {
             />
             <LunarTimeClock initialUtcIso={new Date().toISOString()} />
 
-            <section className="border-b border-potomac-regolith/20 bg-potomac-cream text-potomac-primary">
+            <section className="border-b border-potomac-regolith/20 bg-potomac-secondary text-potomac-cream">
                 <div className="mx-auto grid w-full max-w-[92rem] lg:grid-cols-[17rem_minmax(0,1fr)_19rem]">
-                    <aside className="order-2 border-potomac-primary/15 px-5 py-8 lg:order-1 lg:border-r lg:py-10">
-                        <div className="flex items-center justify-between border-b border-potomac-primary/20 pb-4">
-                            <h2 className="font-serif text-2xl uppercase">Recent stories</h2>
-                            <Link href="/news" className="font-mono text-[0.62rem] font-bold uppercase text-potomac-oxide">All</Link>
+                    <aside className="order-2 border-potomac-regolith/20 px-5 py-8 lg:order-1 lg:border-r lg:py-10">
+                        <div className="flex items-center justify-between border-b border-potomac-regolith/25 pb-4">
+                            <h2 className="font-serif text-2xl uppercase text-white">Recent stories</h2>
+                            <Link href="/news" className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">All</Link>
                         </div>
                         <div>
                             {latestStories.slice(0, 4).map((story) => (
-                                <article key={`recent-${story.title}`} className="border-b border-potomac-primary/15 py-5">
-                                    <p className="font-mono text-[0.6rem] font-bold uppercase text-potomac-oxide">{story.sourceLabel}</p>
-                                    <Link href={story.href} className="mt-2 block font-serif text-lg uppercase leading-5 hover:text-potomac-oxide">{story.title}</Link>
-                                    <time dateTime={story.publishedAt} className="mt-3 block font-mono text-[0.6rem] uppercase text-potomac-primary/55">{formatDate(story.publishedAt)}</time>
+                                <article key={`recent-${story.title}`} className="border-b border-potomac-regolith/20 py-5">
+                                    <p className="font-mono text-[0.6rem] font-bold uppercase text-potomac-gold">{story.sourceLabel}</p>
+                                    <Link href={story.href} className="mt-2 block font-serif text-lg uppercase leading-5 text-potomac-cream hover:text-potomac-gold">{story.title}</Link>
+                                    <time dateTime={story.publishedAt} className="mt-3 block font-mono text-[0.6rem] uppercase text-potomac-regolith">{formatDate(story.publishedAt)}</time>
                                 </article>
                             ))}
                         </div>
@@ -383,24 +383,24 @@ export default async function HomePage() {
                         <HomepageCarousel slides={carouselSlides} />
                     </div>
 
-                    <aside className="order-3 space-y-4 border-potomac-primary/15 px-5 py-8 lg:border-l lg:py-10">
-                        <section className="border border-potomac-primary/20 p-5">
-                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-oxide">Cabeus in your inbox</p>
-                            <h2 className="mt-3 font-serif text-2xl uppercase">The lunar brief</h2>
-                            <p className="mt-3 text-sm leading-5 text-potomac-primary/70">Headlines, program movement, and lunar market intelligence for approved members.</p>
+                    <aside className="order-3 space-y-4 border-potomac-regolith/20 px-5 py-8 lg:border-l lg:py-10">
+                        <section className="border border-potomac-regolith/25 bg-potomac-primary/55 p-5">
+                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Cabeus in your inbox</p>
+                            <h2 className="mt-3 font-serif text-2xl uppercase text-white">The lunar brief</h2>
+                            <p className="mt-3 text-sm leading-5 text-potomac-cream/70">Headlines, program movement, and lunar market intelligence for approved members.</p>
                             <Link href="/request-access" className="mt-5 inline-flex bg-potomac-gold px-4 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-primary">Join Explorer</Link>
                         </section>
-                        <section className="border border-potomac-gold/55 bg-potomac-regolith/15 p-5">
-                            <p className="font-serif text-2xl uppercase">Cabeus Scout</p>
-                            <p className="mt-3 text-sm leading-5 text-potomac-primary/70">Research, proprietary datasets, alerts, exports, and advanced lunar dashboards.</p>
-                            <Link href="/pricing" className="mt-5 inline-flex font-mono text-[0.64rem] font-bold uppercase text-potomac-oxide">Get access →</Link>
+                        <section className="border border-potomac-gold/55 bg-potomac-primary/70 p-5">
+                            <p className="font-serif text-2xl uppercase text-white">Cabeus Scout</p>
+                            <p className="mt-3 text-sm leading-5 text-potomac-cream/70">Research, proprietary datasets, alerts, exports, and advanced lunar dashboards.</p>
+                            <Link href="/pricing" className="mt-5 inline-flex font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">Get access →</Link>
                         </section>
-                        <section className="border border-potomac-primary/20 p-5">
-                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-oxide">Next gathering</p>
-                            <h2 className="mt-3 font-serif text-xl uppercase">{eventTeasers[0]?.name}</h2>
-                            <p className="mt-2 font-mono text-[0.6rem] uppercase text-potomac-primary/55">{eventTeasers[0]?.date} · {eventTeasers[0]?.location}</p>
-                            <p className="mt-3 text-sm leading-5 text-potomac-primary/70">{eventTeasers[0]?.publicNote}</p>
-                            <Link href="/events" className="mt-4 inline-flex font-mono text-[0.64rem] font-bold uppercase text-potomac-oxide">Event calendar →</Link>
+                        <section className="border border-potomac-regolith/25 bg-potomac-primary/55 p-5">
+                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Next gathering</p>
+                            <h2 className="mt-3 font-serif text-xl uppercase text-white">{eventTeasers[0]?.name}</h2>
+                            <p className="mt-2 font-mono text-[0.6rem] uppercase text-potomac-regolith">{eventTeasers[0]?.date} · {eventTeasers[0]?.location}</p>
+                            <p className="mt-3 text-sm leading-5 text-potomac-cream/70">{eventTeasers[0]?.publicNote}</p>
+                            <Link href="/events" className="mt-4 inline-flex font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">Event calendar →</Link>
                         </section>
                     </aside>
                 </div>
