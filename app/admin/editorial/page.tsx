@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { requireEditorialStaff } from "../../../lib/auth/editorial";
 import {
     createArticleDraft,
@@ -128,6 +129,12 @@ export default async function AdminEditorialPage() {
                         Create drafts, preview public and gated story content,
                         update article metadata, and publish when ready.
                     </p>
+                    <Link
+                        href="/studio"
+                        className="mt-6 inline-flex bg-potomac-gold px-5 py-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-primary"
+                    >
+                        Open newsroom studio
+                    </Link>
                 </div>
 
                 <form action={createArticleDraft} className="glass-card mt-12 rounded p-6">

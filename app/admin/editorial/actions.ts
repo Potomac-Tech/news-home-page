@@ -2,6 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { requireEditorialStaff } from "../../../lib/auth/editorial";
+import {
+    sourceDocumentFrom,
+    storeSourceDocument,
+} from "../../../lib/editorial/source-documents";
 
 type EditorialSupabaseClient = Awaited<
     ReturnType<typeof requireEditorialStaff>
@@ -45,6 +49,12 @@ function getAccessTier(formData: FormData) {
     }
 
     return value;
+}
+
+function editorialNextPath(formData: FormData) {
+    return formData.get("studio_context") === "studio"
+        ? "/studio"
+        : "/admin/editorial";
 }
 
 async function createVersion(
@@ -97,8 +107,11 @@ async function createVersion(
 }
 
 export async function createArticleDraft(formData: FormData) {
-    const { supabase, userId } = await requireEditorialStaff();
+    const { supabase, userId } = await requireEditorialStaff(
+        editorialNextPath(formData)
+    );
     const bodyMarkdown = getRequiredString(formData, "body_markdown");
+    const sourceDocument = sourceDocumentFrom(formData);
 
     const { data: article, error: articleError } = await supabase
         .from("editorial_articles")
@@ -141,6 +154,15 @@ export async function createArticleDraft(formData: FormData) {
         throw new Error(bodyError.message);
     }
 
+    if (sourceDocument) {
+        await storeSourceDocument({
+            supabase,
+            userId,
+            articleId: article.id,
+            file: sourceDocument,
+        });
+    }
+
     await createVersion(
         supabase,
         article as ArticleSnapshot,
@@ -150,12 +172,17 @@ export async function createArticleDraft(formData: FormData) {
     );
 
     revalidatePath("/admin/editorial");
+    revalidatePath("/studio");
+    return article.id;
 }
 
 export async function updateArticleDraft(formData: FormData) {
-    const { supabase, userId } = await requireEditorialStaff();
+    const { supabase, userId } = await requireEditorialStaff(
+        editorialNextPath(formData)
+    );
     const articleId = getRequiredString(formData, "article_id");
     const bodyMarkdown = getRequiredString(formData, "body_markdown");
+    const sourceDocument = sourceDocumentFrom(formData);
 
     const { data: article, error: articleError } = await supabase
         .from("editorial_articles")
@@ -200,6 +227,15 @@ export async function updateArticleDraft(formData: FormData) {
         throw new Error(bodyError.message);
     }
 
+    if (sourceDocument) {
+        await storeSourceDocument({
+            supabase,
+            userId,
+            articleId: article.id,
+            file: sourceDocument,
+        });
+    }
+
     await createVersion(
         supabase,
         article as ArticleSnapshot,
@@ -209,10 +245,14 @@ export async function updateArticleDraft(formData: FormData) {
     );
 
     revalidatePath("/admin/editorial");
+    revalidatePath("/studio");
+    return article.id;
 }
 
 export async function publishArticle(formData: FormData) {
-    const { supabase, userId } = await requireEditorialStaff();
+    const { supabase, userId } = await requireEditorialStaff(
+        editorialNextPath(formData)
+    );
     const articleId = getRequiredString(formData, "article_id");
 
     const { data: body, error: bodyError } = await supabase
@@ -252,5 +292,7 @@ export async function publishArticle(formData: FormData) {
     );
 
     revalidatePath("/admin/editorial");
+    revalidatePath("/studio");
     revalidatePath("/news");
+    return article.id;
 }
