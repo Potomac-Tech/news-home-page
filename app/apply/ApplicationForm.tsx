@@ -45,7 +45,7 @@ export function ApplicationForm({
 
         try {
             const supabase = createClient();
-            const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+            const { error: signUpError } = await supabase.auth.signUp({
                 email,
                 password,
                 options: {
@@ -56,25 +56,19 @@ export function ApplicationForm({
 
             if (signUpError) throw signUpError;
 
-            const { error: applicationError } = await supabase
-                .from("membership_applications")
-                .insert({
-                    // With email confirmation enabled Supabase returns a user but
-                    // no authenticated session yet, so RLS requires this to stay
-                    // null until the verified profile flow links the application.
-                    user_id: signUpData.session ? signUpData.user?.id ?? null : null,
-                    email,
-                    full_name: fullName,
-                    company: String(formData.get("company") ?? "").trim() || null,
-                    title: String(formData.get("title") ?? "").trim() || null,
-                    intended_use:
+            const { error: applicationError } = await supabase.rpc(
+                "submit_membership_application",
+                {
+                    p_email: email,
+                    p_full_name: fullName,
+                    p_company: String(formData.get("company") ?? "").trim() || null,
+                    p_title: String(formData.get("title") ?? "").trim() || null,
+                    p_intended_use:
                         String(formData.get("intended_use") ?? "").trim() || null,
-                    status: "pending",
-                });
+                }
+            );
 
-            if (applicationError && applicationError.code !== "23505") {
-                throw applicationError;
-            }
+            if (applicationError) throw applicationError;
 
             form.reset();
             setState("submitted");

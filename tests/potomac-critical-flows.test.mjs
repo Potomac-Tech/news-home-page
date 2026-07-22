@@ -446,6 +446,9 @@ test("request access keeps Explorer signup, recovery, and return context in one 
     const loginForm = read("app/auth/login/LoginForm.tsx");
     const legacyApply = read("app/apply/page.tsx");
     const legacyLogin = read("app/auth/login/page.tsx");
+    const applicationMigration = readMigration(
+        "20260722110153_idempotent_membership_application_submission.sql"
+    );
 
     assertIncludes(
         requestAccessPage + requestAccessClient + applicationForm + loginForm,
@@ -455,8 +458,7 @@ test("request access keeps Explorer signup, recovery, and return context in one 
             "Free membership selected",
             "Explorer",
             "signUp",
-            "membership_applications",
-            "signUpData.session",
+            "submit_membership_application",
             "emailRedirectTo",
             "resetPasswordForEmail",
             "updateUser",
@@ -469,6 +471,18 @@ test("request access keeps Explorer signup, recovery, and return context in one 
         legacyApply + legacyLogin,
         ["redirect(\"/request-access\")", "tab: \"signin\""],
         "legacy access routes"
+    );
+    assertIncludes(applicationMigration, [
+        "security invoker",
+        "insert into public.membership_applications",
+        "on conflict do nothing",
+        "grant execute",
+        "to anon, authenticated",
+    ], "idempotent membership application submission");
+    assert.doesNotMatch(
+        applicationForm,
+        /applicationError\.code\s*!==\s*["']23505["']/,
+        "signup must not hide a failed duplicate request in the browser"
     );
 });
 
