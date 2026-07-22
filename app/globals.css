@@ -38,3 +38,8 @@ body {
         radial-gradient(circle at 85% 0%, rgba(185, 169, 139, 0.11), transparent 28rem),
         linear-gradient(180deg, #0d1114 0%, #161b20 48%, #0d1114 100%);
 }
+
+.stock-ticker-scroll {
+    scrollbar-color: rgba(243, 167, 18, 0.55) rgba(13, 17, 20, 0.75);
+    scrollbar-width: thin;
+}

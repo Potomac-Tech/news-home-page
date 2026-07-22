@@ -10,6 +10,7 @@ import { SponsorUnit } from "./_components/SponsorUnit";
 import { EconomySummaryWidget } from "./_components/EconomySummaryWidget";
 import { HomepageCarousel } from "./_components/HomepageCarousel";
 import { LunarTimeClock } from "./_components/LunarTimeClock";
+import { StockTicker } from "./_components/StockTicker";
 import {
     loadSponsorUnits,
     sponsorPlacementKeys,
@@ -251,7 +252,7 @@ export default async function HomePage() {
             sponsorPlacementKeys.homepageLeadRail,
             sponsorPlacementKeys.marketModuleBand,
         ]),
-        loadPublicTickerItems(4),
+        loadPublicTickerItems(10),
         loadPublicEconomySummary(),
     ]);
     const featuredStory = stories[0] ?? fallbackStories[0];
@@ -360,6 +361,7 @@ export default async function HomePage() {
                 }}
             />
             <LunarTimeClock initialUtcIso={new Date().toISOString()} />
+            <StockTicker items={tickerItems} />
 
             <section className="border-b border-potomac-regolith/20 bg-potomac-secondary text-potomac-cream">
                 <div className="mx-auto grid w-full max-w-[92rem] lg:grid-cols-[17rem_minmax(0,1fr)_19rem]">
@@ -417,9 +419,6 @@ export default async function HomePage() {
                                 ? `Updated ${new Date(launchSummary.freshnessAt).toLocaleString()}`
                                 : "No reviewed records in the current window"}
                         </span>
-                        {tickerItems.map((item) => (
-                            <span key={item.symbol} className="font-mono text-[0.62rem] uppercase text-potomac-cream/65"><strong className="text-potomac-gold">{item.symbol}</strong> {item.value}</span>
-                        ))}
                     </div>
                     <div className="flex gap-4">
                         <Link prefetch={false} href={launchHref} className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">{launchCta}</Link>
