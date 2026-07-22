@@ -75,8 +75,8 @@ export const fallbackArticles: ArticleRecord[] = [
             "The member brief examines where the awarded dollars flow, which follow-on procurements may emerge, and why repeat measurements could create more valuable lunar operating datasets.",
         publishedAt: "2026-06-30",
         accessTier: "member",
-        heroImageUrl: "/cabeus-lunar-industrial-hero.png",
-        heroImageAlt: "Industrial lunar surface operations concept",
+        heroImageUrl: "/commercial-lunar-delivery-pipeline.webp",
+        heroImageAlt: "Commercial lunar lander deploying scientific instruments and cargo on the Moon",
         citations: [
             {
                 label: "Primary source",
@@ -107,8 +107,8 @@ export const fallbackArticles: ArticleRecord[] = [
             "The member analysis separates the near-Earth demonstration from future cislunar service claims and identifies the commercial opportunities created by higher mission-data volumes.",
         publishedAt: "2026-07-16",
         accessTier: "member",
-        heroImageUrl: "/Nexus Screenshot.png",
-        heroImageAlt: "Lunar intelligence and communications dashboard",
+        heroImageUrl: "/artemis-starlink-optical-relay.webp",
+        heroImageAlt: "Crewed spacecraft relaying data through optical communications satellites above Earth",
         citations: [
             {
                 label: "Primary source",
@@ -139,8 +139,8 @@ export const fallbackArticles: ArticleRecord[] = [
             "The member brief maps the milestone to downstream demand and identifies the schedule, integration, and supplier signals that matter most for lunar companies and investors.",
         publishedAt: "2026-07-13",
         accessTier: "member",
-        heroImageUrl: "/cabeus-lunar-industrial-hero.png",
-        heroImageAlt: "Industrial lunar mission and supply-chain concept",
+        heroImageUrl: "/artemis-iii-booster-stacking.webp",
+        heroImageAlt: "Solid rocket booster segments being stacked inside a high-bay integration facility",
         citations: [
             {
                 label: "Primary source",

@@ -860,6 +860,30 @@ test("Pathfinder and Source CTA assets require review before private storage del
     ], "reviewed CTA repository fallbacks");
 });
 
+test("editorial headlines use story-specific imagery instead of product screenshots", () => {
+    const homepage = read("app/_data/homepage.ts");
+    const articles = read("app/news/_data/articles.ts");
+    const homepageLoader = read("app/page.tsx");
+    const migration = readMigration("20260722171806_replace_editorial_story_images.sql");
+    const surfaces = homepage + articles + migration;
+
+    assertIncludes(surfaces, [
+        "/artemis-starlink-optical-relay.webp",
+        "/artemis-iii-booster-stacking.webp",
+        "/commercial-lunar-delivery-pipeline.webp",
+    ], "story-specific editorial images");
+    assert.doesNotMatch(
+        homepage + articles,
+        /Nexus Screenshot\.png|Source Rendering\.png/,
+        "news stories must not use product or dashboard screenshots"
+    );
+    assertIncludes(homepageLoader, [
+        "hero_image_url",
+        "hero_image_alt",
+        "imageUrl: article.hero_image_url",
+    ], "homepage CMS image loading");
+});
+
 test("strategic product inquiries persist and audit before quota-aware Resend delivery", () => {
     const migration = readMigration("20260711080954_strategic_product_inquiries.sql");
     const action = read("app/strategic-inquiry-actions.ts");

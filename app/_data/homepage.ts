@@ -51,8 +51,8 @@ export const fallbackStories: HomeStory[] = [
         publishedAt: "2026-07-16",
         accessTier: "Explorer",
         sourceLabel: "NASA | Strategic analysis",
-        imageUrl: "/Nexus Screenshot.png",
-        imageAlt: "Lunar intelligence communications dashboard",
+        imageUrl: "/artemis-starlink-optical-relay.webp",
+        imageAlt: "Crewed spacecraft relaying data through optical communications satellites above Earth",
     },
     {
         title: "Artemis III hardware stacking raises the visibility of execution risk",
@@ -64,8 +64,8 @@ export const fallbackStories: HomeStory[] = [
         publishedAt: "2026-07-13",
         accessTier: "Explorer",
         sourceLabel: "NASA | Program watch",
-        imageUrl: "/cabeus-lunar-industrial-hero.png",
-        imageAlt: "Lunar industrial base and mission infrastructure",
+        imageUrl: "/artemis-iii-booster-stacking.webp",
+        imageAlt: "Solid rocket booster segments being stacked inside a high-bay integration facility",
     },
     {
         title: "Nearly $600 million expands the commercial lunar delivery pipeline",
@@ -77,8 +77,8 @@ export const fallbackStories: HomeStory[] = [
         publishedAt: "2026-06-30",
         accessTier: "Explorer",
         sourceLabel: "NASA | Market analysis",
-        imageUrl: "/Source Rendering.png",
-        imageAlt: "Cabeus Explorer lunar surface data system",
+        imageUrl: "/commercial-lunar-delivery-pipeline.webp",
+        imageAlt: "Commercial lunar lander deploying scientific instruments and cargo on the Moon",
     },
 ];
 

@@ -57,6 +57,8 @@ type EditorialArticleRow = {
     public_summary: string | null;
     public_teaser_markdown: string | null;
     access_tier_required: string | null;
+    hero_image_url: string | null;
+    hero_image_alt: string | null;
     published_at: string | null;
 };
 
@@ -136,7 +138,7 @@ async function getHomepageStories(): Promise<HomeStory[]> {
         const { data, error } = await supabase
             .from("editorial_articles")
             .select(
-                "slug,title,dek,public_summary,public_teaser_markdown,access_tier_required,published_at"
+                "slug,title,dek,public_summary,public_teaser_markdown,access_tier_required,hero_image_url,hero_image_alt,published_at"
             )
             .eq("status", "published")
             .lte("published_at", new Date().toISOString())
@@ -165,6 +167,8 @@ async function getHomepageStories(): Promise<HomeStory[]> {
                 publishedAt: article.published_at ?? new Date().toISOString(),
                 accessTier: normalizeAccessTier(article.access_tier_required),
                 sourceLabel: "Editorial desk",
+                imageUrl: article.hero_image_url ?? undefined,
+                imageAlt: article.hero_image_alt ?? undefined,
             };
         });
     } catch {
