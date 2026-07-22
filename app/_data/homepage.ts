@@ -42,6 +42,19 @@ export const fallbackStories: HomeStory[] = [
         imageAlt: "Invitation for the July 21, 2026 Space Investment Forum",
     },
     {
+        title: "The lunar workforce is expanding beyond astronauts and engineers",
+        summary:
+            "Building a sustained lunar economy will require operators, skilled trades, logistics planners, financiers, lawyers, insurers, and cybersecurity specialists.",
+        snippet:
+            "Strategic impact: workforce availability is becoming an infrastructure constraint, and organizations that build cross-disciplinary lunar operating expertise early may gain an execution advantage.",
+        href: "/news/space-collar-workforce-lunar-economy",
+        publishedAt: "2026-07-14",
+        accessTier: "Explorer",
+        sourceLabel: "SpaceGo | Workforce analysis",
+        imageUrl: "/space-collar-lunar-workforce.png",
+        imageAlt: "Lunar surface operations team supporting power, logistics, and mission systems",
+    },
+    {
         title: "Starlink optical terminals move into the Artemis communications stack",
         summary:
             "NASA will add two Starlink mini laser terminals to Orion for high-volume imagery during Artemis III.",
@@ -79,6 +92,45 @@ export const fallbackStories: HomeStory[] = [
         sourceLabel: "NASA | Market analysis",
         imageUrl: "/commercial-lunar-delivery-pipeline.webp",
         imageAlt: "Commercial lunar lander deploying scientific instruments and cargo on the Moon",
+    },
+    {
+        title: "CLPS 2.0 points toward a higher-cadence lunar logistics market",
+        summary:
+            "NASA's draft follow-on procurement would expand competition, delivery capacity, and standardized services for sustained lunar operations.",
+        snippet:
+            "Market impact: a larger contract vehicle could reward providers that can increase production, standardize payload interfaces, and prove repeatable delivery performance.",
+        href: "/news/clps-2-lunar-logistics-market",
+        publishedAt: "2026-06-15",
+        accessTier: "Explorer",
+        sourceLabel: "SpaceGo | Procurement watch",
+        imageUrl: "/commercial-lunar-delivery-pipeline.webp",
+        imageAlt: "Commercial lunar lander delivering instruments and cargo to the Moon",
+    },
+    {
+        title: "Crewed lunar rover awards open the surface mobility market",
+        summary:
+            "NASA selected Astrolab and Lunar Outpost for competing crew-capable rover efforts intended to extend astronaut range at the lunar south pole.",
+        snippet:
+            "Market impact: surface mobility creates follow-on demand for power, maintenance, communications, navigation, payload integration, and logistics services.",
+        href: "/news/crewed-lunar-rover-surface-mobility-market",
+        publishedAt: "2026-06-14",
+        accessTier: "Explorer",
+        sourceLabel: "SpaceGo | Market analysis",
+        imageUrl: "/crewed-lunar-rover-market.png",
+        imageAlt: "Two crew-capable lunar rover concepts operating near the lunar south pole",
+    },
+    {
+        title: "Artemis III crew selection sharpens the integration schedule",
+        summary:
+            "NASA named the four-person crew for an orbital test intended to reduce risk across Orion, docking, communications, and commercial lander interfaces.",
+        snippet:
+            "Program impact: assigning a crew raises the visibility of interface readiness and turns supplier milestones into a more concrete mission sequence.",
+        href: "/news/artemis-iii-crew-integration-schedule",
+        publishedAt: "2026-06-09",
+        accessTier: "Explorer",
+        sourceLabel: "SpaceGo | Program watch",
+        imageUrl: "/artemis-iii-crew-integration.png",
+        imageAlt: "Four astronauts reviewing an integrated spacecraft test plan",
     },
 ];
 

@@ -59,6 +59,134 @@ export const fallbackArticles: ArticleRecord[] = [
             "The Space Investment Forum is scheduled for Tuesday, July 21, 2026, at the Cosmos Club, 2121 Massachusetts Avenue NW in Washington, D.C. The invitation-only main forum will run from 9:45 a.m. to noon for approximately 50 curated guests. Business attire is requested.\n\nThe featured conversation, American Strength in Space: Capital, Industry, and Strategic Competition, will include Jim Bridenstine, former NASA administrator and CEO of Quantum Space, and retired Brig. Gen. Damon Feltman, CEO of the Space Force Association.\n\nDiscussion topics include Artemis and the next era of human exploration; integrated space defense; lunar and cislunar infrastructure; space-sector workforce development; capital allocation and investment trends; and the role of data and intelligence in decision-making. These subjects increasingly intersect: mission demand depends on appropriations and private capital, while infrastructure investment depends on credible schedules, customers, operating data, and national priorities.\n\nThe forum is presented in partnership with Meet the Future, the Space Force Association, Quantum Space, Potomac Database Systems, and PSW Science. Questions about the invitation may be directed to the contact listed on the official event invitation.",
     },
     {
+        slug: "space-collar-workforce-lunar-economy",
+        title: "The lunar workforce is expanding beyond astronauts and engineers",
+        dek: "A sustained lunar presence will depend on a broader class of space-focused operators, tradespeople, analysts, financiers, insurers, lawyers, and logistics specialists.",
+        summary:
+            "The emerging lunar economy needs more than launch and spacecraft talent. It also needs the commercial, operational, legal, and industrial workforce required to keep remote infrastructure functioning.",
+        keyPoints: [
+            "Lunar infrastructure creates demand across operations, construction, power, logistics, communications, cybersecurity, finance, insurance, and law.",
+            "Workforce classification and training systems have not yet caught up with the breadth of commercial space activity.",
+            "Employers that combine domain expertise with lunar operating knowledge may build a durable execution advantage.",
+        ],
+        intro:
+            "Meet the Future contributor Rich Cooper describes these roles as space collar jobs: work that enables, finances, governs, protects, and expands activity beyond Earth. For the lunar industry, the concept is useful because it exposes the people and capabilities hidden behind a mission architecture.",
+        teaser:
+            "The Explorer brief maps the workforce categories most likely to become lunar bottlenecks and identifies the demand signals organizations should track.",
+        publishedAt: "2026-07-14",
+        accessTier: "member",
+        heroImageUrl: "/space-collar-lunar-workforce.png",
+        heroImageAlt: "Lunar surface operations team supporting power, logistics, and mission systems",
+        citations: [
+            {
+                label: "Source reporting",
+                title: "Beyond Blue and White: The Rise of Space Collar Jobs",
+                publisher: "Meet the Future / SPACE <GO>",
+                url: "https://mtf.tv/beyond-blue-and-white-the-rise-of-space-collar-jobs",
+                summary:
+                    "Rich Cooper outlines the broad set of technical, commercial, policy, and operational professions needed to support a growing space economy.",
+            },
+        ],
+        fallbackBody:
+            "A lunar mission is the visible output of a much larger operating system. Engineers and astronauts remain central, but sustained activity also requires power technicians, construction specialists, mission operators, supply-chain managers, data analysts, accountants, lawyers, insurers, cybersecurity teams, and procurement professionals. Treating these functions as secondary understates their effect on schedule, cost, and mission resilience.\n\nThe near-term workforce market will form around programs with funded hardware and recurring operations. Employers should watch awarded task orders, planned landing cadence, surface-power deployments, relay-service procurements, and data-delivery requirements. Those signals translate architecture into specific staffing needs.\n\nThe largest risk is a mismatch between specialized lunar knowledge and established professional disciplines. A capable insurance underwriter still needs mission-risk context; a logistics planner must understand launch windows and scarce surface capacity; a cyber team must account for remote assets and intermittent links. Organizations that develop this combined expertise before demand peaks will be better positioned to execute and to price risk.\n\nFor universities and workforce programs, the practical opportunity is not to create a new degree for every space role. It is to add lunar systems, regulation, mission economics, and operational data to existing engineering, business, policy, and skilled-trade pathways.",
+    },
+    {
+        slug: "clps-2-lunar-logistics-market",
+        title: "CLPS 2.0 points toward a higher-cadence lunar logistics market",
+        dek: "NASA's draft follow-on procurement signals more competition, heavier deliveries, standardized interfaces, and a longer runway for commercial lunar transportation.",
+        summary:
+            "A proposed successor to the current Commercial Lunar Payload Services contract would shift the market from occasional payload delivery toward a more repeatable logistics network for sustained operations.",
+        keyPoints: [
+            "The draft vehicle is designed to admit new providers and remove underperforming ones over a contract period extending into the next decade.",
+            "Medium- and heavy-class landers would expand the addressable market beyond small science payloads.",
+            "Standard interfaces and repeatable production are likely to matter as much as headline mission count.",
+        ],
+        intro:
+            "SpaceGo reporting describes a draft NASA procurement intended to increase the frequency and capacity of commercial lunar deliveries. The strategic signal is not a single forecast number; it is the agency's move toward a market structure that can support recurring surface operations.",
+        teaser:
+            "The Explorer brief separates the draft procurement signal from awarded revenue and identifies the logistics, interface, and supply-chain indicators to monitor next.",
+        publishedAt: "2026-06-15",
+        accessTier: "member",
+        heroImageUrl: "/commercial-lunar-delivery-pipeline.webp",
+        heroImageAlt: "Commercial lunar lander delivering instruments and cargo to the Moon",
+        citations: [
+            {
+                label: "Source reporting",
+                title: "NASA Launches CLPS 2.0 to Boost Lunar Deliveries",
+                publisher: "Meet the Future / SPACE <GO>",
+                url: "https://mtf.tv/clps-2-0-nasa",
+                summary:
+                    "Kevin Cirilli reports on NASA's draft CLPS follow-on vehicle, delivery ambitions, provider competition, and standardization goals.",
+            },
+        ],
+        fallbackBody:
+            "The draft CLPS successor should be read as a market-design signal rather than booked revenue. NASA is testing a structure that could support more providers, larger landers, feasibility work, and recurring task orders over a longer period. Final requirements, appropriations, and individual awards will determine how much of that ambition becomes funded demand.\n\nFor lander companies, higher cadence changes the operating model. Repeatable production, common payload interfaces, supplier resilience, and mission recovery become more important than optimizing every flight as a bespoke project. Providers that can demonstrate reliable delivery and transparent performance data should be better positioned when NASA on-ramps vendors or competes task orders.\n\nThe opportunity extends beyond prime lander contracts. Heavier deliveries create demand for payload integration, deployment mechanisms, surface power, communications, navigation, thermal systems, ground operations, and data services. Those adjacent markets will mature only if delivery schedules become predictable enough for customers to plan around them.\n\nThe next evidence to track is the final solicitation, contract ceiling, eligible service categories, domestic-content rules, on-ramp process, and first task orders. Until those items are final, mission-volume estimates should be treated as planning assumptions rather than a revenue forecast.",
+    },
+    {
+        slug: "crewed-lunar-rover-surface-mobility-market",
+        title: "Crewed lunar rover awards open the surface mobility market",
+        dek: "Competing rover awards to Astrolab and Lunar Outpost create a funded path toward extending astronaut range and commercial operations at the lunar south pole.",
+        summary:
+            "Crew-capable lunar vehicles turn mobility into a service layer, with implications for science range, cargo movement, infrastructure maintenance, and future commercial use.",
+        keyPoints: [
+            "NASA's dual-provider strategy preserves competition and reduces dependence on a single vehicle architecture.",
+            "Rovers expand the practical operating radius around landing sites and surface infrastructure.",
+            "Power, maintenance, communications, navigation, payload integration, and spares become follow-on markets.",
+        ],
+        intro:
+            "SpaceGo reported roughly $440 million in NASA awards for crew-capable lunar rover efforts led by Astrolab and Lunar Outpost. The immediate value is funded vehicle development; the larger signal is the emergence of mobility as shared lunar infrastructure.",
+        teaser:
+            "The Explorer brief examines the downstream surface-services market and the milestones that will distinguish a durable mobility platform from a one-mission vehicle.",
+        publishedAt: "2026-06-14",
+        accessTier: "member",
+        heroImageUrl: "/crewed-lunar-rover-market.png",
+        heroImageAlt: "Two crew-capable lunar rover concepts operating near the lunar south pole",
+        citations: [
+            {
+                label: "Source reporting",
+                title: "NASA's $440M for crewed moon buggies",
+                publisher: "Meet the Future / SPACE <GO>",
+                url: "https://mtf.tv/nasa-funds-moon-buggies-for-artemis-program",
+                summary:
+                    "Kevin Cirilli reports on NASA's awards to Astrolab and Lunar Outpost and the role of surface mobility in sustained lunar operations.",
+            },
+        ],
+        fallbackBody:
+            "Surface mobility changes the economics of a landing site. Without a vehicle, crew and cargo operations remain concentrated near the lander. A reliable rover expands the reachable science area, links distributed infrastructure, supports inspection and repair, and reduces the labor required to move equipment.\n\nNASA's dual-provider approach creates competitive pressure while preserving architectural diversity. The commercial question is whether each provider can move from development hardware to a service with measurable availability, payload capacity, range, charging requirements, maintenance intervals, and mission-support pricing. Those operating metrics will matter to customers more than top speed alone.\n\nThe surrounding market includes charging and power management, navigation aids, communications coverage, route planning, dust mitigation, replacement parts, robotic attachments, cargo handling, and fleet telemetry. A rover that exposes standard payload and data interfaces could become a platform for instruments and commercial services rather than a closed vehicle.\n\nInvestors and suppliers should track design reviews, uncrewed demonstrations, delivery contracts, launch assignments, south-pole communications coverage, and the allocation of vehicle capacity between NASA and commercial users. Those milestones will show whether surface mobility is becoming recurring infrastructure or remains program-specific hardware.",
+    },
+    {
+        slug: "artemis-iii-crew-integration-schedule",
+        title: "Artemis III crew selection sharpens the integration schedule",
+        dek: "Naming a four-person crew gives NASA's orbital test a more concrete operating sequence and raises the visibility of dependencies across Orion and commercial lander interfaces.",
+        summary:
+            "Artemis III is positioned as an integrated orbital test intended to reduce risk before a later lunar landing, making docking, communications, procedures, and supplier readiness central schedule indicators.",
+        keyPoints: [
+            "The mission is intended to test integrated systems and rendezvous procedures before a crewed lunar landing attempt.",
+            "A named crew increases training and procedure dependencies alongside hardware readiness.",
+            "Interface milestones across government and commercial systems are the leading schedule signals to watch.",
+        ],
+        intro:
+            "SpaceGo reported NASA's selection of four astronauts for Artemis III and framed the mission as a critical risk-reduction step. For the lunar market, the important change is a more observable integration campaign connecting spacecraft, lander test articles, crews, facilities, and procedures.",
+        teaser:
+            "The Explorer brief identifies the integration milestones that matter most to suppliers, investors, and lunar program planners as the mission approaches.",
+        publishedAt: "2026-06-09",
+        accessTier: "member",
+        heroImageUrl: "/artemis-iii-crew-integration.png",
+        heroImageAlt: "Four astronauts reviewing an integrated spacecraft test plan",
+        citations: [
+            {
+                label: "Source reporting",
+                title: "NASA announces crew for crucial Artemis III",
+                publisher: "Meet the Future / SPACE <GO>",
+                url: "https://mtf.tv/nasa-artemis-rocket-launch",
+                summary:
+                    "Kevin Cirilli reports on the crew announcement, orbital test objectives, commercial-partner interfaces, and Artemis schedule context.",
+            },
+        ],
+        fallbackBody:
+            "Crew selection is not only a communications milestone. It starts a tighter cycle of training, procedure validation, simulator work, medical planning, and mission-specific integration. Each change to hardware or mission design can now propagate into crew preparation and operational certification.\n\nThe core value of Artemis III is risk retirement across interfaces. Orion, docking systems, communications, ground operations, and commercial lander test articles must function as one mission architecture. A component can be technically mature while the integrated sequence remains unproven, so interface testing and end-to-end demonstrations are more informative than isolated hardware completion.\n\nFor suppliers and investors, the most useful indicators are completed design and safety reviews, delivered flight hardware, integrated software tests, docking demonstrations, crew-training milestones, and closure of major anomalies. Program-level target dates matter, but these observable dependencies provide a better view of schedule confidence.\n\nA successful orbital test would improve confidence in later landing missions and clarify demand timing for surface systems. A delay would affect more than launch services: it could shift payload schedules, communications deployments, rover operations, and the timing of commercial lunar revenue across the supply chain.",
+    },
+    {
         slug: "nasa-lunar-delivery-awards-2028",
         title: "NASA commits nearly $600 million to four more lunar deliveries",
         dek: "New awards to Astrobotic, Firefly Aerospace, and Intuitive Machines expand the funded lunar-delivery pipeline and expose the next infrastructure demand signals.",
