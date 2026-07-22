@@ -864,6 +864,17 @@ Blocked reason:
   - Verification: `npm run lint` passed; `npm test` passed with 8 static tests; `npm run build` passed and generated `/request-access`, `/upgrade`, `/pathfinder/inquire`, and `/source/inquire`; `git diff --check` passed with only recurring LF-to-CRLF warnings. Static app/test scan found no remaining public app hits for launch-pending social placeholders, X/Twitter channel copy, old `$1,495/$3,495/$7,495` tier prices, reserved partner slots, public Command request labels, or `/apply` CTA links. In-app Browser setup was attempted first, but its DOM snapshot API failed with `incrementalAriaSnapshot is not a function`, so rendered QA used Playwright with installed Microsoft Edge against `http://127.0.0.1:3003`: desktop homepage showed Cabeus Explorer, Explorer, `$25,000/user/year`, Meridian, no X channel, no launch-pending copy, no framework overlay, and no horizontal overflow; clicking `Join Explorer` opened `/request-access`, where `Start with free Explorer access`, `Request Explorer`, and `Sign in` were visible; mobile `/upgrade` showed the Meridian manual-review card with `Request Meridian`, no Meridian payment/checkout wording, no framework overlay, and no horizontal overflow. Console QA only reported the pre-existing report-only CSP warning for `upgrade-insecure-requests`. `npm run test:e2e` rebuilt successfully but failed before page assertions because its temporary Next server printed Ready on port `61301` while repeated fetch readiness checks still failed; no E2E assertion failure was reached. Live remote Supabase, Resend Free delivery/quota preflight, and production Cloudflare checks were not run because runtime secrets, sender/domain verification, quota ledger configuration, and production deployment access are not available in this shell; Tasks 083-085 and 113-114 retain those deeper operational checks.
   - Blocked reason: None.
 
+- [ ] Task 123: Automate stock ticker updates with Alpha Vantage
+  - Priority: P1
+  - Requirement IDs: R-HOME-008
+  - Supersedes: The manually refreshed delayed stock-price snapshot in Task 122.
+  - Superseded by: None.
+  - Goal: Refresh the ten homepage stock prices from Alpha Vantage without exceeding the provider's free-tier quota.
+  - Acceptance criteria: Use server-only `ALPHA_VANTAGE_API_KEY`; fetch `GLOBAL_QUOTE` end-of-day data in two five-symbol weekday batches after market close; reserve no more than 20 calls per UTC day against the 25-call free allowance; retain prior valid quotes when a request fails; record each ingestion run and provider failure without storing the API key; verify the Cron schedule, quota guard, Supabase writes, production display, and secret non-exposure.
+  - Non-technical summary:
+  - Verification:
+  - Blocked reason: Requires an Alpha Vantage free API key to be stored as the Cloudflare `ALPHA_VANTAGE_API_KEY` secret before live verification.
+
 - [x] Task 078: Add configurable enterprise product naming with Meridian as the current public label
   - Priority: P0
   - Requirement IDs: R-TIER-001, R-UPGRADE-002

@@ -24,7 +24,12 @@ function isAuthorized(request: Request) {
 }
 
 function isJob(value: unknown): value is TrackerIngestionJob {
-    return value === "launches" || value === "space-weather" || value === "contract-awards";
+    return (
+        value === "launches" ||
+        value === "space-weather" ||
+        value === "contract-awards" ||
+        value === "stock-quotes"
+    );
 }
 
 export async function POST(request: Request) {

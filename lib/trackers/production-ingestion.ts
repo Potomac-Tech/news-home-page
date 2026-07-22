@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createServiceClient } from "../supabase/service";
+import { ingestAlphaVantageStockQuotes } from "./alpha-vantage";
 
 const LL2_URL = "https://ll.thespacedevs.com/2.3.0/launches/upcoming/";
 const NOAA_BASE = "https://services.swpc.noaa.gov/products";
@@ -575,10 +576,13 @@ export async function ingestUSAspendingContractAwards(providedPayload?: USAspend
     }
 }
 
-export type TrackerIngestionJob = "launches" | "space-weather" | "contract-awards";
+export type TrackerIngestionJob = "launches" | "space-weather" | "contract-awards" | "stock-quotes";
 
 export async function runTrackerIngestion(job: TrackerIngestionJob, payload?: unknown) {
     if (job === "launches") return { job, result: await ingestLaunchLibrary() };
+    if (job === "stock-quotes") {
+        return { job, result: await ingestAlphaVantageStockQuotes(payload) };
+    }
     if (job === "contract-awards") {
         const providedPayload =
             payload && typeof payload === "object" && Array.isArray((payload as USAspendingResponse).results)
