@@ -16,6 +16,17 @@ function getSafeNextPath() {
     return "/member";
 }
 
+function getSignInErrorMessage(caughtError: unknown) {
+    const fallback = "Sign-in failed. Please try again.";
+    if (!(caughtError instanceof Error)) return fallback;
+
+    if (caughtError.message.toLowerCase().includes("invalid login credentials")) {
+        return "That email and password did not match. Use a magic link or reset your password to continue.";
+    }
+
+    return caughtError.message || fallback;
+}
+
 export function LoginForm({
     initialMode = "magic-link",
 }: {
@@ -102,11 +113,7 @@ export function LoginForm({
 
             setStatus("Check your email for the secure sign-in link.");
         } catch (caughtError) {
-            const message =
-                caughtError instanceof Error
-                    ? caughtError.message
-                    : "Sign-in failed.";
-            setError(message);
+            setError(getSignInErrorMessage(caughtError));
         } finally {
             setIsSubmitting(false);
         }
@@ -197,7 +204,36 @@ export function LoginForm({
                 </p>
             ) : null}
             {error ? (
-                <p className="mt-4 text-sm leading-6 text-red-300">{error}</p>
+                <div
+                    role="alert"
+                    className="mt-4 border-l-2 border-red-300 bg-red-950/20 px-4 py-3"
+                >
+                    <p className="text-sm leading-6 text-red-200">{error}</p>
+                    {mode === "password" ? (
+                        <div className="mt-3 flex flex-wrap gap-4">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setError(null);
+                                    setMode("magic-link");
+                                }}
+                                className="text-xs font-bold uppercase tracking-[0.14em] text-potomac-gold transition hover:text-potomac-cream"
+                            >
+                                Use magic link
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setError(null);
+                                    setMode("recovery");
+                                }}
+                                className="text-xs font-bold uppercase tracking-[0.14em] text-potomac-gold transition hover:text-potomac-cream"
+                            >
+                                Reset password
+                            </button>
+                        </div>
+                    ) : null}
+                </div>
             ) : null}
         </form>
     );
