@@ -39,7 +39,51 @@ body {
         linear-gradient(180deg, #0d1114 0%, #161b20 48%, #0d1114 100%);
 }
 
-.stock-ticker-scroll {
+.stock-ticker-viewport {
+    overflow: hidden;
     scrollbar-color: rgba(243, 167, 18, 0.55) rgba(13, 17, 20, 0.75);
     scrollbar-width: thin;
+}
+
+.stock-ticker-track {
+    display: flex;
+    width: max-content;
+    transform: translateX(-50%);
+    animation: stock-ticker-left-to-right 52s linear infinite;
+    will-change: transform;
+}
+
+.stock-ticker-list {
+    display: flex;
+    width: max-content;
+    flex: none;
+}
+
+.stock-ticker-viewport:hover .stock-ticker-track,
+.stock-ticker-viewport:focus-within .stock-ticker-track {
+    animation-play-state: paused;
+}
+
+@keyframes stock-ticker-left-to-right {
+    from {
+        transform: translateX(-50%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stock-ticker-viewport {
+        overflow-x: auto;
+    }
+
+    .stock-ticker-track {
+        animation: none;
+        transform: none;
+    }
+
+    .stock-ticker-duplicate {
+        display: none;
+    }
 }

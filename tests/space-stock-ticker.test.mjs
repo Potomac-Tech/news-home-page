@@ -9,6 +9,7 @@ test("homepage requests and renders the market-cap-ranked top ten ticker", () =>
     const homepage = read("app/page.tsx");
     const loader = read("app/_data/marketQuotes.ts");
     const ticker = read("app/_components/StockTicker.tsx");
+    const styles = read("app/globals.css");
 
     assert.match(homepage, /loadPublicTickerItems\(10\)/);
     assert.match(homepage, /<StockTicker items=\{tickerItems\}/);
@@ -20,11 +21,17 @@ test("homepage requests and renders the market-cap-ranked top ten ticker", () =>
         "Market-cap leaders",
         "Delayed |",
         "Source:",
-        "overflow-x-auto",
+        "stock-ticker-track",
+        "stock-ticker-duplicate",
         "aria-label",
     ]) {
         assert.ok(ticker.includes(token), `ticker should include ${token}`);
     }
+    assert.match(styles, /@keyframes stock-ticker-left-to-right/);
+    assert.match(styles, /from\s*{\s*transform: translateX\(-50%\)/);
+    assert.match(styles, /to\s*{\s*transform: translateX\(0\)/);
+    assert.match(styles, /prefers-reduced-motion: reduce/);
+    assert.match(styles, /animation-play-state: paused/);
 });
 
 test("production snapshot contains exactly ten sourced space companies and prices", () => {
