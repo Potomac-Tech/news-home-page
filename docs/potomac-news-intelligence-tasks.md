@@ -871,9 +871,9 @@ Blocked reason:
   - Superseded by: None.
   - Goal: Refresh the ten homepage stock prices from Alpha Vantage without exceeding the provider's free-tier quota.
   - Acceptance criteria: Use server-only `ALPHA_VANTAGE_API_KEY`; fetch `GLOBAL_QUOTE` end-of-day data in two five-symbol weekday batches after market close; reserve no more than 20 calls per UTC day against the 25-call free allowance; retain prior valid quotes when a request fails; record each ingestion run and provider failure without storing the API key; verify the Cron schedule, quota guard, Supabase writes, production display, and secret non-exposure.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason: Requires an Alpha Vantage free API key to be stored as the Cloudflare `ALPHA_VANTAGE_API_KEY` secret before live verification.
+  - Non-technical summary: The stock ticker now has a production-ready Alpha Vantage updater that refreshes all ten companies after the market closes on weekdays. It normally uses 10 calls per day and stops at 20, preserving a five-call safety margin below the free-tier limit while keeping the last valid price if a refresh fails.
+  - Verification: Passed TypeScript, lint, production build, 5 focused tests, and all 142 repository tests. Applied and verified the canonical Supabase migration, two active weekday Cron schedules, atomic daily quota reservation, and service-role-only permissions. Deployed Cloudflare Worker version `a81172ed-ee84-4d53-b924-9b7f9c6e07da`; the production homepage returned 200 with `Space Market 10`, and the protected ingestion route returned 401 without its bearer secret. `wrangler secret list` confirms that no Alpha Vantage key is currently configured or exposed.
+  - Blocked reason: Requires an Alpha Vantage free API key to be stored as the Cloudflare `ALPHA_VANTAGE_API_KEY` secret before the first live provider call, Supabase quote write, and production price display can be verified.
 
 - [x] Task 078: Add configurable enterprise product naming with Meridian as the current public label
   - Priority: P0
