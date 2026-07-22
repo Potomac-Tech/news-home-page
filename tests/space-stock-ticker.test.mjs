@@ -28,10 +28,12 @@ test("homepage requests and renders the market-cap-ranked top ten ticker", () =>
 });
 
 test("production snapshot contains exactly ten sourced space companies and prices", () => {
-    const migration = read(
-        "supabase/migrations/20260722133852_seed_top10_space_stock_ticker.sql"
-    );
+    const migration = [
+        read("supabase/migrations/20260722133852_seed_top10_space_stock_ticker.sql"),
+        read("supabase/migrations/20260722160400_add_spacex_to_stock_ticker.sql"),
+    ].join("\n");
     const expectedSymbols = [
+        "SPCX",
         "RKLB",
         "ECHO",
         "ASTS",
@@ -41,7 +43,6 @@ test("production snapshot contains exactly ten sourced space companies and price
         "KRMN",
         "IRDM",
         "FLY",
-        "RDW",
     ];
 
     for (const symbol of expectedSymbols) {
