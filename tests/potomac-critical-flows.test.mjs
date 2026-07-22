@@ -132,6 +132,7 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
     const handoffRoute = read("app/api/member/nexus/handoff/route.ts");
     const memberPage = read("app/member/page.tsx");
     const nexusPage = read("app/nexus/page.tsx");
+    const migrationShell = read("app/_components/MigrationShell.tsx");
     const nextConfig = read("next.config.mjs");
     const migration = readMigration(
         "20260717104836_sync_cabeus_members_to_nexus_roles.sql"
@@ -158,10 +159,13 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         "private, no-store",
         "no-referrer",
     ], "Nexus one-time handoff");
-    assertIncludes(memberPage + nexusPage, [
+    assertIncludes(memberPage + nexusPage + migrationShell, [
         "/api/member/nexus/handoff",
         "Open Nexus",
         "Nexus role",
+        "https://nexus-explore.potomacdb.com/",
+        'label: "Nexus Terminal"',
+        'target="_blank"',
     ], "Nexus member navigation");
     assertIncludes(nextConfig, [
         "/api/member/nexus/handoff",

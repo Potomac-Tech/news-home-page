@@ -12,7 +12,11 @@ import { getProfileGateContext } from "../../lib/auth/profile-completion";
 import { SearchCommandPalette } from "./SearchCommandPalette";
 import { CheckoutAnalytics } from "./CheckoutAnalytics";
 
-const primaryNavItems = [
+const primaryNavItems: Array<{
+    href: string;
+    label: string;
+    external?: boolean;
+}> = [
     { href: "/news", label: "News" },
     { href: "/tracker/launches", label: "Launches" },
     { href: "/companies", label: "Companies" },
@@ -20,6 +24,11 @@ const primaryNavItems = [
     { href: "/regulatory", label: "Policy" },
     { href: "/datasets", label: "Data" },
     { href: "/events", label: "Events" },
+    {
+        href: "https://nexus-explore.potomacdb.com/",
+        label: "Nexus Terminal",
+        external: true,
+    },
 ];
 
 const footerNavItems = [
@@ -107,26 +116,54 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                         aria-label="Primary navigation"
                         className="hidden items-center justify-center gap-7 border-t border-potomac-regolith/15 py-3 lg:flex"
                     >
-                            {primaryNavItems.map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className="shrink-0 font-mono text-[0.66rem] font-semibold uppercase text-potomac-cream/75 transition hover:text-potomac-gold"
-                                >
-                                    {item.label}
-                                </Link>
-                            ))}
+                            {primaryNavItems.map((item) =>
+                                item.external ? (
+                                    <a
+                                        key={item.href}
+                                        href={item.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="shrink-0 font-mono text-[0.66rem] font-semibold uppercase text-potomac-cream/75 transition hover:text-potomac-gold"
+                                    >
+                                        {item.label}
+                                    </a>
+                                ) : (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        className="shrink-0 font-mono text-[0.66rem] font-semibold uppercase text-potomac-cream/75 transition hover:text-potomac-gold"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                )
+                            )}
                     </nav>
                     <details className="border-t border-potomac-regolith/15 lg:hidden">
                         <summary className="cursor-pointer py-3 font-mono text-[0.66rem] font-bold uppercase text-potomac-gold">
                             Sections
                         </summary>
                         <nav aria-label="Mobile navigation" className="grid grid-cols-2 gap-px border-t border-potomac-regolith/15 bg-potomac-regolith/15 pb-px">
-                            {primaryNavItems.map((item) => (
-                                <Link key={item.href} href={item.href} className="bg-potomac-primary px-3 py-3 font-mono text-[0.66rem] font-semibold uppercase text-potomac-cream/75">
-                                    {item.label}
-                                </Link>
-                            ))}
+                            {primaryNavItems.map((item) =>
+                                item.external ? (
+                                    <a
+                                        key={item.href}
+                                        href={item.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="bg-potomac-primary px-3 py-3 font-mono text-[0.66rem] font-semibold uppercase text-potomac-cream/75"
+                                    >
+                                        {item.label}
+                                    </a>
+                                ) : (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        className="bg-potomac-primary px-3 py-3 font-mono text-[0.66rem] font-semibold uppercase text-potomac-cream/75"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                )
+                            )}
                         </nav>
                     </details>
                 </div>
