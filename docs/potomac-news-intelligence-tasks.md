@@ -1313,7 +1313,7 @@ Blocked reason:
   - Acceptance criteria: Implement the decisions in `docs/launch-readiness-2026-07-21.md`; hide unready modules from navigation, terminal, search, command palette, sitemap, structured data, and anonymous/member discovery; direct unready routes return a reviewed unavailable response or staff-only review surface; remove representative, sample, queued, planned, and placeholder records from production rendering; expand the release audit to every discoverable public route and critical member route; record content-owner and editor/admin approvals.
   - Non-technical summary: A conservative launch policy now hides empty company, spacecraft, procurement, regulatory, marketplace, and contract-award pages until approved content is available. Unsupported homepage statistics, readiness scores, supply-chain graphics, and ticker placeholders were removed; public datasets are limited to source-backed NASA and USGS records.
   - Verification: All 133 automated tests, lint, TypeScript, and the production build passed. The expanded production release crawler checked 25 public, gated, and hidden routes with zero issues. Mobile and desktop event quality checks passed with zero layout shift, no accessibility violations, and no overflow after font stabilization.
-  - Blocked reason: Awaiting the content owner's approval of the conservative hide list and a named editor/admin approver; stock ticker remains hidden pending a licensed quote provider.
+  - Blocked reason: Awaiting the content owner's approval of the conservative hide list and a named editor/admin approver.
 
 - [x] Task 119: Put launch, space-weather, and contract-award API trackers into production
   - Priority: P0
@@ -1347,3 +1347,14 @@ Blocked reason:
   - Non-technical summary:
   - Verification:
   - Blocked reason: Depends on Tasks 118-120 and named approvals.
+
+- [x] Task 122: Publish the top-ten space stock ticker
+  - Priority: P1
+  - Requirement IDs: R-HOME-008, R-HOME-003, R-LUNAR-003
+  - Supersedes: The hidden zero-row stock ticker state in Task 118.
+  - Superseded by: None.
+  - Goal: Display approved prices for the ten most valuable companies in the published space-company universe on the homepage.
+  - Acceptance criteria: Homepage shows exactly ten market-cap-ranked space companies when a complete approved snapshot exists; each item includes symbol, price, percent change, rank, company name, quote timestamp, source, and delayed status; anonymous and authenticated visitors receive the same public snapshot; missing or incomplete data hides the band instead of inventing prices; mobile uses contained horizontal scrolling without page overflow.
+  - Non-technical summary: The homepage now includes a compact Space Market 10 band showing delayed prices for the ten largest reviewed public space companies, ordered by market value and labeled with freshness information.
+  - Verification: Passed `npx tsc --noEmit`, `npm run lint`, `npm test` (139/139), and `npm run build`. Applied the `seed_top10_space_stock_ticker` migration to Supabase project `xlpkdoeldtlhearqajat`; verified one published ranking with exactly 10 ranked companies and 10 displayable quotes, with anonymous and authenticated access returning the same 10 rows. Deployed Cloudflare version `5163903e-469d-49ff-b486-e8c89c15cba6`. Production browser QA confirmed all 10 symbols appear in rank order (`SPCX`, `RKLB`, `ECHO`, `ASTS`, `VSAT`, `GSAT`, `PL`, `KRMN`, `IRDM`, `FLY`), the delayed source is visible, desktop and mobile have no page-level horizontal overflow, the mobile ticker scrolls within its band, and no browser console warnings or errors were recorded.
+  - Blocked reason: None.
