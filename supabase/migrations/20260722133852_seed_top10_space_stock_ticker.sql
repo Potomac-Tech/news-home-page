@@ -54,7 +54,7 @@ insert into public.public_space_companies (
 )
 select *
 from (values
-    ('SpaceX', 'SPCX', 'NASDAQ', 'US', 'https://www.spacex.com/', 'https://www.spacex.com/', 'Launch and satellite communications', 'Launch, lunar cargo, Starship, and cislunar infrastructure.', 'active'::public.public_company_status, true, 'market_cap_usd'::public.public_company_ranking_metric, 2220000000000::numeric, 'USD', '2026-07-22'::date, 'Public market snapshot', 'https://finance.yahoo.com/quote/SPCX/', '2026-07-22T13:22:19Z'::timestamptz, 'U.S.-listed space-focused operator.'),
+    ('Redwire Corporation', 'RDW', 'NYSE', 'US', 'https://redwirespace.com/', 'https://ir.redwirespace.com/', 'Space infrastructure and defense technology', 'Spacecraft components, deployable systems, microgravity infrastructure, and mission systems.', 'active'::public.public_company_status, true, 'market_cap_usd'::public.public_company_ranking_metric, 1832139731::numeric, 'USD', '2026-07-22'::date, 'Public market snapshot', 'https://finance.yahoo.com/quote/RDW/', '2026-07-22T13:34:12Z'::timestamptz, 'NYSE-listed space-focused systems supplier.'),
     ('Rocket Lab USA', 'RKLB', 'NASDAQ', 'US', 'https://www.rocketlabusa.com/', 'https://investors.rocketlabusa.com/', 'Launch and space systems', 'Launch vehicles, spacecraft, and lunar mission systems.', 'active'::public.public_company_status, true, 'market_cap_usd'::public.public_company_ranking_metric, 41847642455::numeric, 'USD', '2026-07-22'::date, 'Public market snapshot', 'https://finance.yahoo.com/quote/RKLB/', '2026-07-22T13:21:18Z'::timestamptz, 'U.S.-listed space-focused operator.'),
     ('EchoStar', 'ECHO', 'NASDAQ', 'US', 'https://www.echostar.com/', 'https://ir.echostar.com/', 'Satellite communications', 'Satellite communications and space-network infrastructure.', 'active'::public.public_company_status, true, 'market_cap_usd'::public.public_company_ranking_metric, 27386966640::numeric, 'USD', '2026-07-22'::date, 'Public market snapshot', 'https://finance.yahoo.com/quote/ECHO/', '2026-07-22T12:23:59Z'::timestamptz, 'U.S.-listed satellite and space-network operator.'),
     ('AST SpaceMobile', 'ASTS', 'NASDAQ', 'US', 'https://ast-science.com/', 'https://investors.ast-science.com/', 'Satellite communications', 'Direct-to-device communications and cislunar communications comparables.', 'active'::public.public_company_status, true, 'market_cap_usd'::public.public_company_ranking_metric, 18412270206::numeric, 'USD', '2026-07-22'::date, 'Public market snapshot', 'https://finance.yahoo.com/quote/ASTS/', '2026-07-22T13:20:37Z'::timestamptz, 'U.S.-listed space-focused operator.'),
@@ -123,7 +123,7 @@ select
     'delayed',
     true
 from (values
-    ('SPCX', '2026-07-22T13:22:19Z'::timestamptz, 123.54::numeric, 3.67::numeric, 3.062::numeric),
+    ('RDW', '2026-07-22T13:34:12Z'::timestamptz, 9.485::numeric, 0.065::numeric, 0.690::numeric),
     ('RKLB', '2026-07-22T13:21:18Z'::timestamptz, 69.12::numeric, 3.38::numeric, 5.141::numeric),
     ('ECHO', '2026-07-22T12:23:59Z'::timestamptz, 94.76::numeric, 4.44::numeric, 4.915::numeric),
     ('ASTS', '2026-07-22T13:20:37Z'::timestamptz, 63.34::numeric, 5.91::numeric, 10.293::numeric),
@@ -205,8 +205,8 @@ begin
         and company.ranking_eligible
         and company.ranking_metric = 'market_cap_usd'
         and company.ticker_symbol in (
-            'SPCX', 'RKLB', 'ECHO', 'ASTS', 'VSAT',
-            'GSAT', 'PL', 'KRMN', 'IRDM', 'FLY'
+            'RKLB', 'ECHO', 'ASTS', 'VSAT', 'GSAT',
+            'PL', 'KRMN', 'IRDM', 'FLY', 'RDW'
         )
     order by company.ranking_metric_value desc, company.company_name;
 end

@@ -32,7 +32,6 @@ test("production snapshot contains exactly ten sourced space companies and price
         "supabase/migrations/20260722133852_seed_top10_space_stock_ticker.sql"
     );
     const expectedSymbols = [
-        "SPCX",
         "RKLB",
         "ECHO",
         "ASTS",
@@ -42,6 +41,7 @@ test("production snapshot contains exactly ten sourced space companies and price
         "KRMN",
         "IRDM",
         "FLY",
+        "RDW",
     ];
 
     for (const symbol of expectedSymbols) {
