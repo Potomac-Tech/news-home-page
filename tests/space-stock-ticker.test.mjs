@@ -27,9 +27,9 @@ test("homepage requests and renders the market-cap-ranked top ten ticker", () =>
     ]) {
         assert.ok(ticker.includes(token), `ticker should include ${token}`);
     }
-    assert.match(styles, /@keyframes stock-ticker-left-to-right/);
-    assert.match(styles, /from\s*{\s*transform: translateX\(-50%\)/);
-    assert.match(styles, /to\s*{\s*transform: translateX\(0\)/);
+    assert.match(styles, /@keyframes stock-ticker-right-to-left/);
+    assert.match(styles, /from\s*{\s*transform: translateX\(0\)/);
+    assert.match(styles, /to\s*{\s*transform: translateX\(-50%\)/);
     assert.match(styles, /prefers-reduced-motion: reduce/);
     assert.match(styles, /animation-play-state: paused/);
 });

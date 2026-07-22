@@ -48,8 +48,8 @@ body {
 .stock-ticker-track {
     display: flex;
     width: max-content;
-    transform: translateX(-50%);
-    animation: stock-ticker-left-to-right 52s linear infinite;
+    transform: translateX(0);
+    animation: stock-ticker-right-to-left 52s linear infinite;
     will-change: transform;
 }
 
@@ -64,12 +64,12 @@ body {
     animation-play-state: paused;
 }
 
-@keyframes stock-ticker-left-to-right {
+@keyframes stock-ticker-right-to-left {
     from {
-        transform: translateX(-50%);
+        transform: translateX(0);
     }
     to {
-        transform: translateX(0);
+        transform: translateX(-50%);
     }
 }
 
