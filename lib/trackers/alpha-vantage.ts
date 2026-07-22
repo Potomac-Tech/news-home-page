@@ -44,14 +44,20 @@ async function fetchQuote(symbol: string) {
     url.searchParams.set("symbol", symbol);
     url.searchParams.set("apikey", apiKey);
 
-    const response = await fetch(url, {
-        headers: {
-            accept: "application/json",
-            "user-agent": "CabeusExplorer/1.0 info@potomacdb.com",
-        },
-        signal: AbortSignal.timeout(20_000),
-        cache: "no-store",
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20_000);
+    let response: Response;
+    try {
+        response = await fetch(url, {
+            headers: { accept: "application/json" },
+            signal: controller.signal,
+            cache: "no-store",
+        });
+    } catch {
+        throw new Error(`Alpha Vantage request failed for ${symbol}.`);
+    } finally {
+        clearTimeout(timeout);
+    }
     if (!response.ok) throw new Error(`Alpha Vantage returned ${response.status} for ${symbol}.`);
 
     const payload = (await response.json()) as GlobalQuoteResponse;
@@ -161,11 +167,14 @@ export async function ingestAlphaVantageStockQuotes(payload?: unknown) {
             is_displayable: true,
         }];
     });
-    const failures = results.flatMap((result, index) =>
-        result.status === "rejected"
-            ? [{ symbol: symbols[index], error: "Provider quote unavailable." }]
-            : []
-    );
+    const failures = results.flatMap((result, index) => {
+        if (result.status !== "rejected") return [];
+        const error =
+            result.reason instanceof Error && result.reason.message.startsWith("Alpha Vantage")
+                ? result.reason.message
+                : "Provider quote unavailable.";
+        return [{ symbol: symbols[index], error }];
+    });
 
     let writeError: string | null = null;
     if (rows.length) {
