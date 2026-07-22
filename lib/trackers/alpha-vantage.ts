@@ -61,8 +61,14 @@ async function fetchQuote(symbol: string) {
     if (!response.ok) throw new Error(`Alpha Vantage returned ${response.status} for ${symbol}.`);
 
     const payload = (await response.json()) as GlobalQuoteResponse;
-    if (payload.Information || payload.Note || payload["Error Message"]) {
-        throw new Error(`Alpha Vantage did not return a quote for ${symbol}.`);
+    if (payload.Note) {
+        throw new Error(`Alpha Vantage returned a rate-limit response for ${symbol}.`);
+    }
+    if (payload.Information) {
+        throw new Error(`Alpha Vantage returned an information response for ${symbol}.`);
+    }
+    if (payload["Error Message"]) {
+        throw new Error(`Alpha Vantage returned a symbol error for ${symbol}.`);
     }
 
     const quote = payload["Global Quote"];
