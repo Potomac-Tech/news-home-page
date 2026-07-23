@@ -1315,7 +1315,7 @@ Blocked reason:
   - Verification: Applied the canonical Supabase role-sync migration with 8 mapped members and 0 role mismatches; confirmed members cannot update their own Nexus role. Cabeus TypeScript, lint, production build, and all 132 automated tests passed. Nexus production build and GitHub/Cloudflare checks passed in PRs 20 and 21. Deployed Cabeus Worker version `f9eb707f-29a6-45ea-acef-67eb15c1109e`, added the exact Nexus `/0auth` URL to the canonical Supabase Auth redirect allowlist, and completed a live browser handoff to the Nexus interface with no console errors.
   - Blocked reason: None.
 
-- [ ] Task 118: Enforce July 21 launch visibility and remove production placeholders
+- [x] Task 118: Enforce July 21 launch visibility and remove production placeholders
   - Priority: P0
   - Requirement IDs: R-LAUNCH-001, R-HOME-003, R-CONTENT-001, R-SCOPE-001
   - Supersedes: None.
@@ -1323,8 +1323,8 @@ Blocked reason:
   - Goal: Make every discoverable launch surface source-backed, approved, and accurately labeled by Tuesday, July 21, 2026.
   - Acceptance criteria: Implement the decisions in `docs/launch-readiness-2026-07-21.md`; hide unready modules from navigation, terminal, search, command palette, sitemap, structured data, and anonymous/member discovery; direct unready routes return a reviewed unavailable response or staff-only review surface; remove representative, sample, queued, planned, and placeholder records from production rendering; expand the release audit to every discoverable public route and critical member route; record content-owner and editor/admin approvals.
   - Non-technical summary: A conservative launch policy now hides empty company, spacecraft, procurement, regulatory, marketplace, and contract-award pages until approved content is available. Unsupported homepage statistics, readiness scores, supply-chain graphics, and ticker placeholders were removed; public datasets are limited to source-backed NASA and USGS records.
-  - Verification: All 133 automated tests, lint, TypeScript, and the production build passed. The expanded production release crawler checked 25 public, gated, and hidden routes with zero issues. Mobile and desktop event quality checks passed with zero layout shift, no accessibility violations, and no overflow after font stabilization.
-  - Blocked reason: Awaiting the content owner's approval of the conservative hide list and a named editor/admin approver.
+  - Verification: Jacob Matthews approved the conservative hide list as content owner on July 23, 2026 and was recorded as the named editor approver after canonical Supabase project `xlpkdoeldtlhearqajat` confirmed an active, non-expiring `editor` role for `jake@potomacdb.com`. Current verification passed lint, TypeScript, all 149 automated tests, and the production build. The expanded production release audit checked 25 public, gated, and hidden routes with zero issues; the production crawler visited 60 internal destinations with zero console, network, CSP, runtime, or interaction issues on Cloudflare version `fb0b1cb9-a034-4cf8-b336-abc077d9f06b`. Ten mobile/desktop quality checks passed with zero accessibility, overflow, layout-shift, or performance-budget failures, and all four reviewed promotional fallback units passed expiration checks.
+  - Blocked reason: None.
 
 - [x] Task 119: Put launch, space-weather, and contract-award API trackers into production
   - Priority: P0

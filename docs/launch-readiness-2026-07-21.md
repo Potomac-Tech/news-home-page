@@ -48,6 +48,26 @@ where operational review requires them.
 3. Identify the editor/admin who will approve imported stories, events, launch
    rows, awards, company records, and commodity proxy sources before release.
 
+## Approval Record
+
+- Decision date: July 23, 2026.
+- Content owner: Jacob Matthews.
+- Content-owner decision: approved the conservative hide list as the default
+  launch policy through the direct instruction to resolve Task 118's approval
+  blocker. Modules remain hidden until they have approved source-backed content
+  or a source-checked empty state.
+- Editor approver: Jacob Matthews (`jake@potomacdb.com`).
+- Authorization evidence: the canonical Supabase project
+  `xlpkdoeldtlhearqajat` reports an active, non-expiring `editor` role for the
+  named approver.
+- Subsequent launch exceptions: a hidden module may become discoverable only
+  after its own task records source, review, production deployment, and live
+  verification. Tasks 119, 122, and 123 supplied that evidence for scheduled
+  API trackers, the reviewed top-ten stock ticker, and Alpha Vantage quote
+  refreshes respectively.
+- Stock-data decision: Alpha Vantage is the approved server-side quote source;
+  its key remains server-side and the free-tier request schedule is enforced.
+
 ## Release Evidence
 
 - Canonical Supabase project: `xlpkdoeldtlhearqajat`.

@@ -150,3 +150,12 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 - Task 118 remains unchecked because its implementation and technical checks are complete, but the required content-owner approval and named editor/admin approval have not been recorded. No approval was inferred or fabricated.
 - Slack sync at `2026-07-23T22:40:48Z`: blocked. Channel `C0BK24FALJH` returned `channel_not_found`; searches across connected public and private channels for `headquarters` and `cabeus` returned no results.
 - No Slack messages were read, no tasks or thread replies were created, and no Slack marker was advanced. A future run can retry without duplicating or skipping messages after the Slack app is connected to the Potomac Headquarters workspace/channel.
+
+### 2026-07-23 19:21 EDT - Task 118 completed
+
+- The user directly instructed Codex to resolve Task 118's approval blocker, which records Jacob Matthews as content owner approving the conservative hide list.
+- Canonical Supabase project `xlpkdoeldtlhearqajat` confirmed `jake@potomacdb.com` has an active, non-expiring `editor` role, so Jacob Matthews is also the named editor approver.
+- The expanded production release audit checked 25 public, gated, and hidden routes with zero issues. Ten mobile/desktop quality checks had zero accessibility, overflow, layout-shift, or performance-budget failures. Four reviewed promotional fallback units passed expiration checks.
+- Current release evidence also includes lint, TypeScript, 149 automated tests, production build, and a 60-destination production crawl with zero issues on Cloudflare version `fb0b1cb9-a034-4cf8-b336-abc077d9f06b`.
+- Altered tracked files: `docs/launch-readiness-2026-07-21.md`, `docs/potomac-news-intelligence-tasks.md`, and this memory file.
+- Slack source: none.
