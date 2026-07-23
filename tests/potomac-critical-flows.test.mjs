@@ -102,7 +102,7 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
 });
 
 test("app role rename preserves membership tiers while retiring legacy role IDs", () => {
-    const migration = readMigration("20260723215312_rename_member_command_app_roles.sql");
+    const migration = readMigration("20260723215940_rename_member_command_app_roles.sql");
     const applicationApproval = read("app/admin/applications/actions.ts");
     const runtimeRoleFiles = [
         "app/_data/homepageCarousel.ts",

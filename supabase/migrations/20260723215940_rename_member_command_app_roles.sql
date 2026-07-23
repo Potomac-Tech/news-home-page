@@ -1,3 +1,4 @@
+-- Rename authorization role IDs without changing membership tier values.
 insert into public.app_roles (id, description, created_at)
 select
     'explorer',
