@@ -1138,6 +1138,8 @@ test("homepage carousel UI rotates accessibly with a stable static fallback", ()
         'aria-roledescription="carousel"',
         'aria-roledescription="slide"',
         'aria-label="Top lunar intelligence stories"',
+        'aria-hidden={index !== activeIndex}',
+        'inert={index !== activeIndex ? true : undefined}',
         'role="tablist"',
         'aria-selected={index === activeIndex}',
         'event.key === "ArrowLeft"',

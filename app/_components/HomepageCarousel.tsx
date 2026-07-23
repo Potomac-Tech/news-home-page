@@ -62,6 +62,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                     aria-roledescription="slide"
                     aria-label={`${index + 1} of ${count}`}
                     aria-hidden={index !== activeIndex}
+                    inert={index !== activeIndex ? true : undefined}
                     className={`absolute inset-0 grid grid-rows-[minmax(0,1fr)_13rem] transition-opacity duration-500 motion-reduce:transition-none md:grid-rows-[minmax(0,1fr)_18rem] ${index === activeIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
                 >
                     <img
