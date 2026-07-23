@@ -91,7 +91,7 @@ export async function loadCarouselViewer(supabase: SupabaseServerClient, state: 
     ]);
     const roleIds = new Set((roles ?? []).map((role) => role.role_id));
     if (["admin", "editor", "analyst"].some((role) => roleIds.has(role))) audience = "staff";
-    else if (roleIds.has("command_user")) audience = "command";
+    else if (roleIds.has("meridian")) audience = "command";
     else if (roleIds.has("scout")) audience = "scout";
     return { audience, userId, personalizationEnabled: preference?.behavior_ranking_enabled ?? true, qualifyingEvents: events.count ?? 0 };
 }

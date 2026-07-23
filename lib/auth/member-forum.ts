@@ -13,7 +13,7 @@ export type MemberForumAccessContext = {
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
-const forumMemberRoles = ["member", "scout", "command_user"];
+const forumMemberRoles = ["explorer", "scout", "meridian"];
 const forumModeratorRoles = ["moderator", "editor", "analyst", "admin"];
 
 export async function getMemberForumAccessContext({

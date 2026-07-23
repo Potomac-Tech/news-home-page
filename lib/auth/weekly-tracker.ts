@@ -15,6 +15,6 @@ export async function getWeeklyTrackerAccess({ supabase, nextPath = "/tracker/la
     const { data, error } = await supabase.from("member_role_assignments").select("role_id").eq("user_id", gate.userId).or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`);
     if (error) throw new Error(error.message);
     const roles = new Set((data ?? []).map((role) => role.role_id));
-    const tier: WeeklyTrackerTier = ["admin","analyst","editor"].some((role) => roles.has(role)) ? "staff" : roles.has("command_user") ? "command" : roles.has("scout") ? "scout" : roles.has("member") ? "explorer" : "generic";
+    const tier: WeeklyTrackerTier = ["admin","analyst","editor"].some((role) => roles.has(role)) ? "staff" : roles.has("meridian") ? "command" : roles.has("scout") ? "scout" : roles.has("explorer") ? "explorer" : "generic";
     return { state: "authorized", userId: gate.userId, tier, canReadBasic: true, canUsePremiumTools: ["scout","command","staff"].includes(tier), loginHref: gate.loginHref, profileHref: null };
 }

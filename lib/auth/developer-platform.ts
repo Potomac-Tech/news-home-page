@@ -14,14 +14,14 @@ export type DeveloperPlatformAccessContext = {
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
-const developerRoles = ["admin", "analyst", "editor", "command_user", "scout"];
+const developerRoles = ["admin", "analyst", "editor", "meridian", "scout"];
 
 function tierFromRole(roleId: string | null): DeveloperPlatformAccessContext["tier"] {
     if (roleId === "admin" || roleId === "analyst" || roleId === "editor") {
         return "staff";
     }
 
-    if (roleId === "command_user") {
+    if (roleId === "meridian") {
         return "command";
     }
 

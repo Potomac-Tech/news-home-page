@@ -15,9 +15,9 @@ export type ArticleAccessContext = {
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
 const rolesByTier: Record<ArticleAccessTier, string[]> = {
-    member: ["member", "scout", "command_user", "editor", "analyst", "admin"],
-    scout: ["scout", "command_user", "editor", "analyst", "admin"],
-    command: ["command_user", "editor", "analyst", "admin"],
+    member: ["explorer", "scout", "meridian", "editor", "analyst", "admin"],
+    scout: ["scout", "meridian", "editor", "analyst", "admin"],
+    command: ["meridian", "editor", "analyst", "admin"],
 };
 
 export async function getArticleAccessContext({

@@ -101,6 +101,61 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
     assertIncludes(middleware, ["updateSession", "matcher"], "session middleware");
 });
 
+test("app role rename preserves membership tiers while retiring legacy role IDs", () => {
+    const migration = readMigration("20260723215312_rename_member_command_app_roles.sql");
+    const applicationApproval = read("app/admin/applications/actions.ts");
+    const runtimeRoleFiles = [
+        "app/_data/homepageCarousel.ts",
+        "app/member/test-data/page.tsx",
+        "app/upgrade/page.tsx",
+        "lib/auth/article-access.ts",
+        "lib/auth/data-marketplace.ts",
+        "lib/auth/developer-platform.ts",
+        "lib/auth/economy.ts",
+        "lib/auth/event-access.ts",
+        "lib/auth/lunar-market-intel.ts",
+        "lib/auth/lunar-missions.ts",
+        "lib/auth/member-alerts.ts",
+        "lib/auth/member-chat.ts",
+        "lib/auth/member-forum.ts",
+        "lib/auth/nexus.ts",
+        "lib/auth/rfq.ts",
+        "lib/auth/saved-work.ts",
+        "lib/auth/test-data.ts",
+        "lib/auth/weekly-tracker.ts",
+    ].map(read).join("\n");
+
+    assertIncludes(migration, [
+        "'explorer'",
+        "'meridian'",
+        "update public.member_role_assignments",
+        "when 'member' then 'explorer'",
+        "when 'command_user' then 'meridian'",
+        "delete from public.app_roles",
+        "'''member''::text'",
+        "'''explorer''::text'",
+    ], "app role migration");
+    assertIncludes(applicationApproval, [
+        'role_id: "explorer"',
+        'base_tier: "member"',
+    ], "application approval role and tier");
+    assert.doesNotMatch(
+        runtimeRoleFiles,
+        /\bcommand_user\b/,
+        "runtime authorization must not use the retired command_user app role"
+    );
+    assert.match(
+        migration,
+        /'''member''::text'[\s\S]+'''explorer''::text'/,
+        "policy migration must target text app-role casts"
+    );
+    assert.doesNotMatch(
+        migration,
+        /replace\([^;]*'''member''::membership_tier'/,
+        "app-role migration must not rename the member membership tier"
+    );
+});
+
 test("article gating and RBAC helpers use normalized role assignments", () => {
     const articleAccess = read("lib/auth/article-access.ts");
     const adminAccess = read("lib/auth/admin.ts");
@@ -287,9 +342,9 @@ test("member chat, forums, and RFQs enforce member access and moderation contrac
 
     assertIncludes(chatAuth, [
         "member_role_assignments",
-        "member",
+        "explorer",
         "scout",
-        "command_user",
+        "meridian",
         "Approved member chat access is required.",
     ], "member chat auth");
     assertIncludes(forumAuth, [
@@ -301,7 +356,7 @@ test("member chat, forums, and RFQs enforce member access and moderation contrac
     assertIncludes(rfqAuth, [
         "rfqMemberRoles",
         "scout",
-        "command_user",
+        "meridian",
         "canModerateRfqs",
         "Scout or Command RFQ access is required.",
     ], "RFQ auth");
@@ -326,9 +381,9 @@ test("lunar terminal modules keep Explorer, Scout, Command, and staff gates", ()
         "canReadMemberDetails",
         "canReadScoutDetails",
         "canReadCommandDetails",
-        "command_user",
+        "meridian",
         "scout",
-        "member",
+        "explorer",
     ], "lunar market access");
     assertIncludes(missionsAccess, [
         "member_role_assignments",
@@ -351,7 +406,7 @@ test("paid exports, API access, webhooks, and quota controls stay tier-aware", (
     assertIncludes(developerAuth, [
         "canUseDeveloperPlatform",
         "canUseWebhooks",
-        "command_user",
+        "meridian",
         "scout",
         "staff",
     ], "developer access");
@@ -763,7 +818,7 @@ test("upgrade handoff preserves premium context and separates Scout checkout fro
         "ScoutCheckoutButton",
         "commandHref",
         "tier=meridian",
-        "command_user",
+        "meridianRole",
         "return_url",
         "success_url",
         "premium_click_source",
@@ -808,7 +863,7 @@ test("the enterprise display label is configurable without changing internal Com
         'enterprisePublicName: EnterprisePublicName = "Meridian"',
         'internalName: "Command"',
         "publicTierName",
-        'tier === "command_user"',
+        'tier === "meridian"',
     ], "enterprise tier configuration");
     assert.doesNotMatch(
         tierConfig,

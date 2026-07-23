@@ -27,7 +27,7 @@ export const tierConfig = {
 } as const;
 
 export function publicTierName(tier: string | null | undefined) {
-    if (tier === "command" || tier === "command_user") {
+    if (tier === "command" || tier === "meridian") {
         return tierConfig.enterprise.publicName;
     }
 

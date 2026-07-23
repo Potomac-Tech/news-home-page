@@ -14,7 +14,7 @@ type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
 const testDataUploaderRoles = [
     "scout",
-    "command_user",
+    "meridian",
     "editor",
     "analyst",
     "admin",

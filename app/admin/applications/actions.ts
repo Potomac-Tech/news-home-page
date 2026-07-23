@@ -86,7 +86,7 @@ export async function approveApplication(formData: FormData) {
             .from("member_role_assignments")
             .insert({
                 user_id: application.user_id,
-                role_id: "member",
+                role_id: "explorer",
                 granted_by: userId,
                 granted_at: now,
                 metadata: {

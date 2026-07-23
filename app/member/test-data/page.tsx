@@ -363,7 +363,7 @@ export default async function ExperimentalTestDataPage() {
         []) as CompareDatasetOption[]).filter(
         (dataset) =>
             dataset.access_tier_required !== "command" ||
-            access.roleId === "command_user" ||
+            access.roleId === "meridian" ||
             access.roleId === "admin"
     );
     const uploadOptions = uploads

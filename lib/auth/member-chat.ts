@@ -12,7 +12,7 @@ export type MemberChatAccessContext = {
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
-const memberChatRoles = ["member", "scout", "command_user"];
+const memberChatRoles = ["explorer", "scout", "meridian"];
 const memberChatStaffRoles = ["editor", "analyst", "admin"];
 
 export async function getMemberChatAccessContext({

@@ -13,7 +13,7 @@ export type SavedWorkAccessContext = {
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
-const savedWorkMemberRoles = ["scout", "command_user"];
+const savedWorkMemberRoles = ["scout", "meridian"];
 const savedWorkStaffRoles = ["editor", "analyst", "admin"];
 
 export async function getSavedWorkAccessContext({
@@ -70,7 +70,7 @@ export async function getSavedWorkAccessContext({
     return {
         canUseSavedWork: true,
         canManageOrganizationSavedWork:
-            roleId === "command_user" || savedWorkStaffRoles.includes(roleId),
+            roleId === "meridian" || savedWorkStaffRoles.includes(roleId),
         state: "authorized",
         userId,
         roleId,

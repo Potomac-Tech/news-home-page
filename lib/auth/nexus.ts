@@ -24,9 +24,9 @@ const allowedRoleIds = [
     "admin",
     "analyst",
     "editor",
-    "command_user",
+    "meridian",
     "scout",
-    "member",
+    "explorer",
 ] as const;
 
 function formatIdentifier(value: string) {
@@ -45,13 +45,13 @@ export function resolveNexusProfileRole({
     entitlementTier?: string | null;
 }): NexusProfileRole | null {
     if (roleIds.includes("admin")) return "admin";
-    if (roleIds.includes("command_user") || entitlementTier === "command") {
+    if (roleIds.includes("meridian") || entitlementTier === "command") {
         return "superior_user";
     }
     if (roleIds.includes("scout") || entitlementTier === "scout") {
         return "premium_user";
     }
-    if (roleIds.includes("member")) return "base_user";
+    if (roleIds.includes("explorer")) return "base_user";
     return null;
 }
 
@@ -107,11 +107,11 @@ export async function loadNexusAccessStatus(
         );
         const isStoredAdmin = storedRole === "admin";
         const canOpenNexus = expectedRole !== null || isStaff || isStoredAdmin;
-        const membershipLabel = roleIds.includes("command_user")
+        const membershipLabel = roleIds.includes("meridian")
             ? "Meridian"
             : roleIds.includes("scout")
               ? "Scout"
-              : roleIds.includes("member")
+              : roleIds.includes("explorer")
                 ? "Explorer"
                 : isStaff || isStoredAdmin
                   ? "Staff"

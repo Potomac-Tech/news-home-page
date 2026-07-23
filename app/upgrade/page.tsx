@@ -29,8 +29,8 @@ export default async function UpgradePage({ searchParams }: UpgradePageProps) {
     const gate = await getProfileGateContext({ supabase, nextPath: upgradeUrl });
     if (gate.state === "signed_out" || gate.state === "email_unverified") redirect(gate.loginHref);
     if (gate.state === "profile_incomplete" && gate.profileHref) redirect(gate.profileHref);
-    const { data: commandRole } = await supabase.from("member_role_assignments").select("id").eq("user_id", gate.userId).eq("role_id", "command_user").or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`).limit(1).maybeSingle();
-    if (requestedTier === "meridian" && commandRole) redirect(returnUrl);
+    const { data: meridianRole } = await supabase.from("member_role_assignments").select("id").eq("user_id", gate.userId).eq("role_id", "meridian").or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`).limit(1).maybeSingle();
+    if (requestedTier === "meridian" && meridianRole) redirect(returnUrl);
     const commandHref = `/command?next=${encodeURIComponent(returnUrl)}${source ? `&source=${encodeURIComponent(source)}` : ""}${content ? `&content=${encodeURIComponent(content)}` : ""}${campaign ? `&campaign=${encodeURIComponent(campaign)}` : ""}`;
 
     return (

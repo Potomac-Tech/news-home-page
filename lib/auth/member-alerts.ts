@@ -18,9 +18,9 @@ const alertRoles = [
     "admin",
     "analyst",
     "editor",
-    "command_user",
+    "meridian",
     "scout",
-    "member",
+    "explorer",
 ];
 
 function tierFromRole(roleId: string | null): MemberAlertsAccessContext["tier"] {
@@ -28,7 +28,7 @@ function tierFromRole(roleId: string | null): MemberAlertsAccessContext["tier"] 
         return "staff";
     }
 
-    if (roleId === "command_user") return "command";
+    if (roleId === "meridian") return "command";
     if (roleId === "scout") return "scout";
 
     return "explorer";
@@ -70,7 +70,7 @@ export async function getMemberAlertsAccessContext({
     const roles = ((rolesData ?? []) as Array<{ role_id: string }>).map(
         (role) => role.role_id
     );
-    const roleId = alertRoles.find((role) => roles.includes(role)) ?? "member";
+    const roleId = alertRoles.find((role) => roles.includes(role)) ?? "explorer";
     const tier = tierFromRole(roleId);
 
     return {

@@ -13,7 +13,7 @@ export type RfqAccessContext = {
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
-const rfqMemberRoles = ["scout", "command_user"];
+const rfqMemberRoles = ["scout", "meridian"];
 const rfqStaffRoles = ["moderator", "analyst", "admin"];
 
 export async function getRfqAccessContext({

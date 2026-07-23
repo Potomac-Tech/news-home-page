@@ -25,9 +25,9 @@ const rolePriority = [
     "admin",
     "analyst",
     "editor",
-    "command_user",
+    "meridian",
     "scout",
-    "member",
+    "explorer",
 ];
 
 export async function getLunarMissionAccess({
@@ -93,7 +93,7 @@ export async function getLunarMissionAccess({
         };
     }
 
-    if (roleId === "command_user") {
+    if (roleId === "meridian") {
         return {
             state: "command",
             canReadMemberDetails: true,
@@ -119,7 +119,7 @@ export async function getLunarMissionAccess({
         };
     }
 
-    if (roleId === "member") {
+    if (roleId === "explorer") {
         return {
             state: "explorer",
             canReadMemberDetails: true,
