@@ -37,3 +37,22 @@ test("internal tracker route accepts the protected stock quote job", () => {
     assert.match(route, /value === "stock-quotes"/);
     assert.match(ingestion, /ingestAlphaVantageStockQuotes\(payload\)/);
 });
+
+test("production stock refresh runs through a protected Supabase Edge Function", () => {
+    const edgeFunction = read(
+        "supabase/functions/ingest-alpha-vantage-stock-quotes/index.ts"
+    );
+    const migration = read(
+        "supabase/migrations/20260723194855_route_alpha_vantage_refresh_through_edge_function.sql"
+    );
+    const config = read("supabase/config.toml");
+    assert.match(edgeFunction, /ALPHA_VANTAGE_INGESTION_SECRET/);
+    assert.match(edgeFunction, /SUPABASE_SERVICE_ROLE_KEY/);
+    assert.match(edgeFunction, /claim_alpha_vantage_stock_refresh/);
+    assert.match(edgeFunction, /REQUEST_SPACING_MS = 12_000/);
+    assert.doesNotMatch(edgeFunction, /NEXT_PUBLIC_ALPHA_VANTAGE/);
+    assert.match(migration, /alpha_vantage_ingestion_url/);
+    assert.match(migration, /alpha_vantage_ingestion_secret/);
+    assert.match(migration, /timeout_milliseconds := 55000/);
+    assert.match(config, /\[functions\.ingest-alpha-vantage-stock-quotes\][\s\S]*verify_jwt = false/);
+});
