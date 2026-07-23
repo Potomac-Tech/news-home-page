@@ -132,6 +132,7 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
     const handoffRoute = read("app/api/member/nexus/handoff/route.ts");
     const memberPage = read("app/member/page.tsx");
     const nexusPage = read("app/nexus/page.tsx");
+    const routeScaffold = read("app/_components/RouteScaffold.tsx");
     const migrationShell = read("app/_components/MigrationShell.tsx");
     const nextConfig = read("next.config.mjs");
     const migration = readMigration(
@@ -167,6 +168,10 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         'label: "Nexus Terminal"',
         'target="_blank"',
     ], "Nexus member navigation");
+    assertIncludes(routeScaffold, [
+        'primaryHref.startsWith("/api/")',
+        "<a href={primaryHref}",
+    ], "API action navigation without Next.js route prefetch");
     assertIncludes(nextConfig, [
         "/api/member/nexus/handoff",
         'value: "no-referrer"',
