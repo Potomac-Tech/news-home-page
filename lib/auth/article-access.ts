@@ -1,7 +1,7 @@
 import { createClient } from "../supabase/server";
 import { getProfileGateContext, type ProfileGateState } from "./profile-completion";
 
-export type ArticleAccessTier = "member" | "scout" | "command";
+export type ArticleAccessTier = "explorer" | "scout" | "meridian";
 
 export type ArticleAccessContext = {
     canReadFullStory: boolean;
@@ -15,9 +15,9 @@ export type ArticleAccessContext = {
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
 const rolesByTier: Record<ArticleAccessTier, string[]> = {
-    member: ["explorer", "scout", "meridian", "editor", "analyst", "admin"],
+    explorer: ["explorer", "scout", "meridian", "editor", "analyst", "admin"],
     scout: ["scout", "meridian", "editor", "analyst", "admin"],
-    command: ["meridian", "editor", "analyst", "admin"],
+    meridian: ["meridian", "editor", "analyst", "admin"],
 };
 
 export async function getArticleAccessContext({

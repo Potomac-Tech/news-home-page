@@ -101,7 +101,7 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
     assertIncludes(middleware, ["updateSession", "matcher"], "session middleware");
 });
 
-test("app role rename preserves membership tiers while retiring legacy role IDs", () => {
+test("app role rename retires legacy role IDs", () => {
     const migration = readMigration("20260723215940_rename_member_command_app_roles.sql");
     const applicationApproval = read("app/admin/applications/actions.ts");
     const runtimeRoleFiles = [
@@ -137,7 +137,7 @@ test("app role rename preserves membership tiers while retiring legacy role IDs"
     ], "app role migration");
     assertIncludes(applicationApproval, [
         'role_id: "explorer"',
-        'base_tier: "member"',
+        'base_tier: "explorer"',
     ], "application approval role and tier");
     assert.doesNotMatch(
         runtimeRoleFiles,
@@ -153,6 +153,40 @@ test("app role rename preserves membership tiers while retiring legacy role IDs"
         migration,
         /replace\([^;]*'''member''::membership_tier'/,
         "app-role migration must not rename the member membership tier"
+    );
+});
+
+test("membership tiers use Explorer, Scout, and Meridian enum values", () => {
+    const migration = readMigration("20260723230219_rename_membership_tier_values.sql");
+    const membershipTierWriters = [
+        read("app/admin/applications/actions.ts"),
+        read("app/admin/command/actions.ts"),
+        read("app/admin/command/page.tsx"),
+        read("app/admin/editorial/actions.ts"),
+        read("app/admin/editorial/page.tsx"),
+        read("app/admin/events/actions.ts"),
+        read("app/admin/events/page.tsx"),
+        read("app/studio/EditorialStudio.tsx"),
+    ].join("\n");
+
+    assertIncludes(migration, [
+        "alter type public.membership_tier",
+        "rename value 'member' to 'explorer'",
+        "rename value 'command' to 'meridian'",
+        "private.resolve_nexus_profile_role(uuid)",
+        "array['explorer', 'scout', 'meridian']",
+    ], "membership tier migration");
+    assertIncludes(membershipTierWriters, [
+        'base_tier: "explorer"',
+        'tier: "meridian"',
+        '["explorer", "scout", "meridian"]',
+        '<option value="explorer">Explorer</option>',
+        '<option value="meridian">Meridian</option>',
+    ], "membership tier writers");
+    assert.doesNotMatch(
+        membershipTierWriters,
+        /base_tier:\s*"member"|tier:\s*"command"|value="member"|value="command"/,
+        "membership tier writers must not emit retired enum labels"
     );
 });
 

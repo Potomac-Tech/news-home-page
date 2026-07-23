@@ -70,7 +70,7 @@ export async function approveApplication(formData: FormData) {
                     company: application.company,
                     title: application.title,
                     status: "approved",
-                    base_tier: "member",
+                    base_tier: "explorer",
                     approved_at: now,
                     approved_by: userId,
                     decision_note: decisionNote || null,

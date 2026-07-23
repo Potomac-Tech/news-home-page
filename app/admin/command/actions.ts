@@ -325,7 +325,7 @@ export async function grantCommandEntitlement(formData: FormData) {
         .from("entitlements")
         .insert({
             organization_id: organization.id,
-            tier: "command",
+            tier: "meridian",
             status: "active",
             source: "manual_sales",
             starts_at: now,

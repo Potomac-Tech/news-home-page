@@ -113,7 +113,7 @@ function formatDate(value: string) {
 }
 
 function normalizeAccessTier(value: string | null | undefined): HomeStory["accessTier"] {
-    if (value === "command") {
+    if (value === "meridian") {
         return tierConfig.enterprise.publicName;
     }
 

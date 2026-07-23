@@ -108,11 +108,11 @@ function parseKeyPoints(value: unknown) {
 }
 
 function normalizeTier(value: string | null): ArticleAccessTier {
-    if (value === "command" || value === "scout") {
+    if (value === "meridian" || value === "scout") {
         return value;
     }
 
-    return "member";
+    return "explorer";
 }
 
 function mapCitation(row: EditorialCitationRow): ArticleCitation {

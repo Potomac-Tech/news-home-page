@@ -51,7 +51,7 @@ function statusLabel(value: string) {
 }
 
 function AccessTierSelect({
-    defaultValue = "member",
+    defaultValue = "explorer",
 }: {
     defaultValue?: string;
 }) {
@@ -61,9 +61,9 @@ function AccessTierSelect({
             defaultValue={defaultValue}
             className="w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-sm text-white outline-none transition focus:border-potomac-gold"
         >
-            <option value="member">Member</option>
+            <option value="explorer">Explorer</option>
             <option value="scout">Scout</option>
-            <option value="command">Command</option>
+            <option value="meridian">Meridian</option>
         </select>
     );
 }

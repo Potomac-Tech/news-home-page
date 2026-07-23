@@ -1,7 +1,7 @@
 import { createClient } from "../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
 
-export type DatasetAccessTier = "member" | "scout" | "command" | null;
+export type DatasetAccessTier = "explorer" | "scout" | "meridian" | null;
 
 export type DatasetCatalogSource = {
     id: string;
@@ -431,7 +431,7 @@ const allFallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         availability_state: "upcoming",
         availability_note:
             "Cataloged before full dataset release; current public preview is limited to methodology summaries.",
-        access_tier_required: "command",
+        access_tier_required: "meridian",
         is_sample_available: false,
         sample_url: null,
         is_demo_available: true,
@@ -502,7 +502,7 @@ const allFallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         availability_state: "restricted",
         availability_note:
             "Unavailable until collection rights, review workflow, and Command allocation are approved.",
-        access_tier_required: "command",
+        access_tier_required: "meridian",
         is_sample_available: false,
         sample_url: null,
         is_demo_available: false,

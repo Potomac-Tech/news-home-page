@@ -25,7 +25,7 @@ function tierLabel(value: string | null) {
         return "Public";
     }
 
-    return value === "command" ? "Command" : "Scout";
+    return value === "meridian" ? "Meridian" : "Scout";
 }
 
 export function CompareForm({

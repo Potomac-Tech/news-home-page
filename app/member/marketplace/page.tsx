@@ -45,7 +45,7 @@ function statusLabel(value: string | null | undefined) {
 }
 
 function tierLabel(value: string) {
-    return value === "command" ? "Command" : "Scout";
+    return value === "meridian" ? "Meridian" : "Scout";
 }
 
 function formatDate(value: string | null | undefined) {
@@ -590,7 +590,7 @@ export default async function DataMarketplacePage() {
     const commandOnlyListings = [
         ...dashboard.requests,
         ...dashboard.offers,
-    ].filter((listing) => listing.access_tier_required === "command").length;
+    ].filter((listing) => listing.access_tier_required === "meridian").length;
     const highConfidenceListings = [
         ...dashboard.requests,
         ...dashboard.offers,

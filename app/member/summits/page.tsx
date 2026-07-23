@@ -275,7 +275,7 @@ export default async function MemberSummitsPage() {
     const supabase = await createClient();
     const access = await getEventAccessContext({
         supabase,
-        tier: "member",
+        tier: "explorer",
         nextPath: "/member/summits",
     });
 

@@ -133,7 +133,7 @@ export default async function AdminCommandPage() {
         supabase
             .from("entitlements")
             .select("id,organization_id,organizations(name,slug,status)")
-            .eq("tier", "command")
+            .eq("tier", "meridian")
             .eq("status", "active")
             .order("starts_at", { ascending: false }),
         supabase

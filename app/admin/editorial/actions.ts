@@ -23,7 +23,7 @@ type ArticleSnapshot = {
     aeo_summary: string | null;
 };
 
-const accessTiers = ["member", "scout", "command"] as const;
+const accessTiers = ["explorer", "scout", "meridian"] as const;
 
 function getRequiredString(formData: FormData, key: string) {
     const value = String(formData.get(key) ?? "").trim();
@@ -42,7 +42,7 @@ function getOptionalString(formData: FormData, key: string) {
 }
 
 function getAccessTier(formData: FormData) {
-    const value = String(formData.get("access_tier_required") ?? "member");
+    const value = String(formData.get("access_tier_required") ?? "explorer");
 
     if (!accessTiers.includes(value as (typeof accessTiers)[number])) {
         throw new Error("Invalid access tier.");

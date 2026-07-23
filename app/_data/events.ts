@@ -1,4 +1,4 @@
-export type EventAccessTier = "member" | "scout" | "command";
+export type EventAccessTier = "explorer" | "scout" | "meridian";
 
 export type EventSourceLink = {
     label: string;
@@ -40,7 +40,7 @@ export const fallbackEvents: EventCalendarRecord[] = [
         slug: "potomac-space-investment-forum-2026",
         title: "Space Investment Forum",
         eventType: "forum",
-        accessTier: "member",
+        accessTier: "explorer",
         organizer: "Potomac Database Systems and Meet the Future",
         location: "Cosmos Club, Washington, DC",
         timezone: "America/New_York",
@@ -74,7 +74,7 @@ export const fallbackEvents: EventCalendarRecord[] = [
         slug: "space-industrialist-week-2026",
         title: "Space Industrialist Week",
         eventType: "industry_week",
-        accessTier: "member",
+        accessTier: "explorer",
         organizer: "Cabeus Explorer",
         location: "Venue to be announced",
         timezone: "America/New_York",

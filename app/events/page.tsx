@@ -140,11 +140,11 @@ function formatDateRange(event: EventCalendarRecord) {
 }
 
 function normalizeTier(value: string | null | undefined): EventAccessTier {
-    if (value === "command" || value === "scout") {
+    if (value === "meridian" || value === "scout") {
         return value;
     }
 
-    return "member";
+    return "explorer";
 }
 
 function parseStringArray(value: unknown) {
@@ -226,7 +226,7 @@ async function loadEvents(): Promise<LoadedEvents> {
     const supabase = await createClient();
     const access = await getEventAccessContext({
         supabase,
-        tier: "member",
+        tier: "explorer",
         nextPath: "/events",
     });
 

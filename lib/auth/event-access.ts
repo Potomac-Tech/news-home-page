@@ -14,9 +14,9 @@ export type EventAccessContext = {
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
 const rolesByTier: Record<EventAccessTier, string[]> = {
-    member: ["explorer", "scout", "meridian", "editor", "analyst", "admin"],
+    explorer: ["explorer", "scout", "meridian", "editor", "analyst", "admin"],
     scout: ["scout", "meridian", "editor", "analyst", "admin"],
-    command: ["meridian", "editor", "analyst", "admin"],
+    meridian: ["meridian", "editor", "analyst", "admin"],
 };
 
 export async function getEventAccessContext({

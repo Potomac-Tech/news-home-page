@@ -110,8 +110,8 @@ function profileDetail(profile: Profile | undefined) {
 }
 
 function tierLabel(value: string) {
-    if (value === "command") {
-        return "Command";
+    if (value === "meridian") {
+        return "Meridian";
     }
 
     return value === "scout" ? "Scout" : "Explorer";

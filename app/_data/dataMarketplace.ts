@@ -1,6 +1,6 @@
 import { createClient } from "../../lib/supabase/server";
 
-export type DataMarketplaceAccessTier = "scout" | "command";
+export type DataMarketplaceAccessTier = "scout" | "meridian";
 
 export type DataMarketplaceSourceDocument = {
     id: string;

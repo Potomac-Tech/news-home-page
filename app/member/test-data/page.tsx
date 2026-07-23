@@ -362,7 +362,7 @@ export default async function ExperimentalTestDataPage() {
     const datasetOptions = ((datasetsResult.data ??
         []) as CompareDatasetOption[]).filter(
         (dataset) =>
-            dataset.access_tier_required !== "command" ||
+            dataset.access_tier_required !== "meridian" ||
             access.roleId === "meridian" ||
             access.roleId === "admin"
     );

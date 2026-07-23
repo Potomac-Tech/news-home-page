@@ -42,7 +42,7 @@ export const fallbackArticles: ArticleRecord[] = [
         teaser:
             "The member brief outlines the featured speakers, agenda themes, and why cislunar infrastructure, capital allocation, and data intelligence are converging as strategic priorities.",
         publishedAt: "2026-07-19",
-        accessTier: "member",
+        accessTier: "explorer",
         heroImageUrl: "/potomac-space-investment-forum.jpg",
         heroImageAlt: "Invitation for the July 21, 2026 Space Investment Forum at the Cosmos Club in Washington",
         citations: [
@@ -74,7 +74,7 @@ export const fallbackArticles: ArticleRecord[] = [
         teaser:
             "The Explorer brief maps the workforce categories most likely to become lunar bottlenecks and identifies the demand signals organizations should track.",
         publishedAt: "2026-07-14",
-        accessTier: "member",
+        accessTier: "explorer",
         heroImageUrl: "/space-collar-lunar-workforce.png",
         heroImageAlt: "Lunar surface operations team supporting power, logistics, and mission systems",
         citations: [
@@ -106,7 +106,7 @@ export const fallbackArticles: ArticleRecord[] = [
         teaser:
             "The Explorer brief separates the draft procurement signal from awarded revenue and identifies the logistics, interface, and supply-chain indicators to monitor next.",
         publishedAt: "2026-06-15",
-        accessTier: "member",
+        accessTier: "explorer",
         heroImageUrl: "/commercial-lunar-delivery-pipeline.webp",
         heroImageAlt: "Commercial lunar lander delivering instruments and cargo to the Moon",
         citations: [
@@ -138,7 +138,7 @@ export const fallbackArticles: ArticleRecord[] = [
         teaser:
             "The Explorer brief examines the downstream surface-services market and the milestones that will distinguish a durable mobility platform from a one-mission vehicle.",
         publishedAt: "2026-06-14",
-        accessTier: "member",
+        accessTier: "explorer",
         heroImageUrl: "/crewed-lunar-rover-market.png",
         heroImageAlt: "Two crew-capable lunar rover concepts operating near the lunar south pole",
         citations: [
@@ -170,7 +170,7 @@ export const fallbackArticles: ArticleRecord[] = [
         teaser:
             "The Explorer brief identifies the integration milestones that matter most to suppliers, investors, and lunar program planners as the mission approaches.",
         publishedAt: "2026-06-09",
-        accessTier: "member",
+        accessTier: "explorer",
         heroImageUrl: "/artemis-iii-crew-integration.png",
         heroImageAlt: "Four astronauts reviewing an integrated spacecraft test plan",
         citations: [
@@ -202,7 +202,7 @@ export const fallbackArticles: ArticleRecord[] = [
         teaser:
             "The member brief examines where the awarded dollars flow, which follow-on procurements may emerge, and why repeat measurements could create more valuable lunar operating datasets.",
         publishedAt: "2026-06-30",
-        accessTier: "member",
+        accessTier: "explorer",
         heroImageUrl: "/commercial-lunar-delivery-pipeline.webp",
         heroImageAlt: "Commercial lunar lander deploying scientific instruments and cargo on the Moon",
         citations: [
@@ -234,7 +234,7 @@ export const fallbackArticles: ArticleRecord[] = [
         teaser:
             "The member analysis separates the near-Earth demonstration from future cislunar service claims and identifies the commercial opportunities created by higher mission-data volumes.",
         publishedAt: "2026-07-16",
-        accessTier: "member",
+        accessTier: "explorer",
         heroImageUrl: "/artemis-starlink-optical-relay.webp",
         heroImageAlt: "Crewed spacecraft relaying data through optical communications satellites above Earth",
         citations: [
@@ -266,7 +266,7 @@ export const fallbackArticles: ArticleRecord[] = [
         teaser:
             "The member brief maps the milestone to downstream demand and identifies the schedule, integration, and supplier signals that matter most for lunar companies and investors.",
         publishedAt: "2026-07-13",
-        accessTier: "member",
+        accessTier: "explorer",
         heroImageUrl: "/artemis-iii-booster-stacking.webp",
         heroImageAlt: "Solid rocket booster segments being stacked inside a high-bay integration facility",
         citations: [

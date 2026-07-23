@@ -306,9 +306,9 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                             <label className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">
                                 Reader access
                                 <select name="access_tier_required" value={draft.accessTier} onChange={(event) => updateDraft("accessTier", event.target.value)} className="ml-3 border border-potomac-regolith/30 bg-potomac-primary px-3 py-2 text-potomac-cream">
-                                    <option value="member">Explorer</option>
+                                    <option value="explorer">Explorer</option>
                                     <option value="scout">Scout</option>
-                                    <option value="command">Meridian</option>
+                                    <option value="meridian">Meridian</option>
                                 </select>
                             </label>
                         </div>

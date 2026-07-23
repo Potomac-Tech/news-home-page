@@ -11,6 +11,7 @@ import {
     type DatasetCatalogSource,
     loadDatasetCatalog,
 } from "../_data/datasets";
+import { publicTierName } from "../_data/tiers";
 
 export const dynamic = "force-dynamic";
 
@@ -54,7 +55,7 @@ function tierLabel(value: string | null) {
         return "Public";
     }
 
-    return value === "command" ? "Command" : statusLabel(value);
+    return publicTierName(value);
 }
 
 function formatDate(value: string | null | undefined) {
