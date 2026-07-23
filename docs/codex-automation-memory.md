@@ -143,3 +143,4 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 - Verification: lint, production build, five focused tests, all 147 repository tests, 60-route production crawl with zero issues, and production screenshot `.tmp/task-123-production-homepage.png`.
 - Altered tracked files: `lib/trackers/alpha-vantage.ts`, `supabase/config.toml`, `supabase/functions/ingest-alpha-vantage-stock-quotes/index.ts`, `supabase/migrations/20260723194855_route_alpha_vantage_refresh_through_edge_function.sql`, `tests/alpha-vantage-stock-refresh.test.mjs`, `docs/potomac-news-intelligence-tasks.md`, and this memory file.
 - Slack source: none.
+- Slack sync at `2026-07-23T19:56:00Z`: blocked. The connected Slack app returned `channel_not_found` for `C0BK24FALJH`, and channel search found no Potomac Headquarters match in the connected workspace. No messages were read, no tasks or replies were created, and no Slack marker was advanced.
