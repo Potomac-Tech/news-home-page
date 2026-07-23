@@ -5,6 +5,7 @@ import { createServiceClient } from "../supabase/service";
 const ALPHA_VANTAGE_URL = "https://www.alphavantage.co/query";
 const BATCH_SIZE = 5;
 const DAILY_CALL_CAP = 20;
+const REQUEST_SPACING_MS = 12_000;
 
 type RankingRow = {
     company_id: string;
@@ -33,6 +34,10 @@ type GlobalQuoteResponse = {
 function numberValue(value: string | undefined) {
     const parsed = Number(value?.replace("%", ""));
     return Number.isFinite(parsed) ? parsed : null;
+}
+
+function wait(milliseconds: number) {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
 async function fetchQuote(symbol: string) {
@@ -144,12 +149,24 @@ export async function ingestAlphaVantageStockQuotes(payload?: unknown) {
     }
 
     const retrievedAt = new Date().toISOString();
-    const results = await Promise.allSettled(
-        rankings.map(async (ranking) => ({
-            ranking,
-            quote: await fetchQuote(ranking.ticker_symbol_snapshot),
-        }))
-    );
+    const results: PromiseSettledResult<{
+        ranking: RankingRow;
+        quote: Awaited<ReturnType<typeof fetchQuote>>;
+    }>[] = [];
+    for (const [index, ranking] of rankings.entries()) {
+        try {
+            results.push({
+                status: "fulfilled",
+                value: {
+                    ranking,
+                    quote: await fetchQuote(ranking.ticker_symbol_snapshot),
+                },
+            });
+        } catch (reason) {
+            results.push({ status: "rejected", reason });
+        }
+        if (index < rankings.length - 1) await wait(REQUEST_SPACING_MS);
+    }
     const rows = results.flatMap((result) => {
         if (result.status !== "fulfilled") return [];
         const { ranking, quote } = result.value;

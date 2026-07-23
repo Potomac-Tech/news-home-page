@@ -12,7 +12,9 @@ test("Alpha Vantage refresh uses a server-only key and validated end-of-day quot
     assert.match(source, /function.*GLOBAL_QUOTE/s);
     assert.match(source, /Alpha Vantage end-of-day quote/);
     assert.match(source, /returnedSymbol !== symbol\.toUpperCase\(\)/);
-    assert.match(source, /Promise\.allSettled/);
+    assert.match(source, /REQUEST_SPACING_MS = 12_000/);
+    assert.match(source, /for \(const \[index, ranking\] of rankings\.entries\(\)\)/);
+    assert.match(source, /await wait\(REQUEST_SPACING_MS\)/);
     assert.match(source, /DAILY_CALL_CAP = 20/);
 });
 
