@@ -144,3 +144,9 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 - Altered tracked files: `lib/trackers/alpha-vantage.ts`, `supabase/config.toml`, `supabase/functions/ingest-alpha-vantage-stock-quotes/index.ts`, `supabase/migrations/20260723194855_route_alpha_vantage_refresh_through_edge_function.sql`, `tests/alpha-vantage-stock-refresh.test.mjs`, `docs/potomac-news-intelligence-tasks.md`, and this memory file.
 - Slack source: none.
 - Slack sync at `2026-07-23T19:56:00Z`: blocked. The connected Slack app returned `channel_not_found` for `C0BK24FALJH`, and channel search found no Potomac Headquarters match in the connected workspace. No messages were read, no tasks or replies were created, and no Slack marker was advanced.
+
+### 2026-07-23 18:40 EDT - Task 118 and Slack sync blocked
+
+- Task 118 remains unchecked because its implementation and technical checks are complete, but the required content-owner approval and named editor/admin approval have not been recorded. No approval was inferred or fabricated.
+- Slack sync at `2026-07-23T22:40:48Z`: blocked. Channel `C0BK24FALJH` returned `channel_not_found`; searches across connected public and private channels for `headquarters` and `cabeus` returned no results.
+- No Slack messages were read, no tasks or thread replies were created, and no Slack marker was advanced. A future run can retry without duplicating or skipping messages after the Slack app is connected to the Potomac Headquarters workspace/channel.
