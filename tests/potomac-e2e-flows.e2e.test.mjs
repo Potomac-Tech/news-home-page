@@ -127,6 +127,7 @@ before(async () => {
     const serverEnv = {
         ...process.env,
         NEXT_TELEMETRY_DISABLED: "1",
+        POTOMAC_E2E_CONTENT_FALLBACKS: "1",
         NEXT_PUBLIC_SUPABASE_URL: "https://xlpkdoeldtlhearqajat.supabase.co",
         NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "e2e-placeholder-key",
     };
@@ -179,11 +180,11 @@ test("public article teaser shows citations and member-gated full story", { time
     const { page, consoleMessages } = await newPage();
 
     try {
-        await page.goto(`${baseUrl}/news/nasa-lunar-delivery-awards-2028`, {
+        await page.goto(`${baseUrl}/news/clps-2-lunar-logistics-market`, {
             waitUntil: "domcontentloaded",
         });
 
-        assert.match(await page.title(), /NASA commits nearly \$600 million/i);
+        assert.match(await page.title(), /CLPS 2\.0 points toward/i);
         await assertVisibleText(page, "Public summary");
         await assertVisibleText(page, "Public intro");
         await assertVisibleText(page, "Source Citations");
@@ -196,7 +197,7 @@ test("public article teaser shows citations and member-gated full story", { time
             .getByRole("article")
             .getByRole("link", { name: /^Sign in$/i })
             .click();
-        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fnews%2Fnasa-lunar-delivery-awards-2028/);
+        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fnews%2Fclps-2-lunar-logistics-market/);
         await assertVisibleText(page, "Sign in");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
@@ -208,7 +209,7 @@ test("Explorer article unlock journey redirects signed-out readers to login", { 
     const { page, consoleMessages } = await newPage();
 
     try {
-        await page.goto(`${baseUrl}/news/nasa-lunar-delivery-awards-2028`, {
+        await page.goto(`${baseUrl}/news/clps-2-lunar-logistics-market`, {
             waitUntil: "domcontentloaded",
         });
 
@@ -216,7 +217,7 @@ test("Explorer article unlock journey redirects signed-out readers to login", { 
             .getByRole("article")
             .getByRole("link", { name: /^Sign in$/i })
             .click();
-        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fnews%2Fnasa-lunar-delivery-awards-2028/);
+        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fnews%2Fclps-2-lunar-logistics-market/);
         await assertVisibleText(page, "Sign in");
         await assertVisibleText(page, "Magic link");
         await assertVisibleText(page, "Password");
@@ -276,16 +277,16 @@ test("lunar terminal navigation exposes the core intelligence modules", { timeou
         await assertVisibleText(page, "Cabeus Explorer lunar industry terminal");
         await assertVisibleText(page, "Lunar industry terminal");
         await assertVisibleText(page, "Launches");
-        await assertVisibleText(page, "Spacecraft and landers");
-        await assertVisibleText(page, "Companies");
-        await assertVisibleText(page, "Marketplace");
+        await assertVisibleText(page, "Lunar news");
+        await assertVisibleText(page, "Datasets");
+        await assertVisibleText(page, "Calculators");
 
         await page
-            .getByRole("link", { name: /Spacecraft and landers/i })
+            .getByRole("link", { name: /Calculators/i })
             .first()
             .click();
-        await page.waitForURL(/\/spacecraft/);
-        await assertVisibleText(page, "Lunar spacecraft");
+        await page.waitForURL(/\/calculators/);
+        await assertVisibleText(page, "Lunar mission calculators");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
         await closePage(page);

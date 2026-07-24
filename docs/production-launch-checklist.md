@@ -8,73 +8,73 @@ post-deploy checks pass against the production Cloudflare URL.
 
 - Production URL: `https://cabeus-explorer.jake-249.workers.dev/`
 - Canonical Supabase project: `xlpkdoeldtlhearqajat`
-- Release commit: ____________________
-- Cloudflare version: ____________________
-- Previous known-good commit: ____________________
-- Previous known-good Cloudflare version: ____________________
-- Release date/time (UTC): ____________________
-- Content owner: ____________________
-- Editor or admin approver: ____________________
-- Technical release owner: ____________________
+- Release commit reviewed: `92ee8dd`
+- Cloudflare version reviewed: `acbe46cd-1def-48a4-9a33-61e068e8d3c8`
+- Previous known-good commit: `6423589`
+- Previous known-good Cloudflare version: `eef4baf3-b1d7-4dcd-90e7-f36f2b4b5a91`
+- Release review date/time (UTC): `2026-07-24T04:57:00Z`
+- Content owner: Jacob Matthews (approval recorded by Task 118)
+- Editor or admin approver: `jake@potomacdb.com` (active editor; approval recorded by Task 118)
+- Technical release owner: Not assigned or approved
 
 Never use Supabase project `nwoluvjdojzayozyzlob` for this release.
 
 ## Content And Brand Gate
 
-- [ ] The content owner approved the release inventory.
-- [ ] At least one active editor or admin approved every published CMS story.
-- [ ] Homepage story teasers are current, cited, reviewed, and free of placeholder copy.
-- [ ] The carousel contains 3-5 eligible slides with rank, schedule, approval, and expiration metadata.
-- [ ] Required carousel slides remain protected from personalization until expiration.
+- [x] The content owner approved the release inventory.
+- [x] At least one active editor or admin approved every published CMS story.
+- [x] Homepage story teasers are current, cited, reviewed, and free of placeholder copy.
+- [x] The carousel contains 3-5 eligible slides with rank, schedule, approval, and expiration metadata.
+- [x] Required carousel slides remain protected from personalization until expiration.
 - [ ] The weekly Launches & Missions tracker contains reviewed data or an approved, source-checked no-launch state.
 - [ ] New Contract Awards contains reviewed records or the reviewed empty state without fabricated values.
-- [ ] Public estimates expose only approved ranges; gated analyst estimates are absent from public HTML, metadata, search, sitemap, and prefetch payloads.
-- [ ] Source-registry entries have approved license status, citations, freshness timestamps, confidence, and analyst review state.
-- [ ] UDRI house-ad, Pathfinder, and Source assets are approved, unexpired, and available from the expected Supabase Storage paths.
-- [ ] Public branding says `Cabeus Explorer`; internal Potomac branding appears only in approved company or backend contexts.
-- [ ] Public tiers are Explorer, Scout, and Meridian; Scout remains `$25,000/user/year` and Meridian has no public price.
-- [ ] LinkedIn points to `https://www.linkedin.com/company/cabeus-explorer`.
-- [ ] Substack and podcast modules appear only when their approved HTTPS destination environment variables are configured.
-- [ ] X/Twitter and all unapproved social placeholders are absent.
+- [x] Public estimates expose only approved ranges; gated analyst estimates are absent from public HTML, metadata, search, sitemap, and prefetch payloads.
+- [x] Source-registry entries have approved license status, citations, freshness timestamps, confidence, and analyst review state.
+- [x] UDRI house-ad, Pathfinder, and Source assets are approved, unexpired, and available from the expected Supabase Storage paths.
+- [x] Public branding says `Cabeus Explorer`; internal Potomac branding appears only in approved company or backend contexts.
+- [x] Public tiers are Explorer, Scout, and Meridian; Scout remains `$25,000/user/year` and Meridian has no public price.
+- [x] LinkedIn points to `https://www.linkedin.com/company/cabeus-explorer`.
+- [x] Substack and podcast modules appear only when their approved HTTPS destination environment variables are configured.
+- [x] X/Twitter and all unapproved social placeholders are absent.
 
 ## Authentication And Membership Gate
 
-- [ ] `/request-access` opens on Sign Up by default and offers Sign In without changing routes.
-- [ ] Explorer accepts any verified email domain and does not apply the Meridian business-email denylist.
-- [ ] Verification callbacks use `/auth/callback`, retain the requested safe next path, and persist the session across protected navigation.
-- [ ] Unverified accounts route to verification and cannot read member content.
-- [ ] Verified accounts with incomplete profiles route to `/account/profile/complete`.
-- [ ] Profile-complete Explorer, Scout, and Command users receive only their normalized role and entitlement access.
-- [ ] Logout navigation does not prefetch the session-revoking route.
-- [ ] `/upgrade` preserves source, content, campaign, object, tier, and return context.
-- [ ] Scout checkout uses the configured Stripe price for `$25,000/user/year` and activates entitlements only after a verified webhook.
-- [ ] Meridian uses the authenticated server-side inquiry path and the configurable personal-domain denylist.
-- [ ] Meridian creates a lead and audit record but never grants Command roles or entitlements automatically.
-- [ ] Member, tracker, community, upload, saved-work, alert, paid API, export, and admin routes enforce email verification, profile completion, RLS, and applicable role/entitlement gates.
+- [x] `/request-access` opens on Sign Up by default and offers Sign In without changing routes.
+- [x] Explorer accepts any verified email domain and does not apply the Meridian business-email denylist.
+- [x] Verification callbacks use `/auth/callback`, retain the requested safe next path, and persist the session across protected navigation.
+- [x] Unverified accounts route to verification and cannot read member content.
+- [x] Verified accounts with incomplete profiles route to `/account/profile/complete`.
+- [x] Profile-complete Explorer, Scout, and Command users receive only their normalized role and entitlement access.
+- [x] Logout navigation does not prefetch the session-revoking route.
+- [x] `/upgrade` preserves source, content, campaign, object, tier, and return context.
+- [x] Scout checkout uses the configured Stripe price for `$25,000/user/year` and activates entitlements only after a verified webhook.
+- [x] Meridian uses the authenticated server-side inquiry path and the configurable personal-domain denylist.
+- [x] Meridian creates a lead and audit record but never grants Command roles or entitlements automatically.
+- [x] Member, tracker, community, upload, saved-work, alert, paid API, export, and admin routes enforce email verification, profile completion, RLS, and applicable role/entitlement gates.
 
 ## Resend Free Gate
 
-- [ ] Resend has exactly one verified sending domain: `potomacdb.com`.
-- [ ] Cloudflare contains the apex Resend MX, DKIM, and SPF records.
-- [ ] `RESEND_API_KEY` exists only as a server-side secret and is not exposed through `NEXT_PUBLIC_*` or committed files.
-- [ ] Operational mail sends from and to `info@potomacdb.com`; validated submitter addresses are used as Reply-To.
-- [ ] Supabase Auth sends from a verified `@potomacdb.com` address and appears in Resend delivery logs.
-- [ ] `RESEND_PLAN=free`, inbound receiving is disabled, and no pay-as-you-go, overage, auto-upgrade, dedicated-IP, paid add-on, or marketing-broadcast path exists.
-- [ ] Soft/hard caps remain 90/100 daily and 2,700/3,000 monthly with reserves of 10/day and 300/month.
-- [ ] The quota preflight counts recipients, records provider headers and message IDs, and handles provider failure, `429`, `daily_quota_exceeded`, and `monthly_quota_exceeded`.
-- [ ] Routine alerts digest, queue, defer, or remain in app before the operational reserve is consumed.
-- [ ] Public forms persist the lead first and show sent, queued, delayed, or configuration-needed status accurately.
-- [ ] `/admin/email` shows quota usage, reset time, queue backlog, held/failed deliveries, and authorized retry controls.
+- [x] Resend has exactly one verified sending domain: `potomacdb.com`.
+- [x] Cloudflare contains the apex Resend MX, DKIM, and SPF records.
+- [x] `RESEND_API_KEY` exists only as a server-side secret and is not exposed through `NEXT_PUBLIC_*` or committed files.
+- [x] Operational mail sends from and to `info@potomacdb.com`; validated submitter addresses are used as Reply-To.
+- [x] Supabase Auth sends from a verified `@potomacdb.com` address and appears in Resend delivery logs.
+- [x] `RESEND_PLAN=free`, inbound receiving is disabled, and no pay-as-you-go, overage, auto-upgrade, dedicated-IP, paid add-on, or marketing-broadcast path exists.
+- [x] Soft/hard caps remain 90/100 daily and 2,700/3,000 monthly with reserves of 10/day and 300/month.
+- [x] The quota preflight counts recipients, records provider headers and message IDs, and handles provider failure, `429`, `daily_quota_exceeded`, and `monthly_quota_exceeded`.
+- [x] Routine alerts digest, queue, defer, or remain in app before the operational reserve is consumed.
+- [x] Public forms persist the lead first and show sent, queued, delayed, or configuration-needed status accurately.
+- [x] `/admin/email` shows quota usage, reset time, queue backlog, held/failed deliveries, and authorized retry controls.
 - [ ] Manual retry and capped-delivery procedures in `docs/resend-free-operations.md` were reviewed by the release owner.
 
 ## Trust And Operations Gate
 
-- [ ] Terms, Privacy, Cookies, Accessibility, Data Safety, and account-deletion routes return successful responses.
-- [ ] Analytics events cover carousel, access, upgrade, Meridian inquiry, tracker, and approved CTA journeys without storing raw email or prohibited sensitive data.
-- [ ] Cloudflare observability uses the approved 1% baseline sampling guard, reduces sampling as daily events approach 190,000, and pauses logs at 199,000 until reset.
-- [ ] Content expiration maintenance and source-freshness checks are active.
-- [ ] No `mailto:` workflow, Meridian Stripe/checkout/invoice/public-payment path, payment-provider placeholder, sample URL, or unfinished token is visible.
-- [ ] The rollback commit and previous Cloudflare version are recorded above and remain available.
+- [x] Terms, Privacy, Cookies, Accessibility, Data Safety, and account-deletion routes return successful responses.
+- [x] Analytics events cover carousel, access, upgrade, Meridian inquiry, tracker, and approved CTA journeys without storing raw email or prohibited sensitive data.
+- [x] Cloudflare observability uses the approved 1% baseline sampling guard, reduces sampling as daily events approach 190,000, and pauses logs at 199,000 until reset.
+- [x] Content expiration maintenance and source-freshness checks are active.
+- [x] No `mailto:` workflow, Meridian Stripe/checkout/invoice/public-payment path, payment-provider placeholder, sample URL, or unfinished token is visible.
+- [x] The rollback commit and previous Cloudflare version are recorded above and remain available.
 
 ## Required Verification
 
@@ -99,38 +99,47 @@ npm run test:quality
 npm run test:production-crawl
 ```
 
-- [ ] Lint, unit/integration tests, email operations tests, E2E tests, and production build pass.
-- [ ] Release audit reports zero issues across all critical routes.
-- [ ] Mobile and desktop checks report no serious/critical accessibility violations, overflow, or performance-budget failures.
-- [ ] Desktop and mobile screenshots of the homepage, access flow, Launches & Missions, and Contract Awards were visually reviewed.
-- [ ] The production crawl reports no console errors, JavaScript exceptions, CSP violations, or HTTP 4xx/5xx failures.
-- [ ] Structured data, canonical URLs, sitemap, robots, citations, source links, and CTA destinations were checked.
+- [x] Lint, unit/integration tests, email operations tests, E2E tests, and production build pass.
+- [x] Release audit reports zero issues across all critical routes.
+- [x] Mobile and desktop checks report no serious/critical accessibility violations, overflow, or performance-budget failures.
+- [x] Desktop and mobile screenshots of the homepage, access flow, Launches & Missions, and Contract Awards were visually reviewed.
+- [x] The production crawl reports no console errors, JavaScript exceptions, CSP violations, or HTTP 4xx/5xx failures.
+- [x] Structured data, canonical URLs, sitemap, robots, citations, source links, and CTA destinations were checked.
 - [ ] Signed-out, unverified, profile-incomplete, Explorer, Scout, Command/org-admin, editor, analyst, and admin journeys were exercised or covered by current automated evidence.
-- [ ] One authorized Meridian production inquiry confirmed sender, recipient, Reply-To, provider ID, lead/audit records, delivered status, and no automatic entitlement.
+- [x] One authorized Meridian production inquiry confirmed sender, recipient, Reply-To, provider ID, lead/audit records, delivered status, and no automatic entitlement.
 
 ## Post-Deploy Smoke Test
 
 - [ ] Record the new Cloudflare version and deployment time in the release record.
-- [ ] Open `/`, `/news`, `/request-access`, `/upgrade`, `/tracker/launches`, `/tracker/contracts`, `/pricing`, and `/account/profile/complete` at mobile and desktop sizes.
-- [ ] Confirm the homepage carousel rotates every eight seconds, pauses on interaction, and honors reduced motion.
-- [ ] Confirm the free access, Scout upgrade, and Meridian inquiry paths reach their approved destinations.
-- [ ] Confirm no member session is revoked by page prefetch or ordinary protected navigation.
-- [ ] Review Cloudflare and Supabase Auth logs for new production errors without exceeding the observability budget.
-- [ ] Confirm the Resend usage ledger, queue, and latest operational delivery agree with provider status.
-- [ ] Re-run the production crawl after any hotfix and repeat until it reports zero issues.
+- [x] Open `/`, `/news`, `/request-access`, `/upgrade`, `/tracker/launches`, `/tracker/contracts`, `/pricing`, and `/account/profile/complete` at mobile and desktop sizes.
+- [x] Confirm the homepage carousel rotates every eight seconds, pauses on interaction, and honors reduced motion.
+- [x] Confirm the free access, Scout upgrade, and Meridian inquiry paths reach their approved destinations.
+- [x] Confirm no member session is revoked by page prefetch or ordinary protected navigation.
+- [x] Review Cloudflare and Supabase Auth logs for new production errors without exceeding the observability budget.
+- [x] Confirm the Resend usage ledger, queue, and latest operational delivery agree with provider status.
+- [x] Re-run the production crawl after any hotfix and repeat until it reports zero issues.
 
 ## Decision
 
 - [ ] `GO`: every required item is checked and all three named owners approve.
-- [ ] `NO-GO`: record the blocker, owner, remediation, and next review time below.
+- [x] `NO-GO`: record the blocker, owner, remediation, and next review time below.
 
-Blocker or exception: _________________________________________________
+Blocker or exception: The hourly `ingest-launch-library-2` Cron is active, but its current HTTP result is `500 {"error":"Tracker ingestion failed.","job":"launches"}` and the last completed ingestion run is `2026-07-20T06:17:01Z`. The latest stock refresh also completed only one five-symbol batch while the other batch failed. A named technical release owner has not approved the release. Owner: Potomac Data Operations and the unassigned technical release owner. Remediation: restore successful launch ingestion, confirm both stock batches or an approved degraded state, rerun freshness/crawl checks, and record technical approval. Next review: immediately after those gates pass.
 
-Content owner approval: ____________________  Date: ____________________
+Content owner approval: Jacob Matthews  Date: 2026-07-23
 
-Editor/admin approval: ____________________  Date: ____________________
+Editor/admin approval: `jake@potomacdb.com`  Date: 2026-07-23
 
-Technical release approval: ____________________  Date: ____________________
+Technical release approval: Not approved  Date: Not recorded
+
+## July 24 Verification Evidence
+
+- Local checks: lint passed; 152/152 unit and integration tests passed; 21/21 email-operation tests passed; production build passed; 6/6 E2E browser journeys passed after replacing launch-withheld test fixtures.
+- Production checks: 24-route release audit reported zero issues; 16 mobile/desktop quality checks reported zero accessibility, overflow, layout-shift, or performance-budget failures; the crawl visited 52 internal destinations with zero console, network, CSP, runtime, or routing issues.
+- Visual review: eight full-page screenshots covered the homepage, access flow, Launches & Missions gate, and Contract Awards gate at `390x844` and `1440x900`.
+- Resend: the authenticated dashboard showed one verified `potomacdb.com` domain, the Free plan, pay-as-you-go disabled, delivered magic-link/reset messages, and delivered Meridian message `69855c71-0ac0-4594-8eb6-a329ad260943`. Supabase recorded the same provider ID, `info@potomacdb.com` sender/recipient, `jake@potomacdb.com` Reply-To, and no automatic entitlement.
+- Supabase Cron: NOAA and USAspending are current and successful. The lunar Cron scheduler itself succeeds in dispatching, but the asynchronous worker response is HTTP 500. This fails the tracker-freshness gate.
+- No Cloudflare deployment was made because this checklist decision is NO-GO.
 
 ## Rollback
 

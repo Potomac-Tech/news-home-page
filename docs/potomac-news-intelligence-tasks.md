@@ -1355,9 +1355,9 @@ Blocked reason:
   - Superseded by: None.
   - Goal: Produce a defensible GO or NO-GO decision for the July 21 release.
   - Acceptance criteria: Complete `docs/production-launch-checklist.md`; record release and rollback commits and Cloudflare versions; pass lint, tests, build, expanded release audit, quality audit, E2E role journeys, production crawl, tracker freshness checks, Supabase Cron checks, Resend checks, and mobile/desktop visual review; obtain content-owner, editor/admin, and technical approvals; deploy only on GO.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason: Depends on Tasks 118-120 and named approvals.
+  - Non-technical summary: The release review is complete and currently records a NO-GO. The public site, authentication safeguards, content, email delivery, accessibility, and browser checks are healthy, but the lunar launch feed is failing in production and no technical release owner has signed the release.
+  - Verification: Lint passed; 152/152 unit and integration tests passed; 21/21 email-operation tests passed; the production build and all 6 E2E journeys passed. The production release audit reported zero issues across 24 routes, the quality audit passed 16 route/viewport checks, eight screenshots were visually reviewed, and the 52-destination production crawl reported zero issues. Resend showed one verified `potomacdb.com` domain, the Free plan with pay-as-you-go disabled, delivered Auth mail, and the delivered Meridian inquiry matching Supabase provider ID `69855c71-0ac0-4594-8eb6-a329ad260943`. Supabase Cron confirmed current NOAA and USAspending ingestion, but the hourly Launch Library 2 worker returned HTTP 500 and has not recorded a completed run since 2026-07-20. No Cloudflare deployment was made under the checklist's deploy-only-on-GO rule.
+  - Blocked reason: NO-GO until the Launch Library 2 ingestion worker returns success and records a fresh run, the split stock refresh is healthy or explicitly accepted as degraded, and a named technical release owner records approval.
 
 - [x] Task 122: Publish the top-ten space stock ticker
   - Priority: P1
