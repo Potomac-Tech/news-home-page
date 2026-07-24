@@ -204,3 +204,15 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 - Post-refresh production release audit passed 24 routes with zero issues; the browser crawler visited 52 destinations with no console, network, CSP, runtime, or routing failures.
 - Task 121 remains unchecked. Remaining blockers are eight current Contract Awards drafts awaiting editorial disposition, release-owner review of the Resend manual retry procedure, and named technical release approval.
 - Slack sync at `2026-07-24T10:49:00Z`: blocked. Channel `C0BK24FALJH` returned `channel_not_found`, and a connected-workspace search for `headquarters cabeus` returned no public or private channel. No messages were read, no tasks or replies were created, and no Slack marker was advanced.
+
+### 2026-07-24 09:29 EDT - Task 121 Contract Awards gate cleared; Slack browser access confirmed
+
+- Reviewed all eight records from USAspending ingestion run `ad233f1b-f1cc-44f3-865e-f07b517e7324`.
+- Published two directly lunar NASA awards and archived six unrelated NIH workforce awards that matched the generic word `Gateway`.
+- Migration `review_july_contract_awards` was applied only to canonical project `xlpkdoeldtlhearqajat`.
+- Commit `7e22687` adds NASA/space-context validation for Gateway-only awards and is pushed to PR #4.
+- Verification passed lint, 155 automated tests, the production build, a zero-issue 24-route release audit, and a zero-issue 52-destination production crawl.
+- Cloudflare version `fcf715c0-a54a-454b-adae-7c55ac047c70` is live.
+- Task 121 remains unchecked and NO-GO. Remaining blockers: release-owner review of `docs/resend-free-operations.md` and named technical release approval.
+- Direct browser access to Potomac Slack is confirmed for workspace `T09LW7755H7` and channel `C0BK24FALJH` (`cabeus-explorer-bugs-and-fixes`). The channel had no new actionable parent messages, so no task or reply was created and no marker was advanced.
+- The Codex Slack connector remains authenticated to Lease Passport. Its final `Reconnect` action is open in Codex settings and requires user confirmation before persistent OAuth access is changed.

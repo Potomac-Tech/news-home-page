@@ -27,7 +27,7 @@ Never use Supabase project `nwoluvjdojzayozyzlob` for this release.
 - [x] The carousel contains 3-5 eligible slides with rank, schedule, approval, and expiration metadata.
 - [x] Required carousel slides remain protected from personalization until expiration.
 - [x] The weekly Launches & Missions tracker contains reviewed data or an approved, source-checked no-launch state.
-- [ ] New Contract Awards contains reviewed records or the reviewed empty state without fabricated values.
+- [x] New Contract Awards contains reviewed records or the reviewed empty state without fabricated values.
 - [x] Public estimates expose only approved ranges; gated analyst estimates are absent from public HTML, metadata, search, sitemap, and prefetch payloads.
 - [x] Source-registry entries have approved license status, citations, freshness timestamps, confidence, and analyst review state.
 - [x] UDRI house-ad, Pathfinder, and Source assets are approved, unexpired, and available from the expected Supabase Storage paths.
@@ -124,7 +124,7 @@ npm run test:production-crawl
 - [ ] `GO`: every required item is checked and all three named owners approve.
 - [x] `NO-GO`: record the blocker, owner, remediation, and next review time below.
 
-Blocker or exception: Launch ingestion and both stock batches are current and healthy. Contract Awards has eight current relevant draft records but no editor-approved published record, the Resend manual retry procedure has not been signed as reviewed, and a named technical release owner has not approved the release. Owner: Cabeus editorial operations and the unassigned technical release owner. Remediation: review and approve at least one current Contract Awards record or explicitly approve the reviewed empty presentation, sign the Resend operating-procedure review, and record technical approval. Next review: immediately after those gates pass.
+Blocker or exception: Launch ingestion, both stock batches, and Contract Awards are current and healthy. The Resend manual retry procedure has not been signed as reviewed, and a named technical release owner has not approved the release. Owner: the release owner and the unassigned technical release owner. Remediation: sign the Resend operating-procedure review and record technical approval. Next review: immediately after those gates pass.
 
 Content owner approval: Jacob Matthews  Date: 2026-07-23
 
@@ -134,7 +134,7 @@ Technical release approval: Not approved  Date: Not recorded
 
 ## July 24 Verification Evidence
 
-- Local checks: lint passed; 152/152 unit and integration tests passed; 21/21 email-operation tests passed; production build passed; 6/6 E2E browser journeys passed after replacing launch-withheld test fixtures.
+- Local checks: lint passed; 155/155 unit and integration tests passed; 21/21 email-operation tests passed; production build passed; 6/6 E2E browser journeys passed after replacing launch-withheld test fixtures.
 - Production checks: 24-route release audit reported zero issues; 16 mobile/desktop quality checks reported zero accessibility, overflow, layout-shift, or performance-budget failures; the crawl visited 52 internal destinations with zero console, network, CSP, runtime, or routing issues.
 - Visual review: eight full-page screenshots covered the homepage, access flow, Launches & Missions gate, and Contract Awards gate at `390x844` and `1440x900`.
 - Resend: the authenticated dashboard showed one verified `potomacdb.com` domain, the Free plan, pay-as-you-go disabled, delivered magic-link/reset messages, and delivered Meridian message `69855c71-0ac0-4594-8eb6-a329ad260943`. Supabase recorded the same provider ID, `info@potomacdb.com` sender/recipient, `jake@potomacdb.com` Reply-To, and no automatic entitlement.
@@ -143,6 +143,7 @@ Technical release approval: Not approved  Date: Not recorded
 - Current tracker verification: launch run `8bc7b0ec-3133-45e4-b7eb-64d8b0a3f7e8` fetched directly from Launch Library 2 at `2026-07-24T10:17:15Z` and completed with 13 fetched and zero relevant records. Alpha Vantage runs `39a8cbf2-6655-494a-baaa-58e1ad7f5203` and `3eea879e-1f11-4463-8b5d-c2f9e3bacbd0` each updated all five requested symbols with no failures, using 10 of the guarded 20 daily calls.
 - Role evidence: Task 108 records six purpose-built canonical Auth identities, 102 authenticated RLS reads, and 25 allowed/denied writes covering Explorer, Scout, Command/organization admin, editor, analyst, and admin. Current tests cover signed-out, unverified, and profile-incomplete routing.
 - GitHub PR #4 quality gate passed for commit `86bfec0`. The post-refresh 24-route release audit and 52-destination crawl reported zero issues at `2026-07-24T10:47Z`.
+- Contract Awards review: migration `review_july_contract_awards` published two official NASA lunar awards with cited values and archived six NIH workforce false positives. Commit `7e22687` prevents future Gateway-only matches without NASA or explicit space context. Cloudflare version `fcf715c0-a54a-454b-adae-7c55ac047c70` is live; the post-deploy 24-route release audit and 52-destination crawl reported zero issues at `2026-07-24T13:29Z`.
 
 ## July 24 Launch Ingestion Remediation
 
