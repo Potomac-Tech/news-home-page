@@ -159,3 +159,17 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 - Current release evidence also includes lint, TypeScript, 149 automated tests, production build, and a 60-destination production crawl with zero issues on Cloudflare version `fb0b1cb9-a034-4cf8-b336-abc077d9f06b`.
 - Altered tracked files: `docs/launch-readiness-2026-07-21.md`, `docs/potomac-news-intelligence-tasks.md`, and this memory file.
 - Slack source: none.
+
+### 2026-07-23 22:10 EDT - Task 120 completed
+
+- Selected and approved a narrow production inventory: four cited Explorer news stories and three high-confidence public NASA/USGS datasets.
+- Content owner: Jacob Matthews. Active editor approver: `jake@potomacdb.com`.
+- Archived three unapproved proprietary/derived dataset placeholders and kept events, companies, missions, commodity content, and other incomplete modules off launch surfaces.
+- Production loaders now fail closed instead of substituting local story, event, dataset, search, command-palette, sitemap, or article content.
+- Fixed the Supabase search RLS helper left inconsistent by the tier rename: `intelligence_search_visibility_tier` now evaluates `meridian`, restoring anonymous public search and eliminating stale fallback links.
+- Supabase migrations deployed to canonical project `xlpkdoeldtlhearqajat`: `approve_launch_content_inventory` and `fix_meridian_search_visibility`.
+- Commits pushed to PR #4: `6423589` and `92ee8dd`.
+- Cloudflare production version: `acbe46cd-1def-48a4-9a33-61e068e8d3c8`.
+- Verification: lint; 152/152 tests; production build; 24-route release audit with zero issues; ten mobile/desktop quality checks with zero accessibility, overflow, CLS, or performance failures; 52-route production crawl with zero console, network, or CSP issues.
+- Altered tracked files: content fallback policy/loaders, homepage/news/events/datasets/search/sitemap surfaces, search palette, release audit, two Supabase migrations, launch inventory documentation, tests, task tracker, and this memory file.
+- Slack source: none.

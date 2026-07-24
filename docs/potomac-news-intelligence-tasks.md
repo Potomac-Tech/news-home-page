@@ -1337,16 +1337,16 @@ Blocked reason:
   - Verification: Canonical Supabase project `xlpkdoeldtlhearqajat` has active Cron jobs for Launch Library 2 hourly, NOAA SWPC every 15 minutes, and USAspending daily at 06:23 UTC. Launch runs completed with eight records checked and zero lunar-relevant launches in the current window; NOAA updated four snapshots through 2026-07-19 19:45 UTC; USAspending completed with ten candidates, six relevant records, 12 total draft awards, 12 citations, and 12 exact cited-value records. The private endpoint returned `401` without its bearer secret, all 133 tests passed, and Cloudflare version `2a3c1deb-6fad-43bd-92d6-8bba237ab681` deployed successfully.
   - Blocked reason: None.
 
-- [ ] Task 120: Populate and approve launch content inventory
+- [x] Task 120: Populate and approve launch content inventory
   - Priority: P0
   - Requirement IDs: R-LAUNCH-001, R-HOME-003, R-CONTENT-001, R-CONTENT-002
   - Supersedes: None.
   - Superseded by: None.
   - Goal: Replace local fallback stories, events, companies, missions, datasets, and commodity records with approved production content where those modules will launch.
   - Acceptance criteria: Content owner selects the launch inventory; an editor/admin approves every published record; all records have citations, freshness/review timestamps, audience tier, confidence, and expiration where required; no zero-row module falls back to invented or representative content; omitted modules remain hidden under Task 118.
-  - Non-technical summary:
-  - Verification:
-  - Blocked reason: Requires content-owner inventory and named editor/admin approval.
+  - Non-technical summary: The launch site now uses a deliberately narrow, approved content set: four cited lunar-industry stories and three authoritative public lunar datasets. Unfinished event promotion and three proprietary dataset placeholders are withheld, and production no longer substitutes sample content when a live feed is empty or unavailable.
+  - Verification: Jacob Matthews is recorded as content owner and `jake@potomacdb.com` as the active editor approver. Canonical Supabase project `xlpkdoeldtlhearqajat` reports four approved published articles, three approved public datasets, zero published proprietary placeholders, three archived placeholders, and zero published events. Migrations `approve_launch_content_inventory` and `fix_meridian_search_visibility` are deployed. Passed lint, all 152 tests, production build, a 24-route release audit with zero issues, ten mobile/desktop quality checks with zero accessibility or budget failures, and a 52-route production crawl with zero console, network, or CSP issues. Commits `6423589` and `92ee8dd` are pushed to PR #4; Cloudflare version `acbe46cd-1def-48a4-9a33-61e068e8d3c8` is live.
+  - Blocked reason: None.
 
 - [ ] Task 121: Run and sign the July 21 production release
   - Priority: P0
