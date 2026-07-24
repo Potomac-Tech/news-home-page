@@ -58,7 +58,11 @@ export async function POST(request: Request) {
             message: detail,
         });
         return NextResponse.json(
-            { error: "Tracker ingestion failed.", job: body.job },
+            {
+                error: "Tracker ingestion failed.",
+                job: body.job,
+                detail,
+            },
             { status: 500 }
         );
     }
