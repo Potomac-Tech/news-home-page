@@ -194,3 +194,12 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 - Task 121 remains unchecked and NO-GO. Remaining gates: split Alpha Vantage batch health or explicit degraded approval, reviewed Contract Awards content/empty state, Resend operations review, complete named-role journey evidence, and named technical approval.
 - Altered tracked files: `app/api/internal/trackers/ingest/route.ts`, `lib/trackers/production-ingestion.ts`, two Supabase migrations, `tests/weekly-lunar-ingestion.test.mjs`, the production checklist, task tracker, and this memory file.
 - Slack sync at `2026-07-24T08:00:00Z`: blocked. Channel `C0BK24FALJH` returned `channel_not_found`, and a connected-workspace search for `headquarters cabeus` found no matching public or private channel. No messages were read, no tasks or replies were created, and no Slack marker was advanced.
+
+### 2026-07-24 06:48 EDT - Task 121 operational gates narrowed
+
+- GitHub PR #4 quality gate passed for commit `86bfec0`.
+- Launch ingestion run `8bc7b0ec-3133-45e4-b7eb-64d8b0a3f7e8` used the direct Launch Library 2 transport at `2026-07-24T10:17:15Z`, fetched 13 records, found zero relevant launches, and completed without error.
+- Manually exercised both scheduled Alpha Vantage batches within the existing free-tier guard. Runs `39a8cbf2-6655-494a-baaa-58e1ad7f5203` and `3eea879e-1f11-4463-8b5d-c2f9e3bacbd0` each updated five symbols with zero failures; 10 of 20 guarded daily calls were reserved.
+- Reused current Task 108 evidence for the release role gate: six canonical QA identities, 102 RLS reads, and 25 expected allowed/denied writes across Explorer, Scout, Command/org admin, editor, analyst, and admin, with route tests covering signed-out, unverified, and profile-incomplete states.
+- Post-refresh production release audit passed 24 routes with zero issues; the browser crawler visited 52 destinations with no console, network, CSP, runtime, or routing failures.
+- Task 121 remains unchecked. Remaining blockers are eight current Contract Awards drafts awaiting editorial disposition, release-owner review of the Resend manual retry procedure, and named technical release approval.

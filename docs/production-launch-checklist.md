@@ -105,7 +105,7 @@ npm run test:production-crawl
 - [x] Desktop and mobile screenshots of the homepage, access flow, Launches & Missions, and Contract Awards were visually reviewed.
 - [x] The production crawl reports no console errors, JavaScript exceptions, CSP violations, or HTTP 4xx/5xx failures.
 - [x] Structured data, canonical URLs, sitemap, robots, citations, source links, and CTA destinations were checked.
-- [ ] Signed-out, unverified, profile-incomplete, Explorer, Scout, Command/org-admin, editor, analyst, and admin journeys were exercised or covered by current automated evidence.
+- [x] Signed-out, unverified, profile-incomplete, Explorer, Scout, Command/org-admin, editor, analyst, and admin journeys were exercised or covered by current automated evidence.
 - [x] One authorized Meridian production inquiry confirmed sender, recipient, Reply-To, provider ID, lead/audit records, delivered status, and no automatic entitlement.
 
 ## Post-Deploy Smoke Test
@@ -124,7 +124,7 @@ npm run test:production-crawl
 - [ ] `GO`: every required item is checked and all three named owners approve.
 - [x] `NO-GO`: record the blocker, owner, remediation, and next review time below.
 
-Blocker or exception: Launch ingestion is restored and current. The latest stock refresh still completed only one five-symbol batch while the other batch failed. Contract Awards does not yet have a reviewed record or a reviewed empty-state artifact, the Resend manual retry procedure has not been signed as reviewed, complete automated or exercised evidence for every named role journey has not been recorded, and a named technical release owner has not approved the release. Owner: Potomac Data Operations and the unassigned technical release owner. Remediation: confirm both stock batches or obtain an explicit degraded-state approval, complete the outstanding reviewed evidence and operating-procedure gates, and record technical approval. Next review: immediately after those gates pass.
+Blocker or exception: Launch ingestion and both stock batches are current and healthy. Contract Awards has eight current relevant draft records but no editor-approved published record, the Resend manual retry procedure has not been signed as reviewed, and a named technical release owner has not approved the release. Owner: Cabeus editorial operations and the unassigned technical release owner. Remediation: review and approve at least one current Contract Awards record or explicitly approve the reviewed empty presentation, sign the Resend operating-procedure review, and record technical approval. Next review: immediately after those gates pass.
 
 Content owner approval: Jacob Matthews  Date: 2026-07-23
 
@@ -140,6 +140,9 @@ Technical release approval: Not approved  Date: Not recorded
 - Resend: the authenticated dashboard showed one verified `potomacdb.com` domain, the Free plan, pay-as-you-go disabled, delivered magic-link/reset messages, and delivered Meridian message `69855c71-0ac0-4594-8eb6-a329ad260943`. Supabase recorded the same provider ID, `info@potomacdb.com` sender/recipient, `jake@potomacdb.com` Reply-To, and no automatic entitlement.
 - Supabase Cron: NOAA and USAspending are current and successful. Launch ingestion run `6019cac4-2046-4a47-ae25-882b704484ab` completed from a six-hour-bounded source snapshot after Launch Library 2 throttled shared egress. It preserved the source retrieval time `2026-07-24T07:43:32Z`, evaluated 13 records, found zero lunar-relevant launches, and published the reviewed `No launches this week` state.
 - Operational remediation was deployed to Cloudflare at approximately `2026-07-24T07:54Z` as version `e3cea93a-6465-4a61-8f79-79afa3b6282f`; this is not a release GO decision.
+- Current tracker verification: launch run `8bc7b0ec-3133-45e4-b7eb-64d8b0a3f7e8` fetched directly from Launch Library 2 at `2026-07-24T10:17:15Z` and completed with 13 fetched and zero relevant records. Alpha Vantage runs `39a8cbf2-6655-494a-baaa-58e1ad7f5203` and `3eea879e-1f11-4463-8b5d-c2f9e3bacbd0` each updated all five requested symbols with no failures, using 10 of the guarded 20 daily calls.
+- Role evidence: Task 108 records six purpose-built canonical Auth identities, 102 authenticated RLS reads, and 25 allowed/denied writes covering Explorer, Scout, Command/organization admin, editor, analyst, and admin. Current tests cover signed-out, unverified, and profile-incomplete routing.
+- GitHub PR #4 quality gate passed for commit `86bfec0`. The post-refresh 24-route release audit and 52-destination crawl reported zero issues at `2026-07-24T10:47Z`.
 
 ## July 24 Launch Ingestion Remediation
 
