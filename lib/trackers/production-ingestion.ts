@@ -55,6 +55,15 @@ type USAspendingAward = {
 };
 type USAspendingResponse = { results?: USAspendingAward[] };
 
+class HttpStatusError extends Error {
+    constructor(
+        hostname: string,
+        readonly status: number
+    ) {
+        super(`${hostname} returned ${status}.`);
+    }
+}
+
 function monday(value: Date) {
     const date = new Date(value);
     const day = date.getUTCDay() || 7;
@@ -136,8 +145,44 @@ async function checkedJson<T>(url: string | URL): Promise<T> {
         signal: AbortSignal.timeout(20_000),
         cache: "no-store",
     });
-    if (!response.ok) throw new Error(`${new URL(url).hostname} returned ${response.status}.`);
+    if (!response.ok) throw new HttpStatusError(new URL(url).hostname, response.status);
     return (await response.json()) as T;
+}
+
+async function launchLibraryJson(
+    url: URL,
+    supabase: ReturnType<typeof createServiceClient>
+): Promise<LaunchResponse> {
+    try {
+        return await checkedJson<LaunchResponse>(url);
+    } catch (error) {
+        if (!(error instanceof HttpStatusError) || error.status !== 429) throw error;
+    }
+
+    const { data: requestId, error: enqueueError } = await supabase.rpc(
+        "enqueue_launch_library_request",
+        { p_url: url.toString() }
+    );
+    if (enqueueError || !requestId) {
+        throw new Error(enqueueError?.message ?? "Launch Library fallback request could not be queued.");
+    }
+
+    for (let attempt = 0; attempt < 20; attempt += 1) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        const { data, error } = await supabase.rpc("read_launch_library_response", {
+            p_request_id: requestId,
+        });
+        if (error) throw new Error(error.message);
+        const response = Array.isArray(data) ? data[0] : data;
+        if (!response) continue;
+        if (response.error_msg) throw new Error(`Launch Library fallback failed: ${response.error_msg}`);
+        if (response.status_code !== 200) {
+            throw new HttpStatusError(new URL(url).hostname, response.status_code ?? 500);
+        }
+        return JSON.parse(response.content) as LaunchResponse;
+    }
+
+    throw new Error("Launch Library fallback request timed out.");
 }
 
 async function checkedJsonPost<T>(url: string, body: unknown): Promise<T> {
@@ -173,7 +218,7 @@ export async function ingestLaunchLibrary() {
             .select("id,source_key,license_status,analyst_review_state,publication_status")
             .eq("source_key", "launch-library-2")
             .single(),
-        checkedJson<LaunchResponse>(url),
+        launchLibraryJson(url, supabase),
     ]);
     if (sourceError || !source) throw new Error("Approved Launch Library 2 registry source is missing.");
     if (
@@ -279,7 +324,31 @@ export async function ingestLaunchLibrary() {
             })
             .eq("id", run.id);
         if (finishError) throw finishError;
-        return { runId: run.id, fetched: records.length, created, updated };
+        if (records.length === 0) {
+            const { error: emptyStateError } = await supabase
+                .from("weekly_lunar_empty_states")
+                .upsert(
+                    {
+                        week_timezone: "UTC",
+                        week_start_local: start,
+                        filter_scope: "lunar_cislunar",
+                        source_registry_id: source.id,
+                        ingestion_run_id: run.id,
+                        source_checked_at: checkedAt,
+                        source_reviewed: true,
+                        publication_status: "published",
+                    },
+                    { onConflict: "week_timezone,week_start_local,filter_scope" }
+                );
+            if (emptyStateError) throw emptyStateError;
+        }
+        return {
+            runId: run.id,
+            fetched: fetchedRecords.length,
+            relevant: records.length,
+            created,
+            updated,
+        };
     } catch (error) {
         await supabase
             .from("weekly_lunar_ingestion_runs")

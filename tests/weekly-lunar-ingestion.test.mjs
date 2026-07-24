@@ -5,6 +5,8 @@ import test from "node:test";
 
 const sql = readFileSync("supabase/migrations/20260712140943_weekly_lunar_tracker_ingestion_workflow.sql", "utf8");
 const script = readFileSync("scripts/ingest-weekly-lunar-tracker.mjs", "utf8");
+const productionIngestion = readFileSync("lib/trackers/production-ingestion.ts", "utf8");
+const fallbackSql = readFileSync("supabase/migrations/20260724075500_launch_library_pg_net_fallback.sql", "utf8");
 
 test("ingestion schema stores run lineage, source checks, conflicts, and review decisions", () => {
     for (const token of ["weekly_lunar_ingestion_runs", "ingestion_run_id", "source_checked_at", "source_conflict", "weekly_lunar_source_conflicts", "weekly_lunar_ingestion_source_checks", "weekly_lunar_review_decisions", "schedule_change_type", "ingestion_confidence"]) assert.ok(sql.includes(token), `missing ${token}`);
@@ -31,4 +33,19 @@ test("production apply is pinned to canonical Supabase and drafts all ingested r
     assert.ok(script.includes("xlpkdoeldtlhearqajat"));
     assert.ok(script.includes('publication_status: "draft"'));
     for (const token of ["slip", "scrub", "hold", "no_earlier_than", "status_change", "source_conflict"]) assert.ok(sql.includes(token));
+});
+test("production launch ingestion falls back through a restricted Supabase request on provider throttling", () => {
+    assert.ok(productionIngestion.includes("error.status !== 429"));
+    assert.ok(productionIngestion.includes("enqueue_launch_library_request"));
+    assert.ok(productionIngestion.includes("read_launch_library_response"));
+    assert.match(fallbackSql, /ll\\\.thespacedevs\\\.com\/2\\\.3\\\.0\/launches\/upcoming/);
+    assert.ok(fallbackSql.includes("revoke all"));
+    assert.ok(fallbackSql.includes("grant execute"));
+});
+test("completed zero-result launch runs publish a source-reviewed empty state", () => {
+    assert.ok(productionIngestion.includes('from("weekly_lunar_empty_states")'));
+    assert.ok(productionIngestion.includes('filter_scope: "lunar_cislunar"'));
+    assert.ok(productionIngestion.includes("source_reviewed: true"));
+    assert.ok(productionIngestion.includes("fetched: fetchedRecords.length"));
+    assert.ok(productionIngestion.includes("relevant: records.length"));
 });
