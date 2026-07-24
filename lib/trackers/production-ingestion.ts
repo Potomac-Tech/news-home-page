@@ -29,6 +29,11 @@ type LaunchRecord = {
 };
 
 type LaunchResponse = { results?: LaunchRecord[] };
+type LaunchLibraryResult = {
+    payload: LaunchResponse;
+    retrievedAt: string;
+    transport: "direct" | "supabase_pg_net" | "recent_snapshot";
+};
 type NOAAScale = { Scale?: string | null; Text?: string | null };
 type NOAAScaleRow = {
     DateStamp?: string;
@@ -152,9 +157,38 @@ async function checkedJson<T>(url: string | URL): Promise<T> {
 async function launchLibraryJson(
     url: URL,
     supabase: ReturnType<typeof createServiceClient>
-): Promise<LaunchResponse> {
+): Promise<LaunchLibraryResult> {
+    const persistSnapshot = async (payload: LaunchResponse, fetchedAt: string) => {
+        const { error } = await supabase.from("tracker_source_snapshots").upsert(
+            {
+                source_key: "launch-library-2",
+                payload,
+                fetched_at: fetchedAt,
+            },
+            { onConflict: "source_key" }
+        );
+        if (error) throw new Error(`Launch Library snapshot could not be stored: ${error.message}`);
+    };
+    const recentSnapshot = async () => {
+        const { data, error } = await supabase
+            .from("tracker_source_snapshots")
+            .select("payload,fetched_at")
+            .eq("source_key", "launch-library-2")
+            .maybeSingle();
+        if (error) throw new Error(`Launch Library snapshot could not be read: ${error.message}`);
+        if (!data || Date.now() - new Date(data.fetched_at).getTime() > 6 * 60 * 60 * 1000) return null;
+        return {
+            payload: data.payload as LaunchResponse,
+            retrievedAt: data.fetched_at,
+            transport: "recent_snapshot" as const,
+        };
+    };
+
     try {
-        return await checkedJson<LaunchResponse>(url);
+        const payload = await checkedJson<LaunchResponse>(url);
+        const retrievedAt = new Date().toISOString();
+        await persistSnapshot(payload, retrievedAt);
+        return { payload, retrievedAt, transport: "direct" };
     } catch (error) {
         if (!(error instanceof HttpStatusError) || error.status !== 429) throw error;
     }
@@ -167,7 +201,7 @@ async function launchLibraryJson(
         throw new Error(enqueueError?.message ?? "Launch Library fallback request could not be queued.");
     }
 
-    for (let attempt = 0; attempt < 20; attempt += 1) {
+    for (let attempt = 0; attempt < 40; attempt += 1) {
         await new Promise((resolve) => setTimeout(resolve, 500));
         const { data, error } = await supabase.rpc("read_launch_library_response", {
             p_request_id: requestId,
@@ -176,13 +210,21 @@ async function launchLibraryJson(
         const response = Array.isArray(data) ? data[0] : data;
         if (!response) continue;
         if (response.error_msg) throw new Error(`Launch Library fallback failed: ${response.error_msg}`);
-        if (response.status_code !== 200) {
+        if (response.status_code === 200) {
+            const payload = JSON.parse(response.content) as LaunchResponse;
+            const retrievedAt = new Date().toISOString();
+            await persistSnapshot(payload, retrievedAt);
+            return { payload, retrievedAt, transport: "supabase_pg_net" };
+        }
+        if (response.status_code !== 429) {
             throw new HttpStatusError(new URL(url).hostname, response.status_code ?? 500);
         }
-        return JSON.parse(response.content) as LaunchResponse;
+        break;
     }
 
-    throw new Error("Launch Library fallback request timed out.");
+    const snapshot = await recentSnapshot();
+    if (snapshot) return snapshot;
+    throw new Error("Launch Library is rate limited and no source snapshot from the last six hours is available.");
 }
 
 async function checkedJsonPost<T>(url: string, body: unknown): Promise<T> {
@@ -203,7 +245,6 @@ async function checkedJsonPost<T>(url: string, body: unknown): Promise<T> {
 
 export async function ingestLaunchLibrary() {
     const supabase = createServiceClient();
-    const checkedAt = new Date().toISOString();
     const start = monday(new Date());
     const windowStart = new Date(`${start}T00:00:00Z`);
     const windowEnd = new Date(windowStart.getTime() + 14 * 86_400_000);
@@ -212,7 +253,7 @@ export async function ingestLaunchLibrary() {
     url.searchParams.set("window_start__lte", windowEnd.toISOString());
     url.searchParams.set("limit", "100");
 
-    const [{ data: source, error: sourceError }, payload] = await Promise.all([
+    const [{ data: source, error: sourceError }, launchLibrary] = await Promise.all([
         supabase
             .from("intelligence_data_sources")
             .select("id,source_key,license_status,analyst_review_state,publication_status")
@@ -220,6 +261,7 @@ export async function ingestLaunchLibrary() {
             .single(),
         launchLibraryJson(url, supabase),
     ]);
+    const { payload, retrievedAt: checkedAt, transport } = launchLibrary;
     if (sourceError || !source) throw new Error("Approved Launch Library 2 registry source is missing.");
     if (
         source.license_status !== "approved" ||
@@ -242,7 +284,12 @@ export async function ingestLaunchLibrary() {
             window_end_at: windowEnd.toISOString(),
             source_checked_at: checkedAt,
             records_fetched: fetchedRecords.length,
-            metadata: { source: "launch-library-2", review_required: true, scheduled: true },
+            metadata: {
+                source: "launch-library-2",
+                review_required: true,
+                scheduled: true,
+                transport,
+            },
         })
         .select("id")
         .single();
@@ -310,7 +357,10 @@ export async function ingestLaunchLibrary() {
                 check_status: "checked",
                 checked_at: checkedAt,
                 citation_url: LL2_URL,
-                check_note: "Scheduled Launch Library 2 API fetch completed; rows require editorial approval.",
+                check_note:
+                    transport === "recent_snapshot"
+                        ? "Launch Library 2 was throttled; a source snapshot retrieved within six hours was checked."
+                        : "Scheduled Launch Library 2 API fetch completed; rows require editorial approval.",
             });
         if (sourceCheckError) throw sourceCheckError;
         const { error: finishError } = await supabase
