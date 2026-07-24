@@ -5,7 +5,6 @@ import {
     type EventCalendarDetails,
     type EventCalendarRecord,
     type EventSourceLink,
-    fallbackEvents,
     publicEventTeasers,
 } from "../_data/events";
 import {
@@ -16,6 +15,7 @@ import {
 } from "../_data/site";
 import { createClient } from "../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+import { allowLocalContentFallbacks } from "../_data/contentFallbacks";
 import {
     getEventAccessContext,
     type EventAccessContext,
@@ -218,7 +218,7 @@ function mapEvent(
 async function loadEvents(): Promise<LoadedEvents> {
     if (!hasPotomacSupabasePublicConfig()) {
         return {
-            events: publicEventTeasers(),
+            events: allowLocalContentFallbacks() ? publicEventTeasers() : [],
             access: anonymousAccess,
         };
     }
@@ -242,7 +242,7 @@ async function loadEvents(): Promise<LoadedEvents> {
 
     if (error || !data?.length) {
         return {
-            events: publicEventTeasers(),
+            events: [],
             access,
         };
     }
@@ -482,6 +482,17 @@ export default async function EventsPage() {
                 </div>
 
                 <div className="mt-12 space-y-6">
+                    {!events.length ? (
+                        <section className="border border-potomac-regolith/25 bg-potomac-primary/65 p-6">
+                            <h2 className="font-serif text-2xl uppercase text-white">
+                                No approved events are published
+                            </h2>
+                            <p className="mt-3 max-w-2xl text-sm leading-6 text-potomac-cream/70">
+                                The calendar will return when event dates, locations,
+                                sources, and editorial approval are complete.
+                            </p>
+                        </section>
+                    ) : null}
                     {events.map((event) => (
                         <article key={event.slug} className="glass-card rounded p-6">
                             <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">

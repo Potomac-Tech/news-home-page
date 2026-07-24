@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
-    eventTeasers,
     fallbackStories,
     type HomeStory,
 } from "./_data/homepage";
+import { allowLocalContentFallbacks } from "./_data/contentFallbacks";
 import { loadPublicTickerItems } from "./_data/marketQuotes";
 import { SponsorUnit } from "./_components/SponsorUnit";
 import { EconomySummaryWidget } from "./_components/EconomySummaryWidget";
@@ -130,7 +130,7 @@ function articleHref(slug: string) {
 
 async function getHomepageStories(): Promise<HomeStory[]> {
     if (!hasPotomacSupabasePublicConfig()) {
-        return fallbackStories;
+        return allowLocalContentFallbacks() ? fallbackStories : [];
     }
 
     try {
@@ -146,7 +146,7 @@ async function getHomepageStories(): Promise<HomeStory[]> {
             .limit(6);
 
         if (error || !data?.length) {
-            return fallbackStories;
+            return [];
         }
 
         return ((data ?? []) as EditorialArticleRow[]).map((article) => {
@@ -172,7 +172,7 @@ async function getHomepageStories(): Promise<HomeStory[]> {
             };
         });
     } catch {
-        return fallbackStories;
+        return [];
     }
 }
 
@@ -259,8 +259,8 @@ export default async function HomePage() {
         loadPublicTickerItems(10),
         loadPublicEconomySummary(),
     ]);
-    const featuredStory = stories[0] ?? fallbackStories[0];
-    const latestStories = stories.slice(1).length ? stories.slice(1) : fallbackStories.slice(1);
+    const featuredStory = stories[0];
+    const latestStories = stories.slice(1);
     let carouselSlides: HomepageCarouselSlide[] = [];
     let launchSummary: HomepageLaunchSummary = { reviewedCount: 0, lunarCount: 0, freshnessAt: null, weekStart: "", timeZone: "UTC" };
     let launchHref = "/request-access?next=%2Ftracker%2Flaunches";
@@ -282,9 +282,9 @@ export default async function HomePage() {
             carouselSlides = [];
         }
     }
-    if (!carouselSlides.length) {
+    if (!carouselSlides.length && featuredStory) {
         carouselSlides = [{
-            id: "homepage-static-fallback",
+            id: "homepage-editorial-record",
             articleId: null,
             slideType: "anonymous_teaser",
             title: featuredStory.title,
@@ -297,11 +297,11 @@ export default async function HomePage() {
             isRequired: true,
             isPinned: true,
             displayRank: 0,
-            sourceNote: "Static homepage fallback.",
+            sourceNote: "Current approved editorial record.",
             freshnessAt: featuredStory.publishedAt,
             expiresAt: new Date(Date.now() + 14 * 86_400_000).toISOString(),
         }];
-    } else {
+    } else if (featuredStory) {
         const editorialLead: HomepageCarouselSlide = {
             id: "homepage-editorial-lead",
             articleId: null,
@@ -386,7 +386,24 @@ export default async function HomePage() {
                     </aside>
 
                     <div className="order-1 bg-potomac-primary lg:order-2">
-                        <HomepageCarousel slides={carouselSlides} />
+                        {carouselSlides.length ? (
+                            <HomepageCarousel slides={carouselSlides} />
+                        ) : (
+                            <section className="flex min-h-[500px] items-center px-8 py-16">
+                                <div>
+                                    <p className="font-mono text-xs font-bold uppercase text-potomac-gold">
+                                        Editorial desk
+                                    </p>
+                                    <h1 className="mt-4 font-serif text-4xl uppercase text-white">
+                                        News feed temporarily unavailable
+                                    </h1>
+                                    <p className="mt-4 max-w-xl text-potomac-cream/70">
+                                        Approved stories will return when the editorial
+                                        feed is available.
+                                    </p>
+                                </div>
+                            </section>
+                        )}
                     </div>
 
                     <aside className="order-3 space-y-4 border-potomac-regolith/20 px-5 py-8 lg:border-l lg:py-10">
@@ -400,13 +417,6 @@ export default async function HomePage() {
                             <p className="font-serif text-2xl uppercase text-white">Cabeus Scout</p>
                             <p className="mt-3 text-sm leading-5 text-potomac-cream/70">Research, proprietary datasets, alerts, exports, and advanced lunar dashboards.</p>
                             <Link href="/pricing" className="mt-5 inline-flex font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">Get access →</Link>
-                        </section>
-                        <section className="border border-potomac-regolith/25 bg-potomac-primary/55 p-5">
-                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Next gathering</p>
-                            <h2 className="mt-3 font-serif text-xl uppercase text-white">{eventTeasers[0]?.name}</h2>
-                            <p className="mt-2 font-mono text-[0.6rem] uppercase text-potomac-regolith">{eventTeasers[0]?.date} · {eventTeasers[0]?.location}</p>
-                            <p className="mt-3 text-sm leading-5 text-potomac-cream/70">{eventTeasers[0]?.publicNote}</p>
-                            <Link href="/events" className="mt-4 inline-flex font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">Event calendar →</Link>
                         </section>
                     </aside>
                 </div>
@@ -449,22 +459,11 @@ export default async function HomePage() {
                 <div className="mx-auto w-full max-w-[92rem] px-4 py-10 md:px-8">
                     <div className="flex items-end justify-between border-b border-potomac-regolith/25 pb-4">
                         <div>
-                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Lunar desk</p>
-                            <h2 className="mt-2 font-serif text-3xl uppercase text-white">To the Moon</h2>
+                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Market model</p>
+                            <h2 className="mt-2 font-serif text-3xl uppercase text-white">Lunar economy</h2>
                         </div>
-                        <Link href="/events" className="font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">All events →</Link>
                     </div>
-                    <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.72fr)]">
-                        <div className="grid gap-y-6 md:grid-cols-2">
-                            {eventTeasers.map((event) => (
-                                <article key={event.name} className="border-l border-potomac-regolith/25 px-5 first:border-l-0 first:pl-0">
-                                    <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">{event.date} · {event.location}</p>
-                                    <h3 className="mt-3 font-serif text-2xl uppercase text-white">{event.name}</h3>
-                                    <p className="mt-3 text-sm leading-6 text-potomac-cream/70">{event.publicNote}</p>
-                                    <p className="mt-3 text-sm leading-6 text-potomac-cream/50">{event.memberNote}</p>
-                                </article>
-                            ))}
-                        </div>
+                    <div className="mt-6 max-w-3xl">
                         <EconomySummaryWidget summary={economySummary} />
                     </div>
                 </div>

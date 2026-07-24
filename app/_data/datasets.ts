@@ -1,5 +1,6 @@
 import { createClient } from "../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+import { allowLocalContentFallbacks } from "./contentFallbacks";
 
 export type DatasetAccessTier = "explorer" | "scout" | "meridian" | null;
 
@@ -602,7 +603,9 @@ async function loadDatasetSources(
 
 export async function loadDatasetCatalog(): Promise<DatasetCatalogEntry[]> {
     if (!hasPotomacSupabasePublicConfig()) {
-        return fallbackDatasetCatalogEntries;
+        return allowLocalContentFallbacks()
+            ? fallbackDatasetCatalogEntries
+            : [];
     }
 
     try {
@@ -616,7 +619,7 @@ export async function loadDatasetCatalog(): Promise<DatasetCatalogEntry[]> {
             .limit(48);
 
         if (error || !data?.length) {
-            return fallbackDatasetCatalogEntries;
+            return [];
         }
 
         const entryRows = (data ?? []) as unknown as DatasetCatalogEntryRow[];
@@ -632,6 +635,6 @@ export async function loadDatasetCatalog(): Promise<DatasetCatalogEntry[]> {
             isFallback: false,
         }));
     } catch {
-        return fallbackDatasetCatalogEntries;
+        return [];
     }
 }

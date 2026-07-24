@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 import { absoluteSiteUrl } from "./_data/site";
 import { fallbackArticles } from "./news/_data/articles";
+import { allowLocalContentFallbacks } from "./_data/contentFallbacks";
+import { createClient } from "../lib/supabase/server";
+import { hasPotomacSupabasePublicConfig } from "../lib/supabase/config";
 
 const publicRoutes = [
     { path: "/", changeFrequency: "daily", priority: 1 },
@@ -9,7 +12,6 @@ const publicRoutes = [
     { path: "/news", changeFrequency: "daily", priority: 0.9 },
     { path: "/launches", changeFrequency: "weekly", priority: 0.75 },
     { path: "/datasets", changeFrequency: "weekly", priority: 0.8 },
-    { path: "/events", changeFrequency: "weekly", priority: 0.8 },
     { path: "/calculators", changeFrequency: "monthly", priority: 0.7 },
     { path: "/alerts", changeFrequency: "monthly", priority: 0.7 },
     { path: "/account", changeFrequency: "monthly", priority: 0.7 },
@@ -27,7 +29,45 @@ const publicRoutes = [
     { path: "/team", changeFrequency: "monthly", priority: 0.5 },
 ] as const;
 
-export default function sitemap(): MetadataRoute.Sitemap {
+async function loadPublishedArticleEntries(): Promise<MetadataRoute.Sitemap> {
+    if (!hasPotomacSupabasePublicConfig()) {
+        return allowLocalContentFallbacks()
+            ? fallbackArticles.map((article) => ({
+                  url: absoluteSiteUrl(`/news/${article.slug}`),
+                  lastModified: new Date(article.publishedAt),
+                  changeFrequency: "weekly" as const,
+                  priority: 0.8,
+              }))
+            : [];
+    }
+
+    try {
+        const supabase = await createClient();
+        const { data, error } = await supabase
+            .from("editorial_articles")
+            .select("slug,published_at,updated_at")
+            .eq("status", "published")
+            .lte("published_at", new Date().toISOString())
+            .order("published_at", { ascending: false });
+
+        if (error || !data?.length) {
+            return [];
+        }
+
+        return data.map((article) => ({
+            url: absoluteSiteUrl(`/news/${article.slug}`),
+            lastModified: new Date(
+                article.updated_at ?? article.published_at ?? Date.now()
+            ),
+            changeFrequency: "weekly" as const,
+            priority: 0.8,
+        }));
+    } catch {
+        return [];
+    }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const publicEntries = publicRoutes.map((route) => ({
         url: absoluteSiteUrl(route.path),
         lastModified: new Date(),
@@ -35,12 +75,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: route.priority,
     }));
 
-    const articleEntries = fallbackArticles.map((article) => ({
-        url: absoluteSiteUrl(`/news/${article.slug}`),
-        lastModified: new Date(article.publishedAt),
-        changeFrequency: "weekly" as const,
-        priority: 0.8,
-    }));
+    const articleEntries = await loadPublishedArticleEntries();
 
     return [...publicEntries, ...articleEntries];
 }

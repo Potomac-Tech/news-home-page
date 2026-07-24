@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { fallbackArticles } from "./_data/articles";
 import { absoluteSiteUrl, jsonLdScript, siteConfig } from "../_data/site";
+import { allowLocalContentFallbacks } from "../_data/contentFallbacks";
+import { createClient } from "../../lib/supabase/server";
+import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
     title: "News",
@@ -20,13 +25,52 @@ export const metadata: Metadata = {
     },
 };
 
-const articles = fallbackArticles.map((article) => ({
+type NewsTeaser = {
+    href: string;
+    title: string;
+    summary: string;
+};
+
+const fallbackTeasers = fallbackArticles.map((article) => ({
     href: `/news/${article.slug}`,
     title: article.title,
     summary: article.summary,
 }));
 
-export default function NewsPage() {
+async function loadArticles(): Promise<NewsTeaser[]> {
+    if (!hasPotomacSupabasePublicConfig()) {
+        return allowLocalContentFallbacks() ? fallbackTeasers : [];
+    }
+
+    try {
+        const supabase = await createClient();
+        const { data, error } = await supabase
+            .from("editorial_articles")
+            .select("slug,title,public_summary,dek,published_at")
+            .eq("status", "published")
+            .lte("published_at", new Date().toISOString())
+            .order("published_at", { ascending: false })
+            .limit(48);
+
+        if (error || !data?.length) {
+            return [];
+        }
+
+        return data.map((article) => ({
+            href: `/news/${article.slug}`,
+            title: article.title,
+            summary:
+                article.public_summary ??
+                article.dek ??
+                "Published Cabeus Explorer intelligence brief.",
+        }));
+    } catch {
+        return [];
+    }
+}
+
+export default async function NewsPage() {
+    const articles = await loadArticles();
     const newsItemListJsonLd = {
         "@context": "https://schema.org",
         "@type": "ItemList",
@@ -63,6 +107,17 @@ export default function NewsPage() {
                     </p>
                 </div>
                 <div className="mt-12 grid gap-6 md:grid-cols-2">
+                    {!articles.length ? (
+                        <section className="border border-potomac-regolith/25 bg-potomac-primary/65 p-6 md:col-span-2">
+                            <h2 className="font-serif text-2xl uppercase text-white">
+                                News feed temporarily unavailable
+                            </h2>
+                            <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
+                                Approved stories will return when the editorial feed
+                                is available.
+                            </p>
+                        </section>
+                    ) : null}
                     {articles.map((article) => (
                         <article key={article.href} className="glass-card rounded p-6">
                             <h2 className="font-serif text-2xl text-white">

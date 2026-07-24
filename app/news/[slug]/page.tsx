@@ -15,6 +15,7 @@ import {
 } from "../../_data/site";
 import { createClient } from "../../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../../lib/supabase/config";
+import { allowLocalContentFallbacks } from "../../_data/contentFallbacks";
 import {
     getArticleAccessContext,
     type ArticleAccessContext,
@@ -207,7 +208,9 @@ async function getArticleBody(articleId: string) {
 }
 
 async function loadArticle(slug: string): Promise<LoadedArticle | null> {
-    const fallbackArticle = findFallbackArticle(slug);
+    const fallbackArticle = allowLocalContentFallbacks()
+        ? findFallbackArticle(slug)
+        : undefined;
 
     if (!hasPotomacSupabasePublicConfig()) {
         if (!fallbackArticle) {
@@ -255,27 +258,33 @@ export async function generateMetadata({
     params,
 }: ArticlePageProps): Promise<Metadata> {
     const { slug } = await params;
-    const fallbackArticle = findFallbackArticle(slug);
+    const fallbackArticle = allowLocalContentFallbacks()
+        ? findFallbackArticle(slug)
+        : undefined;
+    const cmsArticle = hasPotomacSupabasePublicConfig()
+        ? (await getPublishedCmsArticle(slug)).article
+        : null;
+    const article = cmsArticle ?? fallbackArticle;
     const canonicalPath = `/news/${slug}`;
 
     return {
-        title: fallbackArticle?.title ?? "Article",
-        description: fallbackArticle?.summary,
+        title: article?.title ?? "Article",
+        description: article?.summary,
         alternates: {
             canonical: canonicalPath,
         },
         openGraph: {
-            title: fallbackArticle?.title ?? "Cabeus Explorer Article",
-            description: fallbackArticle?.summary ?? siteConfig.description,
+            title: article?.title ?? "Cabeus Explorer Article",
+            description: article?.summary ?? siteConfig.description,
             url: absoluteSiteUrl(canonicalPath),
             siteName: siteConfig.name,
             type: "article",
-            publishedTime: fallbackArticle?.publishedAt,
-            images: fallbackArticle
+            publishedTime: article?.publishedAt,
+            images: article
                 ? [
                       {
-                          url: absoluteSiteUrl(fallbackArticle.heroImageUrl),
-                          alt: fallbackArticle.heroImageAlt,
+                          url: absoluteSiteUrl(article.heroImageUrl),
+                          alt: article.heroImageAlt,
                       },
                   ]
                 : undefined,

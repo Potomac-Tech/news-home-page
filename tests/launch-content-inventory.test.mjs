@@ -1,0 +1,40 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import test from "node:test";
+
+const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
+
+test("production content loaders do not substitute local launch content", async () => {
+    const [fallbackPolicy, homepage, events, datasets, news, article] =
+        await Promise.all([
+            read("app/_data/contentFallbacks.ts"),
+            read("app/page.tsx"),
+            read("app/events/page.tsx"),
+            read("app/_data/datasets.ts"),
+            read("app/news/page.tsx"),
+            read("app/news/[slug]/page.tsx"),
+        ]);
+
+    assert.match(fallbackPolicy, /NODE_ENV !== "production"/);
+    assert.match(homepage, /allowLocalContentFallbacks\(\) \? fallbackStories : \[\]/);
+    assert.match(events, /allowLocalContentFallbacks\(\) \? publicEventTeasers\(\) : \[\]/);
+    assert.match(datasets, /allowLocalContentFallbacks\(\)[\s\S]*fallbackDatasetCatalogEntries[\s\S]*: \[\]/);
+    assert.match(news, /allowLocalContentFallbacks\(\) \? fallbackTeasers : \[\]/);
+    assert.match(article, /allowLocalContentFallbacks\(\)[\s\S]*findFallbackArticle/);
+});
+
+test("launch inventory records approval and withholds unapproved modules", async () => {
+    const [migration, visibility, inventory] = await Promise.all([
+        read("supabase/migrations/20260724014752_approve_launch_content_inventory.sql"),
+        read("app/_data/launchVisibility.ts"),
+        read("docs/launch-content-inventory-2026-07-24.md"),
+    ]);
+
+    assert.match(migration, /jake@potomacdb\.com/);
+    assert.match(migration, /Expected 4 approved editorial launch records/);
+    assert.match(migration, /Expected 3 approved public launch datasets/);
+    assert.match(migration, /Expected 3 proprietary placeholders to be archived/);
+    assert.match(visibility, /"events"/);
+    assert.match(inventory, /Supabase project: `xlpkdoeldtlhearqajat`/);
+    assert.match(inventory, /production shows an explicit unavailable or empty state/);
+});

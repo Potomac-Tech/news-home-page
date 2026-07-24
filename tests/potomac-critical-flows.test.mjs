@@ -1223,7 +1223,7 @@ test("homepage carousel inventory is audited, gated, ranked, and auto-filled fro
     ], "carousel staff controls");
 });
 
-test("homepage carousel UI rotates accessibly with a stable static fallback", () => {
+test("homepage carousel UI rotates accessibly and fails closed without approved stories", () => {
     const component = read("app/_components/HomepageCarousel.tsx");
     const homepage = read("app/page.tsx");
 
@@ -1254,9 +1254,10 @@ test("homepage carousel UI rotates accessibly with a stable static fallback", ()
     assertIncludes(homepage, [
         "loadHomepageCarousel",
         "getProfileGateContext",
-        'id: "homepage-static-fallback"',
+        'id: "homepage-editorial-record"',
         'ctaLabel: "Read the brief"',
         "<HomepageCarousel slides={carouselSlides} />",
+        "News feed temporarily unavailable",
         'aria-label="Lunar economy activity"',
     ], "homepage carousel integration");
     assert.doesNotMatch(homepage, /Brand system active/);

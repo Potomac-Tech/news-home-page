@@ -5,6 +5,7 @@ export const hiddenLaunchModuleIds = new Set([
     "regulatory",
     "companies",
     "marketplace",
+    "events",
 ]);
 
 export const hiddenLaunchPathPrefixes = [
@@ -17,6 +18,7 @@ export const hiddenLaunchPathPrefixes = [
     "/member/marketplace",
     "/member/missions",
     "/member/procurement",
+    "/events",
 ] as const;
 
 export function isHiddenLaunchPath(pathname: string) {
