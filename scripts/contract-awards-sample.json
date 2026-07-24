@@ -20,6 +20,13 @@
         "award_date": "2026-07-02",
         "customer_name": "Department of Defense",
         "vendor_name": "Example Aerospace"
+    },
+    {
+        "id": "nih-gateway-001",
+        "title": "Gateway to Research Opportunities for the Workforce",
+        "description": "NIH undergraduate workforce development program.",
+        "award_date": "2026-07-03",
+        "customer_name": "Department of Health and Human Services",
+        "vendor_name": "Example University"
     }
 ]
-

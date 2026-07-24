@@ -2,6 +2,7 @@ import "server-only";
 
 import { createServiceClient } from "../supabase/service";
 import { ingestAlphaVantageStockQuotes } from "./alpha-vantage";
+import { isDirectLunarContract } from "./contract-relevance";
 
 const LL2_URL = "https://ll.thespacedevs.com/2.3.0/launches/upcoming/";
 const NOAA_BASE = "https://services.swpc.noaa.gov/products";
@@ -567,7 +568,11 @@ export async function ingestUSAspendingContractAwards(providedPayload?: USAspend
 
     const fetched = [...new Map((payload.results ?? []).map((item) => [String(item["Award ID"]), item])).values()];
     const records = fetched.filter((item) => {
-        return Boolean(item["Award ID"] && item["Start Date"] && lunarTerms.test(item.Description ?? ""));
+        return Boolean(
+            item["Award ID"] &&
+            item["Start Date"] &&
+            isDirectLunarContract(item.Description ?? "", item["Awarding Agency"] ?? "")
+        );
     });
     const { data: run, error: runError } = await supabase
         .from("contract_award_ingestion_runs")

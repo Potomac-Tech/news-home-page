@@ -1,11 +1,24 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
 import test from "node:test";
+import { build } from "esbuild";
 
 const sql = readFileSync("supabase/migrations/20260713051127_contract_awards_ingestion_workflow.sql", "utf8");
 const hardeningSql = readFileSync("supabase/migrations/20260713052000_contract_awards_rls_performance_hardening.sql", "utf8");
 const script = readFileSync("scripts/ingest-contract-awards.mjs", "utf8");
+const relevanceOutput = path.join(mkdtempSync(path.join(tmpdir(), "contract-relevance-")), "contract-relevance.mjs");
+await build({
+    entryPoints: ["lib/trackers/contract-relevance.ts"],
+    outfile: relevanceOutput,
+    bundle: true,
+    platform: "node",
+    format: "esm",
+});
+const { isDirectLunarContract } = await import(pathToFileURL(relevanceOutput).href);
 
 test("contract award schema captures dates, parties, vehicle, value state, review, lineage, and tier visibility", () => {
     for (const token of ["award_date", "effective_date", "option_exercise_date", "customer_name", "vendor_name", "program_name", "award_vehicle", "contract_award_values", "value_state", "tier_visibility", "value_visibility", "source_registry_id", "confidence_label", "reviewed_by", "reviewed_at", "contract_award_audit_log"]) assert.ok(sql.includes(token), `missing ${token}`);
@@ -31,11 +44,32 @@ test("dry run includes lunar award and excludes unrelated defense award", () => 
     const output = execFileSync(process.execPath, ["scripts/ingest-contract-awards.mjs", "--input", "scripts/contract-awards-sample.json"], { encoding: "utf8" });
     const result = JSON.parse(output);
     assert.equal(result.dryRun, true);
-    assert.equal(result.fetched, 2);
+    assert.equal(result.fetched, 3);
     assert.equal(result.relevant, 1);
-    assert.equal(result.excluded, 1);
+    assert.equal(result.excluded, 2);
     assert.equal(result.awards[0].award.publication_status, "draft");
     assert.equal(result.awards[0].award.relevance_scope, "lunar");
+});
+
+test("Gateway-only awards require NASA or explicit space context", () => {
+    assert.equal(
+        isDirectLunarContract(
+            "NATIONAL INSTITUTES OF HEALTH GATEWAY TO RESEARCH OPPORTUNITIES FOR THE WORKFORCE",
+            "Department of Health and Human Services"
+        ),
+        false
+    );
+    assert.equal(
+        isDirectLunarContract(
+            "Gateway logistics and habitation systems",
+            "National Aeronautics and Space Administration"
+        ),
+        true
+    );
+    assert.equal(
+        isDirectLunarContract("Artemis III suit ancillary hardware", "National Aeronautics and Space Administration"),
+        true
+    );
 });
 
 test("production writes are pinned to canonical Supabase and approved source keys", () => {

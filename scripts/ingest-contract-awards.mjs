@@ -3,8 +3,11 @@ import { createClient } from "@supabase/supabase-js";
 
 const PROJECT_REF = "xlpkdoeldtlhearqajat";
 const PROJECT_URL = `https://${PROJECT_REF}.supabase.co`;
-const directSpaceTerms = /\b(lunar|moon|cislunar|artemis|clps|gateway|spacecraft|lander|rover|satellite|launch vehicle|space launch|space mission|orbital|space station)\b/i;
-const lunarTerms = /\b(lunar|moon|cislunar|artemis|clps|gateway|lander|lunar rover)\b/i;
+const directSpaceTerms = /\b(lunar|moon|cislunar|artemis|clps|spacecraft|lander|rover|satellite|launch vehicle|space launch|space mission|orbital|space station)\b/i;
+const highSignalLunarTerms = /\b(lunar|moon|cislunar|artemis|clps|lander|lunar rover)\b/i;
+const gatewayTerm = /\bgateway\b/i;
+const gatewaySpaceContext = /\b(space|lunar|moon|cislunar|artemis|orbital|spacecraft|lander)\b/i;
+const nasaAgency = /\b(nasa|national aeronautics and space administration)\b/i;
 
 function options(argv) {
     const result = { input: null, apply: false, source: "usaspending" };
@@ -29,22 +32,28 @@ function valueFields(item, citationUrl) {
     return { value_state: "unknown", exact_cited_amount: null };
 }
 
+function isLunarRelevance(text, customerName) {
+    if (highSignalLunarTerms.test(text)) return true;
+    return gatewayTerm.test(text) && (nasaAgency.test(customerName) || gatewaySpaceContext.test(text));
+}
+
 export function normalizeContractAward(item, sourceId, runId, checkedAt) {
     const title = item.title ?? item.description ?? item.Award_Description ?? "";
     const program = item.program_name ?? item.program ?? item.parent_award_id ?? "";
     const relevanceText = [title, item.description, item.relevance_statement, program].filter(Boolean).join(" ");
-    if (!directSpaceTerms.test(relevanceText)) return null;
+    const customerName = item.customer_name ?? item.awarding_agency ?? item.Awarding_Agency ?? "";
+    const isLunar = isLunarRelevance(relevanceText, customerName);
+    if (!directSpaceTerms.test(relevanceText) && !isLunar) return null;
     const awardDate = asDate(item.award_date ?? item.start_date ?? item.Action_Date);
     const externalKey = item.id ?? item.award_id ?? item.Award_ID;
     if (!awardDate || !externalKey) return null;
-    const isLunar = lunarTerms.test(relevanceText);
     const citationUrl = item.citation_url ?? item.generated_subaward_url ?? item.source_url;
     return {
         award: {
             external_source_key: String(externalKey), source_registry_id: sourceId, ingestion_run_id: runId,
             title: title.trim().slice(0, 240), award_date: awardDate,
             effective_date: asDate(item.effective_date), option_exercise_date: asDate(item.option_exercise_date),
-            customer_name: item.customer_name ?? item.awarding_agency ?? item.Awarding_Agency ?? "Customer pending review",
+            customer_name: customerName || "Customer pending review",
             vendor_name: item.vendor_name ?? item.recipient_name ?? item.Recipient_Name ?? "Vendor pending review",
             program_name: program || null, award_vehicle: item.award_vehicle ?? item.contract_award_type ?? null,
             award_number: item.award_number ?? String(externalKey), relevance_scope: isLunar ? "lunar" : "space",
