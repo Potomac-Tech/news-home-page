@@ -215,4 +215,11 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 - Cloudflare version `fcf715c0-a54a-454b-adae-7c55ac047c70` is live.
 - Task 121 remains unchecked and NO-GO. Remaining blockers: release-owner review of `docs/resend-free-operations.md` and named technical release approval.
 - Direct browser access to Potomac Slack is confirmed for workspace `T09LW7755H7` and channel `C0BK24FALJH` (`cabeus-explorer-bugs-and-fixes`). The channel had no new actionable parent messages, so no task or reply was created and no marker was advanced.
-- The Codex Slack connector remains authenticated to Lease Passport. Its final `Reconnect` action is open in Codex settings and requires user confirmation before persistent OAuth access is changed.
+- The Codex Slack connector remained authenticated to Lease Passport at the end of this run. Its final `Reconnect` action was left open in Codex settings pending user confirmation before persistent OAuth access changed.
+
+### 2026-07-24 13:43 EDT - Potomac Slack connector restored
+
+- The user confirmed the Slack reconnect, and OAuth completed for the Potomac workspace.
+- The Codex Slack connector can now read Potomac workspace `T09LW7755H7` and channel `C0BK24FALJH` (`cabeus-explorer-bugs-and-fixes`).
+- The newest actionable-parent scan found only channel membership events and Jacob Matthews's channel-description update. No actionable request was present, so no task or confirmation reply was created.
+- Slack parent-message marker advanced to `1784822231.883139` after the read completed successfully. The newer `1784822245.928899` event is an automation-generated ChatGPT channel-join event and is intentionally ignored.
