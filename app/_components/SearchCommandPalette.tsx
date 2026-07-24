@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { publicTierName } from "../_data/tiers";
 
-type SearchTier = "public" | "explorer" | "scout" | "command" | "staff";
+type SearchTier = "public" | "explorer" | "scout" | "meridian" | "staff";
 
 type CommandPaletteEntry = {
     id: string;
@@ -42,7 +42,7 @@ function tierLabel(tier: SearchTier) {
     if (tier === "public") return "Public";
     if (tier === "explorer") return "Explorer+";
     if (tier === "scout") return "Scout+";
-    if (tier === "command") return publicTierName(tier);
+    if (tier === "meridian") return publicTierName(tier);
     return "Staff";
 }
 

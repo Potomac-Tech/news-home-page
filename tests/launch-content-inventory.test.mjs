@@ -38,3 +38,22 @@ test("launch inventory records approval and withholds unapproved modules", async
     assert.match(inventory, /Supabase project: `xlpkdoeldtlhearqajat`/);
     assert.match(inventory, /production shows an explicit unavailable or empty state/);
 });
+
+test("search uses Meridian visibility and fails closed in production", async () => {
+    const [search, palette, migration, releaseAudit] = await Promise.all([
+        read("app/_data/search.ts"),
+        read("app/_components/SearchCommandPalette.tsx"),
+        read("supabase/migrations/20260724020354_fix_meridian_search_visibility.sql"),
+        read("scripts/audit-release-readiness.mjs"),
+    ]);
+
+    assert.match(
+        search,
+        /SearchTier = "public" \| "explorer" \| "scout" \| "meridian" \| "staff"/
+    );
+    assert.doesNotMatch(search, /SearchTier = [^\n]*"command"/);
+    assert.match(search, /if \(!allowLocalContentFallbacks\(\)\) \{\s*return \[\]/);
+    assert.match(palette, /"meridian"/);
+    assert.match(migration, /target_tier = 'meridian'/);
+    assert.doesNotMatch(releaseAudit, /\{ path: "\/events", kind: "public" \}/);
+});

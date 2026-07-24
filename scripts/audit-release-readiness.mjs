@@ -15,7 +15,6 @@ const routeSpecs = [
     { path: "/terminal", kind: "public" },
     { path: "/search", kind: "public" },
     { path: "/news", kind: "public" },
-    { path: "/events", kind: "public" },
     { path: "/datasets", kind: "public" },
     { path: "/calculators", kind: "public" },
     { path: "/pricing", kind: "enterprise" },

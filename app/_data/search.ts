@@ -2,8 +2,9 @@ import { createClient } from "../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
 import { publicTierName, tierConfig } from "./tiers";
 import { isHiddenLaunchPath } from "./launchVisibility";
+import { allowLocalContentFallbacks } from "./contentFallbacks";
 
-export type SearchTier = "public" | "explorer" | "scout" | "command" | "staff";
+export type SearchTier = "public" | "explorer" | "scout" | "meridian" | "staff";
 
 export type SearchResultKind =
     | "article"
@@ -403,7 +404,7 @@ const tierRank: Record<SearchTier, number> = {
     public: 0,
     explorer: 1,
     scout: 2,
-    command: 3,
+    meridian: 3,
     staff: 4,
 };
 
@@ -411,7 +412,7 @@ export function tierLabel(tier: SearchTier) {
     if (tier === "public") return "Public";
     if (tier === "explorer") return "Explorer+";
     if (tier === "scout") return "Scout+";
-    if (tier === "command") return publicTierName(tier);
+    if (tier === "meridian") return publicTierName(tier);
     return "Staff";
 }
 
@@ -459,7 +460,7 @@ function mapTier(value: string | null | undefined): SearchTier {
         value === "public" ||
         value === "explorer" ||
         value === "scout" ||
-        value === "command" ||
+        value === "meridian" ||
         value === "staff"
     ) {
         return value;
@@ -478,6 +479,9 @@ export async function loadSearchResults({
     publicOnly?: boolean;
 } = {}): Promise<SearchResult[]> {
     if (!hasPotomacSupabasePublicConfig() || !supabase) {
+        if (!allowLocalContentFallbacks()) {
+            return [];
+        }
         return publicOnly
             ? fallbackSearchResults.filter((result) => result.tier === "public")
             : fallbackSearchResults;
@@ -502,9 +506,7 @@ export async function loadSearchResults({
             .limit(limit);
 
         if (error || !data?.length) {
-            return publicOnly
-                ? fallbackSearchResults.filter((result) => result.tier === "public")
-                : fallbackSearchResults;
+            return [];
         }
 
         return (data as Array<{
@@ -540,9 +542,7 @@ export async function loadSearchResults({
             isFallback: false,
         }));
     } catch {
-        return publicOnly
-            ? fallbackSearchResults.filter((result) => result.tier === "public")
-            : fallbackSearchResults;
+        return [];
     }
 }
 
@@ -554,6 +554,9 @@ export async function loadCommandPaletteEntries({
     publicOnly?: boolean;
 } = {}): Promise<CommandPaletteEntry[]> {
     if (!hasPotomacSupabasePublicConfig() || !supabase) {
+        if (!allowLocalContentFallbacks()) {
+            return [];
+        }
         return publicOnly
             ? fallbackCommandEntries.filter((entry) => entry.tier === "public")
             : fallbackCommandEntries;
@@ -577,9 +580,7 @@ export async function loadCommandPaletteEntries({
             .limit(40);
 
         if (error || !data?.length) {
-            return publicOnly
-                ? fallbackCommandEntries.filter((entry) => entry.tier === "public")
-                : fallbackCommandEntries;
+            return [];
         }
 
         return (data as Array<{
@@ -604,9 +605,7 @@ export async function loadCommandPaletteEntries({
             keywords: row.keywords ?? [],
         }));
     } catch {
-        return publicOnly
-            ? fallbackCommandEntries.filter((entry) => entry.tier === "public")
-            : fallbackCommandEntries;
+        return [];
     }
 }
 
