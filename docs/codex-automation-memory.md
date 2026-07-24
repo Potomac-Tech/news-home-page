@@ -173,3 +173,4 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 - Verification: lint; 152/152 tests; production build; 24-route release audit with zero issues; ten mobile/desktop quality checks with zero accessibility, overflow, CLS, or performance failures; 52-route production crawl with zero console, network, or CSP issues.
 - Altered tracked files: content fallback policy/loaders, homepage/news/events/datasets/search/sitemap surfaces, search palette, release audit, two Supabase migrations, launch inventory documentation, tests, task tracker, and this memory file.
 - Slack source: none.
+- Slack sync at `2026-07-24T02:12:00Z`: blocked. Channel `C0BK24FALJH` still returns `channel_not_found`, so no messages were read, no tasks or replies were created, and no Slack marker was advanced.
