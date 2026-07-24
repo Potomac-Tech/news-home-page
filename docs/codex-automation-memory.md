@@ -182,3 +182,14 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 - Resend production evidence confirms exactly one verified `potomacdb.com` domain, the Free plan with pay-as-you-go disabled, delivered Supabase Auth mail, and delivered Meridian provider message `69855c71-0ac0-4594-8eb6-a329ad260943`.
 - No Cloudflare deployment was made because the checklist permits deployment only on GO.
 - Slack sync at `2026-07-24T04:59:00Z`: blocked. Channel `C0BK24FALJH` returned `channel_not_found`, and a connected-workspace search for `headquarters cabeus` found no matching public or private channel. No messages, tasks, replies, or marker changes were made.
+
+### 2026-07-24 03:58 EDT - Task 121 launch ingestion restored; release remains NO-GO
+
+- Diagnosed the production launch worker failure as Launch Library 2 HTTP 429 throttling on shared Cloudflare egress. The provider documents a 15-calls-per-hour anonymous limit.
+- Commits pushed to PR #4: `5249542` (protected ingestion diagnostics), `2371077` (restricted Supabase `pg_net` fallback and reviewed empty state), and `b9f61ea` (service-only six-hour source snapshot).
+- Applied Supabase migrations `launch_library_pg_net_fallback` and `tracker_source_snapshots` only to canonical project `xlpkdoeldtlhearqajat`.
+- Production run `6019cac4-2046-4a47-ae25-882b704484ab` completed with 13 fetched records, zero relevant records, truthful source time `2026-07-24T07:43:32Z`, and a published reviewed `No launches this week` state.
+- Cloudflare remediation version: `e3cea93a-6465-4a61-8f79-79afa3b6282f`.
+- Verification: lint; 154/154 tests; 21/21 email tests; production build; 6/6 E2E journeys; zero-issue 24-route release audit; 16 clean route/viewport checks; zero-issue 52-route production crawl.
+- Task 121 remains unchecked and NO-GO. Remaining gates: split Alpha Vantage batch health or explicit degraded approval, reviewed Contract Awards content/empty state, Resend operations review, complete named-role journey evidence, and named technical approval.
+- Altered tracked files: `app/api/internal/trackers/ingest/route.ts`, `lib/trackers/production-ingestion.ts`, two Supabase migrations, `tests/weekly-lunar-ingestion.test.mjs`, the production checklist, task tracker, and this memory file.

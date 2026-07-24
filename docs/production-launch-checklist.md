@@ -8,11 +8,11 @@ post-deploy checks pass against the production Cloudflare URL.
 
 - Production URL: `https://cabeus-explorer.jake-249.workers.dev/`
 - Canonical Supabase project: `xlpkdoeldtlhearqajat`
-- Release commit reviewed: `92ee8dd`
-- Cloudflare version reviewed: `acbe46cd-1def-48a4-9a33-61e068e8d3c8`
-- Previous known-good commit: `6423589`
-- Previous known-good Cloudflare version: `eef4baf3-b1d7-4dcd-90e7-f36f2b4b5a91`
-- Release review date/time (UTC): `2026-07-24T04:57:00Z`
+- Release commit reviewed: `b9f61ea`
+- Cloudflare version reviewed: `e3cea93a-6465-4a61-8f79-79afa3b6282f`
+- Previous known-good commit: `92ee8dd`
+- Previous known-good Cloudflare version: `acbe46cd-1def-48a4-9a33-61e068e8d3c8`
+- Release review date/time (UTC): `2026-07-24T07:57:20Z`
 - Content owner: Jacob Matthews (approval recorded by Task 118)
 - Editor or admin approver: `jake@potomacdb.com` (active editor; approval recorded by Task 118)
 - Technical release owner: Not assigned or approved
@@ -26,7 +26,7 @@ Never use Supabase project `nwoluvjdojzayozyzlob` for this release.
 - [x] Homepage story teasers are current, cited, reviewed, and free of placeholder copy.
 - [x] The carousel contains 3-5 eligible slides with rank, schedule, approval, and expiration metadata.
 - [x] Required carousel slides remain protected from personalization until expiration.
-- [ ] The weekly Launches & Missions tracker contains reviewed data or an approved, source-checked no-launch state.
+- [x] The weekly Launches & Missions tracker contains reviewed data or an approved, source-checked no-launch state.
 - [ ] New Contract Awards contains reviewed records or the reviewed empty state without fabricated values.
 - [x] Public estimates expose only approved ranges; gated analyst estimates are absent from public HTML, metadata, search, sitemap, and prefetch payloads.
 - [x] Source-registry entries have approved license status, citations, freshness timestamps, confidence, and analyst review state.
@@ -110,7 +110,7 @@ npm run test:production-crawl
 
 ## Post-Deploy Smoke Test
 
-- [ ] Record the new Cloudflare version and deployment time in the release record.
+- [x] Record the new Cloudflare version and deployment time in the release record.
 - [x] Open `/`, `/news`, `/request-access`, `/upgrade`, `/tracker/launches`, `/tracker/contracts`, `/pricing`, and `/account/profile/complete` at mobile and desktop sizes.
 - [x] Confirm the homepage carousel rotates every eight seconds, pauses on interaction, and honors reduced motion.
 - [x] Confirm the free access, Scout upgrade, and Meridian inquiry paths reach their approved destinations.
@@ -124,7 +124,7 @@ npm run test:production-crawl
 - [ ] `GO`: every required item is checked and all three named owners approve.
 - [x] `NO-GO`: record the blocker, owner, remediation, and next review time below.
 
-Blocker or exception: The hourly `ingest-launch-library-2` Cron is active, but its current HTTP result is `500 {"error":"Tracker ingestion failed.","job":"launches"}` and the last completed ingestion run is `2026-07-20T06:17:01Z`. The latest stock refresh also completed only one five-symbol batch while the other batch failed. A named technical release owner has not approved the release. Owner: Potomac Data Operations and the unassigned technical release owner. Remediation: restore successful launch ingestion, confirm both stock batches or an approved degraded state, rerun freshness/crawl checks, and record technical approval. Next review: immediately after those gates pass.
+Blocker or exception: Launch ingestion is restored and current. The latest stock refresh still completed only one five-symbol batch while the other batch failed. Contract Awards does not yet have a reviewed record or a reviewed empty-state artifact, the Resend manual retry procedure has not been signed as reviewed, complete automated or exercised evidence for every named role journey has not been recorded, and a named technical release owner has not approved the release. Owner: Potomac Data Operations and the unassigned technical release owner. Remediation: confirm both stock batches or obtain an explicit degraded-state approval, complete the outstanding reviewed evidence and operating-procedure gates, and record technical approval. Next review: immediately after those gates pass.
 
 Content owner approval: Jacob Matthews  Date: 2026-07-23
 
@@ -138,8 +138,16 @@ Technical release approval: Not approved  Date: Not recorded
 - Production checks: 24-route release audit reported zero issues; 16 mobile/desktop quality checks reported zero accessibility, overflow, layout-shift, or performance-budget failures; the crawl visited 52 internal destinations with zero console, network, CSP, runtime, or routing issues.
 - Visual review: eight full-page screenshots covered the homepage, access flow, Launches & Missions gate, and Contract Awards gate at `390x844` and `1440x900`.
 - Resend: the authenticated dashboard showed one verified `potomacdb.com` domain, the Free plan, pay-as-you-go disabled, delivered magic-link/reset messages, and delivered Meridian message `69855c71-0ac0-4594-8eb6-a329ad260943`. Supabase recorded the same provider ID, `info@potomacdb.com` sender/recipient, `jake@potomacdb.com` Reply-To, and no automatic entitlement.
-- Supabase Cron: NOAA and USAspending are current and successful. The lunar Cron scheduler itself succeeds in dispatching, but the asynchronous worker response is HTTP 500. This fails the tracker-freshness gate.
-- No Cloudflare deployment was made because this checklist decision is NO-GO.
+- Supabase Cron: NOAA and USAspending are current and successful. Launch ingestion run `6019cac4-2046-4a47-ae25-882b704484ab` completed from a six-hour-bounded source snapshot after Launch Library 2 throttled shared egress. It preserved the source retrieval time `2026-07-24T07:43:32Z`, evaluated 13 records, found zero lunar-relevant launches, and published the reviewed `No launches this week` state.
+- Operational remediation was deployed to Cloudflare at approximately `2026-07-24T07:54Z` as version `e3cea93a-6465-4a61-8f79-79afa3b6282f`; this is not a release GO decision.
+
+## July 24 Launch Ingestion Remediation
+
+- Root cause: Launch Library 2 enforces 15 anonymous calls per hour and returned HTTP 429 to shared Cloudflare and Supabase egress during release probes.
+- Remediation commits: `5249542` adds protected internal diagnostics; `2371077` adds the restricted Supabase `pg_net` fallback and reviewed empty state; `b9f61ea` adds a service-only six-hour source snapshot with truthful retrieval metadata.
+- Supabase migrations: `launch_library_pg_net_fallback` and `tracker_source_snapshots` were applied only to `xlpkdoeldtlhearqajat`.
+- Local verification: lint passed; 154/154 unit and integration tests passed; 21/21 email-operation tests passed; production build passed; 6/6 E2E journeys passed.
+- Production verification: the 24-route release audit, 16 route/viewport quality checks, and 52-destination crawl all reported zero issues.
 
 ## Rollback
 
