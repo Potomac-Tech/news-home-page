@@ -217,25 +217,30 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 - Direct browser access to Potomac Slack is confirmed for workspace `T09LW7755H7` and channel `C0BK24FALJH` (`cabeus-explorer-bugs-and-fixes`). The channel had no new actionable parent messages, so no task or reply was created and no marker was advanced.
 - The Codex Slack connector remained authenticated to Lease Passport at the end of this run. Its final `Reconnect` action was left open in Codex settings pending user confirmation before persistent OAuth access changed.
 
-### 2026-07-24 13:43 EDT - Potomac Slack connector restored
+### 2026-07-24 09:43 EDT - Potomac Slack connector restored
 
 - The user confirmed the Slack reconnect, and OAuth completed for the Potomac workspace.
 - The Codex Slack connector can now read Potomac workspace `T09LW7755H7` and channel `C0BK24FALJH` (`cabeus-explorer-bugs-and-fixes`).
 - The newest actionable-parent scan found only channel membership events and Jacob Matthews's channel-description update. No actionable request was present, so no task or confirmation reply was created.
 - Slack parent-message marker advanced to `1784822231.883139` after the read completed successfully. The newer `1784822245.928899` event is an automation-generated ChatGPT channel-join event and is intentionally ignored.
 
-### 2026-07-24 16:43 EDT - Task 121 approval wait and Slack sync
+### 2026-07-24 12:43 EDT - Task 121 approval wait and Slack sync
 
 - Task 121 remains unchecked because the release-owner review of `docs/resend-free-operations.md` and a named technical release approval have not been recorded. No human approval was inferred.
 - Slack sync succeeded for channel `C0BK24FALJH`. The only event newer than the stored parent-message marker was the previously identified ChatGPT channel-join event at `1784822245.928899`.
 - No actionable parent message, task conversion, or Slack reply was required. The actionable-parent marker remains `1784822231.883139`.
 
-### 2026-07-24 19:45 EDT - Approval wait unchanged
+### 2026-07-24 15:45 EDT - Approval wait unchanged
 
 - Task 121 remains blocked on the same two human approvals; no implementation or verification state changed.
 - Slack sync succeeded. No new user-authored parent message was found, and the actionable-parent marker remains `1784822231.883139`.
 
-### 2026-07-24 22:45 EDT - Approval wait unchanged
+### 2026-07-24 18:45 EDT - Approval wait unchanged
+
+- Task 121 remains blocked on the release-owner Resend runbook review and named technical release approval.
+- Slack sync succeeded with no new user-authored parent messages. The actionable-parent marker remains `1784822231.883139`.
+
+### 2026-07-24 21:46 EDT - Approval wait unchanged
 
 - Task 121 remains blocked on the release-owner Resend runbook review and named technical release approval.
 - Slack sync succeeded with no new user-authored parent messages. The actionable-parent marker remains `1784822231.883139`.
