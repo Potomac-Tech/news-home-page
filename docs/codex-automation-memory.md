@@ -245,9 +245,9 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 - Task 121 remains blocked on the release-owner Resend runbook review and named technical release approval.
 - Slack sync succeeded with no new user-authored parent messages. The actionable-parent marker remains `1784822231.883139`.
 
-### 2026-07-26 14:04 EDT - Latest approval wait and Slack sync blocked
+### 2026-07-26 17:05 EDT - Latest approval wait and Slack sync blocked
 
 - Task 121 remains blocked on the release-owner Resend runbook review and named technical release approval.
 - Slack sync is blocked because the ChatGPT Slack plugin has reverted to `jmatthews@leasepassport.com`; the Potomac channel returns `INVALID_ARGUMENT`, and connector channel search finds no Potomac match.
 - Potomac remains present in the signed-in Slack desktop workspace switcher, but the Slack window is positioned outside the automation input bounds and could not be switched safely.
-- No Slack messages were read, no tasks or replies were created, and the actionable-parent marker remains `1784822231.883139`. Reconnecting the plugin to Potomac requires a new user-confirmed OAuth action.
+- No Slack messages were read, no tasks or replies were created, and the actionable-parent marker remains `1784822231.883139`. Reconnecting the plugin to Potomac requires a new user-confirmed OAuth action; confirmation has not yet been received.
