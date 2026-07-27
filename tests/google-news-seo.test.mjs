@@ -54,6 +54,7 @@ test("publisher transparency pages and disclosures are public and discoverable",
     const site = read("app/_data/site.ts");
     const sponsors = read("app/_components/SponsorUnit.tsx");
     const sitemap = read("app/sitemap.ts");
+    const launchVisibility = read("app/_data/launchVisibility.ts");
 
     assert.match(shell, /href: "\/authors", label: "Author biographies"/);
     assert.match(shell, /href: "\/contact", label: "Contact & standards"/);
@@ -71,4 +72,5 @@ test("publisher transparency pages and disclosures are public and discoverable",
     assert.match(sitemap, /loadAuthorEntries/);
     assert.match(sitemap, /path: "\/authors"/);
     assert.match(sitemap, /path: "\/contact"/);
+    assert.doesNotMatch(launchVisibility, /"events"|"\/events"/);
 });

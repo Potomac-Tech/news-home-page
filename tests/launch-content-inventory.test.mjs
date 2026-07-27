@@ -34,7 +34,11 @@ test("launch inventory records approval and withholds unapproved modules", async
     assert.match(migration, /Expected 4 approved editorial launch records/);
     assert.match(migration, /Expected 3 approved public launch datasets/);
     assert.match(migration, /Expected 3 proprietary placeholders to be archived/);
-    assert.match(visibility, /"events"/);
+    assert.doesNotMatch(
+        visibility,
+        /"events"|"\/events"/,
+        "published event pages must remain reachable from the masthead"
+    );
     assert.match(inventory, /Supabase project: `xlpkdoeldtlhearqajat`/);
     assert.match(inventory, /production shows an explicit unavailable or empty state/);
 });
