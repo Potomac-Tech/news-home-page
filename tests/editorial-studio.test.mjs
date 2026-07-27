@@ -92,6 +92,9 @@ test("editorial media, scalable dashboard, and author pages are wired", () => {
     assert.match(workflowMigration, /editorial_media_assets/);
     assert.match(workflowMigration, /editorial-media/);
     assert.match(actions, /storeMediaAssets/);
+    assert.match(actions, /removeArticleMedia/);
+    assert.match(actions, /\.storage[\s\S]*\.remove/);
+    assert.match(studioUi, /Remove media/);
     assert.match(dashboard, /50 per page/);
     assert.match(dashboard, /scheduled_for/);
     assert.match(authorPage, /primary_author_id/);

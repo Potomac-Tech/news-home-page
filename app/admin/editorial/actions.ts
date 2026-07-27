@@ -482,3 +482,55 @@ export async function scheduleArticle(formData: FormData) {
     revalidatePath(`/studio/preview/${articleId}`);
     return articleId;
 }
+
+export async function removeArticleMedia(formData: FormData) {
+    const { supabase } = await requireEditorialStaff(
+        editorialNextPath(formData)
+    );
+    const articleId = getRequiredString(formData, "article_id");
+    const assetId = getRequiredString(formData, "asset_id");
+
+    const { data: asset, error: assetError } = await supabase
+        .from("editorial_media_assets")
+        .select("storage_bucket,storage_object_path,public_url")
+        .eq("id", assetId)
+        .eq("article_id", articleId)
+        .single();
+    if (assetError || !asset) {
+        throw new Error(assetError?.message ?? "Media asset not found.");
+    }
+
+    const { error: storageError } = await supabase.storage
+        .from(asset.storage_bucket)
+        .remove([asset.storage_object_path]);
+    if (storageError) throw new Error(storageError.message);
+
+    const { error: recordError } = await supabase
+        .from("editorial_media_assets")
+        .delete()
+        .eq("id", assetId)
+        .eq("article_id", articleId);
+    if (recordError) throw new Error(recordError.message);
+
+    const { error: heroResetError } = await supabase
+        .from("editorial_articles")
+        .update({
+            hero_image_url: null,
+            hero_image_alt: null,
+        })
+        .eq("id", articleId)
+        .eq("hero_image_url", asset.public_url);
+    if (heroResetError) throw new Error(heroResetError.message);
+
+    const { error: previewResetError } = await supabase
+        .from("editorial_preview_approvals")
+        .delete()
+        .eq("article_id", articleId);
+    if (previewResetError) throw new Error(previewResetError.message);
+
+    revalidatePath("/studio");
+    revalidatePath("/studio/dashboard");
+    revalidatePath(`/studio/preview/${articleId}`);
+    revalidatePath("/news");
+    return assetId;
+}

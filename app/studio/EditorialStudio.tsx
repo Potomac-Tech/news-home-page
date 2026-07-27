@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
     createArticleDraft,
+    removeArticleMedia,
     updateArticleDraft,
 } from "../admin/editorial/actions";
 
@@ -150,6 +151,29 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
             router.refresh();
         } catch (error) {
             setSaveStatus(error instanceof Error ? error.message : "Draft could not be saved.");
+        } finally {
+            setIsSaving(false);
+        }
+    }
+
+    async function removeMedia(assetId: string) {
+        if (draft.id === "new") return;
+        setIsSaving(true);
+        setSaveStatus("Removing media...");
+        const formData = new FormData();
+        formData.set("studio_context", "studio");
+        formData.set("article_id", draft.id);
+        formData.set("asset_id", assetId);
+        try {
+            await removeArticleMedia(formData);
+            setDraft((current) => ({
+                ...current,
+                mediaAssets: current.mediaAssets.filter((asset) => asset.id !== assetId),
+            }));
+            setSaveStatus("Media removed. Preview approval must be renewed.");
+            router.refresh();
+        } catch (error) {
+            setSaveStatus(error instanceof Error ? error.message : "Media could not be removed.");
         } finally {
             setIsSaving(false);
         }
@@ -416,6 +440,14 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                                     <img src={asset.publicUrl} alt={asset.altText} className="aspect-video w-full object-cover" />
                                                 )}
                                                 <figcaption className="mt-2 text-xs text-potomac-regolith">{asset.caption || asset.altText || "Story media"}</figcaption>
+                                                <button
+                                                    type="button"
+                                                    disabled={isSaving}
+                                                    onClick={() => void removeMedia(asset.id)}
+                                                    className="mt-3 w-full border border-red-300/45 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-red-200 hover:border-red-200 disabled:opacity-40"
+                                                >
+                                                    Remove media
+                                                </button>
                                             </figure>
                                         ))}
                                     </div>
