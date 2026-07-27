@@ -54,7 +54,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                 if (event.key === "ArrowRight") { event.preventDefault(); move(1); }
                 if (event.key === " ") { event.preventDefault(); setPaused((value) => !value); }
             }}
-            className="relative min-h-[500px] overflow-hidden bg-potomac-primary outline-none [min-height:760px]"
+            className="relative min-h-[70rem] overflow-hidden bg-potomac-primary outline-none sm:min-h-[58rem] lg:min-h-[760px]"
         >
             {slides.map((slide, index) => (
                 <article
@@ -63,46 +63,48 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                     aria-label={`${index + 1} of ${count}`}
                     aria-hidden={index !== activeIndex}
                     inert={index !== activeIndex ? true : undefined}
-                    className={`absolute inset-0 grid grid-rows-[minmax(0,1fr)_13rem] transition-opacity duration-500 motion-reduce:transition-none md:grid-rows-[minmax(0,1fr)_18rem] ${index === activeIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
+                    className={`absolute inset-0 transition-opacity duration-500 motion-reduce:transition-none ${index === activeIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
                 >
-                    <img
-                        src={slide.visualAssetUrl}
-                        alt={slide.visualAssetAlt}
-                        loading={index === 0 ? "eager" : "lazy"}
-                        fetchPriority={index === 0 ? "high" : "auto"}
-                        sizes="100vw"
-                        className={`col-start-1 row-start-2 h-full w-full bg-potomac-primary ${
-                            slide.visualAssetUrl.includes("space-investment-forum")
-                            || slide.visualAssetUrl.includes("/editorial-media/")
-                                ? "object-contain"
-                                : "object-cover"
-                        }`}
-                    />
-                    <div className="col-start-1 row-start-1 min-h-[500px] px-5 pb-6 pt-8 lg:px-8 lg:pt-10">
-                        <div>
-                            <p className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
-                                Cabeus Explorer / {slide.slideType.replaceAll("_", " ")}
-                            </p>
-                            <h1 className="mt-5 max-w-[18ch] font-serif text-4xl uppercase leading-[1.04] text-white">
-                                {slide.title}
-                            </h1>
-                            <div className="industrial-divider mt-6 h-px w-40" />
-                            <p className="mt-5 max-w-2xl text-base leading-7 text-potomac-cream/80">
-                                {slide.summary}
-                            </p>
-                            <Link
-                                href={slide.ctaRoute}
-                                onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel", slideId: slide.id } })}
-                                className="mt-7 inline-flex min-h-11 items-center bg-potomac-gold px-5 py-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-primary transition hover:bg-potomac-cream"
-                            >
-                                {slide.ctaLabel}
-                            </Link>
+                    <div className="h-full px-5 pb-24 pt-8 lg:px-8 lg:pt-10">
+                        <p className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
+                            Cabeus Explorer / {slide.slideType.replaceAll("_", " ")}
+                        </p>
+                        <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(17rem,0.72fr)_minmax(0,1.28fr)] lg:items-start lg:gap-9">
+                            <div>
+                                <h1 className="max-w-[18ch] font-serif text-4xl uppercase leading-[1.04] text-white">
+                                    {slide.title}
+                                </h1>
+                                <div className="industrial-divider mt-6 h-px w-40" />
+                            </div>
+                            <img
+                                src={slide.visualAssetUrl}
+                                alt={slide.visualAssetAlt}
+                                loading={index === 0 ? "eager" : "lazy"}
+                                fetchPriority={index === 0 ? "high" : "auto"}
+                                sizes="(min-width: 1024px) 55vw, 100vw"
+                                className={`aspect-video max-h-[22rem] w-full bg-potomac-primary ${
+                                    slide.visualAssetUrl.includes("space-investment-forum")
+                                    || slide.visualAssetUrl.includes("/editorial-media/")
+                                        ? "object-contain object-top"
+                                        : "object-cover"
+                                }`}
+                            />
                         </div>
+                        <p className="mt-6 max-w-4xl text-base leading-7 text-potomac-cream/80">
+                            {slide.summary}
+                        </p>
+                        <Link
+                            href={slide.ctaRoute}
+                            onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel", slideId: slide.id } })}
+                            className="mt-7 inline-flex min-h-11 items-center bg-potomac-gold px-5 py-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-primary transition hover:bg-potomac-cream"
+                        >
+                            {slide.ctaLabel}
+                        </Link>
                     </div>
                 </article>
             ))}
 
-            <div className="absolute bottom-4 left-0 right-0 z-20 flex items-center justify-between gap-3 px-5 lg:px-8">
+            <div className="absolute bottom-4 left-0 right-0 z-20 flex flex-col items-start justify-between gap-3 px-5 sm:flex-row sm:items-center lg:px-8">
                 <div className="flex items-center gap-2" role="tablist" aria-label="Choose story">
                     {slides.map((slide, index) => (
                         <button
