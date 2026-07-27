@@ -1397,6 +1397,7 @@ test("Cabeus Terminal is mounted as a reviewed Explorer route package", () => {
         "Andromeda program comparison",
         "14 companies",
         "Open Cabeus Terminal",
+        'href="/terminal/contracts"',
         "Open Nexus",
         "/api/member/nexus/handoff",
     ], "Explorer Terminal route integration");

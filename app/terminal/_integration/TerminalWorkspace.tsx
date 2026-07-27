@@ -99,7 +99,7 @@ export function TerminalWorkspace({
                         </div>
                         <div className="flex flex-wrap gap-3">
                             <Link
-                                href="#terminal-capabilities"
+                    href="/terminal/contracts"
                                 className="rounded border border-white/20 px-4 py-3 text-sm font-semibold text-white transition hover:border-cyan-300/60"
                             >
                                 Open Cabeus Terminal
