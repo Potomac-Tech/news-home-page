@@ -52,10 +52,6 @@ test("studio supports journalist drafting without layout knowledge", () => {
         "Public teaser",
         "Draft from opening",
         "Story body",
-        "draggable",
-        "moveSection",
-        "Homepage",
-        "Full story",
         "Save draft",
         "Continue",
         "Start writing...",
@@ -109,8 +105,10 @@ test("studio preserves headline case and separates story paragraphs", () => {
     assert.doesNotMatch(previewPage, /text-3xl uppercase text-white/);
     assert.match(previewRender, /split\(\/\\n\\s\*\\n\/\)/);
     assert.match(articlePage, /split\(\/\\n\\s\*\\n\/\)/);
-    assert.match(studioUi, /space-y-9/);
-    assert.match(studioUi, /formatActiveSection/);
+    assert.match(studioUi, /aria-label="Story body"/);
+    assert.match(studioUi, /formatBody/);
+    assert.match(studioUi, /setBodyText/);
+    assert.doesNotMatch(studioUi, /Add section|\+ Paragraph|Move section|Remove section|draggable/);
     assert.match(studioUi, /Unsaved draft/);
     assert.match(studioUi, /aria-label="Text style"/);
     assert.match(devicePreview, /Computer/);

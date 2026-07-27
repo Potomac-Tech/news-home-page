@@ -40,8 +40,6 @@ export type StudioArticle = {
     }>;
 };
 
-type StorySection = { id: string; text: string };
-
 const inputClass =
     "mt-2 w-full border border-potomac-regolith/30 bg-potomac-primary px-4 py-3 text-base text-white outline-none transition placeholder:text-potomac-regolith/55 focus:border-potomac-gold";
 const labelClass =
@@ -55,18 +53,6 @@ function slugify(value: string) {
         .trim()
         .replace(/\s+/g, "-")
         .replace(/-+/g, "-");
-}
-
-function toSections(body: string): StorySection[] {
-    const sections = body
-        .split(/\n\s*\n/)
-        .map((text) => text.trim())
-        .filter(Boolean)
-        .map((text, index) => ({ id: `section-${index}`, text }));
-
-    return sections.length
-        ? sections
-        : [{ id: "section-0", text: "" }];
 }
 
 function emptyArticle(): StudioArticle {
@@ -106,29 +92,26 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
         [articles, selectedId]
     );
     const [draft, setDraft] = useState(selected);
-    const [sections, setSections] = useState(() => toSections(selected.body));
+    const [bodyText, setBodyText] = useState(selected.body);
     const [query, setQuery] = useState("");
-    const [draggedSectionId, setDraggedSectionId] = useState<string | null>(null);
-    const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
     const [importStatus, setImportStatus] = useState<string>("");
-    const [previewMode, setPreviewMode] = useState<"public" | "member">("public");
     const [saveStatus, setSaveStatus] = useState("");
     const [isSaving, setIsSaving] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const mediaInputRef = useRef<HTMLInputElement>(null);
-    const sectionRefs = useRef<Record<string, HTMLTextAreaElement | null>>({});
+    const bodyRef = useRef<HTMLTextAreaElement>(null);
     const formId = "editorial-studio-story-form";
 
     const filteredArticles = articles.filter((article) =>
         `${article.title} ${article.authorName} ${article.status}`.toLowerCase().includes(query.toLowerCase())
     );
-    const bodyMarkdown = sections.map((section) => section.text.trim()).filter(Boolean).join("\n\n");
+    const bodyMarkdown = bodyText.trim();
     const action = draft.id === "new" ? createArticleDraft : updateArticleDraft;
 
     function chooseArticle(article: StudioArticle) {
         setSelectedId(article.id);
         setDraft(article);
-        setSections(toSections(article.body));
+        setBodyText(article.body);
         setImportStatus("");
         if (fileInputRef.current) fileInputRef.current.value = "";
     }
@@ -137,7 +120,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
         const next = emptyArticle();
         setSelectedId("new");
         setDraft(next);
-        setSections(toSections(""));
+        setBodyText("");
         setImportStatus("");
         if (fileInputRef.current) fileInputRef.current.value = "";
     }
@@ -216,14 +199,13 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
             const bodySections = probableHeadline.length <= 180
                 ? imported.slice(1)
                 : imported;
-            const nextSections = (bodySections.length ? bodySections : imported).map(
-                (text) => ({ id: crypto.randomUUID(), text })
-            );
+            const nextBodyParagraphs = bodySections.length ? bodySections : imported;
+            const nextBody = nextBodyParagraphs.join("\n\n");
 
-            setSections(nextSections);
+            setBodyText(nextBody);
             setDraft((current) => {
                 const headline = current.title || (probableHeadline.length <= 180 ? probableHeadline : "");
-                const firstBody = nextSections[0]?.text ?? "";
+                const firstBody = nextBodyParagraphs[0] ?? "";
                 return {
                     ...current,
                     title: headline,
@@ -249,49 +231,26 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
         }
     }
 
-    function moveSection(targetId: string) {
-        if (!draggedSectionId || draggedSectionId === targetId) return;
-        setSections((current) => {
-            const from = current.findIndex((item) => item.id === draggedSectionId);
-            const to = current.findIndex((item) => item.id === targetId);
-            if (from < 0 || to < 0) return current;
-            const next = [...current];
-            const [moved] = next.splice(from, 1);
-            next.splice(to, 0, moved);
-            return next;
-        });
-        setDraggedSectionId(null);
-    }
-
     function draftTeaser() {
-        const source = draft.publicSummary || sections.find((section) => section.text.trim())?.text || "";
+        const source = draft.publicSummary || bodyText.split(/\n\s*\n/).find((paragraph) => paragraph.trim()) || "";
         const normalized = source.replace(/\s+/g, " ").trim();
         updateDraft("publicTeaser", normalized.length > 320 ? `${normalized.slice(0, 317).trimEnd()}...` : normalized);
     }
 
-    function formatActiveSection(prefix: string, suffix = prefix, fallback = "text") {
-        const sectionId = activeSectionId ?? sections[0]?.id;
-        if (!sectionId) return;
-        const textarea = sectionRefs.current[sectionId];
-        const section = sections.find((item) => item.id === sectionId);
-        if (!section) return;
-        const start = textarea?.selectionStart ?? section.text.length;
+    function formatBody(prefix: string, suffix = prefix, fallback = "text") {
+        const textarea = bodyRef.current;
+        const start = textarea?.selectionStart ?? bodyText.length;
         const end = textarea?.selectionEnd ?? start;
-        const selectedText = section.text.slice(start, end) || fallback;
+        const selectedText = bodyText.slice(start, end) || fallback;
         const nextText =
-            section.text.slice(0, start) +
+            bodyText.slice(0, start) +
             prefix +
             selectedText +
             suffix +
-            section.text.slice(end);
-        setSections((current) =>
-            current.map((item) =>
-                item.id === sectionId ? { ...item, text: nextText } : item
-            )
-        );
-        setActiveSectionId(sectionId);
+            bodyText.slice(end);
+        setBodyText(nextText);
         window.setTimeout(() => {
-            const nextTextarea = sectionRefs.current[sectionId];
+            const nextTextarea = bodyRef.current;
             if (!nextTextarea) return;
             nextTextarea.focus();
             nextTextarea.setSelectionRange(
@@ -327,7 +286,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                             defaultValue=""
                             onChange={(event) => {
                                 if (event.target.value === "heading") {
-                                    formatActiveSection("## ", "", "Heading");
+                                    formatBody("## ", "", "Heading");
                                 }
                                 event.target.value = "";
                             }}
@@ -337,17 +296,16 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                             <option value="heading" className="bg-potomac-primary">Heading</option>
                         </select>
                         <span className="mx-2 h-5 w-px bg-white/15" />
-                        <button type="button" title="Bold" aria-label="Bold" onClick={() => formatActiveSection("**")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">B</button>
-                        <button type="button" title="Italic" aria-label="Italic" onClick={() => formatActiveSection("_")} className="h-9 w-9 font-serif text-lg italic hover:bg-white/5">I</button>
-                        <button type="button" title="Heading" aria-label="Heading" onClick={() => formatActiveSection("## ", "", "Heading")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">T</button>
-                        <button type="button" title="Insert link" aria-label="Insert link" onClick={() => formatActiveSection("[", "](https://)", "link text")} className="h-9 w-9 text-lg hover:bg-white/5">↗</button>
+                        <button type="button" title="Bold" aria-label="Bold" onClick={() => formatBody("**")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">B</button>
+                        <button type="button" title="Italic" aria-label="Italic" onClick={() => formatBody("_")} className="h-9 w-9 font-serif text-lg italic hover:bg-white/5">I</button>
+                        <button type="button" title="Heading" aria-label="Heading" onClick={() => formatBody("## ", "", "Heading")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">T</button>
+                        <button type="button" title="Insert link" aria-label="Insert link" onClick={() => formatBody("[", "](https://)", "link text")} className="h-9 w-9 text-lg hover:bg-white/5">↗</button>
                         <span className="mx-2 h-5 w-px bg-white/15" />
                         <button type="button" title="Upload image or video" aria-label="Upload image or video" onClick={() => mediaInputRef.current?.click()} className="h-9 w-9 text-lg hover:bg-white/5">▧</button>
                         <button type="button" title="Import Word document" aria-label="Import Word document" onClick={() => fileInputRef.current?.click()} className="h-9 px-3 font-mono text-xs font-bold hover:bg-white/5">DOC</button>
                         <span className="mx-2 h-5 w-px bg-white/15" />
-                        <button type="button" title="Bulleted list" aria-label="Bulleted list" onClick={() => formatActiveSection("- ", "", "List item")} className="h-9 w-9 text-lg hover:bg-white/5">•</button>
-                        <button type="button" title="Quote" aria-label="Quote" onClick={() => formatActiveSection("> ", "", "Quote")} className="h-9 w-9 text-lg hover:bg-white/5">”</button>
-                        <button type="button" onClick={() => setSections((current) => [...current, { id: crypto.randomUUID(), text: "" }])} className="ml-2 h-9 px-3 font-mono text-xs font-bold uppercase text-potomac-gold hover:bg-white/5">+ Paragraph</button>
+                        <button type="button" title="Bulleted list" aria-label="Bulleted list" onClick={() => formatBody("- ", "", "List item")} className="h-9 w-9 text-lg hover:bg-white/5">•</button>
+                        <button type="button" title="Quote" aria-label="Quote" onClick={() => formatBody("> ", "", "Quote")} className="h-9 w-9 text-lg hover:bg-white/5">”</button>
                     </div>
                 </div>
             </header>
@@ -532,36 +490,17 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                 <span className="mt-2 block text-[0.58rem] text-potomac-regolith">Scheduling is confirmed from the device preview after this draft is saved.</span>
                             </label>
 
-                            <section className="order-4 mt-12 border-t border-white/10 pt-10">
-                                <div className="flex items-center justify-between gap-4">
-                                    <h2 className="sr-only">Story body</h2>
-                                    <button type="button" onClick={() => setSections((current) => [...current, { id: crypto.randomUUID(), text: "" }])} className="border border-potomac-regolith/35 px-4 py-2 font-mono text-[0.62rem] font-bold uppercase text-potomac-cream hover:border-potomac-gold">Add section</button>
-                                </div>
-                                <div className="mt-4 space-y-9">
-                                    {sections.map((section, index) => (
-                                        <article
-                                            key={section.id}
-                                            draggable
-                                            onDragStart={() => setDraggedSectionId(section.id)}
-                                            onDragOver={(event) => event.preventDefault()}
-                                            onDrop={() => moveSection(section.id)}
-                                            className="group grid grid-cols-[2.25rem_minmax(0,1fr)_2.25rem]"
-                                        >
-                                            <button type="button" aria-label={`Move section ${index + 1}`} className="cursor-grab font-mono text-lg text-potomac-regolith/45 hover:text-potomac-gold">≡</button>
-                                            <textarea
-                                                ref={(element) => { sectionRefs.current[section.id] = element; }}
-                                                aria-label={`Story section ${index + 1}`}
-                                                rows={Math.max(4, Math.min(12, Math.ceil(section.text.length / 90)))}
-                                                value={section.text}
-                                                onFocus={() => setActiveSectionId(section.id)}
-                                                onChange={(event) => setSections((current) => current.map((item) => item.id === section.id ? { ...item, text: event.target.value } : item))}
-                                                className="min-w-0 resize-none bg-transparent px-3 py-1 text-lg leading-8 text-potomac-cream/90 outline-none placeholder:text-potomac-regolith/45"
-                                                placeholder={index === 0 ? "Start writing..." : "Continue writing..."}
-                                            />
-                                            <button type="button" aria-label={`Remove section ${index + 1}`} onClick={() => setSections((current) => current.length === 1 ? [{ ...current[0], text: "" }] : current.filter((item) => item.id !== section.id))} className="font-mono text-xl text-potomac-regolith/40 hover:text-red-300">×</button>
-                                        </article>
-                                    ))}
-                                </div>
+                            <section className="order-4 mt-8">
+                                <h2 className="sr-only">Story body</h2>
+                                <textarea
+                                    ref={bodyRef}
+                                    aria-label="Story body"
+                                    rows={Math.max(18, Math.ceil(bodyText.length / 84))}
+                                    value={bodyText}
+                                    onChange={(event) => setBodyText(event.target.value)}
+                                    className="min-h-[32rem] w-full resize-none border-0 bg-transparent py-3 text-lg leading-8 text-potomac-cream/90 outline-none placeholder:text-potomac-regolith/45"
+                                    placeholder="Start writing..."
+                                />
                             </section>
 
                             <section className="order-5 mt-12 border-y border-white/10 py-6">
@@ -586,35 +525,6 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                         </div>
                     </form>
                 </main>
-
-                <aside className="hidden">
-                    <div className="flex border border-potomac-regolith/25 p-1" role="tablist" aria-label="Story preview">
-                        {(["public", "member"] as const).map((mode) => (
-                            <button key={mode} type="button" role="tab" aria-selected={previewMode === mode} onClick={() => setPreviewMode(mode)} className={`min-h-10 flex-1 font-mono text-[0.62rem] font-bold uppercase ${previewMode === mode ? "bg-potomac-gold text-potomac-primary" : "text-potomac-regolith"}`}>{mode === "public" ? "Homepage" : "Full story"}</button>
-                        ))}
-                    </div>
-                    <div className="mt-4 border border-potomac-regolith/25 bg-potomac-primary p-5">
-                        <p className="font-mono text-[0.58rem] font-bold uppercase text-potomac-gold">{previewMode === "public" ? "Public preview" : `${draft.accessTier} access`}</p>
-                        <h2 className="mt-4 font-serif text-3xl leading-tight text-white">{draft.title || "Story headline"}</h2>
-                        <p className="mt-3 text-xs font-bold uppercase text-potomac-cream/55">By {draft.authorName || "Author name"}</p>
-                        <div className="industrial-divider mt-5 h-px w-24" />
-                        <p className="mt-5 text-base leading-6 text-potomac-cream/80">{draft.publicSummary || "The standfirst will appear here."}</p>
-                        {previewMode === "public" ? (
-                            <>
-                                <p className="mt-5 whitespace-pre-wrap text-sm leading-6 text-potomac-cream/65">{draft.publicTeaser || "The public teaser will appear here."}</p>
-                                <div className="mt-6 border-t border-potomac-regolith/20 pt-5">
-                                    <span className="inline-flex bg-potomac-gold px-4 py-2 font-mono text-[0.62rem] font-bold uppercase text-potomac-primary">Read full story</span>
-                                </div>
-                            </>
-                        ) : (
-                            <div className="mt-6 space-y-4 border-t border-potomac-regolith/20 pt-5">
-                                {sections.filter((section) => section.text.trim()).map((section) => (
-                                    <p key={section.id} className="whitespace-pre-wrap text-sm leading-6 text-potomac-cream/72">{section.text}</p>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </aside>
             </div>
         </div>
     );
