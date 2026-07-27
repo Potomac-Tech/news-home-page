@@ -71,7 +71,7 @@ async function handleTerminalProxy(
     jti: crypto.randomUUID(),
     contract_version: "2026-07-27.v1",
     membership: viewer.membership,
-    organizations: [],
+    organizations: viewer.organizations,
   };
 
   try {
