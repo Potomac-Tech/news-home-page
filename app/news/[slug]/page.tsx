@@ -40,6 +40,7 @@ type EditorialArticleRow = {
     id: string;
     slug: string;
     title: string;
+    primary_author_id: string | null;
     dek: string | null;
     public_summary: string | null;
     public_teaser_markdown: string | null;
@@ -126,11 +127,16 @@ function mapCitation(row: EditorialCitationRow): ArticleCitation {
     };
 }
 
-function mapArticle(row: EditorialArticleRow, citations: ArticleCitation[]): ArticleRecord {
+function mapArticle(
+    row: EditorialArticleRow,
+    citations: ArticleCitation[],
+    authorName: string | null
+): ArticleRecord {
     return {
         id: row.id,
         slug: row.slug,
         title: row.title,
+        authorName: authorName ?? "Cabeus Explorer Editorial Desk",
         dek: row.dek ?? row.public_summary ?? "Cabeus Explorer intelligence brief.",
         summary: row.public_summary ?? row.dek ?? "Cabeus Explorer intelligence brief.",
         keyPoints: parseKeyPoints(row.public_key_points),
@@ -157,7 +163,7 @@ async function getPublishedCmsArticle(slug: string) {
     const { data, error } = await supabase
         .from("editorial_articles")
         .select(
-            "id,slug,title,dek,public_summary,public_teaser_markdown,public_key_points,intro_markdown,access_tier_required,hero_image_url,hero_image_alt,published_at"
+            "id,slug,title,primary_author_id,dek,public_summary,public_teaser_markdown,public_key_points,intro_markdown,access_tier_required,hero_image_url,hero_image_alt,published_at"
         )
         .eq("slug", slug)
         .eq("status", "published")
@@ -172,22 +178,38 @@ async function getPublishedCmsArticle(slug: string) {
     }
 
     const articleRow = data as EditorialArticleRow;
-    const { data: citationData, error: citationError } = await supabase
-        .from("editorial_article_citations")
-        .select("label,title,publisher,url,summary,sort_order")
-        .eq("article_id", articleRow.id)
-        .order("sort_order", { ascending: true });
+    const [citationResult, authorResult] = await Promise.all([
+        supabase
+            .from("editorial_article_citations")
+            .select("label,title,publisher,url,summary,sort_order")
+            .eq("article_id", articleRow.id)
+            .order("sort_order", { ascending: true }),
+        articleRow.primary_author_id
+            ? supabase
+                .from("editorial_authors")
+                .select("display_name")
+                .eq("id", articleRow.primary_author_id)
+                .maybeSingle()
+            : Promise.resolve({ data: null, error: null }),
+    ]);
 
-    if (citationError) {
-        throw new Error(citationError.message);
+    if (citationResult.error) {
+        throw new Error(citationResult.error.message);
+    }
+    if (authorResult.error) {
+        throw new Error(authorResult.error.message);
     }
 
-    const citations = ((citationData ?? []) as EditorialCitationRow[]).map(
+    const citations = ((citationResult.data ?? []) as EditorialCitationRow[]).map(
         mapCitation
     );
 
     return {
-        article: mapArticle(articleRow, citations),
+        article: mapArticle(
+            articleRow,
+            citations,
+            (authorResult.data as { display_name?: string } | null)?.display_name ?? null
+        ),
         supabase,
     };
 }
@@ -280,6 +302,7 @@ export async function generateMetadata({
             siteName: siteConfig.name,
             type: "article",
             publishedTime: article?.publishedAt,
+            authors: article?.authorName ? [article.authorName] : undefined,
             images: article
                 ? [
                       {
@@ -381,7 +404,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         image: [absoluteSiteUrl(article.heroImageUrl)],
         datePublished: new Date(article.publishedAt).toISOString(),
         dateModified: new Date(article.publishedAt).toISOString(),
-        author: organizationJsonLd(),
+        author: article.authorName
+            ? { "@type": "Person", name: article.authorName }
+            : organizationJsonLd(),
         publisher: organizationJsonLd(),
         mainEntityOfPage: canonicalUrl,
         isAccessibleForFree: false,
@@ -421,6 +446,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             {article.dek}
                         </p>
                         <div className="mt-6 flex flex-wrap gap-3 text-xs font-bold uppercase tracking-[0.14em] text-potomac-cream/50">
+                            <span>By {article.authorName ?? "Cabeus Explorer Editorial Desk"}</span>
                             <time dateTime={article.publishedAt}>
                                 {formatDate(article.publishedAt)}
                             </time>

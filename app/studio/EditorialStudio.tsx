@@ -14,6 +14,7 @@ export type StudioArticle = {
     status: string;
     accessTier: string;
     title: string;
+    authorName: string;
     publicSummary: string;
     publicTeaser: string;
     intro: string;
@@ -67,6 +68,7 @@ function emptyArticle(): StudioArticle {
         status: "draft",
         accessTier: "member",
         title: "",
+        authorName: "",
         publicSummary: "",
         publicTeaser: "",
         intro: "",
@@ -105,7 +107,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
     const formId = "editorial-studio-story-form";
 
     const filteredArticles = articles.filter((article) =>
-        `${article.title} ${article.status}`.toLowerCase().includes(query.toLowerCase())
+        `${article.title} ${article.authorName} ${article.status}`.toLowerCase().includes(query.toLowerCase())
     );
     const bodyMarkdown = sections.map((section) => section.text.trim()).filter(Boolean).join("\n\n");
     const action = draft.id === "new" ? createArticleDraft : updateArticleDraft;
@@ -285,6 +287,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                             >
                                 <span className="block font-mono text-[0.58rem] font-bold uppercase text-potomac-gold">{article.status} · {article.accessTier}</span>
                                 <span className="mt-2 block font-serif text-base uppercase leading-5 text-white">{article.title}</span>
+                                <span className="mt-2 block text-xs text-potomac-cream/65">{article.authorName ? `By ${article.authorName}` : "Byline not set"}</span>
                                 <span className="mt-2 block font-mono text-[0.56rem] uppercase text-potomac-regolith">{new Date(article.updatedAt).toLocaleDateString()}</span>
                             </button>
                         ))}
@@ -331,6 +334,19 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                     }}
                                     className={`${inputClass} resize-y font-serif text-3xl uppercase leading-tight`}
                                     placeholder="Write the clearest version of the story"
+                                />
+                            </label>
+
+                            <label className={labelClass}>
+                                Byline
+                                <input
+                                    required
+                                    name="author_name"
+                                    value={draft.authorName}
+                                    onChange={(event) => updateDraft("authorName", event.target.value)}
+                                    className={inputClass}
+                                    placeholder="Author's published name"
+                                    autoComplete="name"
                                 />
                             </label>
 
@@ -439,6 +455,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                     <div className="mt-4 border border-potomac-regolith/25 bg-potomac-primary p-5">
                         <p className="font-mono text-[0.58rem] font-bold uppercase text-potomac-gold">{previewMode === "public" ? "Public preview" : `${draft.accessTier} access`}</p>
                         <h2 className="mt-4 font-serif text-3xl uppercase leading-tight text-white">{draft.title || "Story headline"}</h2>
+                        <p className="mt-3 text-xs font-bold uppercase text-potomac-cream/55">By {draft.authorName || "Author name"}</p>
                         <div className="industrial-divider mt-5 h-px w-24" />
                         <p className="mt-5 text-base leading-6 text-potomac-cream/80">{draft.publicSummary || "The standfirst will appear here."}</p>
                         {previewMode === "public" ? (

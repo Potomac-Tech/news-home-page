@@ -38,6 +38,8 @@ test("studio supports journalist drafting without layout knowledge", () => {
         "Drop Word story here",
         "extractRawText",
         "Headline",
+        "Byline",
+        "author_name",
         "Standfirst",
         "Public teaser",
         "Draft from opening",
@@ -54,6 +56,9 @@ test("studio supports journalist drafting without layout knowledge", () => {
 test("studio saves source documents and retains article version history", () => {
     assert.match(actions, /storeSourceDocument/);
     assert.match(actions, /createVersion/);
+    assert.match(actions, /resolvePrimaryAuthorId/);
+    assert.match(studioPage, /primary_author_id/);
+    assert.match(studioPage, /editorial_authors/);
     assert.match(actions, /revalidatePath\("\/studio"\)/);
     assert.match(studioUi, /createArticleDraft/);
     assert.match(studioUi, /updateArticleDraft/);

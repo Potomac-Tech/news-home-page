@@ -15,6 +15,7 @@ type ArticleRow = {
     status: string;
     access_tier_required: string;
     title: string;
+    primary_author_id: string | null;
     public_summary: string;
     public_teaser_markdown: string;
     intro_markdown: string | null;
@@ -28,25 +29,35 @@ export default async function StudioPage() {
     const { supabase } = await requireEditorialStaff("/studio");
     const { data: articleRows, error: articleError } = await supabase
         .from("editorial_articles")
-        .select("id,slug,status,access_tier_required,title,public_summary,public_teaser_markdown,intro_markdown,seo_title,seo_description,aeo_summary,updated_at")
+        .select("id,slug,status,access_tier_required,title,primary_author_id,public_summary,public_teaser_markdown,intro_markdown,seo_title,seo_description,aeo_summary,updated_at")
         .order("updated_at", { ascending: false });
 
     if (articleError) throw new Error(articleError.message);
 
     const rows = (articleRows ?? []) as ArticleRow[];
     const ids = rows.map((row) => row.id);
-    const [bodiesResult, documentsResult] = ids.length
+    const authorIds = Array.from(
+        new Set(rows.map((row) => row.primary_author_id).filter((id): id is string => Boolean(id)))
+    );
+    const [bodiesResult, documentsResult, authorsResult] = ids.length
         ? await Promise.all([
             supabase.from("editorial_article_bodies").select("article_id,body_markdown,body_excerpt").in("article_id", ids),
             supabase.from("editorial_source_documents").select("id,article_id,original_file_name,size_bytes,created_at").in("article_id", ids).order("created_at", { ascending: false }),
+            authorIds.length
+                ? supabase.from("editorial_authors").select("id,display_name").in("id", authorIds)
+                : Promise.resolve({ data: [], error: null }),
         ])
-        : [{ data: [], error: null }, { data: [], error: null }];
+        : [{ data: [], error: null }, { data: [], error: null }, { data: [], error: null }];
 
     if (bodiesResult.error) throw new Error(bodiesResult.error.message);
     if (documentsResult.error) throw new Error(documentsResult.error.message);
+    if (authorsResult.error) throw new Error(authorsResult.error.message);
 
     const bodyByArticle = new Map(
         (bodiesResult.data ?? []).map((body) => [body.article_id, body])
+    );
+    const authorById = new Map(
+        (authorsResult.data ?? []).map((author) => [author.id, author.display_name])
     );
     const documentsByArticle = new Map<string, StudioArticle["sourceDocuments"]>();
     for (const document of documentsResult.data ?? []) {
@@ -68,6 +79,9 @@ export default async function StudioPage() {
             status: row.status,
             accessTier: row.access_tier_required,
             title: row.title,
+            authorName: row.primary_author_id
+                ? authorById.get(row.primary_author_id) ?? ""
+                : "",
             publicSummary: row.public_summary,
             publicTeaser: row.public_teaser_markdown,
             intro: row.intro_markdown ?? "",

@@ -12,6 +12,7 @@ export type ArticleRecord = {
     id?: string;
     slug: string;
     title: string;
+    authorName?: string;
     dek: string;
     summary: string;
     keyPoints: string[];

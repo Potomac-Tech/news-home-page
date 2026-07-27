@@ -51,6 +51,60 @@ function getAccessTier(formData: FormData) {
     return value;
 }
 
+function authorSlug(value: string) {
+    return value
+        .toLowerCase()
+        .normalize("NFKD")
+        .replace(/[^a-z0-9\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
+}
+
+async function resolvePrimaryAuthorId(
+    supabase: EditorialSupabaseClient,
+    formData: FormData
+) {
+    if (!formData.has("author_name")) {
+        return undefined;
+    }
+
+    const displayName = String(formData.get("author_name") ?? "").trim();
+    if (!displayName) {
+        return null;
+    }
+
+    const slug = authorSlug(displayName);
+    if (!slug) {
+        throw new Error("Author name must contain letters or numbers.");
+    }
+
+    const { data: existing, error: existingError } = await supabase
+        .from("editorial_authors")
+        .select("id")
+        .eq("slug", slug)
+        .maybeSingle();
+
+    if (existingError) {
+        throw new Error(existingError.message);
+    }
+    if (existing?.id) {
+        return existing.id as string;
+    }
+
+    const { data: author, error: authorError } = await supabase
+        .from("editorial_authors")
+        .insert({ display_name: displayName, slug })
+        .select("id")
+        .single();
+
+    if (authorError || !author?.id) {
+        throw new Error(authorError?.message ?? "Author not created.");
+    }
+
+    return author.id as string;
+}
+
 function editorialNextPath(formData: FormData) {
     return formData.get("studio_context") === "studio"
         ? "/studio"
@@ -112,12 +166,14 @@ export async function createArticleDraft(formData: FormData) {
     );
     const bodyMarkdown = getRequiredString(formData, "body_markdown");
     const sourceDocument = sourceDocumentFrom(formData);
+    const primaryAuthorId = await resolvePrimaryAuthorId(supabase, formData);
 
     const { data: article, error: articleError } = await supabase
         .from("editorial_articles")
         .insert({
             slug: getRequiredString(formData, "slug"),
             title: getRequiredString(formData, "title"),
+            primary_author_id: primaryAuthorId ?? null,
             status: "draft",
             access_tier_required: getAccessTier(formData),
             public_summary: getRequiredString(formData, "public_summary"),
@@ -183,24 +239,30 @@ export async function updateArticleDraft(formData: FormData) {
     const articleId = getRequiredString(formData, "article_id");
     const bodyMarkdown = getRequiredString(formData, "body_markdown");
     const sourceDocument = sourceDocumentFrom(formData);
+    const primaryAuthorId = await resolvePrimaryAuthorId(supabase, formData);
+    const articleUpdates: Record<string, string | null> = {
+        slug: getRequiredString(formData, "slug"),
+        title: getRequiredString(formData, "title"),
+        access_tier_required: getAccessTier(formData),
+        public_summary: getRequiredString(formData, "public_summary"),
+        public_teaser_markdown: getRequiredString(
+            formData,
+            "public_teaser_markdown"
+        ),
+        intro_markdown: getOptionalString(formData, "intro_markdown"),
+        seo_title: getOptionalString(formData, "seo_title"),
+        seo_description: getOptionalString(formData, "seo_description"),
+        aeo_summary: getOptionalString(formData, "aeo_summary"),
+        updated_by: userId,
+    };
+
+    if (primaryAuthorId !== undefined) {
+        articleUpdates.primary_author_id = primaryAuthorId;
+    }
 
     const { data: article, error: articleError } = await supabase
         .from("editorial_articles")
-        .update({
-            slug: getRequiredString(formData, "slug"),
-            title: getRequiredString(formData, "title"),
-            access_tier_required: getAccessTier(formData),
-            public_summary: getRequiredString(formData, "public_summary"),
-            public_teaser_markdown: getRequiredString(
-                formData,
-                "public_teaser_markdown"
-            ),
-            intro_markdown: getOptionalString(formData, "intro_markdown"),
-            seo_title: getOptionalString(formData, "seo_title"),
-            seo_description: getOptionalString(formData, "seo_description"),
-            aeo_summary: getOptionalString(formData, "aeo_summary"),
-            updated_by: userId,
-        })
+        .update(articleUpdates)
         .eq("id", articleId)
         .select(
             "id,status,slug,title,public_summary,public_teaser_markdown,seo_title,seo_description,aeo_summary"
