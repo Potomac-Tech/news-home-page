@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "../../../lib/supabase/server";
+import { absoluteSiteUrl, jsonLdScript, organizationJsonLd } from "../../_data/site";
 
 export const dynamic = "force-dynamic";
 
@@ -43,9 +44,25 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
     const socialLinks = author.social_links && typeof author.social_links === "object"
         ? Object.entries(author.social_links as Record<string, unknown>).filter((entry): entry is [string, string] => typeof entry[1] === "string")
         : [];
+    const { "@context": _organizationContext, ...worksFor } = organizationJsonLd();
+    const authorJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: author.display_name,
+        url: absoluteSiteUrl(`/authors/${author.slug}`),
+        jobTitle: author.title ?? undefined,
+        description: author.bio ?? undefined,
+        image: author.avatar_url ?? undefined,
+        worksFor,
+        sameAs: socialLinks.map(([, url]) => url),
+    };
 
     return (
         <main className="bg-grid-pattern min-h-screen">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: jsonLdScript(authorJsonLd) }}
+            />
             <header className="border-b border-white/10">
                 <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-12 md:flex-row md:items-center md:px-8">
                     {author.avatar_url ? <img src={author.avatar_url} alt="" className="h-32 w-32 border border-potomac-gold/40 object-cover" /> : null}

@@ -20,6 +20,7 @@ export type ArticleRecord = {
     intro: string;
     teaser: string;
     publishedAt: string;
+    updatedAt?: string;
     accessTier: ArticleAccessTier;
     heroImageUrl: string;
     heroImageAlt: string;

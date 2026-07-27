@@ -14,7 +14,10 @@ export default function robots(): MetadataRoute.Robots {
                 "/organization",
             ],
         },
-        sitemap: absoluteSiteUrl("/sitemap.xml"),
+        sitemap: [
+            absoluteSiteUrl("/sitemap.xml"),
+            absoluteSiteUrl("/news-sitemap.xml"),
+        ],
         host: siteConfig.url,
     };
 }

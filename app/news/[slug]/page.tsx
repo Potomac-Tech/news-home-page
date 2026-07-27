@@ -51,6 +51,7 @@ type EditorialArticleRow = {
     hero_image_url: string | null;
     hero_image_alt: string | null;
     published_at: string | null;
+    updated_at: string | null;
 };
 
 type EditorialCitationRow = {
@@ -84,6 +85,10 @@ const displayDateFormatter = new Intl.DateTimeFormat("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "America/New_York",
+    timeZoneName: "short",
 });
 
 const anonymousAccess: ArticleAccessContext = {
@@ -152,6 +157,7 @@ function mapArticle(
         intro: row.intro_markdown ?? row.public_teaser_markdown ?? "",
         teaser: row.public_teaser_markdown ?? row.public_summary ?? "",
         publishedAt: row.published_at ?? new Date().toISOString(),
+        updatedAt: row.updated_at ?? row.published_at ?? undefined,
         accessTier: normalizeTier(row.access_tier_required),
         heroImageUrl: row.hero_image_url ?? "",
         heroImageAlt: row.hero_image_alt ?? "",
@@ -172,7 +178,7 @@ async function getPublishedCmsArticle(slug: string) {
     const { data, error } = await supabase
         .from("editorial_articles")
         .select(
-            "id,slug,title,primary_author_id,dek,public_summary,public_teaser_markdown,public_key_points,intro_markdown,access_tier_required,hero_image_url,hero_image_alt,published_at"
+            "id,slug,title,primary_author_id,dek,public_summary,public_teaser_markdown,public_key_points,intro_markdown,access_tier_required,hero_image_url,hero_image_alt,published_at,updated_at"
         )
         .eq("slug", slug)
         .eq("status", "published")
@@ -339,7 +345,7 @@ export async function generateMetadata({
             type: "article",
             publishedTime: article?.publishedAt,
             authors: article?.authorName ? [article.authorName] : undefined,
-            images: article
+            images: article?.heroImageUrl
                 ? [
                       {
                           url: absoluteSiteUrl(article.heroImageUrl),
@@ -432,19 +438,39 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         ? article.keyPoints
         : [article.summary, article.teaser].filter(Boolean);
     const canonicalUrl = absoluteSiteUrl(`/news/${article.slug}`);
+    const authorUrl = article.authorSlug
+        ? absoluteSiteUrl(`/authors/${article.authorSlug}`)
+        : undefined;
+    const { "@context": _publisherContext, ...publisherJsonLd } =
+        organizationJsonLd();
     const articleJsonLd = {
         "@context": "https://schema.org",
         "@type": "NewsArticle",
         headline: article.title,
         description: article.summary,
-        image: [absoluteSiteUrl(article.heroImageUrl)],
+        image: article.heroImageUrl
+            ? [
+                  {
+                      "@type": "ImageObject",
+                      url: absoluteSiteUrl(article.heroImageUrl),
+                      caption: article.heroImageAlt,
+                  },
+              ]
+            : undefined,
         datePublished: new Date(article.publishedAt).toISOString(),
-        dateModified: new Date(article.publishedAt).toISOString(),
+        dateModified: new Date(article.updatedAt ?? article.publishedAt).toISOString(),
         author: article.authorName
-            ? { "@type": "Person", name: article.authorName }
-            : organizationJsonLd(),
-        publisher: organizationJsonLd(),
-        mainEntityOfPage: canonicalUrl,
+            ? {
+                  "@type": "Person",
+                  name: article.authorName,
+                  url: authorUrl,
+              }
+            : publisherJsonLd,
+        publisher: publisherJsonLd,
+        mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": canonicalUrl,
+        },
         isAccessibleForFree: false,
         keywords: keyPoints,
         abstract: article.teaser || article.summary,
@@ -488,8 +514,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                                 <span>By {article.authorName ?? "Cabeus Explorer Editorial Desk"}</span>
                             )}
                             <time dateTime={article.publishedAt}>
-                                {formatDate(article.publishedAt)}
+                                Published {formatDate(article.publishedAt)}
                             </time>
+                            {article.updatedAt &&
+                            article.updatedAt !== article.publishedAt ? (
+                                <time dateTime={article.updatedAt}>
+                                    Updated {formatDate(article.updatedAt)}
+                                </time>
+                            ) : null}
                             <span>{accessTierLabel(article.accessTier)}+ full story</span>
                         </div>
                     </div>

@@ -10,6 +10,8 @@ const publicRoutes = [
     { path: "/terminal", changeFrequency: "weekly", priority: 0.9 },
     { path: "/search", changeFrequency: "weekly", priority: 0.9 },
     { path: "/news", changeFrequency: "daily", priority: 0.9 },
+    { path: "/authors", changeFrequency: "weekly", priority: 0.7 },
+    { path: "/contact", changeFrequency: "monthly", priority: 0.7 },
     { path: "/launches", changeFrequency: "weekly", priority: 0.75 },
     { path: "/datasets", changeFrequency: "weekly", priority: 0.8 },
     { path: "/calculators", changeFrequency: "monthly", priority: 0.7 },
@@ -67,6 +69,30 @@ async function loadPublishedArticleEntries(): Promise<MetadataRoute.Sitemap> {
     }
 }
 
+async function loadAuthorEntries(): Promise<MetadataRoute.Sitemap> {
+    if (!hasPotomacSupabasePublicConfig()) return [];
+
+    try {
+        const supabase = await createClient();
+        const { data, error } = await supabase
+            .from("editorial_authors")
+            .select("slug,updated_at")
+            .eq("is_active", true)
+            .order("display_name");
+
+        if (error) return [];
+
+        return (data ?? []).map((author) => ({
+            url: absoluteSiteUrl(`/authors/${author.slug}`),
+            lastModified: new Date(author.updated_at ?? Date.now()),
+            changeFrequency: "weekly" as const,
+            priority: 0.65,
+        }));
+    } catch {
+        return [];
+    }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const publicEntries = publicRoutes.map((route) => ({
         url: absoluteSiteUrl(route.path),
@@ -75,7 +101,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: route.priority,
     }));
 
-    const articleEntries = await loadPublishedArticleEntries();
+    const [articleEntries, authorEntries] = await Promise.all([
+        loadPublishedArticleEntries(),
+        loadAuthorEntries(),
+    ]);
 
-    return [...publicEntries, ...articleEntries];
+    return [...publicEntries, ...articleEntries, ...authorEntries];
 }

@@ -26,20 +26,20 @@ export function StockTicker({ items }: { items: TickerItem[] }) {
                 key={`${copy}-${item.symbol}`}
                 title={`${item.label}. Market capitalization ${formatMarketCap(item.marketCapUsd)}. ${item.detail}.`}
                 aria-label={`Rank ${item.rank}, ${item.label}, ${item.symbol}, ${item.value}. ${item.detail}.`}
-                className="flex min-h-20 w-44 shrink-0 flex-col justify-center border-r border-potomac-regolith/15 px-4 py-3"
+                className="flex min-h-14 w-36 shrink-0 flex-col justify-center border-r border-potomac-regolith/15 px-3 py-2"
             >
                 <div className="flex items-baseline justify-between gap-3">
-                    <span className="font-mono text-[0.58rem] text-potomac-regolith">
+                    <span className="font-mono text-[0.52rem] text-potomac-regolith">
                         {String(item.rank).padStart(2, "0")}
                     </span>
-                    <strong className="font-mono text-xs uppercase text-potomac-gold">
+                    <strong className="font-mono text-[0.66rem] uppercase text-potomac-gold">
                         {item.symbol}
                     </strong>
                 </div>
-                <span className="mt-2 whitespace-nowrap font-mono text-[0.7rem] font-bold tabular-nums text-white">
+                <span className="mt-1 whitespace-nowrap font-mono text-[0.64rem] font-bold tabular-nums text-white">
                     {item.value}
                 </span>
-                <span className="mt-1 truncate text-[0.6rem] uppercase text-potomac-regolith">
+                <span className="truncate text-[0.52rem] uppercase text-potomac-regolith">
                     {item.label}
                 </span>
             </li>
@@ -50,20 +50,28 @@ export function StockTicker({ items }: { items: TickerItem[] }) {
             aria-label="Top ten publicly traded space companies by market value"
             className="border-b border-potomac-regolith/25 bg-[#090d10]"
         >
-            <div className="mx-auto flex w-full max-w-[92rem] flex-col border-x border-potomac-regolith/15 lg:flex-row">
-                <div className="flex shrink-0 flex-col items-start gap-3 border-b border-potomac-regolith/20 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6 md:px-6 lg:w-56 lg:flex-col lg:items-start lg:justify-center lg:border-b-0 lg:border-r">
-                    <div>
-                        <p className="font-mono text-[0.6rem] font-bold uppercase text-potomac-gold">
-                            Space Market 10
-                        </p>
-                        <p className="mt-1 font-serif text-lg uppercase text-white">
-                            Market-cap leaders
-                        </p>
+            <div className="mx-auto grid w-full max-w-[92rem] grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] gap-2 px-2 py-2 lg:flex lg:gap-0">
+                <div className="flex min-h-12 shrink-0 flex-col justify-center border border-potomac-regolith/20 px-3 lg:min-h-14 lg:w-52 lg:px-4">
+                    <p className="font-mono text-[0.58rem] font-bold uppercase text-potomac-gold">
+                        Space Market 10
+                    </p>
+                    <p className="mt-0.5 font-serif text-sm uppercase text-white">
+                        Market-cap leaders
+                    </p>
+                </div>
+                <div className="stock-ticker-viewport col-span-2 row-start-2 min-w-0 flex-1 border-y border-potomac-regolith/20 lg:order-none lg:col-auto lg:row-auto">
+                    <div className="stock-ticker-track">
+                        <ol className="stock-ticker-list">{tickerItems("primary")}</ol>
+                        <ol aria-hidden="true" className="stock-ticker-list stock-ticker-duplicate">
+                            {tickerItems("duplicate")}
+                        </ol>
                     </div>
+                </div>
+                <div className="col-start-2 row-start-1 flex min-h-12 shrink-0 flex-col justify-center border border-potomac-regolith/20 px-3 lg:col-auto lg:row-auto lg:min-h-14 lg:w-72 lg:px-4">
                     <time
                         dateTime={latestQuoteAt}
                         title="Companies are ranked by the latest published market-cap snapshot. Prices are delayed market observations, not real-time exchange quotes."
-                        className="font-mono text-[0.55rem] uppercase leading-4 text-potomac-regolith"
+                        className="font-mono text-[0.52rem] uppercase leading-4 text-potomac-regolith"
                     >
                         Delayed | {new Date(latestQuoteAt).toLocaleString("en-US", {
                             month: "short",
@@ -79,19 +87,11 @@ export function StockTicker({ items }: { items: TickerItem[] }) {
                             href={items[0].sourceUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="font-mono text-[0.55rem] uppercase text-potomac-gold hover:text-potomac-cream"
+                            className="font-mono text-[0.52rem] uppercase leading-4 text-potomac-gold hover:text-potomac-cream"
                         >
-                            Source: {items[0].sourceName}
+                            Source: Alpha Vantage end-of-day quote
                         </a>
                     ) : null}
-                </div>
-                <div className="stock-ticker-viewport min-w-0 flex-1">
-                    <div className="stock-ticker-track">
-                        <ol className="stock-ticker-list">{tickerItems("primary")}</ol>
-                        <ol aria-hidden="true" className="stock-ticker-list stock-ticker-duplicate">
-                            {tickerItems("duplicate")}
-                        </ol>
-                    </div>
                 </div>
             </div>
         </section>

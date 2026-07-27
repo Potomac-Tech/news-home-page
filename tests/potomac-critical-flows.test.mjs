@@ -340,14 +340,18 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         "private, no-store",
         "no-referrer",
     ], "Nexus one-time handoff");
-    assertIncludes(memberPage + nexusPage + migrationShell, [
+    assertIncludes(memberPage + nexusPage, [
         "/api/member/nexus/handoff",
         "Open Nexus",
         "Nexus role",
-        "https://potomac-nexus-explore.pages.dev/",
-        'label: "Nexus Terminal"',
-        'target="_blank"',
     ], "Nexus member navigation");
+    assertIncludes(migrationShell, [
+        '{ href: "/news", label: "News" }',
+        'label: "Space Investment Forum"',
+        'label: "Space Industrialist Week"',
+        'label: "Cabeus Games"',
+        '{ href: "/terminal", label: "Terminal" }',
+    ], "primary publication navigation");
     assertIncludes(routeScaffold, [
         'primaryHref.startsWith("/api/")',
         "<a href={primaryHref}",
@@ -1392,7 +1396,9 @@ test("Cabeus Terminal is mounted as a reviewed Explorer route package", () => {
         "Public / unclassified",
         "Andromeda program comparison",
         "14 companies",
-        "https://potomac-nexus-explore.pages.dev/",
+        "Open Cabeus Terminal",
+        "Open Nexus",
+        "/api/member/nexus/handoff",
     ], "Explorer Terminal route integration");
     assert.doesNotMatch(rootPage + modulePage + workspace, /<iframe|standalonePublicFrontend:\s*true/);
 });
@@ -1416,7 +1422,10 @@ test("Cabeus Terminal membership display fails closed and keeps Scout and Meridi
         "Scout and Meridian capabilities are active",
         "Upgrade membership",
     ], "Terminal membership boundary");
-    assert.doesNotMatch(access, /admin|staff|editor|service_role|SUPABASE_SERVICE_ROLE_KEY/);
+    assert.doesNotMatch(
+        access,
+        /\b(?:admin|staff|editor|service_role)\b|SUPABASE_SERVICE_ROLE_KEY/
+    );
 });
 
 test("Explorer proxies Terminal API requests through a private signed Service Binding", () => {

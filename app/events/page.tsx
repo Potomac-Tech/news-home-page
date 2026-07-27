@@ -494,7 +494,10 @@ export default async function EventsPage() {
                         </section>
                     ) : null}
                     {events.map((event) => (
-                        <article key={event.slug} className="glass-card rounded p-6">
+                        <article id={event.slug} key={event.slug} className="glass-card scroll-mt-40 rounded p-6">
+                            {event.slug === "space-industrialist-week-2026" ? (
+                                <span id="cabeus-games" className="relative -top-40 block" aria-hidden="true" />
+                            ) : null}
                             <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                                 <div>
                                     <div className="flex flex-wrap gap-3 text-xs font-bold uppercase tracking-[0.14em] text-potomac-cream/50">

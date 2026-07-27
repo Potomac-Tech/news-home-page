@@ -6,8 +6,6 @@ import {
     type TerminalModule,
 } from "../../../lib/terminal/frontend";
 
-const NEXUS_TERMINAL_URL = "https://potomac-nexus-explore.pages.dev/";
-
 const commonCapabilities = [
     {
         title: "Watchlists & alerts",
@@ -101,16 +99,16 @@ export function TerminalWorkspace({
                         </div>
                         <div className="flex flex-wrap gap-3">
                             <Link
-                                href="/search"
+                                href="#terminal-capabilities"
                                 className="rounded border border-white/20 px-4 py-3 text-sm font-semibold text-white transition hover:border-cyan-300/60"
                             >
-                                Search Explorer
+                                Open Cabeus Terminal
                             </Link>
                             <a
-                                href={NEXUS_TERMINAL_URL}
+                                href="/api/member/nexus/handoff"
                                 className="rounded bg-cyan-300 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-cyan-200"
                             >
-                                Open Nexus Terminal
+                                Open Nexus
                             </a>
                         </div>
                     </div>

@@ -28,6 +28,9 @@ function CreativeFrame({ unit }: { unit: SponsorAdUnit }) {
 export function SponsorUnit({ unit, variant = "compact" }: SponsorUnitProps) {
     const content = (
         <>
+            <p className="mb-3 font-mono text-[0.58rem] font-bold uppercase text-potomac-cream/45">
+                {unit.isDirectSold ? "Sponsored content" : "Publisher promotion"}
+            </p>
             <div className="flex items-start justify-between gap-4">
                 <div>
                     <p className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">

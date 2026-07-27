@@ -1,0 +1,74 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+
+const root = new URL("..", import.meta.url);
+const read = (path) => readFileSync(new URL(path, root), "utf8");
+
+test("Google News sitemap contains only recent published articles", () => {
+    const route = read("app/news-sitemap.xml/route.ts");
+    const robots = read("app/robots.ts");
+
+    for (const token of [
+        'xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"',
+        '.eq("status", "published")',
+        '.gte("published_at", cutoff.toISOString())',
+        '.limit(1000)',
+        "<news:publication_date>",
+        "<news:title>",
+    ]) {
+        assert.ok(route.includes(token), `news sitemap should include ${token}`);
+    }
+    assert.match(route, /48 \* 60 \* 60 \* 1000/);
+    assert.match(robots, /absoluteSiteUrl\("\/news-sitemap\.xml"\)/);
+});
+
+test("article pages expose complete NewsArticle signals and visible timestamps", () => {
+    const article = read("app/news/[slug]/page.tsx");
+    const site = read("app/_data/site.ts");
+
+    for (const token of [
+        '"@type": "NewsArticle"',
+        "datePublished:",
+        "dateModified:",
+        '"@type": "Person"',
+        "authorUrl",
+        '"@type": "ImageObject"',
+        '"@type": "WebPage"',
+        "Published {formatDate(article.publishedAt)}",
+        "Updated {formatDate(article.updatedAt)}",
+    ]) {
+        assert.ok(article.includes(token), `article SEO should include ${token}`);
+    }
+    assert.match(article, /canonical:\s*canonical/);
+    assert.match(article, /absoluteSiteUrl\(`\/news\/\$\{article\.slug\}`\)/);
+    assert.match(site, /process\.env\.NEXT_PUBLIC_SITE_URL/);
+    assert.match(site, /https:\/\/cabeus-explorer\.jake-249\.workers\.dev/);
+});
+
+test("publisher transparency pages and disclosures are public and discoverable", () => {
+    const shell = read("app/_components/MigrationShell.tsx");
+    const authors = read("app/authors/page.tsx");
+    const authorProfile = read("app/authors/[slug]/page.tsx");
+    const contact = read("app/contact/page.tsx");
+    const site = read("app/_data/site.ts");
+    const sponsors = read("app/_components/SponsorUnit.tsx");
+    const sitemap = read("app/sitemap.ts");
+
+    assert.match(shell, /href: "\/authors", label: "Author biographies"/);
+    assert.match(shell, /href: "\/contact", label: "Contact & standards"/);
+    assert.match(authors, /editorial_authors/);
+    assert.match(authorProfile, /"@type": "Person"/);
+    assert.match(authorProfile, /Articles by \{author\.display_name\}/);
+    assert.match(contact, /siteConfig\.publisherEmail/);
+    assert.match(contact, /siteConfig\.publisherLocation/);
+    assert.match(site, /publisherEmail: "info@potomacdb\.com"/);
+    assert.match(site, /publisherLocation: "Washington, DC, United States"/);
+    assert.match(contact, /Original reporting/);
+    assert.match(contact, />Advertising</);
+    assert.match(sponsors, /Sponsored content/);
+    assert.match(sponsors, /noopener noreferrer sponsored/);
+    assert.match(sitemap, /loadAuthorEntries/);
+    assert.match(sitemap, /path: "\/authors"/);
+    assert.match(sitemap, /path: "\/contact"/);
+});
