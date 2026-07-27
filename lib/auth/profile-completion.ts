@@ -45,6 +45,10 @@ export async function getProfileGateContext({
 }) {
     const { data: claimsData, error: claimsError } = await supabase.auth.getClaims();
     const userId = claimsData?.claims?.sub;
+    const sessionId =
+        typeof claimsData?.claims?.session_id === "string"
+            ? claimsData.claims.session_id
+            : null;
     const requestAccessHref = `/request-access?tab=signin&next=${encodeURIComponent(safeReturnPath(nextPath))}`;
 
     if (claimsError || !userId) {
@@ -89,6 +93,7 @@ export async function getProfileGateContext({
     return {
         state: "ready" as const,
         userId,
+        sessionId,
         loginHref: requestAccessHref,
         profileHref: null,
         profile: data as ProfileCompletionRecord,

@@ -18,5 +18,39 @@
             "enabled": true,
             "head_sampling_rate": 0.01
         }
+    },
+    "env": {
+        "local": {
+            "services": [
+                {
+                    "binding": "CABEUS_TERMINAL_API",
+                    "service": "cabeus-terminal-api-local"
+                }
+            ]
+        },
+        "preview": {
+            "services": [
+                {
+                    "binding": "CABEUS_TERMINAL_API",
+                    "service": "cabeus-terminal-api-preview"
+                }
+            ]
+        },
+        "staging": {
+            "services": [
+                {
+                    "binding": "CABEUS_TERMINAL_API",
+                    "service": "cabeus-terminal-api-staging"
+                }
+            ]
+        },
+        "production": {
+            "services": [
+                {
+                    "binding": "CABEUS_TERMINAL_API",
+                    "service": "cabeus-terminal-api-production"
+                }
+            ]
+        }
     }
 }

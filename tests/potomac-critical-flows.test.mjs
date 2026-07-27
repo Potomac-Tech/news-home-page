@@ -1414,3 +1414,31 @@ test("Cabeus Terminal membership display fails closed and keeps Scout and Meridi
     ], "Terminal membership boundary");
     assert.doesNotMatch(access, /admin|staff|editor|service_role|SUPABASE_SERVICE_ROLE_KEY/);
 });
+
+test("Explorer proxies Terminal API requests through a private signed Service Binding", () => {
+    const route = read("app/api/terminal/[...path]/route.ts");
+    const proxy = read("lib/terminal/binding-proxy.ts");
+    const signer = read("lib/terminal/assertion.ts");
+    const contract = read("lib/terminal/host-contract.ts");
+    const wrangler = read("wrangler.jsonc");
+
+    assertIncludes(route + proxy + signer + contract + wrangler, [
+        "CABEUS_TERMINAL_API",
+        "CABEUS_TERMINAL_ASSERTION_PRIVATE_JWK",
+        "getCloudflareContext",
+        "getTerminalViewerContext",
+        "signTerminalAssertion",
+        "proxyTerminalBindingRequest",
+        "X-Cabeus-Terminal-Assertion",
+        "X-Correlation-ID",
+        "crypto.randomUUID()",
+        "private, no-store",
+        "terminal_service_unavailable",
+        "cabeus-terminal-api-local",
+        "cabeus-terminal-api-preview",
+        "cabeus-terminal-api-staging",
+        "cabeus-terminal-api-production",
+    ], "private Terminal Service Binding");
+    assert.doesNotMatch(proxy, /authorization|x-terminal-membership/i);
+    assert.match(proxy, /responseHeaders\.delete\("set-cookie"\)/);
+});

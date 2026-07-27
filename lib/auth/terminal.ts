@@ -10,6 +10,8 @@ export type TerminalViewerContext =
       }>
     | Readonly<{
           state: "ready";
+          userId: string;
+          sessionId: string | null;
           membership: "explorer" | "scout" | "meridian";
           capabilityMode: "public_and_explorer" | "full_mvp";
           actionHref: "/pricing" | "/account";
@@ -65,6 +67,8 @@ export async function getTerminalViewerContext(
 
     return {
         state: "ready",
+        userId: gate.userId,
+        sessionId: gate.sessionId,
         membership,
         capabilityMode:
             membership === "explorer" ? "public_and_explorer" : "full_mvp",
