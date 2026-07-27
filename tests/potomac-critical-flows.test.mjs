@@ -937,6 +937,11 @@ test("Pathfinder and Source CTA assets require review before private storage del
         "/Source Rendering.png",
     ], "CTA asset schema");
     assert.match(migration, /'cta-assets',\s*'cta-assets',\s*false/);
+    assert.match(
+        migration,
+        /create or replace function public\.set_updated_at\(\)[\s\S]*create trigger set_cta_assets_updated_at[\s\S]*execute function public\.set_updated_at\(\)/,
+        "CTA asset migration must define its updated-at function before creating the trigger"
+    );
     assertIncludes(actions + adminPage, [
         "uploadCtaAsset",
         "validateCtaImageFile",

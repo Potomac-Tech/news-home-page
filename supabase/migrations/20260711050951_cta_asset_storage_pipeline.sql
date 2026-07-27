@@ -62,6 +62,20 @@ where storage_object_path is not null;
 create index if not exists cta_assets_product_review_idx
 on public.cta_assets (product, review_status, expires_at);
 
+-- Supabase data-less preview branches can initialize migration history without
+-- carrying forward every function from the parent schema. Keep this pending
+-- migration self-contained so the trigger is safe to create in either case.
+create or replace function public.set_updated_at()
+returns trigger
+language plpgsql
+set search_path = public, pg_temp
+as $$
+begin
+    new.updated_at = now();
+    return new;
+end;
+$$;
+
 drop trigger if exists set_cta_assets_updated_at on public.cta_assets;
 create trigger set_cta_assets_updated_at
 before update on public.cta_assets
