@@ -160,7 +160,7 @@ function mapArticle(
 
 function renderParagraphs(value: string) {
     return value
-        .split(/\n{2,}/)
+        .split(/\n\s*\n/)
         .map((paragraph) => paragraph.trim())
         .filter(Boolean);
 }

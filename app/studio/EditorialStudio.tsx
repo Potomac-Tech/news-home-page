@@ -109,11 +109,14 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
     const [sections, setSections] = useState(() => toSections(selected.body));
     const [query, setQuery] = useState("");
     const [draggedSectionId, setDraggedSectionId] = useState<string | null>(null);
+    const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
     const [importStatus, setImportStatus] = useState<string>("");
     const [previewMode, setPreviewMode] = useState<"public" | "member">("public");
     const [saveStatus, setSaveStatus] = useState("");
     const [isSaving, setIsSaving] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const mediaInputRef = useRef<HTMLInputElement>(null);
+    const sectionRefs = useRef<Record<string, HTMLTextAreaElement | null>>({});
     const formId = "editorial-studio-story-form";
 
     const filteredArticles = articles.filter((article) =>
@@ -266,28 +269,91 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
         updateDraft("publicTeaser", normalized.length > 320 ? `${normalized.slice(0, 317).trimEnd()}...` : normalized);
     }
 
+    function formatActiveSection(prefix: string, suffix = prefix, fallback = "text") {
+        const sectionId = activeSectionId ?? sections[0]?.id;
+        if (!sectionId) return;
+        const textarea = sectionRefs.current[sectionId];
+        const section = sections.find((item) => item.id === sectionId);
+        if (!section) return;
+        const start = textarea?.selectionStart ?? section.text.length;
+        const end = textarea?.selectionEnd ?? start;
+        const selectedText = section.text.slice(start, end) || fallback;
+        const nextText =
+            section.text.slice(0, start) +
+            prefix +
+            selectedText +
+            suffix +
+            section.text.slice(end);
+        setSections((current) =>
+            current.map((item) =>
+                item.id === sectionId ? { ...item, text: nextText } : item
+            )
+        );
+        setActiveSectionId(sectionId);
+        window.setTimeout(() => {
+            const nextTextarea = sectionRefs.current[sectionId];
+            if (!nextTextarea) return;
+            nextTextarea.focus();
+            nextTextarea.setSelectionRange(
+                start + prefix.length,
+                start + prefix.length + selectedText.length
+            );
+        });
+    }
+
     return (
-        <div className="min-h-screen bg-potomac-secondary text-potomac-cream">
-            <header className="border-b border-potomac-regolith/25 bg-potomac-primary">
-                <div className="mx-auto flex w-full max-w-[100rem] flex-wrap items-center justify-between gap-4 px-4 py-4 md:px-6">
-                    <div>
-                        <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Cabeus newsroom</p>
-                        <h1 className="mt-1 font-serif text-2xl uppercase text-white">Editorial studio</h1>
+        <div className="min-h-screen bg-[#080a0c] text-potomac-cream">
+            <header className="sticky top-0 z-40 border-b border-white/10 bg-[#080a0c]/95 backdrop-blur">
+                <div className="flex min-h-16 w-full flex-wrap items-center justify-between gap-3 px-3 md:px-6">
+                    <div className="flex items-center gap-3">
+                        <a href="/studio/dashboard" aria-label="Back to article dashboard" title="Article dashboard" className="grid h-10 w-10 place-items-center text-xl text-potomac-regolith hover:text-white">←</a>
+                        <span className="h-5 w-px bg-white/15" />
+                        <p role="status" className="font-mono text-[0.62rem] uppercase text-potomac-regolith">
+                            <span className={`mr-2 inline-block h-2 w-2 rounded-full ${isSaving ? "bg-potomac-gold" : "bg-emerald-400"}`} />
+                            {saveStatus || (draft.id === "new" ? "Unsaved draft" : "Saved")}
+                        </p>
                     </div>
                     <div className="flex items-center gap-3">
-                        <a href="/studio/dashboard" className="border border-potomac-regolith/35 px-4 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-cream hover:border-potomac-gold">Article dashboard</a>
-                        <a href="/" target="_blank" className="border border-potomac-regolith/35 px-4 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-cream hover:border-potomac-gold">View site</a>
-                        {saveStatus ? <p role="status" className="font-mono text-[0.62rem] uppercase text-potomac-regolith">{saveStatus}</p> : null}
-                        <button disabled={isSaving} type="submit" form={formId} className="bg-potomac-gold px-5 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-primary disabled:cursor-wait disabled:opacity-55">Save draft</button>
                         {draft.id !== "new" ? (
-                            <a href={`/studio/preview/${draft.id}`} className="border border-potomac-gold px-5 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">Preview to publish</a>
+                            <a href={`/studio/preview/${draft.id}`} className="border border-white/15 px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-white hover:border-potomac-gold">Preview</a>
                         ) : null}
+                        <button disabled={isSaving} type="submit" form={formId} className="bg-potomac-gold px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-potomac-primary disabled:cursor-wait disabled:opacity-55">{draft.id === "new" ? "Save draft" : "Continue"}</button>
+                    </div>
+                </div>
+                <div className="overflow-x-auto border-t border-white/10">
+                    <div className="mx-auto flex min-w-max items-center justify-center gap-1 px-4 py-2">
+                        <select
+                            aria-label="Text style"
+                            defaultValue=""
+                            onChange={(event) => {
+                                if (event.target.value === "heading") {
+                                    formatActiveSection("## ", "", "Heading");
+                                }
+                                event.target.value = "";
+                            }}
+                            className="h-9 border-0 bg-transparent px-2 text-sm text-potomac-cream outline-none"
+                        >
+                            <option value="" className="bg-potomac-primary">Style</option>
+                            <option value="heading" className="bg-potomac-primary">Heading</option>
+                        </select>
+                        <span className="mx-2 h-5 w-px bg-white/15" />
+                        <button type="button" title="Bold" aria-label="Bold" onClick={() => formatActiveSection("**")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">B</button>
+                        <button type="button" title="Italic" aria-label="Italic" onClick={() => formatActiveSection("_")} className="h-9 w-9 font-serif text-lg italic hover:bg-white/5">I</button>
+                        <button type="button" title="Heading" aria-label="Heading" onClick={() => formatActiveSection("## ", "", "Heading")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">T</button>
+                        <button type="button" title="Insert link" aria-label="Insert link" onClick={() => formatActiveSection("[", "](https://)", "link text")} className="h-9 w-9 text-lg hover:bg-white/5">↗</button>
+                        <span className="mx-2 h-5 w-px bg-white/15" />
+                        <button type="button" title="Upload image or video" aria-label="Upload image or video" onClick={() => mediaInputRef.current?.click()} className="h-9 w-9 text-lg hover:bg-white/5">▧</button>
+                        <button type="button" title="Import Word document" aria-label="Import Word document" onClick={() => fileInputRef.current?.click()} className="h-9 px-3 font-mono text-xs font-bold hover:bg-white/5">DOC</button>
+                        <span className="mx-2 h-5 w-px bg-white/15" />
+                        <button type="button" title="Bulleted list" aria-label="Bulleted list" onClick={() => formatActiveSection("- ", "", "List item")} className="h-9 w-9 text-lg hover:bg-white/5">•</button>
+                        <button type="button" title="Quote" aria-label="Quote" onClick={() => formatActiveSection("> ", "", "Quote")} className="h-9 w-9 text-lg hover:bg-white/5">”</button>
+                        <button type="button" onClick={() => setSections((current) => [...current, { id: crypto.randomUUID(), text: "" }])} className="ml-2 h-9 px-3 font-mono text-xs font-bold uppercase text-potomac-gold hover:bg-white/5">+ Paragraph</button>
                     </div>
                 </div>
             </header>
 
-            <div className="mx-auto grid w-full max-w-[100rem] lg:grid-cols-[17rem_minmax(0,1fr)_22rem]">
-                <aside className="border-b border-potomac-regolith/20 bg-potomac-primary/45 p-4 lg:min-h-[calc(100vh-5rem)] lg:border-b-0 lg:border-r">
+            <div className="mx-auto w-full">
+                <aside className="hidden">
                     <button onClick={startNewStory} className="w-full bg-potomac-gold px-4 py-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-primary">New story</button>
                     <label className={`${labelClass} mt-5`}>
                         Find a story
@@ -301,7 +367,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                 className={`w-full border-b border-potomac-regolith/15 px-3 py-4 text-left transition ${selectedId === article.id ? "bg-potomac-gold/12" : "hover:bg-white/5"}`}
                             >
                                 <span className="block font-mono text-[0.58rem] font-bold uppercase text-potomac-gold">{article.status} · {article.accessTier}</span>
-                                <span className="mt-2 block font-serif text-base uppercase leading-5 text-white">{article.title}</span>
+                                <span className="mt-2 block font-serif text-base leading-5 text-white">{article.title}</span>
                                 <span className="mt-2 block text-xs text-potomac-cream/65">{article.authorName ? `By ${article.authorName}` : "Byline not set"}</span>
                                 <span className="mt-2 block font-mono text-[0.56rem] uppercase text-potomac-regolith">{new Date(article.updatedAt).toLocaleDateString()}</span>
                             </button>
@@ -309,7 +375,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                     </div>
                 </aside>
 
-                <main className="min-w-0 border-potomac-regolith/20 px-4 py-6 md:px-6 lg:border-r">
+                <main className="mx-auto min-w-0 max-w-[52rem] px-5 pb-24 pt-14 md:px-10">
                     <form id={formId} action={saveStory}>
                         <input type="hidden" name="studio_context" value="studio" />
                         {draft.id !== "new" ? <input type="hidden" name="article_id" value={draft.id} /> : null}
@@ -331,9 +397,9 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                             </label>
                         </div>
 
-                        <div className="mt-6 space-y-6">
-                            <label className={labelClass}>
-                                Headline
+                        <div className="mt-6 flex flex-col">
+                            <label className="order-1 block">
+                                <span className="sr-only">Headline</span>
                                 <textarea
                                     required
                                     name="title"
@@ -347,31 +413,30 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                             slug: current.id === "new" ? slugify(title) : current.slug,
                                         }));
                                     }}
-                                    className={`${inputClass} resize-y font-serif text-3xl uppercase leading-tight`}
-                                    placeholder="Write the clearest version of the story"
+                                    className="mt-6 w-full resize-none border-0 bg-transparent font-serif text-5xl leading-[1.08] text-white outline-none placeholder:text-white/25 md:text-6xl"
+                                    placeholder="Title"
                                 />
                             </label>
 
-                            <label className={labelClass}>
-                                Byline
+                            <label className="order-3 mt-7 block">
+                                <span className="sr-only">Byline</span>
                                 <input
                                     required
                                     name="author_name"
                                     value={draft.authorName}
                                     onChange={(event) => updateDraft("authorName", event.target.value)}
-                                    className={inputClass}
-                                    placeholder="Author's published name"
+                                    className="min-w-48 border border-white/15 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-potomac-gold"
+                                    placeholder="Author name"
                                     autoComplete="name"
                                 />
                             </label>
 
-                            <label className={labelClass}>
-                                Standfirst
-                                <textarea required name="public_summary" rows={3} value={draft.publicSummary} onChange={(event) => updateDraft("publicSummary", event.target.value)} className={inputClass} placeholder="One sentence that explains why this matters" />
-                                <span className="mt-2 block text-right text-[0.58rem] text-potomac-regolith">{draft.publicSummary.length} characters</span>
+                            <label className="order-2 block">
+                                <span className="sr-only">Standfirst</span>
+                                <textarea required name="public_summary" rows={2} value={draft.publicSummary} onChange={(event) => updateDraft("publicSummary", event.target.value)} className="mt-4 w-full resize-none border-0 bg-transparent text-xl leading-8 text-potomac-cream/75 outline-none placeholder:text-potomac-regolith/50" placeholder="Add a subtitle..." />
                             </label>
 
-                            <section className="border-y border-potomac-regolith/20 py-6">
+                            <section className="order-6 mt-10 border-y border-white/10 py-6">
                                 <div
                                     onDragOver={(event) => event.preventDefault()}
                                     onDrop={(event) => {
@@ -408,11 +473,12 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                 ) : null}
                             </section>
 
-                            <section className="border-y border-potomac-regolith/20 py-6">
+                            <section className="order-7 border-b border-white/10 py-6">
                                 <div className="grid gap-5 md:grid-cols-2">
                                     <label className={`${labelClass} md:col-span-2`}>
                                         Story images and video
                                         <input
+                                            ref={mediaInputRef}
                                             name="story_media"
                                             type="file"
                                             multiple
@@ -454,7 +520,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                 ) : null}
                             </section>
 
-                            <label className={labelClass}>
+                            <label className={`${labelClass} order-8 mt-6`}>
                                 Intended publishing date and time
                                 <input
                                     name="scheduled_for"
@@ -466,12 +532,12 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                 <span className="mt-2 block text-[0.58rem] text-potomac-regolith">Scheduling is confirmed from the device preview after this draft is saved.</span>
                             </label>
 
-                            <section>
+                            <section className="order-4 mt-12 border-t border-white/10 pt-10">
                                 <div className="flex items-center justify-between gap-4">
-                                    <h2 className="font-serif text-2xl uppercase text-white">Story body</h2>
+                                    <h2 className="sr-only">Story body</h2>
                                     <button type="button" onClick={() => setSections((current) => [...current, { id: crypto.randomUUID(), text: "" }])} className="border border-potomac-regolith/35 px-4 py-2 font-mono text-[0.62rem] font-bold uppercase text-potomac-cream hover:border-potomac-gold">Add section</button>
                                 </div>
-                                <div className="mt-4 space-y-3">
+                                <div className="mt-4 space-y-9">
                                     {sections.map((section, index) => (
                                         <article
                                             key={section.id}
@@ -479,24 +545,26 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                             onDragStart={() => setDraggedSectionId(section.id)}
                                             onDragOver={(event) => event.preventDefault()}
                                             onDrop={() => moveSection(section.id)}
-                                            className="grid grid-cols-[2.75rem_minmax(0,1fr)_2.75rem] border border-potomac-regolith/25 bg-potomac-primary/40"
+                                            className="group grid grid-cols-[2.25rem_minmax(0,1fr)_2.25rem]"
                                         >
-                                            <button type="button" aria-label={`Move section ${index + 1}`} className="cursor-grab border-r border-potomac-regolith/20 font-mono text-lg text-potomac-gold">≡</button>
+                                            <button type="button" aria-label={`Move section ${index + 1}`} className="cursor-grab font-mono text-lg text-potomac-regolith/45 hover:text-potomac-gold">≡</button>
                                             <textarea
+                                                ref={(element) => { sectionRefs.current[section.id] = element; }}
                                                 aria-label={`Story section ${index + 1}`}
                                                 rows={Math.max(4, Math.min(12, Math.ceil(section.text.length / 90)))}
                                                 value={section.text}
+                                                onFocus={() => setActiveSectionId(section.id)}
                                                 onChange={(event) => setSections((current) => current.map((item) => item.id === section.id ? { ...item, text: event.target.value } : item))}
-                                                className="min-w-0 resize-y bg-transparent px-4 py-4 text-base leading-7 text-potomac-cream outline-none"
-                                                placeholder="Write or paste this section"
+                                                className="min-w-0 resize-none bg-transparent px-3 py-1 text-lg leading-8 text-potomac-cream/90 outline-none placeholder:text-potomac-regolith/45"
+                                                placeholder={index === 0 ? "Start writing..." : "Continue writing..."}
                                             />
-                                            <button type="button" aria-label={`Remove section ${index + 1}`} onClick={() => setSections((current) => current.length === 1 ? [{ ...current[0], text: "" }] : current.filter((item) => item.id !== section.id))} className="border-l border-potomac-regolith/20 font-mono text-xl text-potomac-regolith hover:text-red-300">×</button>
+                                            <button type="button" aria-label={`Remove section ${index + 1}`} onClick={() => setSections((current) => current.length === 1 ? [{ ...current[0], text: "" }] : current.filter((item) => item.id !== section.id))} className="font-mono text-xl text-potomac-regolith/40 hover:text-red-300">×</button>
                                         </article>
                                     ))}
                                 </div>
                             </section>
 
-                            <section className="border-y border-potomac-regolith/20 py-6">
+                            <section className="order-5 mt-12 border-y border-white/10 py-6">
                                 <div className="flex flex-wrap items-center justify-between gap-4">
                                     <h2 className="font-serif text-2xl uppercase text-white">Public teaser</h2>
                                     <button type="button" onClick={draftTeaser} className="border border-potomac-gold/55 px-4 py-2 font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Draft from opening</button>
@@ -505,7 +573,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                 <p className="mt-2 text-right font-mono text-[0.58rem] uppercase text-potomac-regolith">{draft.publicTeaser.length} characters</p>
                             </section>
 
-                            <details className="border-b border-potomac-regolith/20 pb-6">
+                            <details className="order-9 mt-6 border-b border-white/10 pb-6">
                                 <summary className="cursor-pointer font-mono text-[0.66rem] font-bold uppercase text-potomac-gold">Search, answer engines, and URL</summary>
                                 <div className="mt-5 grid gap-5 md:grid-cols-2">
                                     <label className={labelClass}>Story URL<input required name="slug" value={draft.slug} onChange={(event) => updateDraft("slug", slugify(event.target.value))} className={inputClass} /></label>
@@ -519,7 +587,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                     </form>
                 </main>
 
-                <aside className="bg-potomac-primary/35 p-4 lg:min-h-[calc(100vh-5rem)] lg:p-5">
+                <aside className="hidden">
                     <div className="flex border border-potomac-regolith/25 p-1" role="tablist" aria-label="Story preview">
                         {(["public", "member"] as const).map((mode) => (
                             <button key={mode} type="button" role="tab" aria-selected={previewMode === mode} onClick={() => setPreviewMode(mode)} className={`min-h-10 flex-1 font-mono text-[0.62rem] font-bold uppercase ${previewMode === mode ? "bg-potomac-gold text-potomac-primary" : "text-potomac-regolith"}`}>{mode === "public" ? "Homepage" : "Full story"}</button>
@@ -527,7 +595,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                     </div>
                     <div className="mt-4 border border-potomac-regolith/25 bg-potomac-primary p-5">
                         <p className="font-mono text-[0.58rem] font-bold uppercase text-potomac-gold">{previewMode === "public" ? "Public preview" : `${draft.accessTier} access`}</p>
-                        <h2 className="mt-4 font-serif text-3xl uppercase leading-tight text-white">{draft.title || "Story headline"}</h2>
+                        <h2 className="mt-4 font-serif text-3xl leading-tight text-white">{draft.title || "Story headline"}</h2>
                         <p className="mt-3 text-xs font-bold uppercase text-potomac-cream/55">By {draft.authorName || "Author name"}</p>
                         <div className="industrial-divider mt-5 h-px w-24" />
                         <p className="mt-5 text-base leading-6 text-potomac-cream/80">{draft.publicSummary || "The standfirst will appear here."}</p>

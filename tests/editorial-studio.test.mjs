@@ -10,10 +10,12 @@ const sourceDocuments = readFileSync("lib/editorial/source-documents.ts", "utf8"
 const migration = readFileSync("supabase/migrations/20260720025828_editorial_studio_source_documents.sql", "utf8");
 const workflowMigration = readFileSync("supabase/migrations/20260727170007_editorial_preview_scheduling_media.sql", "utf8");
 const previewPage = readFileSync("app/studio/preview/[id]/page.tsx", "utf8");
+const previewRender = readFileSync("app/studio/preview/[id]/render/page.tsx", "utf8");
 const previewActions = readFileSync("app/studio/preview/[id]/PreviewActions.tsx", "utf8");
 const devicePreview = readFileSync("app/studio/preview/[id]/DevicePreview.tsx", "utf8");
 const dashboard = readFileSync("app/studio/dashboard/page.tsx", "utf8");
 const authorPage = readFileSync("app/authors/[slug]/page.tsx", "utf8");
+const articlePage = readFileSync("app/news/[slug]/page.tsx", "utf8");
 
 test("editorial studio uses the existing editor and admin authorization boundary", () => {
     assert.match(studioPage, /requireEditorialStaff\("\/studio"\)/);
@@ -55,7 +57,8 @@ test("studio supports journalist drafting without layout knowledge", () => {
         "Homepage",
         "Full story",
         "Save draft",
-        "Preview to publish",
+        "Continue",
+        "Start writing...",
         "Story images and video",
         "Intended publishing date and time",
     ]) assert.ok(studioUi.includes(token), `missing ${token}`);
@@ -99,4 +102,16 @@ test("editorial media, scalable dashboard, and author pages are wired", () => {
     assert.match(dashboard, /scheduled_for/);
     assert.match(authorPage, /primary_author_id/);
     assert.match(authorPage, /Articles by/);
+});
+
+test("studio preserves headline case and separates story paragraphs", () => {
+    assert.doesNotMatch(studioUi, /uppercase[^>]*>\{draft\.title/);
+    assert.doesNotMatch(previewPage, /text-3xl uppercase text-white/);
+    assert.match(previewRender, /split\(\/\\n\\s\*\\n\/\)/);
+    assert.match(articlePage, /split\(\/\\n\\s\*\\n\/\)/);
+    assert.match(studioUi, /space-y-9/);
+    assert.match(studioUi, /formatActiveSection/);
+    assert.match(studioUi, /Unsaved draft/);
+    assert.match(studioUi, /aria-label="Text style"/);
+    assert.match(devicePreview, /Computer/);
 });

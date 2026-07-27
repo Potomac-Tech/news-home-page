@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { requireEditorialStaff } from "../../../../../lib/auth/editorial";
 
 function paragraphs(value: string | null) {
-    return (value ?? "").split(/\n{2,}/).map((item) => item.trim()).filter(Boolean);
+    return (value ?? "").split(/\n\s*\n/).map((item) => item.trim()).filter(Boolean);
 }
 
 export default async function PreviewRenderPage({ params }: { params: Promise<{ id: string }> }) {

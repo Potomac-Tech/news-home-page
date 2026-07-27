@@ -31,7 +31,7 @@ export default async function PreviewPage({ params }: { params: Promise<{ id: st
                 <div className="flex flex-wrap items-end justify-between gap-4 border-b border-potomac-regolith/25 pb-5">
                     <div>
                         <Link href="/studio" className="font-mono text-xs font-bold uppercase text-potomac-gold">Back to editor</Link>
-                        <h1 className="mt-3 font-serif text-3xl uppercase text-white">{article.title}</h1>
+                        <h1 className="mt-3 font-serif text-3xl text-white">{article.title}</h1>
                         <p className="mt-2 font-mono text-xs uppercase text-potomac-regolith">
                             {article.status} · {approved ? "current revision approved" : "approval required"}
                         </p>
