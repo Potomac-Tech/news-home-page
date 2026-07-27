@@ -25,7 +25,7 @@ const primaryNavItems: Array<{
     { href: "/datasets", label: "Data" },
     { href: "/events", label: "Events" },
     {
-        href: "https://nexus-explore.potomacdb.com/",
+        href: "https://potomac-nexus-explore.pages.dev/",
         label: "Nexus Terminal",
         external: true,
     },

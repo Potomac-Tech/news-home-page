@@ -253,7 +253,7 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         "/api/member/nexus/handoff",
         "Open Nexus",
         "Nexus role",
-        "https://nexus-explore.potomacdb.com/",
+        "https://potomac-nexus-explore.pages.dev/",
         'label: "Nexus Terminal"',
         'target="_blank"',
     ], "Nexus member navigation");
