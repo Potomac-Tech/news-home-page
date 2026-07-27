@@ -361,7 +361,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                 <textarea
                                     required
                                     name="title"
-                                    rows={2}
+                                    rows={1}
                                     value={draft.title}
                                     onChange={(event) => {
                                         const title = event.target.value;
@@ -371,7 +371,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                             slug: current.id === "new" ? slugify(title) : current.slug,
                                         }));
                                     }}
-                                    className="mt-6 w-full resize-none border-0 bg-transparent font-serif text-5xl leading-[1.08] text-white outline-none placeholder:text-white/25 md:text-6xl"
+                                    className="mt-6 w-full resize-none overflow-hidden border-0 bg-transparent font-serif text-5xl leading-[1.08] text-white outline-none [field-sizing:content] placeholder:text-white/25 md:text-6xl"
                                     placeholder="Title"
                                 />
                             </label>
@@ -391,7 +391,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
 
                             <label className="order-2 block">
                                 <span className="sr-only">Standfirst</span>
-                                <textarea required name="public_summary" rows={2} value={draft.publicSummary} onChange={(event) => updateDraft("publicSummary", event.target.value)} className="mt-4 w-full resize-none border-0 bg-transparent text-xl leading-8 text-potomac-cream/75 outline-none placeholder:text-potomac-regolith/50" placeholder="Add a subtitle..." />
+                                <textarea required name="public_summary" rows={1} value={draft.publicSummary} onChange={(event) => updateDraft("publicSummary", event.target.value)} className="mt-4 w-full resize-none overflow-hidden border-0 bg-transparent text-xl leading-8 text-potomac-cream/75 outline-none [field-sizing:content] placeholder:text-potomac-regolith/50" placeholder="Add a subtitle..." />
                             </label>
 
                             <section className="order-6 mt-10 border-y border-white/10 py-6">
@@ -495,10 +495,10 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                 <textarea
                                     ref={bodyRef}
                                     aria-label="Story body"
-                                    rows={Math.max(18, Math.ceil(bodyText.length / 84))}
+                                    rows={1}
                                     value={bodyText}
                                     onChange={(event) => setBodyText(event.target.value)}
-                                    className="min-h-[32rem] w-full resize-none border-0 bg-transparent py-3 text-lg leading-8 text-potomac-cream/90 outline-none placeholder:text-potomac-regolith/45"
+                                    className="min-h-[32rem] w-full resize-none overflow-hidden border-0 bg-transparent py-3 text-lg leading-8 text-potomac-cream/90 outline-none [field-sizing:content] placeholder:text-potomac-regolith/45"
                                     placeholder="Start writing..."
                                 />
                             </section>
