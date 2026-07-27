@@ -121,6 +121,7 @@ test("new stories, safe rich text, and standard article rendering are enforced",
     assert.match(studioPage, /newStory === "1"/);
     assert.match(studioUi, /href="\/studio\?new=1"/);
     assert.match(dashboard, /href="\/studio\?new=1"/);
+    assert.match(studioUi, /timeZone: "UTC"/);
     assert.match(actions, /sanitizeArticleHtml/);
     assert.match(actions, /promoteFirstImageToHero/);
     assert.match(actions, /revalidatePath\("\/"\)/);

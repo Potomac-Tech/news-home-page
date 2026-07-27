@@ -103,10 +103,20 @@ function emptyArticle(): StudioArticle {
         seoDescription: "",
         aeoSummary: "",
         publishAt: "",
-        updatedAt: new Date().toISOString(),
+        updatedAt: "",
         sourceDocuments: [],
         mediaAssets: [],
     };
+}
+
+function formatUpdatedDate(value: string) {
+    if (!value) return "Not saved";
+    return new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        timeZone: "UTC",
+    }).format(new Date(value));
 }
 
 function formatFileSize(bytes: number) {
@@ -362,7 +372,7 @@ export function EditorialStudio({
                                 <span className="block font-mono text-[0.58rem] font-bold uppercase text-potomac-gold">{article.status} · {article.accessTier}</span>
                                 <span className="mt-2 block font-serif text-base leading-5 text-white">{article.title}</span>
                                 <span className="mt-2 block text-xs text-potomac-cream/65">{article.authorName ? `By ${article.authorName}` : "Byline not set"}</span>
-                                <span className="mt-2 block font-mono text-[0.56rem] uppercase text-potomac-regolith">{new Date(article.updatedAt).toLocaleDateString()}</span>
+                                <span className="mt-2 block font-mono text-[0.56rem] uppercase text-potomac-regolith">{formatUpdatedDate(article.updatedAt)}</span>
                             </button>
                         ))}
                     </div>
