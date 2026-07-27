@@ -69,6 +69,7 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
     const requestAccessPage = read("app/request-access/page.tsx");
     const requestAccessClient = read("app/request-access/RequestAccessClient.tsx");
     const callbackRoute = read("app/auth/callback/route.ts");
+    const updatePasswordPage = read("app/account/update-password/page.tsx");
     const logoutRoute = read("app/auth/logout/route.ts");
     const memberPage = read("app/member/page.tsx");
     const middleware = read("middleware.ts");
@@ -92,6 +93,20 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
         "profileResponse.cookies.set",
         "loginResponse.cookies.set",
     ], "auth callback");
+    assertIncludes(
+        loginForm + callbackRoute + updatePasswordPage + requestAccessClient,
+        [
+            'getCallbackUrl("/account/update-password")',
+            'redirectUrl.pathname === "/account/update-password"',
+            "exchangeError",
+            "expired-reset-link",
+            'title: "Set New Password"',
+            'initialMode="reset"',
+            'mode === "reset" || mode === "recovery"',
+            "shared account used by Cabeus",
+        ],
+        "dedicated password recovery destination"
+    );
     assertIncludes(logoutRoute, ["signOut", "/auth/login"], "logout route");
     assert.match(
         memberPage,

@@ -72,7 +72,13 @@ export function RequestAccessClient({
                 </div>
             ) : (
                 <div role="tabpanel" className="mt-6">
-                    <LoginForm initialMode={mode === "reset" ? "reset" : "magic-link"} />
+                    <LoginForm
+                        initialMode={
+                            mode === "reset" || mode === "recovery"
+                                ? mode
+                                : "magic-link"
+                        }
+                    />
                 </div>
             )}
         </div>

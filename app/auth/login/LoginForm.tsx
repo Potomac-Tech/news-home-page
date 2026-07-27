@@ -75,7 +75,7 @@ export function LoginForm({
 
             if (mode === "recovery") {
                 const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: getCallbackUrl("/request-access?tab=signin&mode=reset").toString(),
+                    redirectTo: getCallbackUrl("/account/update-password").toString(),
                 });
 
                 if (resetError) throw resetError;

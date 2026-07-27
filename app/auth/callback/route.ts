@@ -44,7 +44,21 @@ export async function GET(request: NextRequest) {
                 },
             }
         );
-        await supabase.auth.exchangeCodeForSession(code);
+        const { error: exchangeError } =
+            await supabase.auth.exchangeCodeForSession(code);
+
+        if (exchangeError) {
+            return NextResponse.redirect(
+                new URL(
+                    "/request-access?tab=signin&mode=recovery&error=expired-reset-link",
+                    requestUrl.origin
+                )
+            );
+        }
+
+        if (redirectUrl.pathname === "/account/update-password") {
+            return response;
+        }
 
         const profileGate = await getProfileGateContext({
             supabase,
