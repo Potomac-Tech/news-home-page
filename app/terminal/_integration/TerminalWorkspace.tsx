@@ -178,7 +178,7 @@ export function TerminalWorkspace({
                                         key={label}
                                         className="rounded-lg border border-white/10 bg-black/20 p-4"
                                     >
-                                        <p className="text-xs uppercase tracking-[0.14em] text-potomac-cream/45">
+                                        <p className="text-xs uppercase tracking-[0.14em] text-potomac-cream/70">
                                             {label}
                                         </p>
                                         <p className="mt-2 text-lg font-bold text-white">
