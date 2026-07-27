@@ -116,6 +116,82 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
     assertIncludes(middleware, ["updateSession", "matcher"], "session middleware");
 });
 
+test("Explorer and Terminal share a versioned private host contract", () => {
+    const contract = JSON.parse(
+        read("config/explorer-terminal-host-contract-v1.json")
+    );
+    const typedContract = read("lib/terminal/host-contract.ts");
+    const contractDoc = read("docs/terminal-host-contract.md");
+
+    assert.deepEqual(contract, {
+        version: "2026-07-27.v1",
+        status: "ready",
+        terminalMountPath: "/terminal",
+        terminalApiProxyPath: "/api/terminal/*",
+        terminalApiUpstreamPath: "/api/v1/*",
+        serviceBinding: "CABEUS_TERMINAL_API",
+        correlationIdHeader: "X-Correlation-ID",
+        assertion: {
+            header: "X-Cabeus-Terminal-Assertion",
+            format: "compact-jws",
+            algorithm: "ES256",
+            keyId: "explorer-terminal-v1",
+            issuer: "cabeus-explorer",
+            audience: "cabeus-terminal-api",
+            maximumTtlSeconds: 60,
+        },
+        claims: [
+            "iss",
+            "aud",
+            "sub",
+            "sid",
+            "iat",
+            "exp",
+            "jti",
+            "contract_version",
+            "membership",
+            "organizations",
+        ],
+        membership: {
+            tiers: ["explorer", "scout", "meridian"],
+            precedence: ["meridian", "scout", "explorer"],
+            staffRolesDoNotElevateMembership: true,
+            analystCapabilitiesDeferred: true,
+        },
+        organizations: {
+            source: "active_organization_members",
+            maximumEntries: 50,
+            roles: ["member", "org_admin"],
+        },
+        compatibility: {
+            additiveChangesRemainWithinVersion: true,
+            breakingChangesRequireNewVersion: true,
+            deploymentOrder: ["terminal_api_consumer", "explorer_producer"],
+            rollbackOrder: ["explorer_producer", "terminal_api_consumer"],
+        },
+    });
+    assertIncludes(typedContract + contractDoc, [
+        "2026-07-27.v1",
+        "CABEUS_TERMINAL_API",
+        "X-Cabeus-Terminal-Assertion",
+        "X-Correlation-ID",
+        "ES256",
+        "cabeus-explorer",
+        "cabeus-terminal-api",
+        "active",
+        "organization_members",
+        "staff roles do not elevate",
+        "analyst",
+        "assertion validation",
+        "frontend_rollback",
+        "backend_rollback",
+    ], "Terminal host contract");
+    assert.doesNotMatch(
+        typedContract + contractDoc + JSON.stringify(contract),
+        /private.?key|service.?role|password|secret.?value/i
+    );
+});
+
 test("app role rename retires legacy role IDs", () => {
     const migration = readMigration("20260723215940_rename_member_command_app_roles.sql");
     const applicationApproval = read("app/admin/applications/actions.ts");

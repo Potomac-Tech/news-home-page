@@ -1,0 +1,47 @@
+{
+  "version": "2026-07-27.v1",
+  "status": "ready",
+  "terminalMountPath": "/terminal",
+  "terminalApiProxyPath": "/api/terminal/*",
+  "terminalApiUpstreamPath": "/api/v1/*",
+  "serviceBinding": "CABEUS_TERMINAL_API",
+  "correlationIdHeader": "X-Correlation-ID",
+  "assertion": {
+    "header": "X-Cabeus-Terminal-Assertion",
+    "format": "compact-jws",
+    "algorithm": "ES256",
+    "keyId": "explorer-terminal-v1",
+    "issuer": "cabeus-explorer",
+    "audience": "cabeus-terminal-api",
+    "maximumTtlSeconds": 60
+  },
+  "claims": [
+    "iss",
+    "aud",
+    "sub",
+    "sid",
+    "iat",
+    "exp",
+    "jti",
+    "contract_version",
+    "membership",
+    "organizations"
+  ],
+  "membership": {
+    "tiers": ["explorer", "scout", "meridian"],
+    "precedence": ["meridian", "scout", "explorer"],
+    "staffRolesDoNotElevateMembership": true,
+    "analystCapabilitiesDeferred": true
+  },
+  "organizations": {
+    "source": "active_organization_members",
+    "maximumEntries": 50,
+    "roles": ["member", "org_admin"]
+  },
+  "compatibility": {
+    "additiveChangesRemainWithinVersion": true,
+    "breakingChangesRequireNewVersion": true,
+    "deploymentOrder": ["terminal_api_consumer", "explorer_producer"],
+    "rollbackOrder": ["explorer_producer", "terminal_api_consumer"]
+  }
+}
