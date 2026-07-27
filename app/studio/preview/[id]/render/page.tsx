@@ -1,10 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireEditorialStaff } from "../../../../../lib/auth/editorial";
-
-function paragraphs(value: string | null) {
-    return (value ?? "").split(/\n\s*\n/).map((item) => item.trim()).filter(Boolean);
-}
+import { renderArticleHtml } from "../../../../../lib/editorial/rich-text";
 
 export default async function PreviewRenderPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -38,27 +35,25 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
                             <time>{new Date(date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</time>
                         </div>
                     </div>
-                    {hero ? <img src={hero} alt={article.hero_image_alt ?? "Story image"} className="h-72 w-full border border-white/10 object-cover" /> : null}
+                    {hero ? <img src={hero} alt={article.hero_image_alt ?? "Story image"} className="max-h-[34rem] w-full border border-white/10 bg-black object-contain object-top" /> : null}
                 </div>
             </header>
-            <div className="mx-auto w-full max-w-4xl space-y-7 px-4 py-10 md:px-8">
-                <section className="border border-white/10 p-6">
-                    <p className="text-xs font-bold uppercase text-potomac-gold">Public summary</p>
-                    <p className="mt-4 text-xl leading-8 text-white">{article.public_summary}</p>
+            <div className="mx-auto w-full max-w-3xl px-4 py-12 md:px-8">
+                <section>
+                    <p className="text-xs font-bold uppercase text-potomac-gold">Member full story</p>
+                    <div
+                        className="article-rich-text mt-6 text-lg leading-8 text-potomac-cream/85"
+                        dangerouslySetInnerHTML={{
+                            __html: renderArticleHtml(body?.body_markdown ?? ""),
+                        }}
+                    />
                 </section>
-                <section className="border border-white/10 p-6">
-                    {paragraphs(article.intro_markdown ?? article.public_teaser_markdown).map((item) => <p key={item} className="mb-4 leading-7 text-potomac-cream/75">{item}</p>)}
-                </section>
-                {(media ?? []).map((asset) => (
+                {(media ?? []).filter((asset) => asset.media_type === "video").map((asset) => (
                     <figure key={asset.id} className="border border-white/10 p-3">
-                        {asset.media_type === "video" ? <video src={asset.public_url} controls className="w-full" /> : <img src={asset.public_url} alt={asset.alt_text ?? ""} className="w-full" />}
+                        <video src={asset.public_url} controls className="w-full" />
                         {asset.caption ? <figcaption className="mt-3 text-sm text-potomac-regolith">{asset.caption}</figcaption> : null}
                     </figure>
                 ))}
-                <section className="border border-white/10 p-6">
-                    <p className="text-xs font-bold uppercase text-potomac-gold">Member full story</p>
-                    {paragraphs(body?.body_markdown ?? null).map((item) => <p key={item} className="mt-5 leading-8 text-potomac-cream/80">{item}</p>)}
-                </section>
             </div>
         </article>
     );

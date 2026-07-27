@@ -162,7 +162,7 @@ export async function loadHomepageCarousel(
             visualAssetAlt: typeof article.hero_image_alt === "string"
                 ? article.hero_image_alt
                 : "Cabeus Explorer lunar intelligence briefing",
-            ctaLabel: "Read the brief",
+            ctaLabel: "Full story",
             ctaRoute: `/news/${String(article.slug)}`,
             minimumTier: "public",
             isRequired: false,

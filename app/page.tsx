@@ -51,6 +51,7 @@ export const metadata: Metadata = {
 };
 
 type EditorialArticleRow = {
+    id: string;
     slug: string;
     title: string;
     dek: string | null;
@@ -138,7 +139,7 @@ async function getHomepageStories(): Promise<HomeStory[]> {
         const { data, error } = await supabase
             .from("editorial_articles")
             .select(
-                "slug,title,dek,public_summary,public_teaser_markdown,access_tier_required,hero_image_url,hero_image_alt,published_at"
+                "id,slug,title,dek,public_summary,public_teaser_markdown,access_tier_required,hero_image_url,hero_image_alt,published_at"
             )
             .eq("status", "published")
             .lte("published_at", new Date().toISOString())
@@ -149,7 +150,24 @@ async function getHomepageStories(): Promise<HomeStory[]> {
             return [];
         }
 
-        return ((data ?? []) as EditorialArticleRow[]).map((article) => {
+        const articleRows = data as EditorialArticleRow[];
+        const { data: media } = await supabase
+            .from("editorial_media_assets")
+            .select("article_id,public_url,alt_text,media_type,sort_order")
+            .in("article_id", articleRows.map((article) => article.id))
+            .eq("media_type", "image")
+            .order("sort_order");
+        const firstImageByArticle = new Map<string, { url: string; alt: string }>();
+        for (const asset of media ?? []) {
+            if (!firstImageByArticle.has(asset.article_id)) {
+                firstImageByArticle.set(asset.article_id, {
+                    url: asset.public_url,
+                    alt: asset.alt_text ?? "Article photograph",
+                });
+            }
+        }
+
+        return articleRows.map((article) => {
             const summary =
                 cleanSnippet(article.public_summary) ||
                 cleanSnippet(article.dek) ||
@@ -167,8 +185,8 @@ async function getHomepageStories(): Promise<HomeStory[]> {
                 publishedAt: article.published_at ?? new Date().toISOString(),
                 accessTier: normalizeAccessTier(article.access_tier_required),
                 sourceLabel: "Editorial desk",
-                imageUrl: article.hero_image_url ?? undefined,
-                imageAlt: article.hero_image_alt ?? undefined,
+                imageUrl: article.hero_image_url ?? firstImageByArticle.get(article.id)?.url,
+                imageAlt: article.hero_image_alt ?? firstImageByArticle.get(article.id)?.alt,
             };
         });
     } catch {
@@ -217,7 +235,7 @@ function StoryMeta({ story }: { story: HomeStory }) {
         <div className="flex flex-wrap items-center gap-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-cream/48">
             <span className="text-potomac-gold">{story.sourceLabel}</span>
             <time dateTime={story.publishedAt}>{formatDate(story.publishedAt)}</time>
-            <span>{story.accessTier}+ full brief</span>
+            <span>{story.accessTier}+ full story</span>
         </div>
     );
 }
@@ -243,7 +261,7 @@ function StoryCard({ story }: { story: HomeStory }) {
                 href={story.href}
                 className="mt-5 inline-flex self-start font-mono text-[0.68rem] font-bold uppercase text-potomac-gold hover:text-potomac-cream"
             >
-                Read brief →
+                Full story →
             </Link>
         </article>
     );
@@ -291,7 +309,7 @@ export default async function HomePage() {
             summary: featuredStory.summary || siteConfig.description,
             visualAssetUrl: featuredStory.imageUrl ?? potomacBrand.assets.cabeusHero,
             visualAssetAlt: featuredStory.imageAlt ?? "Lunar industrial base under a crescent moon",
-            ctaLabel: "Read the brief",
+            ctaLabel: "Full story",
             ctaRoute: featuredStory.href,
             minimumTier: "public",
             isRequired: true,
@@ -310,7 +328,7 @@ export default async function HomePage() {
             summary: featuredStory.summary || siteConfig.description,
             visualAssetUrl: featuredStory.imageUrl ?? potomacBrand.assets.cabeusHero,
             visualAssetAlt: featuredStory.imageAlt ?? "Lunar industrial base under a crescent moon",
-            ctaLabel: "Read the brief",
+            ctaLabel: "Full story",
             ctaRoute: featuredStory.href,
             minimumTier: "public",
             isRequired: true,

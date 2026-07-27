@@ -1074,7 +1074,8 @@ test("editorial headlines use story-specific imagery instead of product screensh
     assertIncludes(homepageLoader, [
         "hero_image_url",
         "hero_image_alt",
-        "imageUrl: article.hero_image_url",
+        "firstImageByArticle",
+        "editorial_media_assets",
     ], "homepage CMS image loading");
 });
 
@@ -1302,7 +1303,7 @@ test("homepage carousel inventory is audited, gated, ranked, and auto-filled fro
         '.gt("expires_at", now)',
         'id: `auto:${String(article.id)}`',
         "Latest published CMS story auto-selection.",
-        'ctaLabel: "Read the brief"',
+        'ctaLabel: "Full story"',
         ".slice(0, 5)",
     ], "carousel selection contract");
     assertIncludes(actions + page, [
@@ -1351,7 +1352,7 @@ test("homepage carousel UI rotates accessibly and fails closed without approved 
         "loadHomepageCarousel",
         "getProfileGateContext",
         'id: "homepage-editorial-record"',
-        'ctaLabel: "Read the brief"',
+        'ctaLabel: "Full story"',
         "<HomepageCarousel slides={carouselSlides} />",
         "News feed temporarily unavailable",
         'aria-label="Lunar economy activity"',

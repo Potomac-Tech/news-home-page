@@ -16,6 +16,7 @@ const devicePreview = readFileSync("app/studio/preview/[id]/DevicePreview.tsx", 
 const dashboard = readFileSync("app/studio/dashboard/page.tsx", "utf8");
 const authorPage = readFileSync("app/authors/[slug]/page.tsx", "utf8");
 const articlePage = readFileSync("app/news/[slug]/page.tsx", "utf8");
+const richText = readFileSync("lib/editorial/rich-text.ts", "utf8");
 
 test("editorial studio uses the existing editor and admin authorization boundary", () => {
     assert.match(studioPage, /requireEditorialStaff\("\/studio"\)/);
@@ -103,13 +104,29 @@ test("editorial media, scalable dashboard, and author pages are wired", () => {
 test("studio preserves headline case and separates story paragraphs", () => {
     assert.doesNotMatch(studioUi, /uppercase[^>]*>\{draft\.title/);
     assert.doesNotMatch(previewPage, /text-3xl uppercase text-white/);
-    assert.match(previewRender, /split\(\/\\n\\s\*\\n\/\)/);
+    assert.match(previewRender, /renderArticleHtml/);
     assert.match(articlePage, /split\(\/\\n\\s\*\\n\/\)/);
     assert.match(studioUi, /aria-label="Story body"/);
-    assert.match(studioUi, /formatBody/);
-    assert.match(studioUi, /setBodyText/);
+    assert.match(studioUi, /contentEditable/);
+    assert.match(studioUi, /runEditorCommand\("bold"\)/);
+    assert.match(studioUi, /runEditorCommand\("underline"\)/);
+    assert.match(studioUi, /setBodyHtml/);
     assert.doesNotMatch(studioUi, /Add section|\+ Paragraph|Move section|Remove section|draggable/);
     assert.match(studioUi, /Unsaved draft/);
     assert.match(studioUi, /aria-label="Text style"/);
     assert.match(devicePreview, /Computer/);
+});
+
+test("new stories, safe rich text, and standard article rendering are enforced", () => {
+    assert.match(studioPage, /newStory === "1"/);
+    assert.match(studioUi, /href="\/studio\?new=1"/);
+    assert.match(dashboard, /href="\/studio\?new=1"/);
+    assert.match(actions, /sanitizeArticleHtml/);
+    assert.match(actions, /promoteFirstImageToHero/);
+    assert.match(actions, /revalidatePath\("\/"\)/);
+    assert.match(richText, /allowedTags/);
+    assert.match(richText, /noopener noreferrer/);
+    assert.match(articlePage, /article-rich-text/);
+    assert.doesNotMatch(articlePage, />\s*Public summary\s*</);
+    assert.doesNotMatch(articlePage, />\s*Public intro\s*</);
 });

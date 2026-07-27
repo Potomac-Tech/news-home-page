@@ -87,3 +87,99 @@ body {
         display: none;
     }
 }
+.studio-rich-editor:empty::before {
+    color: rgb(139 137 128 / 0.55);
+    content: attr(data-placeholder);
+    pointer-events: none;
+}
+
+.studio-rich-editor p {
+    margin: 0 0 1.25rem;
+}
+
+.studio-rich-editor h2,
+.studio-rich-editor h3 {
+    color: white;
+    font-family: var(--font-oswald), sans-serif;
+    font-weight: 600;
+    margin: 2rem 0 0.75rem;
+}
+
+.studio-rich-editor h2 {
+    font-size: 1.75rem;
+}
+
+.studio-rich-editor h3 {
+    font-size: 1.4rem;
+}
+
+.studio-rich-editor blockquote {
+    border-left: 3px solid #e9a93f;
+    color: rgb(239 236 224 / 0.8);
+    margin: 1.5rem 0;
+    padding-left: 1.25rem;
+}
+
+.studio-rich-editor ul,
+.studio-rich-editor ol {
+    margin: 1rem 0 1.5rem;
+    padding-left: 1.75rem;
+}
+
+.studio-rich-editor ul {
+    list-style: disc;
+}
+
+.studio-rich-editor ol {
+    list-style: decimal;
+}
+
+.studio-rich-editor a {
+    color: #e9a93f;
+    text-decoration: underline;
+}
+
+.article-rich-text > * + * {
+    margin-top: 1.35rem;
+}
+
+.article-rich-text h2,
+.article-rich-text h3 {
+    color: white;
+    font-family: var(--font-oswald), sans-serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 2.5rem;
+}
+
+.article-rich-text h2 {
+    font-size: 2rem;
+}
+
+.article-rich-text h3 {
+    font-size: 1.5rem;
+}
+
+.article-rich-text blockquote {
+    border-left: 3px solid #e9a93f;
+    color: rgb(239 236 224 / 0.78);
+    padding-left: 1.25rem;
+}
+
+.article-rich-text ul,
+.article-rich-text ol {
+    padding-left: 1.75rem;
+}
+
+.article-rich-text ul {
+    list-style: disc;
+}
+
+.article-rich-text ol {
+    list-style: decimal;
+}
+
+.article-rich-text a {
+    color: #e9a93f;
+    text-decoration: underline;
+}

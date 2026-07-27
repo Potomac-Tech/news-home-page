@@ -27,6 +27,7 @@ import {
     sponsorPlacementKeys,
 } from "../../_data/sponsorAds";
 import { publicTierName, tierConfig } from "../../_data/tiers";
+import { renderArticleHtml } from "../../../lib/editorial/rich-text";
 
 export const dynamic = "force-dynamic";
 
@@ -152,8 +153,8 @@ function mapArticle(
         teaser: row.public_teaser_markdown ?? row.public_summary ?? "",
         publishedAt: row.published_at ?? new Date().toISOString(),
         accessTier: normalizeTier(row.access_tier_required),
-        heroImageUrl: row.hero_image_url ?? "/Source Rendering.png",
-        heroImageAlt: row.hero_image_alt ?? "Cabeus Explorer lunar intelligence rendering",
+        heroImageUrl: row.hero_image_url ?? "",
+        heroImageAlt: row.hero_image_alt ?? "",
         citations,
     };
 }
@@ -259,7 +260,7 @@ async function loadArticle(slug: string): Promise<LoadedArticle | null> {
     }
 
     const { article: cmsArticle, supabase } = await getPublishedCmsArticle(slug);
-    const article = cmsArticle ?? fallbackArticle;
+    let article = cmsArticle ?? fallbackArticle;
 
     if (!article) {
         return null;
@@ -287,17 +288,27 @@ async function loadArticle(slug: string): Promise<LoadedArticle | null> {
         : { data: [], error: null };
     if (mediaError) throw new Error(mediaError.message);
 
+    const mediaAssets = (mediaRows ?? []).map((asset) => ({
+        id: asset.id,
+        publicUrl: asset.public_url,
+        mediaType: asset.media_type as "image" | "video",
+        altText: asset.alt_text ?? "",
+        caption: asset.caption,
+    }));
+    const leadImage = mediaAssets.find((asset) => asset.mediaType === "image");
+    if (!article.heroImageUrl && leadImage) {
+        article = {
+            ...article,
+            heroImageUrl: leadImage.publicUrl,
+            heroImageAlt: leadImage.altText || "Article photograph",
+        };
+    }
+
     return {
         article,
         fullBody,
         access,
-        mediaAssets: (mediaRows ?? []).map((asset) => ({
-            id: asset.id,
-            publicUrl: asset.public_url,
-            mediaType: asset.media_type as "image" | "video",
-            altText: asset.alt_text ?? "",
-            caption: asset.caption,
-        })),
+        mediaAssets,
     };
 }
 
@@ -456,8 +467,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 }}
             />
             <header className="border-b border-white/10">
-                <div className="mx-auto grid w-full max-w-7xl gap-10 px-4 py-12 md:px-8 lg:grid-cols-[1.08fr_0.92fr] lg:py-16">
-                    <div>
+                <div className="mx-auto w-full max-w-5xl px-4 py-12 md:px-8 lg:py-16">
+                    <div className="max-w-4xl">
                         <Link
                             href="/news"
                             className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold hover:text-potomac-cream"
@@ -482,82 +493,54 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             <span>{accessTierLabel(article.accessTier)}+ full story</span>
                         </div>
                     </div>
-                    <figure className="glass-card rounded p-5">
+                    {article.heroImageUrl ? (
+                    <figure className="mt-10">
                         <img
                             src={article.heroImageUrl}
                             alt={article.heroImageAlt}
-                            className={`h-72 w-full rounded bg-potomac-primary ${
-                                article.slug === "potomac-space-investment-forum-2026"
-                                    ? "object-contain"
-                                    : "object-cover"
-                            }`}
+                            className="max-h-[42rem] w-full bg-black object-contain object-top"
                         />
-                        <figcaption className="mt-4 text-sm leading-6 text-potomac-cream/60">
-                            {article.summary}
-                        </figcaption>
+                        {mediaAssets.find((asset) => asset.publicUrl === article.heroImageUrl)?.caption ? (
+                            <figcaption className="mt-3 text-sm leading-6 text-potomac-cream/60">
+                                {mediaAssets.find((asset) => asset.publicUrl === article.heroImageUrl)?.caption}
+                            </figcaption>
+                        ) : null}
                     </figure>
+                    ) : null}
                 </div>
             </header>
 
             <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-12 md:px-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
-                <main className="space-y-8">
-                    <section className="glass-card rounded p-6">
-                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
-                            Public summary
-                        </p>
-                        <p className="mt-4 text-xl leading-8 text-white">
-                            {article.summary}
-                        </p>
-                        <div className="mt-6 grid gap-4 md:grid-cols-3">
-                            {keyPoints.map((point) => (
-                                <div
-                                    key={point}
-                                    className="border-l border-potomac-gold/45 pl-4"
-                                >
-                                    <p className="text-sm leading-6 text-potomac-cream/75">
-                                        {point}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-
-                    <section className="glass-card rounded p-6">
-                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
-                            Public intro
-                        </p>
-                        <div className="mt-4 space-y-4 text-base leading-7 text-potomac-cream/75">
-                            {renderParagraphs(article.intro || article.teaser).map(
-                                (paragraph) => (
-                                    <p key={paragraph}>{paragraph}</p>
-                                )
-                            )}
-                        </div>
-                    </section>
-
+                <main>
                     {fullBody ? (
-                        <section className="member-gated-content glass-card rounded p-6">
+                        <section className="member-gated-content">
                             <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
                                 Member full story
                             </p>
-                            <div className="mt-5 space-y-5 text-base leading-8 text-potomac-cream/80">
-                                {renderParagraphs(fullBody).map((paragraph) => (
+                            <div
+                                className="article-rich-text mt-6 text-lg leading-8 text-potomac-cream/85"
+                                dangerouslySetInnerHTML={{
+                                    __html: renderArticleHtml(fullBody),
+                                }}
+                            />
+                        </section>
+                    ) : (
+                        <>
+                            <div className="article-rich-text text-lg leading-8 text-potomac-cream/80">
+                                {renderParagraphs(article.teaser || article.summary).map((paragraph) => (
                                     <p key={paragraph}>{paragraph}</p>
                                 ))}
                             </div>
-                        </section>
-                    ) : (
-                        <GatePanel access={access} tier={article.accessTier} slug={article.slug} />
+                            <div className="mt-10">
+                                <GatePanel access={access} tier={article.accessTier} slug={article.slug} />
+                            </div>
+                        </>
                     )}
-                    {mediaAssets.length ? (
-                        <section className="space-y-5">
-                            {mediaAssets.map((asset) => (
+                    {mediaAssets.some((asset) => asset.mediaType === "video") ? (
+                        <section className="mt-10 space-y-5">
+                            {mediaAssets.filter((asset) => asset.mediaType === "video").map((asset) => (
                                 <figure key={asset.id} className="glass-card rounded p-4">
-                                    {asset.mediaType === "video" ? (
-                                        <video src={asset.publicUrl} controls preload="metadata" className="w-full rounded" />
-                                    ) : (
-                                        <img src={asset.publicUrl} alt={asset.altText} className="w-full rounded object-cover" />
-                                    )}
+                                    <video src={asset.publicUrl} controls preload="metadata" className="w-full rounded" />
                                     {asset.caption ? <figcaption className="mt-3 text-sm text-potomac-cream/60">{asset.caption}</figcaption> : null}
                                 </figure>
                             ))}

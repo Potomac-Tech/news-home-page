@@ -185,8 +185,8 @@ test("public article teaser shows citations and member-gated full story", { time
         });
 
         assert.match(await page.title(), /CLPS 2\.0 points toward/i);
-        await assertVisibleText(page, "Public summary");
-        await assertVisibleText(page, "Public intro");
+        assert.equal(await page.getByText(/^Public summary$/i).count(), 0);
+        assert.equal(await page.getByText(/^Public intro$/i).count(), 0);
         await assertVisibleText(page, "Source Citations");
         await assertVisibleText(
             page,

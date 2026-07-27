@@ -55,7 +55,7 @@ export default async function ArticleDashboard({
                         <h1 className="mt-2 font-serif text-4xl uppercase text-white">Article dashboard</h1>
                         <p className="mt-2 text-sm text-potomac-regolith">{articlesResult.count ?? 0} matching articles · 50 per page</p>
                     </div>
-                    <Link href="/studio" className="bg-potomac-gold px-5 py-3 font-mono text-xs font-bold uppercase text-potomac-primary">Create or edit story</Link>
+                    <Link href="/studio?new=1" className="bg-potomac-gold px-5 py-3 font-mono text-xs font-bold uppercase text-potomac-primary">New story</Link>
                 </header>
 
                 <section className="mt-6 grid gap-3 sm:grid-cols-3">

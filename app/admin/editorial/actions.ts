@@ -10,6 +10,7 @@ import {
     mediaFilesFrom,
     storeMediaAssets,
 } from "../../../lib/editorial/media-assets";
+import { sanitizeArticleHtml } from "../../../lib/editorial/rich-text";
 
 type EditorialSupabaseClient = Awaited<
     ReturnType<typeof requireEditorialStaff>
@@ -164,11 +165,41 @@ async function createVersion(
     }
 }
 
+async function promoteFirstImageToHero(
+    supabase: EditorialSupabaseClient,
+    articleId: string,
+    userId: string
+) {
+    const { data: image, error: imageError } = await supabase
+        .from("editorial_media_assets")
+        .select("public_url,alt_text")
+        .eq("article_id", articleId)
+        .eq("media_type", "image")
+        .order("sort_order")
+        .limit(1)
+        .maybeSingle();
+    if (imageError) throw new Error(imageError.message);
+    if (!image) return;
+
+    const { error } = await supabase
+        .from("editorial_articles")
+        .update({
+            hero_image_url: image.public_url,
+            hero_image_alt: image.alt_text || "Article photograph",
+            updated_by: userId,
+        })
+        .eq("id", articleId)
+        .is("hero_image_url", null);
+    if (error) throw new Error(error.message);
+}
+
 export async function createArticleDraft(formData: FormData) {
     const { supabase, userId } = await requireEditorialStaff(
         editorialNextPath(formData)
     );
-    const bodyMarkdown = getRequiredString(formData, "body_markdown");
+    const bodyMarkdown = sanitizeArticleHtml(
+        getRequiredString(formData, "body_markdown")
+    );
     const sourceDocument = sourceDocumentFrom(formData);
     const mediaFiles = mediaFilesFrom(formData);
     const primaryAuthorId = await resolvePrimaryAuthorId(supabase, formData);
@@ -233,6 +264,7 @@ export async function createArticleDraft(formData: FormData) {
             altText: getOptionalString(formData, "media_alt_text"),
             caption: getOptionalString(formData, "media_caption"),
         });
+        await promoteFirstImageToHero(supabase, article.id, userId);
     }
 
     await createVersion(
@@ -253,7 +285,9 @@ export async function updateArticleDraft(formData: FormData) {
         editorialNextPath(formData)
     );
     const articleId = getRequiredString(formData, "article_id");
-    const bodyMarkdown = getRequiredString(formData, "body_markdown");
+    const bodyMarkdown = sanitizeArticleHtml(
+        getRequiredString(formData, "body_markdown")
+    );
     const sourceDocument = sourceDocumentFrom(formData);
     const mediaFiles = mediaFilesFrom(formData);
     const primaryAuthorId = await resolvePrimaryAuthorId(supabase, formData);
@@ -324,6 +358,7 @@ export async function updateArticleDraft(formData: FormData) {
             altText: getOptionalString(formData, "media_alt_text"),
             caption: getOptionalString(formData, "media_caption"),
         });
+        await promoteFirstImageToHero(supabase, article.id, userId);
     }
 
     const { error: previewResetError } = await supabase
@@ -411,7 +446,10 @@ export async function publishArticle(formData: FormData) {
 
     revalidatePath("/admin/editorial");
     revalidatePath("/studio");
+    revalidatePath("/studio/dashboard");
+    revalidatePath("/");
     revalidatePath("/news");
+    revalidatePath(`/news/${article.slug}`);
     return article.id;
 }
 

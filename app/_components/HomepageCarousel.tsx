@@ -73,6 +73,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                         sizes="100vw"
                         className={`col-start-1 row-start-2 h-full w-full bg-potomac-primary ${
                             slide.visualAssetUrl.includes("space-investment-forum")
+                            || slide.visualAssetUrl.includes("/editorial-media/")
                                 ? "object-contain"
                                 : "object-cover"
                         }`}

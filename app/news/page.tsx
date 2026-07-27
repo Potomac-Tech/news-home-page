@@ -130,7 +130,7 @@ export default async function NewsPage() {
                                 href={article.href}
                                 className="mt-6 inline-block text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold hover:text-potomac-cream"
                             >
-                                Read brief
+                                Full story
                             </Link>
                         </article>
                     ))}

@@ -37,9 +37,12 @@ function localDateTime(value: string | null) {
 export default async function StudioPage({
     searchParams,
 }: {
-    searchParams: Promise<{ article?: string }>;
+    searchParams: Promise<{ article?: string; new?: string }>;
 }) {
-    const { article: selectedArticleId } = await searchParams;
+    const {
+        article: selectedArticleId,
+        new: newStory,
+    } = await searchParams;
     const { supabase } = await requireEditorialStaff("/studio");
     const { data: articleRows, error: articleError } = await supabase
         .from("editorial_articles")
@@ -132,5 +135,5 @@ export default async function StudioPage({
         );
     }
 
-    return <EditorialStudio articles={articles} />;
+    return <EditorialStudio articles={articles} startNew={newStory === "1"} />;
 }

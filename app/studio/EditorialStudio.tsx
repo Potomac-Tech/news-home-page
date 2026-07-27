@@ -55,6 +55,37 @@ function slugify(value: string) {
         .replace(/-+/g, "-");
 }
 
+function escapeHtml(value: string) {
+    return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function toEditorHtml(value: string) {
+    if (/<(?:p|br|strong|b|em|i|u|s|h2|h3|blockquote|ul|ol|li|a)(?:\s|>)/i.test(value)) {
+        return value;
+    }
+
+    return value
+        .split(/\n\s*\n/)
+        .map((paragraph) => paragraph.trim())
+        .filter(Boolean)
+        .map((paragraph) => `<p>${escapeHtml(paragraph).replaceAll("\n", "<br>")}</p>`)
+        .join("");
+}
+
+function editorPlainText(value: string) {
+    if (typeof document === "undefined") {
+        return value.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    }
+    const container = document.createElement("div");
+    container.innerHTML = value;
+    return (container.textContent ?? "").replace(/\s+/g, " ").trim();
+}
+
 function emptyArticle(): StudioArticle {
     return {
         id: "new",
@@ -84,34 +115,44 @@ function formatFileSize(bytes: number) {
         : `${(bytes / 1_000_000).toFixed(1)} MB`;
 }
 
-export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
+export function EditorialStudio({
+    articles,
+    startNew = false,
+}: {
+    articles: StudioArticle[];
+    startNew?: boolean;
+}) {
     const router = useRouter();
-    const [selectedId, setSelectedId] = useState(articles[0]?.id ?? "new");
+    const [selectedId, setSelectedId] = useState(
+        startNew ? "new" : articles[0]?.id ?? "new"
+    );
     const selected = useMemo(
         () => articles.find((article) => article.id === selectedId) ?? emptyArticle(),
         [articles, selectedId]
     );
     const [draft, setDraft] = useState(selected);
-    const [bodyText, setBodyText] = useState(selected.body);
+    const [bodyHtml, setBodyHtml] = useState(() => toEditorHtml(selected.body));
     const [query, setQuery] = useState("");
     const [importStatus, setImportStatus] = useState<string>("");
     const [saveStatus, setSaveStatus] = useState("");
     const [isSaving, setIsSaving] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const mediaInputRef = useRef<HTMLInputElement>(null);
-    const bodyRef = useRef<HTMLTextAreaElement>(null);
+    const bodyRef = useRef<HTMLDivElement>(null);
     const formId = "editorial-studio-story-form";
 
     const filteredArticles = articles.filter((article) =>
         `${article.title} ${article.authorName} ${article.status}`.toLowerCase().includes(query.toLowerCase())
     );
-    const bodyMarkdown = bodyText.trim();
+    const bodyMarkdown = bodyHtml.trim();
     const action = draft.id === "new" ? createArticleDraft : updateArticleDraft;
 
     function chooseArticle(article: StudioArticle) {
         setSelectedId(article.id);
         setDraft(article);
-        setBodyText(article.body);
+        const nextBody = toEditorHtml(article.body);
+        setBodyHtml(nextBody);
+        if (bodyRef.current) bodyRef.current.innerHTML = nextBody;
         setImportStatus("");
         if (fileInputRef.current) fileInputRef.current.value = "";
     }
@@ -120,7 +161,8 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
         const next = emptyArticle();
         setSelectedId("new");
         setDraft(next);
-        setBodyText("");
+        setBodyHtml("");
+        if (bodyRef.current) bodyRef.current.innerHTML = "";
         setImportStatus("");
         if (fileInputRef.current) fileInputRef.current.value = "";
     }
@@ -200,9 +242,12 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                 ? imported.slice(1)
                 : imported;
             const nextBodyParagraphs = bodySections.length ? bodySections : imported;
-            const nextBody = nextBodyParagraphs.join("\n\n");
+            const nextBody = nextBodyParagraphs
+                .map((paragraph) => `<p>${escapeHtml(paragraph).replaceAll("\n", "<br>")}</p>`)
+                .join("");
 
-            setBodyText(nextBody);
+            setBodyHtml(nextBody);
+            if (bodyRef.current) bodyRef.current.innerHTML = nextBody;
             setDraft((current) => {
                 const headline = current.title || (probableHeadline.length <= 180 ? probableHeadline : "");
                 const firstBody = nextBodyParagraphs[0] ?? "";
@@ -232,32 +277,20 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
     }
 
     function draftTeaser() {
-        const source = draft.publicSummary || bodyText.split(/\n\s*\n/).find((paragraph) => paragraph.trim()) || "";
+        const source = draft.publicSummary || editorPlainText(bodyHtml);
         const normalized = source.replace(/\s+/g, " ").trim();
         updateDraft("publicTeaser", normalized.length > 320 ? `${normalized.slice(0, 317).trimEnd()}...` : normalized);
     }
 
-    function formatBody(prefix: string, suffix = prefix, fallback = "text") {
-        const textarea = bodyRef.current;
-        const start = textarea?.selectionStart ?? bodyText.length;
-        const end = textarea?.selectionEnd ?? start;
-        const selectedText = bodyText.slice(start, end) || fallback;
-        const nextText =
-            bodyText.slice(0, start) +
-            prefix +
-            selectedText +
-            suffix +
-            bodyText.slice(end);
-        setBodyText(nextText);
-        window.setTimeout(() => {
-            const nextTextarea = bodyRef.current;
-            if (!nextTextarea) return;
-            nextTextarea.focus();
-            nextTextarea.setSelectionRange(
-                start + prefix.length,
-                start + prefix.length + selectedText.length
-            );
-        });
+    function runEditorCommand(command: string, value?: string) {
+        bodyRef.current?.focus();
+        document.execCommand(command, false, value);
+        setBodyHtml(bodyRef.current?.innerHTML ?? "");
+    }
+
+    function addLink() {
+        const href = window.prompt("Link URL", "https://");
+        if (href) runEditorCommand("createLink", href);
     }
 
     return (
@@ -273,6 +306,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                         </p>
                     </div>
                     <div className="flex items-center gap-3">
+                        <a href="/studio?new=1" className="border border-white/15 px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-white hover:border-potomac-gold">New story</a>
                         {draft.id !== "new" ? (
                             <a href={`/studio/preview/${draft.id}`} className="border border-white/15 px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-white hover:border-potomac-gold">Preview</a>
                         ) : null}
@@ -286,7 +320,7 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                             defaultValue=""
                             onChange={(event) => {
                                 if (event.target.value === "heading") {
-                                    formatBody("## ", "", "Heading");
+                                    runEditorCommand("formatBlock", "h2");
                                 }
                                 event.target.value = "";
                             }}
@@ -296,16 +330,17 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                             <option value="heading" className="bg-potomac-primary">Heading</option>
                         </select>
                         <span className="mx-2 h-5 w-px bg-white/15" />
-                        <button type="button" title="Bold" aria-label="Bold" onClick={() => formatBody("**")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">B</button>
-                        <button type="button" title="Italic" aria-label="Italic" onClick={() => formatBody("_")} className="h-9 w-9 font-serif text-lg italic hover:bg-white/5">I</button>
-                        <button type="button" title="Heading" aria-label="Heading" onClick={() => formatBody("## ", "", "Heading")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">T</button>
-                        <button type="button" title="Insert link" aria-label="Insert link" onClick={() => formatBody("[", "](https://)", "link text")} className="h-9 w-9 text-lg hover:bg-white/5">↗</button>
+                        <button type="button" title="Bold" aria-label="Bold" onClick={() => runEditorCommand("bold")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">B</button>
+                        <button type="button" title="Italic" aria-label="Italic" onClick={() => runEditorCommand("italic")} className="h-9 w-9 font-serif text-lg italic hover:bg-white/5">I</button>
+                        <button type="button" title="Underline" aria-label="Underline" onClick={() => runEditorCommand("underline")} className="h-9 w-9 text-lg underline hover:bg-white/5">U</button>
+                        <button type="button" title="Heading" aria-label="Heading" onClick={() => runEditorCommand("formatBlock", "h2")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">T</button>
+                        <button type="button" title="Insert link" aria-label="Insert link" onClick={addLink} className="h-9 w-9 text-lg hover:bg-white/5">↗</button>
                         <span className="mx-2 h-5 w-px bg-white/15" />
                         <button type="button" title="Upload image or video" aria-label="Upload image or video" onClick={() => mediaInputRef.current?.click()} className="h-9 w-9 text-lg hover:bg-white/5">▧</button>
                         <button type="button" title="Import Word document" aria-label="Import Word document" onClick={() => fileInputRef.current?.click()} className="h-9 px-3 font-mono text-xs font-bold hover:bg-white/5">DOC</button>
                         <span className="mx-2 h-5 w-px bg-white/15" />
-                        <button type="button" title="Bulleted list" aria-label="Bulleted list" onClick={() => formatBody("- ", "", "List item")} className="h-9 w-9 text-lg hover:bg-white/5">•</button>
-                        <button type="button" title="Quote" aria-label="Quote" onClick={() => formatBody("> ", "", "Quote")} className="h-9 w-9 text-lg hover:bg-white/5">”</button>
+                        <button type="button" title="Bulleted list" aria-label="Bulleted list" onClick={() => runEditorCommand("insertUnorderedList")} className="h-9 w-9 text-lg hover:bg-white/5">•</button>
+                        <button type="button" title="Quote" aria-label="Quote" onClick={() => runEditorCommand("formatBlock", "blockquote")} className="h-9 w-9 text-lg hover:bg-white/5">”</button>
                     </div>
                 </div>
             </header>
@@ -492,14 +527,17 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
 
                             <section className="order-4 mt-8">
                                 <h2 className="sr-only">Story body</h2>
-                                <textarea
+                                <div
                                     ref={bodyRef}
+                                    contentEditable
+                                    suppressContentEditableWarning
                                     aria-label="Story body"
-                                    rows={1}
-                                    value={bodyText}
-                                    onChange={(event) => setBodyText(event.target.value)}
-                                    className="min-h-[32rem] w-full resize-none overflow-hidden border-0 bg-transparent py-3 text-lg leading-8 text-potomac-cream/90 outline-none [field-sizing:content] placeholder:text-potomac-regolith/45"
-                                    placeholder="Start writing..."
+                                    role="textbox"
+                                    aria-multiline="true"
+                                    data-placeholder="Start writing..."
+                                    onInput={(event) => setBodyHtml(event.currentTarget.innerHTML)}
+                                    dangerouslySetInnerHTML={{ __html: bodyHtml }}
+                                    className="studio-rich-editor min-h-[32rem] w-full border-0 bg-transparent py-3 text-lg leading-8 text-potomac-cream/90 outline-none"
                                 />
                             </section>
 
