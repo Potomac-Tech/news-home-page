@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
+    experimental: {
+        serverActions: {
+            bodySizeLimit: "50mb",
+        },
+    },
     async headers() {
         const securityHeaders = [
             {
@@ -13,7 +18,7 @@ const nextConfig = {
             },
             {
                 key: "X-Frame-Options",
-                value: "DENY",
+                value: "SAMEORIGIN",
             },
             {
                 key: "Referrer-Policy",
@@ -39,6 +44,8 @@ const nextConfig = {
                     "frame-ancestors 'none'",
                     "object-src 'none'",
                     "img-src 'self' data: https:",
+                    "media-src 'self' https://*.supabase.co",
+                    "frame-src 'self'",
                     "font-src 'self' data: https://fonts.gstatic.com",
                     "connect-src 'self' https://*.supabase.co https://api.stripe.com",
                     "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",

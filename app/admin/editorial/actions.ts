@@ -6,6 +6,10 @@ import {
     sourceDocumentFrom,
     storeSourceDocument,
 } from "../../../lib/editorial/source-documents";
+import {
+    mediaFilesFrom,
+    storeMediaAssets,
+} from "../../../lib/editorial/media-assets";
 
 type EditorialSupabaseClient = Awaited<
     ReturnType<typeof requireEditorialStaff>
@@ -166,6 +170,7 @@ export async function createArticleDraft(formData: FormData) {
     );
     const bodyMarkdown = getRequiredString(formData, "body_markdown");
     const sourceDocument = sourceDocumentFrom(formData);
+    const mediaFiles = mediaFilesFrom(formData);
     const primaryAuthorId = await resolvePrimaryAuthorId(supabase, formData);
 
     const { data: article, error: articleError } = await supabase
@@ -219,6 +224,17 @@ export async function createArticleDraft(formData: FormData) {
         });
     }
 
+    if (mediaFiles.length) {
+        await storeMediaAssets({
+            supabase,
+            userId,
+            articleId: article.id,
+            files: mediaFiles,
+            altText: getOptionalString(formData, "media_alt_text"),
+            caption: getOptionalString(formData, "media_caption"),
+        });
+    }
+
     await createVersion(
         supabase,
         article as ArticleSnapshot,
@@ -239,6 +255,7 @@ export async function updateArticleDraft(formData: FormData) {
     const articleId = getRequiredString(formData, "article_id");
     const bodyMarkdown = getRequiredString(formData, "body_markdown");
     const sourceDocument = sourceDocumentFrom(formData);
+    const mediaFiles = mediaFilesFrom(formData);
     const primaryAuthorId = await resolvePrimaryAuthorId(supabase, formData);
     const articleUpdates: Record<string, string | null> = {
         slug: getRequiredString(formData, "slug"),
@@ -298,6 +315,25 @@ export async function updateArticleDraft(formData: FormData) {
         });
     }
 
+    if (mediaFiles.length) {
+        await storeMediaAssets({
+            supabase,
+            userId,
+            articleId: article.id,
+            files: mediaFiles,
+            altText: getOptionalString(formData, "media_alt_text"),
+            caption: getOptionalString(formData, "media_caption"),
+        });
+    }
+
+    const { error: previewResetError } = await supabase
+        .from("editorial_preview_approvals")
+        .delete()
+        .eq("article_id", article.id);
+    if (previewResetError) {
+        throw new Error(previewResetError.message);
+    }
+
     await createVersion(
         supabase,
         article as ArticleSnapshot,
@@ -317,6 +353,25 @@ export async function publishArticle(formData: FormData) {
     );
     const articleId = getRequiredString(formData, "article_id");
 
+    const { data: currentArticle, error: currentArticleError } = await supabase
+        .from("editorial_articles")
+        .select("updated_at")
+        .eq("id", articleId)
+        .single();
+    if (currentArticleError || !currentArticle) {
+        throw new Error(currentArticleError?.message ?? "Article not found.");
+    }
+
+    const { data: approval, error: approvalError } = await supabase
+        .from("editorial_preview_approvals")
+        .select("article_updated_at")
+        .eq("article_id", articleId)
+        .maybeSingle();
+    if (approvalError) throw new Error(approvalError.message);
+    if (!approval || approval.article_updated_at !== currentArticle.updated_at) {
+        throw new Error("Open the device preview and approve this saved revision before publishing.");
+    }
+
     const { data: body, error: bodyError } = await supabase
         .from("editorial_article_bodies")
         .select("body_markdown")
@@ -333,6 +388,7 @@ export async function publishArticle(formData: FormData) {
         .update({
             status: "published",
             published_at: now,
+            scheduled_for: null,
             updated_by: userId,
         })
         .eq("id", articleId)
@@ -357,4 +413,72 @@ export async function publishArticle(formData: FormData) {
     revalidatePath("/studio");
     revalidatePath("/news");
     return article.id;
+}
+
+export async function approveArticlePreview(formData: FormData) {
+    const { supabase, userId } = await requireEditorialStaff("/studio");
+    const articleId = getRequiredString(formData, "article_id");
+    const { data: article, error } = await supabase
+        .from("editorial_articles")
+        .select("updated_at")
+        .eq("id", articleId)
+        .single();
+    if (error || !article) throw new Error(error?.message ?? "Article not found.");
+
+    const { error: approvalError } = await supabase
+        .from("editorial_preview_approvals")
+        .upsert({
+            article_id: articleId,
+            article_updated_at: article.updated_at,
+            previewed_by: userId,
+            previewed_at: new Date().toISOString(),
+        });
+    if (approvalError) throw new Error(approvalError.message);
+
+    revalidatePath(`/studio/preview/${articleId}`);
+    return articleId;
+}
+
+export async function scheduleArticle(formData: FormData) {
+    const { supabase, userId } = await requireEditorialStaff("/studio");
+    const articleId = getRequiredString(formData, "article_id");
+    const scheduledFor = getRequiredString(formData, "scheduled_for");
+    const scheduledDate = new Date(scheduledFor);
+    if (Number.isNaN(scheduledDate.getTime()) || scheduledDate <= new Date()) {
+        throw new Error("Publishing time must be in the future.");
+    }
+
+    const { data: article, error: articleError } = await supabase
+        .from("editorial_articles")
+        .select("updated_at")
+        .eq("id", articleId)
+        .single();
+    if (articleError || !article) {
+        throw new Error(articleError?.message ?? "Article not found.");
+    }
+    const { data: approval, error: approvalError } = await supabase
+        .from("editorial_preview_approvals")
+        .select("article_updated_at")
+        .eq("article_id", articleId)
+        .maybeSingle();
+    if (approvalError) throw new Error(approvalError.message);
+    if (!approval || approval.article_updated_at !== article.updated_at) {
+        throw new Error("Approve the current saved revision in preview before scheduling.");
+    }
+
+    const { error: updateError } = await supabase
+        .from("editorial_articles")
+        .update({
+            status: "scheduled",
+            scheduled_for: scheduledDate.toISOString(),
+            published_at: null,
+            updated_by: userId,
+        })
+        .eq("id", articleId);
+    if (updateError) throw new Error(updateError.message);
+
+    revalidatePath("/studio");
+    revalidatePath("/studio/dashboard");
+    revalidatePath(`/studio/preview/${articleId}`);
+    return articleId;
 }

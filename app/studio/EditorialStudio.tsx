@@ -4,7 +4,6 @@ import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
     createArticleDraft,
-    publishArticle,
     updateArticleDraft,
 } from "../admin/editorial/actions";
 
@@ -23,12 +22,20 @@ export type StudioArticle = {
     seoTitle: string;
     seoDescription: string;
     aeoSummary: string;
+    publishAt: string;
     updatedAt: string;
     sourceDocuments: Array<{
         id: string;
         fileName: string;
         sizeBytes: number;
         createdAt: string;
+    }>;
+    mediaAssets: Array<{
+        id: string;
+        publicUrl: string;
+        mediaType: "image" | "video";
+        altText: string;
+        caption: string;
     }>;
 };
 
@@ -66,7 +73,7 @@ function emptyArticle(): StudioArticle {
         id: "new",
         slug: "",
         status: "draft",
-        accessTier: "member",
+        accessTier: "explorer",
         title: "",
         authorName: "",
         publicSummary: "",
@@ -77,8 +84,10 @@ function emptyArticle(): StudioArticle {
         seoTitle: "",
         seoDescription: "",
         aeoSummary: "",
+        publishAt: "",
         updatedAt: new Date().toISOString(),
         sourceDocuments: [],
+        mediaAssets: [],
     };
 }
 
@@ -141,21 +150,6 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
             router.refresh();
         } catch (error) {
             setSaveStatus(error instanceof Error ? error.message : "Draft could not be saved.");
-        } finally {
-            setIsSaving(false);
-        }
-    }
-
-    async function publishStory(formData: FormData) {
-        setIsSaving(true);
-        setSaveStatus("Publishing...");
-        try {
-            await publishArticle(formData);
-            setDraft((current) => ({ ...current, status: "published" }));
-            setSaveStatus("Story published.");
-            router.refresh();
-        } catch (error) {
-            setSaveStatus(error instanceof Error ? error.message : "Story could not be published.");
         } finally {
             setIsSaving(false);
         }
@@ -257,15 +251,12 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                         <h1 className="mt-1 font-serif text-2xl uppercase text-white">Editorial studio</h1>
                     </div>
                     <div className="flex items-center gap-3">
+                        <a href="/studio/dashboard" className="border border-potomac-regolith/35 px-4 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-cream hover:border-potomac-gold">Article dashboard</a>
                         <a href="/" target="_blank" className="border border-potomac-regolith/35 px-4 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-cream hover:border-potomac-gold">View site</a>
                         {saveStatus ? <p role="status" className="font-mono text-[0.62rem] uppercase text-potomac-regolith">{saveStatus}</p> : null}
                         <button disabled={isSaving} type="submit" form={formId} className="bg-potomac-gold px-5 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-primary disabled:cursor-wait disabled:opacity-55">Save draft</button>
-                        {draft.id !== "new" && draft.status !== "published" ? (
-                            <form action={publishStory}>
-                                <input type="hidden" name="studio_context" value="studio" />
-                                <input type="hidden" name="article_id" value={draft.id} />
-                                <button disabled={isSaving} className="border border-potomac-gold px-5 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-gold disabled:cursor-wait disabled:opacity-55">Publish</button>
-                            </form>
+                        {draft.id !== "new" ? (
+                            <a href={`/studio/preview/${draft.id}`} className="border border-potomac-gold px-5 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">Preview to publish</a>
                         ) : null}
                     </div>
                 </div>
@@ -392,6 +383,56 @@ export function EditorialStudio({ articles }: { articles: StudioArticle[] }) {
                                     </div>
                                 ) : null}
                             </section>
+
+                            <section className="border-y border-potomac-regolith/20 py-6">
+                                <div className="grid gap-5 md:grid-cols-2">
+                                    <label className={`${labelClass} md:col-span-2`}>
+                                        Story images and video
+                                        <input
+                                            name="story_media"
+                                            type="file"
+                                            multiple
+                                            accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
+                                            className={inputClass}
+                                        />
+                                        <span className="mt-2 block text-[0.58rem] text-potomac-regolith">JPG, PNG, WebP, GIF, MP4, or WebM. 50 MB maximum per file.</span>
+                                    </label>
+                                    <label className={labelClass}>
+                                        Media description
+                                        <input name="media_alt_text" className={inputClass} placeholder="Describe the image for readers using assistive technology" />
+                                    </label>
+                                    <label className={labelClass}>
+                                        Media caption
+                                        <input name="media_caption" className={inputClass} placeholder="Optional caption or credit" />
+                                    </label>
+                                </div>
+                                {draft.mediaAssets.length ? (
+                                    <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-3">
+                                        {draft.mediaAssets.map((asset) => (
+                                            <figure key={asset.id} className="border border-potomac-regolith/25 p-2">
+                                                {asset.mediaType === "video" ? (
+                                                    <video src={asset.publicUrl} className="aspect-video w-full object-cover" controls preload="metadata" />
+                                                ) : (
+                                                    <img src={asset.publicUrl} alt={asset.altText} className="aspect-video w-full object-cover" />
+                                                )}
+                                                <figcaption className="mt-2 text-xs text-potomac-regolith">{asset.caption || asset.altText || "Story media"}</figcaption>
+                                            </figure>
+                                        ))}
+                                    </div>
+                                ) : null}
+                            </section>
+
+                            <label className={labelClass}>
+                                Intended publishing date and time
+                                <input
+                                    name="scheduled_for"
+                                    type="datetime-local"
+                                    value={draft.publishAt}
+                                    onChange={(event) => updateDraft("publishAt", event.target.value)}
+                                    className={inputClass}
+                                />
+                                <span className="mt-2 block text-[0.58rem] text-potomac-regolith">Scheduling is confirmed from the device preview after this draft is saved.</span>
+                            </label>
 
                             <section>
                                 <div className="flex items-center justify-between gap-4">

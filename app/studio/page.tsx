@@ -22,15 +22,30 @@ type ArticleRow = {
     seo_title: string | null;
     seo_description: string | null;
     aeo_summary: string | null;
+    scheduled_for: string | null;
+    published_at: string | null;
     updated_at: string;
 };
 
-export default async function StudioPage() {
+function localDateTime(value: string | null) {
+    if (!value) return "";
+    const date = new Date(value);
+    const offset = date.getTimezoneOffset() * 60_000;
+    return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+}
+
+export default async function StudioPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ article?: string }>;
+}) {
+    const { article: selectedArticleId } = await searchParams;
     const { supabase } = await requireEditorialStaff("/studio");
     const { data: articleRows, error: articleError } = await supabase
         .from("editorial_articles")
-        .select("id,slug,status,access_tier_required,title,primary_author_id,public_summary,public_teaser_markdown,intro_markdown,seo_title,seo_description,aeo_summary,updated_at")
-        .order("updated_at", { ascending: false });
+        .select("id,slug,status,access_tier_required,title,primary_author_id,public_summary,public_teaser_markdown,intro_markdown,seo_title,seo_description,aeo_summary,scheduled_for,published_at,updated_at")
+        .order("updated_at", { ascending: false })
+        .limit(100);
 
     if (articleError) throw new Error(articleError.message);
 
@@ -39,19 +54,21 @@ export default async function StudioPage() {
     const authorIds = Array.from(
         new Set(rows.map((row) => row.primary_author_id).filter((id): id is string => Boolean(id)))
     );
-    const [bodiesResult, documentsResult, authorsResult] = ids.length
+    const [bodiesResult, documentsResult, authorsResult, mediaResult] = ids.length
         ? await Promise.all([
             supabase.from("editorial_article_bodies").select("article_id,body_markdown,body_excerpt").in("article_id", ids),
             supabase.from("editorial_source_documents").select("id,article_id,original_file_name,size_bytes,created_at").in("article_id", ids).order("created_at", { ascending: false }),
             authorIds.length
                 ? supabase.from("editorial_authors").select("id,display_name").in("id", authorIds)
                 : Promise.resolve({ data: [], error: null }),
+            supabase.from("editorial_media_assets").select("id,article_id,public_url,media_type,alt_text,caption").in("article_id", ids).order("sort_order"),
         ])
-        : [{ data: [], error: null }, { data: [], error: null }, { data: [], error: null }];
+        : [{ data: [], error: null }, { data: [], error: null }, { data: [], error: null }, { data: [], error: null }];
 
     if (bodiesResult.error) throw new Error(bodiesResult.error.message);
     if (documentsResult.error) throw new Error(documentsResult.error.message);
     if (authorsResult.error) throw new Error(authorsResult.error.message);
+    if (mediaResult.error) throw new Error(mediaResult.error.message);
 
     const bodyByArticle = new Map(
         (bodiesResult.data ?? []).map((body) => [body.article_id, body])
@@ -60,6 +77,7 @@ export default async function StudioPage() {
         (authorsResult.data ?? []).map((author) => [author.id, author.display_name])
     );
     const documentsByArticle = new Map<string, StudioArticle["sourceDocuments"]>();
+    const mediaByArticle = new Map<string, StudioArticle["mediaAssets"]>();
     for (const document of documentsResult.data ?? []) {
         const list = documentsByArticle.get(document.article_id) ?? [];
         list.push({
@@ -69,6 +87,17 @@ export default async function StudioPage() {
             createdAt: document.created_at,
         });
         documentsByArticle.set(document.article_id, list);
+    }
+    for (const asset of mediaResult.data ?? []) {
+        const list = mediaByArticle.get(asset.article_id) ?? [];
+        list.push({
+            id: asset.id,
+            publicUrl: asset.public_url,
+            mediaType: asset.media_type,
+            altText: asset.alt_text ?? "",
+            caption: asset.caption ?? "",
+        });
+        mediaByArticle.set(asset.article_id, list);
     }
 
     const articles: StudioArticle[] = rows.map((row) => {
@@ -90,10 +119,18 @@ export default async function StudioPage() {
             seoTitle: row.seo_title ?? "",
             seoDescription: row.seo_description ?? "",
             aeoSummary: row.aeo_summary ?? "",
+            publishAt: localDateTime(row.scheduled_for ?? row.published_at),
             updatedAt: row.updated_at,
             sourceDocuments: documentsByArticle.get(row.id) ?? [],
+            mediaAssets: mediaByArticle.get(row.id) ?? [],
         };
     });
+
+    if (selectedArticleId) {
+        articles.sort((left, right) =>
+            left.id === selectedArticleId ? -1 : right.id === selectedArticleId ? 1 : 0
+        );
+    }
 
     return <EditorialStudio articles={articles} />;
 }

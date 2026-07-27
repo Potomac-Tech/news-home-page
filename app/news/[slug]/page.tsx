@@ -70,6 +70,13 @@ type LoadedArticle = {
     article: ArticleRecord;
     fullBody: string | null;
     access: ArticleAccessContext;
+    mediaAssets: Array<{
+        id: string;
+        publicUrl: string;
+        mediaType: "image" | "video";
+        altText: string;
+        caption: string | null;
+    }>;
 };
 
 const displayDateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -130,13 +137,14 @@ function mapCitation(row: EditorialCitationRow): ArticleCitation {
 function mapArticle(
     row: EditorialArticleRow,
     citations: ArticleCitation[],
-    authorName: string | null
+    author: { display_name?: string; slug?: string } | null
 ): ArticleRecord {
     return {
         id: row.id,
         slug: row.slug,
         title: row.title,
-        authorName: authorName ?? "Cabeus Explorer Editorial Desk",
+        authorName: author?.display_name ?? "Cabeus Explorer Editorial Desk",
+        authorSlug: author?.slug,
         dek: row.dek ?? row.public_summary ?? "Cabeus Explorer intelligence brief.",
         summary: row.public_summary ?? row.dek ?? "Cabeus Explorer intelligence brief.",
         keyPoints: parseKeyPoints(row.public_key_points),
@@ -187,7 +195,7 @@ async function getPublishedCmsArticle(slug: string) {
         articleRow.primary_author_id
             ? supabase
                 .from("editorial_authors")
-                .select("display_name")
+                .select("display_name,slug")
                 .eq("id", articleRow.primary_author_id)
                 .maybeSingle()
             : Promise.resolve({ data: null, error: null }),
@@ -208,7 +216,7 @@ async function getPublishedCmsArticle(slug: string) {
         article: mapArticle(
             articleRow,
             citations,
-            (authorResult.data as { display_name?: string } | null)?.display_name ?? null
+            authorResult.data as { display_name?: string; slug?: string } | null
         ),
         supabase,
     };
@@ -246,6 +254,7 @@ async function loadArticle(slug: string): Promise<LoadedArticle | null> {
                 ...anonymousAccess,
                 loginHref: `/auth/login?next=${encodeURIComponent(`/news/${slug}`)}`,
             },
+            mediaAssets: [],
         };
     }
 
@@ -269,10 +278,26 @@ async function loadArticle(slug: string): Promise<LoadedArticle | null> {
               ? article.fallbackBody ?? null
               : null;
 
+    const { data: mediaRows, error: mediaError } = article.id
+        ? await supabase
+            .from("editorial_media_assets")
+            .select("id,public_url,media_type,alt_text,caption")
+            .eq("article_id", article.id)
+            .order("sort_order")
+        : { data: [], error: null };
+    if (mediaError) throw new Error(mediaError.message);
+
     return {
         article,
         fullBody,
         access,
+        mediaAssets: (mediaRows ?? []).map((asset) => ({
+            id: asset.id,
+            publicUrl: asset.public_url,
+            mediaType: asset.media_type as "image" | "video",
+            altText: asset.alt_text ?? "",
+            caption: asset.caption,
+        })),
     };
 }
 
@@ -388,7 +413,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         notFound();
     }
 
-    const { article, fullBody, access } = loaded;
+    const { article, fullBody, access, mediaAssets } = loaded;
     const articleSponsorUnit = sponsorUnits.get(
         sponsorPlacementKeys.articleSidebar
     )!;
@@ -446,7 +471,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             {article.dek}
                         </p>
                         <div className="mt-6 flex flex-wrap gap-3 text-xs font-bold uppercase tracking-[0.14em] text-potomac-cream/50">
-                            <span>By {article.authorName ?? "Cabeus Explorer Editorial Desk"}</span>
+                            {article.authorSlug ? (
+                                <Link href={`/authors/${article.authorSlug}`}>By {article.authorName}</Link>
+                            ) : (
+                                <span>By {article.authorName ?? "Cabeus Explorer Editorial Desk"}</span>
+                            )}
                             <time dateTime={article.publishedAt}>
                                 {formatDate(article.publishedAt)}
                             </time>
@@ -520,6 +549,20 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     ) : (
                         <GatePanel access={access} tier={article.accessTier} slug={article.slug} />
                     )}
+                    {mediaAssets.length ? (
+                        <section className="space-y-5">
+                            {mediaAssets.map((asset) => (
+                                <figure key={asset.id} className="glass-card rounded p-4">
+                                    {asset.mediaType === "video" ? (
+                                        <video src={asset.publicUrl} controls preload="metadata" className="w-full rounded" />
+                                    ) : (
+                                        <img src={asset.publicUrl} alt={asset.altText} className="w-full rounded object-cover" />
+                                    )}
+                                    {asset.caption ? <figcaption className="mt-3 text-sm text-potomac-cream/60">{asset.caption}</figcaption> : null}
+                                </figure>
+                            ))}
+                        </section>
+                    ) : null}
                 </main>
 
                 <aside className="space-y-6">
