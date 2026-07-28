@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { editorialSections } from "../../lib/editorial/section-tags";
 import {
     createArticleDraft,
     removeArticleMedia,
@@ -26,6 +27,7 @@ export type StudioArticle = {
     aeoSummary: string;
     publishAt: string;
     updatedAt: string;
+    sectionTags: string[];
     sourceDocuments: Array<{
         id: string;
         fileName: string;
@@ -105,6 +107,7 @@ function emptyArticle(): StudioArticle {
         aeoSummary: "",
         publishAt: "",
         updatedAt: "",
+        sectionTags: ["news"],
         sourceDocuments: [],
         mediaAssets: [],
     };
@@ -348,6 +351,18 @@ export function EditorialStudio({
         setDraft((current) => ({ ...current, [field]: value }));
     }
 
+    function toggleSectionTag(slug: string) {
+        setDraft((current) => {
+            const selected = current.sectionTags.includes(slug)
+                ? current.sectionTags.filter((tag) => tag !== slug)
+                : [...current.sectionTags, slug];
+            return {
+                ...current,
+                sectionTags: selected.length ? selected : ["news"],
+            };
+        });
+    }
+
     async function importWordDocument(file: File) {
         if (!file.name.toLowerCase().endsWith(".docx")) {
             setImportStatus("Select a .docx Word document.");
@@ -526,6 +541,30 @@ export function EditorialStudio({
                                 </select>
                             </label>
                         </div>
+
+                        <fieldset className="mt-5 border-b border-potomac-regolith/25 pb-5">
+                            <legend className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">
+                                Article sections
+                            </legend>
+                            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-3">
+                                {editorialSections.map((section) => (
+                                    <label
+                                        key={section.slug}
+                                        className="flex items-center gap-2 text-sm text-white"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            name="section_tags"
+                                            value={section.slug}
+                                            checked={draft.sectionTags.includes(section.slug)}
+                                            onChange={() => toggleSectionTag(section.slug)}
+                                            className="h-4 w-4 accent-potomac-gold"
+                                        />
+                                        {section.label}
+                                    </label>
+                                ))}
+                            </div>
+                        </fieldset>
 
                         <div className="mt-6 flex flex-col">
                             <label className="order-1 block">

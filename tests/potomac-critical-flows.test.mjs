@@ -1306,7 +1306,7 @@ test("homepage carousel inventory is audited, gated, ranked, and auto-filled fro
         '.eq("status", "published")',
         '.gt("expires_at", now)',
         'id: `auto:${String(article.id)}`',
-        "Latest published CMS story auto-selection.",
+        "Editor-assigned CMS carousel position.",
         'ctaLabel: "Full story"',
         ".slice(0, 5)",
     ], "carousel selection contract");

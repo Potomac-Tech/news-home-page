@@ -11,6 +11,10 @@ import {
     storeMediaAssets,
 } from "../../../lib/editorial/media-assets";
 import { sanitizeArticleHtml } from "../../../lib/editorial/rich-text";
+import {
+    sectionTagsFrom,
+    syncArticleSectionTags,
+} from "../../../lib/editorial/section-tags";
 
 type EditorialSupabaseClient = Awaited<
     ReturnType<typeof requireEditorialStaff>
@@ -202,6 +206,7 @@ export async function createArticleDraft(formData: FormData) {
     );
     const sourceDocument = sourceDocumentFrom(formData);
     const mediaFiles = mediaFilesFrom(formData);
+    const sectionTags = sectionTagsFrom(formData);
     const primaryAuthorId = await resolvePrimaryAuthorId(supabase, formData);
 
     const { data: article, error: articleError } = await supabase
@@ -245,6 +250,12 @@ export async function createArticleDraft(formData: FormData) {
     if (bodyError) {
         throw new Error(bodyError.message);
     }
+
+    await syncArticleSectionTags({
+        supabase,
+        articleId: article.id,
+        sectionSlugs: sectionTags,
+    });
 
     if (sourceDocument) {
         await storeSourceDocument({
@@ -291,6 +302,9 @@ export async function updateArticleDraft(formData: FormData) {
     );
     const sourceDocument = sourceDocumentFrom(formData);
     const mediaFiles = mediaFilesFrom(formData);
+    const sectionTags = formData.has("section_tags")
+        ? sectionTagsFrom(formData)
+        : null;
     const primaryAuthorId = await resolvePrimaryAuthorId(supabase, formData);
     const articleUpdates: Record<string, string | null> = {
         slug: getRequiredString(formData, "slug"),
@@ -339,6 +353,14 @@ export async function updateArticleDraft(formData: FormData) {
 
     if (bodyError) {
         throw new Error(bodyError.message);
+    }
+
+    if (sectionTags) {
+        await syncArticleSectionTags({
+            supabase,
+            articleId: article.id,
+            sectionSlugs: sectionTags,
+        });
     }
 
     if (sourceDocument) {

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { requireEditorialStaff } from "../../../lib/auth/editorial";
+import { editorialSections } from "../../../lib/editorial/section-tags";
+import { updateCarouselPosition } from "./actions";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Article dashboard", robots: { index: false, follow: false } };
@@ -21,7 +23,7 @@ export default async function ArticleDashboard({
 
     let articleQuery = supabase
         .from("editorial_articles")
-        .select("id,title,slug,status,primary_author_id,scheduled_for,published_at,updated_at", { count: "exact" })
+        .select("id,title,slug,status,primary_author_id,scheduled_for,published_at,updated_at,carousel_position", { count: "exact" })
         .order("updated_at", { ascending: false })
         .range((page - 1) * pageSize, page * pageSize - 1);
     if (activeStatus !== "all") articleQuery = articleQuery.eq("status", activeStatus);
@@ -37,12 +39,39 @@ export default async function ArticleDashboard({
     if (articlesResult.error) throw new Error(articlesResult.error.message);
 
     const rows = articlesResult.data ?? [];
+    const articleIds = rows.map((row) => row.id);
     const authorIds = Array.from(new Set(rows.map((row) => row.primary_author_id).filter(Boolean))) as string[];
-    const { data: authors, error: authorError } = authorIds.length
-        ? await supabase.from("editorial_authors").select("id,display_name").in("id", authorIds)
-        : { data: [], error: null };
-    if (authorError) throw new Error(authorError.message);
+    const [authorsResult, articleTagsResult, sectionTagsResult] = await Promise.all([
+        authorIds.length
+            ? supabase.from("editorial_authors").select("id,display_name").in("id", authorIds)
+            : Promise.resolve({ data: [], error: null }),
+        articleIds.length
+            ? supabase.from("editorial_article_tags").select("article_id,tag_id").in("article_id", articleIds)
+            : Promise.resolve({ data: [], error: null }),
+        supabase.from("editorial_tags").select("id,slug").in(
+            "slug",
+            editorialSections.map((section) => section.slug)
+        ),
+    ]);
+    if (authorsResult.error) throw new Error(authorsResult.error.message);
+    if (articleTagsResult.error) throw new Error(articleTagsResult.error.message);
+    if (sectionTagsResult.error) throw new Error(sectionTagsResult.error.message);
+    const authors = authorsResult.data ?? [];
     const authorById = new Map((authors ?? []).map((author) => [author.id, author.display_name]));
+    const sectionById = new Map(
+        (sectionTagsResult.data ?? []).map((tag) => [tag.id, tag.slug])
+    );
+    const sectionsByArticle = new Map<string, string[]>();
+    for (const articleTag of articleTagsResult.data ?? []) {
+        const slug = sectionById.get(articleTag.tag_id);
+        if (!slug) continue;
+        const sections = sectionsByArticle.get(articleTag.article_id) ?? [];
+        sections.push(slug);
+        sectionsByArticle.set(articleTag.article_id, sections);
+    }
+    const sectionLabelBySlug = new Map<string, string>(
+        editorialSections.map((section) => [section.slug, section.label])
+    );
     const counts = new Map(countResults);
     const totalPages = Math.max(1, Math.ceil((articlesResult.count ?? 0) / pageSize));
 
@@ -76,9 +105,9 @@ export default async function ArticleDashboard({
                 </form>
 
                 <div className="mt-6 overflow-x-auto border border-potomac-regolith/25">
-                    <table className="w-full min-w-[58rem] border-collapse text-left">
+                    <table className="w-full min-w-[76rem] border-collapse text-left">
                         <thead className="bg-black/30 font-mono text-[0.68rem] uppercase text-potomac-gold">
-                            <tr><th className="p-4">Headline</th><th className="p-4">Author</th><th className="p-4">Status</th><th className="p-4">Publishing date</th><th className="p-4">Updated</th><th className="p-4">Actions</th></tr>
+                            <tr><th className="p-4">Headline</th><th className="p-4">Author</th><th className="p-4">Sections</th><th className="p-4">Status</th><th className="p-4">Publishing date</th><th className="p-4">Carousel</th><th className="p-4">Updated</th><th className="p-4">Actions</th></tr>
                         </thead>
                         <tbody>
                             {rows.map((article) => {
@@ -87,8 +116,32 @@ export default async function ArticleDashboard({
                                     <tr key={article.id} className="border-t border-potomac-regolith/20">
                                         <td className="p-4"><strong className="block text-white">{article.title}</strong><span className="mt-1 block font-mono text-xs text-potomac-regolith">/news/{article.slug}</span></td>
                                         <td className="p-4 text-sm">{article.primary_author_id ? authorById.get(article.primary_author_id) ?? "Unknown" : "Byline not set"}</td>
+                                        <td className="p-4 text-sm">
+                                            {(sectionsByArticle.get(article.id) ?? ["news"])
+                                                .map((slug) => sectionLabelBySlug.get(slug) ?? slug)
+                                                .join(", ")}
+                                        </td>
                                         <td className="p-4 font-mono text-xs uppercase text-potomac-gold">{article.status}</td>
                                         <td className="p-4 text-sm">{publishDate ? new Date(publishDate).toLocaleString() : "Not set"}</td>
+                                        <td className="p-4">
+                                            <form action={updateCarouselPosition} className="flex items-center gap-2">
+                                                <input type="hidden" name="article_id" value={article.id} />
+                                                <select
+                                                    name="carousel_position"
+                                                    defaultValue={article.carousel_position ?? ""}
+                                                    aria-label={`Carousel position for ${article.title}`}
+                                                    className="border border-potomac-regolith/30 bg-potomac-primary px-2 py-2 text-sm text-white"
+                                                >
+                                                    <option value="">N/A</option>
+                                                    {[1, 2, 3, 4, 5].map((position) => (
+                                                        <option key={position} value={position}>{position}</option>
+                                                    ))}
+                                                </select>
+                                                <button className="border border-potomac-gold px-3 py-2 font-mono text-[0.6rem] font-bold uppercase text-potomac-gold">
+                                                    Save
+                                                </button>
+                                            </form>
+                                        </td>
                                         <td className="p-4 text-sm">{new Date(article.updated_at).toLocaleString()}</td>
                                         <td className="p-4"><div className="flex gap-3"><Link href={`/studio?article=${article.id}`} className="font-mono text-xs font-bold uppercase text-potomac-cream">Edit</Link><Link href={`/studio/preview/${article.id}`} className="font-mono text-xs font-bold uppercase text-potomac-gold">Preview</Link></div></td>
                                     </tr>

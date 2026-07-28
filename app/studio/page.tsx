@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { requireEditorialStaff } from "../../lib/auth/editorial";
+import { editorialSections } from "../../lib/editorial/section-tags";
 import { EditorialStudio, type StudioArticle } from "./EditorialStudio";
 
 export const dynamic = "force-dynamic";
@@ -63,7 +64,14 @@ export default async function StudioPage({
     const authorIds = Array.from(
         new Set(rows.map((row) => row.primary_author_id).filter((id): id is string => Boolean(id)))
     );
-    const [bodiesResult, documentsResult, authorsResult, mediaResult] = ids.length
+    const [
+        bodiesResult,
+        documentsResult,
+        authorsResult,
+        mediaResult,
+        articleTagsResult,
+        sectionTagsResult,
+    ] = ids.length
         ? await Promise.all([
             supabase.from("editorial_article_bodies").select("article_id,body_markdown,body_excerpt").in("article_id", ids),
             supabase.from("editorial_source_documents").select("id,article_id,original_file_name,size_bytes,created_at").in("article_id", ids).order("created_at", { ascending: false }),
@@ -71,13 +79,27 @@ export default async function StudioPage({
                 ? supabase.from("editorial_authors").select("id,display_name").in("id", authorIds)
                 : Promise.resolve({ data: [], error: null }),
             supabase.from("editorial_media_assets").select("id,article_id,public_url,media_type,alt_text,caption").in("article_id", ids).order("sort_order"),
+            supabase.from("editorial_article_tags").select("article_id,tag_id").in("article_id", ids),
+            supabase.from("editorial_tags").select("id,slug").in(
+                "slug",
+                editorialSections.map((section) => section.slug)
+            ),
         ])
-        : [{ data: [], error: null }, { data: [], error: null }, { data: [], error: null }, { data: [], error: null }];
+        : [
+            { data: [], error: null },
+            { data: [], error: null },
+            { data: [], error: null },
+            { data: [], error: null },
+            { data: [], error: null },
+            { data: [], error: null },
+        ];
 
     if (bodiesResult.error) throw new Error(bodiesResult.error.message);
     if (documentsResult.error) throw new Error(documentsResult.error.message);
     if (authorsResult.error) throw new Error(authorsResult.error.message);
     if (mediaResult.error) throw new Error(mediaResult.error.message);
+    if (articleTagsResult.error) throw new Error(articleTagsResult.error.message);
+    if (sectionTagsResult.error) throw new Error(sectionTagsResult.error.message);
 
     const bodyByArticle = new Map(
         (bodiesResult.data ?? []).map((body) => [body.article_id, body])
@@ -87,6 +109,17 @@ export default async function StudioPage({
     );
     const documentsByArticle = new Map<string, StudioArticle["sourceDocuments"]>();
     const mediaByArticle = new Map<string, StudioArticle["mediaAssets"]>();
+    const sectionSlugById = new Map(
+        (sectionTagsResult.data ?? []).map((tag) => [tag.id, tag.slug])
+    );
+    const sectionsByArticle = new Map<string, string[]>();
+    for (const articleTag of articleTagsResult.data ?? []) {
+        const slug = sectionSlugById.get(articleTag.tag_id);
+        if (!slug) continue;
+        const sections = sectionsByArticle.get(articleTag.article_id) ?? [];
+        sections.push(slug);
+        sectionsByArticle.set(articleTag.article_id, sections);
+    }
     for (const document of documentsResult.data ?? []) {
         const list = documentsByArticle.get(document.article_id) ?? [];
         list.push({
@@ -130,6 +163,7 @@ export default async function StudioPage({
             aeoSummary: row.aeo_summary ?? "",
             publishAt: localDateTime(row.scheduled_for ?? row.published_at),
             updatedAt: row.updated_at,
+            sectionTags: sectionsByArticle.get(row.id) ?? ["news"],
             sourceDocuments: documentsByArticle.get(row.id) ?? [],
             mediaAssets: mediaByArticle.get(row.id) ?? [],
         };

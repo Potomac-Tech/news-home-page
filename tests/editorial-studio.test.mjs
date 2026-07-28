@@ -14,6 +14,11 @@ const previewRender = readFileSync("app/studio/preview/[id]/render/page.tsx", "u
 const previewActions = readFileSync("app/studio/preview/[id]/PreviewActions.tsx", "utf8");
 const devicePreview = readFileSync("app/studio/preview/[id]/DevicePreview.tsx", "utf8");
 const dashboard = readFileSync("app/studio/dashboard/page.tsx", "utf8");
+const dashboardActions = readFileSync("app/studio/dashboard/actions.ts", "utf8");
+const sectionTags = readFileSync("lib/editorial/section-tags.ts", "utf8");
+const sectionMigration = readFileSync("supabase/migrations/20260728135218_editorial_sections_and_carousel_positions.sql", "utf8");
+const newsPage = readFileSync("app/news/page.tsx", "utf8");
+const carouselLoader = readFileSync("app/_data/homepageCarousel.ts", "utf8");
 const authorPage = readFileSync("app/authors/[slug]/page.tsx", "utf8");
 const articlePage = readFileSync("app/news/[slug]/page.tsx", "utf8");
 const richText = readFileSync("lib/editorial/rich-text.ts", "utf8");
@@ -132,6 +137,30 @@ test("editorial media, scalable dashboard, and author pages are wired", () => {
     assert.match(dashboard, /scheduled_for/);
     assert.match(authorPage, /primary_author_id/);
     assert.match(authorPage, /Articles by/);
+});
+
+test("article sections and carousel positions are editor controlled", () => {
+    for (const slug of [
+        "news",
+        "space-investment-forum",
+        "space-industrialist-week",
+        "cabeus-games",
+    ]) {
+        assert.match(sectionTags, new RegExp(slug));
+        assert.match(sectionMigration, new RegExp(slug));
+    }
+    assert.match(studioUi, /name="section_tags"/);
+    assert.match(actions, /syncArticleSectionTags/);
+    assert.match(studioPage, /editorial_article_tags/);
+    assert.match(newsPage, /editorial_article_tags/);
+    assert.match(newsPage, /section=\$\{item\.slug\}/);
+    assert.match(sectionMigration, /carousel_position between 1 and 5/);
+    assert.match(sectionMigration, /set_editorial_article_carousel_position/);
+    assert.match(dashboard, /Carousel position for/);
+    assert.match(dashboard, /<option value="">N\/A<\/option>/);
+    assert.match(dashboardActions, /updateCarouselPosition/);
+    assert.match(carouselLoader, /\.not\("carousel_position", "is", null\)/);
+    assert.match(carouselLoader, /displayRank: Number\(article\.carousel_position\)/);
 });
 
 test("studio preserves headline case and separates story paragraphs", () => {

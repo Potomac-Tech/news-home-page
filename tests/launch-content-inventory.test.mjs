@@ -19,7 +19,10 @@ test("production content loaders do not substitute local launch content", async 
     assert.match(homepage, /allowLocalContentFallbacks\(\) \? fallbackStories : \[\]/);
     assert.match(events, /allowLocalContentFallbacks\(\) \? publicEventTeasers\(\) : \[\]/);
     assert.match(datasets, /allowLocalContentFallbacks\(\)[\s\S]*fallbackDatasetCatalogEntries[\s\S]*: \[\]/);
-    assert.match(news, /allowLocalContentFallbacks\(\) \? fallbackTeasers : \[\]/);
+    assert.match(
+        news,
+        /sectionSlug === "news" && allowLocalContentFallbacks\(\)[\s\S]*\? fallbackTeasers[\s\S]*: \[\]/
+    );
     assert.match(article, /allowLocalContentFallbacks\(\)[\s\S]*findFallbackArticle/);
 });
 

@@ -17,9 +17,9 @@ const primaryNavItems: Array<{
     label: string;
 }> = [
     { href: "/news", label: "News" },
-    { href: "/events#potomac-space-investment-forum-2026", label: "Space Investment Forum" },
-    { href: "/events#space-industrialist-week-2026", label: "Space Industrialist Week" },
-    { href: "/events#cabeus-games", label: "Cabeus Games" },
+    { href: "/news?section=space-investment-forum", label: "Space Investment Forum" },
+    { href: "/news?section=space-industrialist-week", label: "Space Industrialist Week" },
+    { href: "/news?section=cabeus-games", label: "Cabeus Games" },
     { href: "/terminal", label: "Terminal" },
 ];
 

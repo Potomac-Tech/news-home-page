@@ -141,17 +141,18 @@ export async function loadHomepageCarousel(
     const articleIds = new Set(manual.flatMap((slide) => slide.articleId ?? []));
     const { data: articles, error: articleError } = await supabase
         .from("editorial_articles")
-        .select("id,slug,title,public_summary,hero_image_url,hero_image_alt,published_at")
+        .select("id,slug,title,public_summary,hero_image_url,hero_image_alt,published_at,carousel_position")
         .eq("status", "published")
         .not("primary_author_id", "is", null)
-        .order("published_at", { ascending: false })
-        .limit(10);
+        .not("carousel_position", "is", null)
+        .order("carousel_position", { ascending: true })
+        .limit(5);
     if (articleError) throw new Error(articleError.message);
 
     const auto = ((articles ?? []) as Array<Record<string, unknown>>)
         .filter((article) => !articleIds.has(String(article.id)))
         .slice(0, 5)
-        .map((article, index): HomepageCarouselSlide => ({
+        .map((article): HomepageCarouselSlide => ({
             id: `auto:${String(article.id)}`,
             articleId: String(article.id),
             slideType: "anonymous_teaser",
@@ -167,9 +168,9 @@ export async function loadHomepageCarousel(
             ctaRoute: `/news/${String(article.slug)}`,
             minimumTier: "public",
             isRequired: false,
-            isPinned: false,
-            displayRank: 900 + index,
-            sourceNote: "Latest published CMS story auto-selection.",
+            isPinned: true,
+            displayRank: Number(article.carousel_position),
+            sourceNote: "Editor-assigned CMS carousel position.",
             freshnessAt: String(article.published_at),
             expiresAt: new Date(Date.now() + 14 * 86_400_000).toISOString(),
         }));
@@ -187,5 +188,10 @@ export async function loadHomepageCarousel(
             displayRank: card.display_rank, sourceNote: card.reason_text, freshnessAt: card.generated_at, expiresAt: card.expires_at,
         }));
     }
-    return resolveCarouselSlides({ inventory: [...manual, ...auto], customCards, viewer });
+    const positionedRanks = new Set(auto.map((slide) => slide.displayRank));
+    const inventory = [
+        ...manual.filter((slide) => !positionedRanks.has(slide.displayRank)),
+        ...auto,
+    ].sort((left, right) => left.displayRank - right.displayRank);
+    return resolveCarouselSlides({ inventory, customCards, viewer });
 }
