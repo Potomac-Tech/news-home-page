@@ -17,6 +17,7 @@ const dashboard = readFileSync("app/studio/dashboard/page.tsx", "utf8");
 const authorPage = readFileSync("app/authors/[slug]/page.tsx", "utf8");
 const articlePage = readFileSync("app/news/[slug]/page.tsx", "utf8");
 const richText = readFileSync("lib/editorial/rich-text.ts", "utf8");
+const nextConfig = readFileSync("next.config.mjs", "utf8");
 
 test("editorial studio uses the existing editor and admin authorization boundary", () => {
     assert.match(studioPage, /requireEditorialStaff\("\/studio"\)/);
@@ -88,6 +89,9 @@ test("preview approval gates immediate and scheduled publication", () => {
     }
     assert.match(workflowMigration, /publish_due_editorial_articles/);
     assert.match(workflowMigration, /\*\/5 \* \* \* \*/);
+    assert.match(nextConfig, /frame-ancestors 'self'/);
+    assert.doesNotMatch(nextConfig, /frame-ancestors 'none'/);
+    assert.match(nextConfig, /X-Frame-Options[\s\S]*SAMEORIGIN/);
 });
 
 test("unnamed editorial-desk stories cannot reach public news surfaces", () => {

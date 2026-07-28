@@ -41,7 +41,7 @@ const nextConfig = {
                 value: [
                     "default-src 'self'",
                     "base-uri 'self'",
-                    "frame-ancestors 'none'",
+                    "frame-ancestors 'self'",
                     "object-src 'none'",
                     "img-src 'self' data: https:",
                     "media-src 'self' https://*.supabase.co",
