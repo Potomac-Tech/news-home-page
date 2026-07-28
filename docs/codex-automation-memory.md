@@ -133,6 +133,11 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 
 ## Automation Run Log
 
+### 2026-07-27 20:14 EDT - Approval wait unchanged
+
+- Task 121 remains blocked on the release-owner Resend runbook review and named technical release approval.
+- Slack sync again returned `INVALID_ARGUMENT` for `C0BK24FALJH`; no messages, tasks, or replies were created, and the actionable-parent marker remains `1784822231.883139`.
+
 ### 2026-07-27 17:13 EDT - Task 121 approval wait and Slack sync blocked
 
 - Task 121 remains unchecked because the release-owner review of `docs/resend-free-operations.md` and a named technical release approval are still not recorded. No human approval was inferred.
