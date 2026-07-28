@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { requireEditorialStaff } from "../../../lib/auth/editorial";
 import {
-    createArticleDraft,
+    createArticleDraft as createArticleDraftWithResult,
     publishArticle,
-    updateArticleDraft,
+    updateArticleDraft as updateArticleDraftWithResult,
 } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +12,16 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
     title: "Editorial CMS",
 };
+
+async function createArticleDraft(formData: FormData) {
+    "use server";
+    await createArticleDraftWithResult(formData);
+}
+
+async function updateArticleDraft(formData: FormData) {
+    "use server";
+    await updateArticleDraftWithResult(formData);
+}
 
 type Article = {
     id: string;

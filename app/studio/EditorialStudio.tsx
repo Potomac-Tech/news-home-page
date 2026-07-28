@@ -6,6 +6,7 @@ import {
     createArticleDraft,
     removeArticleMedia,
     updateArticleDraft,
+    updateArticleMediaMetadata,
 } from "../admin/editorial/actions";
 
 export type StudioArticle = {
@@ -125,6 +126,74 @@ function formatFileSize(bytes: number) {
         : `${(bytes / 1_000_000).toFixed(1)} MB`;
 }
 
+function MediaAssetEditor({
+    asset,
+    disabled,
+    onSave,
+    onRemove,
+}: {
+    asset: StudioArticle["mediaAssets"][number];
+    disabled: boolean;
+    onSave: (assetId: string, altText: string, caption: string) => Promise<void>;
+    onRemove: (assetId: string) => Promise<void>;
+}) {
+    const [altText, setAltText] = useState(asset.altText);
+    const [caption, setCaption] = useState(asset.caption);
+
+    return (
+        <figure className="border border-potomac-regolith/25 p-2">
+            {asset.mediaType === "video" ? (
+                <video
+                    src={asset.publicUrl}
+                    className="aspect-video w-full object-cover"
+                    controls
+                    preload="metadata"
+                />
+            ) : (
+                <img
+                    src={asset.publicUrl}
+                    alt={altText}
+                    className="aspect-video w-full object-cover"
+                />
+            )}
+            <label className={`${labelClass} mt-3`}>
+                Media description
+                <input
+                    value={altText}
+                    onChange={(event) => setAltText(event.target.value)}
+                    className={inputClass}
+                    placeholder="Describe this media"
+                />
+            </label>
+            <label className={`${labelClass} mt-3`}>
+                Caption
+                <input
+                    value={caption}
+                    onChange={(event) => setCaption(event.target.value)}
+                    className={inputClass}
+                    placeholder="Optional caption or credit"
+                />
+            </label>
+            <button
+                type="button"
+                disabled={disabled}
+                onClick={() => void onSave(asset.id, altText, caption)}
+                className="mt-3 w-full border border-potomac-gold/55 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-potomac-gold hover:border-potomac-gold disabled:opacity-40"
+            >
+                Save media details
+            </button>
+            <button
+                type="button"
+                disabled={disabled}
+                onClick={() => void onRemove(asset.id)}
+                className="mt-2 w-full border border-red-300/45 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-red-200 hover:border-red-200 disabled:opacity-40"
+            >
+                Remove media
+            </button>
+        </figure>
+    );
+}
+
 export function EditorialStudio({
     articles,
     startNew = false,
@@ -146,6 +215,9 @@ export function EditorialStudio({
     const [importStatus, setImportStatus] = useState<string>("");
     const [saveStatus, setSaveStatus] = useState("");
     const [isSaving, setIsSaving] = useState(false);
+    const [mediaAltText, setMediaAltText] = useState("");
+    const [mediaCaption, setMediaCaption] = useState("");
+    const [selectedMediaNames, setSelectedMediaNames] = useState<string[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const mediaInputRef = useRef<HTMLInputElement>(null);
     const bodyRef = useRef<HTMLDivElement>(null);
@@ -165,6 +237,10 @@ export function EditorialStudio({
         if (bodyRef.current) bodyRef.current.innerHTML = nextBody;
         setImportStatus("");
         if (fileInputRef.current) fileInputRef.current.value = "";
+        if (mediaInputRef.current) mediaInputRef.current.value = "";
+        setMediaAltText("");
+        setMediaCaption("");
+        setSelectedMediaNames([]);
     }
 
     function startNewStory() {
@@ -175,17 +251,33 @@ export function EditorialStudio({
         if (bodyRef.current) bodyRef.current.innerHTML = "";
         setImportStatus("");
         if (fileInputRef.current) fileInputRef.current.value = "";
+        if (mediaInputRef.current) mediaInputRef.current.value = "";
+        setMediaAltText("");
+        setMediaCaption("");
+        setSelectedMediaNames([]);
     }
 
     async function saveStory(formData: FormData) {
         setIsSaving(true);
         setSaveStatus("Saving...");
         try {
-            const articleId = await action(formData);
-            setSelectedId(articleId);
-            setDraft((current) => ({ ...current, id: articleId }));
+            const result = await action(formData);
+            setSelectedId(result.articleId);
+            setDraft((current) => ({
+                ...current,
+                id: result.articleId,
+                mediaAssets: [...current.mediaAssets, ...result.uploadedMedia],
+            }));
             if (fileInputRef.current) fileInputRef.current.value = "";
-            setSaveStatus("Draft saved.");
+            if (mediaInputRef.current) mediaInputRef.current.value = "";
+            setMediaAltText("");
+            setMediaCaption("");
+            setSelectedMediaNames([]);
+            setSaveStatus(
+                result.uploadedMedia.length
+                    ? `Draft saved with ${result.uploadedMedia.length} new media file${result.uploadedMedia.length === 1 ? "" : "s"}.`
+                    : "Draft saved."
+            );
             router.refresh();
         } catch (error) {
             setSaveStatus(error instanceof Error ? error.message : "Draft could not be saved.");
@@ -212,6 +304,41 @@ export function EditorialStudio({
             router.refresh();
         } catch (error) {
             setSaveStatus(error instanceof Error ? error.message : "Media could not be removed.");
+        } finally {
+            setIsSaving(false);
+        }
+    }
+
+    async function saveMediaDetails(
+        assetId: string,
+        altText: string,
+        caption: string
+    ) {
+        if (draft.id === "new") return;
+        setIsSaving(true);
+        setSaveStatus("Saving media details...");
+        const formData = new FormData();
+        formData.set("studio_context", "studio");
+        formData.set("article_id", draft.id);
+        formData.set("asset_id", assetId);
+        formData.set("media_alt_text", altText);
+        formData.set("media_caption", caption);
+        try {
+            const savedAsset = await updateArticleMediaMetadata(formData);
+            setDraft((current) => ({
+                ...current,
+                mediaAssets: current.mediaAssets.map((asset) =>
+                    asset.id === assetId ? savedAsset : asset
+                ),
+            }));
+            setSaveStatus("Media description and caption saved.");
+            router.refresh();
+        } catch (error) {
+            setSaveStatus(
+                error instanceof Error
+                    ? error.message
+                    : "Media details could not be saved."
+            );
         } finally {
             setIsSaving(false);
         }
@@ -487,37 +614,52 @@ export function EditorialStudio({
                                             multiple
                                             accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
                                             className={inputClass}
+                                            onChange={(event) =>
+                                                setSelectedMediaNames(
+                                                    Array.from(event.target.files ?? []).map(
+                                                        (file) => file.name
+                                                    )
+                                                )
+                                            }
                                         />
                                         <span className="mt-2 block text-[0.58rem] text-potomac-regolith">JPG, PNG, WebP, GIF, MP4, or WebM. 50 MB maximum per file.</span>
+                                        {selectedMediaNames.length ? (
+                                            <span className="mt-2 block normal-case text-white">
+                                                Ready to upload: {selectedMediaNames.join(", ")}
+                                            </span>
+                                        ) : null}
                                     </label>
                                     <label className={labelClass}>
                                         Media description
-                                        <input name="media_alt_text" className={inputClass} placeholder="Describe the image for readers using assistive technology" />
+                                        <input
+                                            name="media_alt_text"
+                                            value={mediaAltText}
+                                            onChange={(event) => setMediaAltText(event.target.value)}
+                                            className={inputClass}
+                                            placeholder="Describe the image for readers using assistive technology"
+                                        />
                                     </label>
                                     <label className={labelClass}>
                                         Media caption
-                                        <input name="media_caption" className={inputClass} placeholder="Optional caption or credit" />
+                                        <input
+                                            name="media_caption"
+                                            value={mediaCaption}
+                                            onChange={(event) => setMediaCaption(event.target.value)}
+                                            className={inputClass}
+                                            placeholder="Optional caption or credit"
+                                        />
                                     </label>
                                 </div>
                                 {draft.mediaAssets.length ? (
                                     <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-3">
                                         {draft.mediaAssets.map((asset) => (
-                                            <figure key={asset.id} className="border border-potomac-regolith/25 p-2">
-                                                {asset.mediaType === "video" ? (
-                                                    <video src={asset.publicUrl} className="aspect-video w-full object-cover" controls preload="metadata" />
-                                                ) : (
-                                                    <img src={asset.publicUrl} alt={asset.altText} className="aspect-video w-full object-cover" />
-                                                )}
-                                                <figcaption className="mt-2 text-xs text-potomac-regolith">{asset.caption || asset.altText || "Story media"}</figcaption>
-                                                <button
-                                                    type="button"
-                                                    disabled={isSaving}
-                                                    onClick={() => void removeMedia(asset.id)}
-                                                    className="mt-3 w-full border border-red-300/45 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-red-200 hover:border-red-200 disabled:opacity-40"
-                                                >
-                                                    Remove media
-                                                </button>
-                                            </figure>
+                                            <MediaAssetEditor
+                                                key={asset.id}
+                                                asset={asset}
+                                                disabled={isSaving}
+                                                onSave={saveMediaDetails}
+                                                onRemove={removeMedia}
+                                            />
                                         ))}
                                     </div>
                                 ) : null}

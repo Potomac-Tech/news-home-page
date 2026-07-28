@@ -255,8 +255,9 @@ export async function createArticleDraft(formData: FormData) {
         });
     }
 
+    let uploadedMedia: Awaited<ReturnType<typeof storeMediaAssets>> = [];
     if (mediaFiles.length) {
-        await storeMediaAssets({
+        uploadedMedia = await storeMediaAssets({
             supabase,
             userId,
             articleId: article.id,
@@ -277,7 +278,7 @@ export async function createArticleDraft(formData: FormData) {
 
     revalidatePath("/admin/editorial");
     revalidatePath("/studio");
-    return article.id;
+    return { articleId: article.id, uploadedMedia };
 }
 
 export async function updateArticleDraft(formData: FormData) {
@@ -349,8 +350,9 @@ export async function updateArticleDraft(formData: FormData) {
         });
     }
 
+    let uploadedMedia: Awaited<ReturnType<typeof storeMediaAssets>> = [];
     if (mediaFiles.length) {
-        await storeMediaAssets({
+        uploadedMedia = await storeMediaAssets({
             supabase,
             userId,
             articleId: article.id,
@@ -379,7 +381,7 @@ export async function updateArticleDraft(formData: FormData) {
 
     revalidatePath("/admin/editorial");
     revalidatePath("/studio");
-    return article.id;
+    return { articleId: article.id, uploadedMedia };
 }
 
 export async function publishArticle(formData: FormData) {
@@ -577,4 +579,59 @@ export async function removeArticleMedia(formData: FormData) {
     revalidatePath(`/studio/preview/${articleId}`);
     revalidatePath("/news");
     return assetId;
+}
+
+export async function updateArticleMediaMetadata(formData: FormData) {
+    const { supabase, userId } = await requireEditorialStaff(
+        editorialNextPath(formData)
+    );
+    const articleId = getRequiredString(formData, "article_id");
+    const assetId = getRequiredString(formData, "asset_id");
+    const altText = getOptionalString(formData, "media_alt_text");
+    const caption = getOptionalString(formData, "media_caption");
+
+    const { data: asset, error: assetError } = await supabase
+        .from("editorial_media_assets")
+        .update({
+            alt_text: altText,
+            caption,
+        })
+        .eq("id", assetId)
+        .eq("article_id", articleId)
+        .select("id,public_url,media_type,alt_text,caption")
+        .single();
+    if (assetError || !asset) {
+        throw new Error(assetError?.message ?? "Media details were not saved.");
+    }
+
+    if (asset.media_type === "image") {
+        const { error: heroError } = await supabase
+            .from("editorial_articles")
+            .update({
+                hero_image_alt: altText || "Article photograph",
+                updated_by: userId,
+            })
+            .eq("id", articleId)
+            .eq("hero_image_url", asset.public_url);
+        if (heroError) throw new Error(heroError.message);
+    }
+
+    const { error: previewResetError } = await supabase
+        .from("editorial_preview_approvals")
+        .delete()
+        .eq("article_id", articleId);
+    if (previewResetError) throw new Error(previewResetError.message);
+
+    revalidatePath("/studio");
+    revalidatePath("/studio/dashboard");
+    revalidatePath(`/studio/preview/${articleId}`);
+    revalidatePath("/news");
+
+    return {
+        id: asset.id,
+        publicUrl: asset.public_url,
+        mediaType: asset.media_type as "image" | "video",
+        altText: asset.alt_text ?? "",
+        caption: asset.caption ?? "",
+    };
 }

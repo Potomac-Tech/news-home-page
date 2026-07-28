@@ -15,6 +15,14 @@ type EditorialSupabaseClient = Awaited<
     ReturnType<typeof requireEditorialStaff>
 >["supabase"];
 
+export type StoredMediaAsset = {
+    id: string;
+    publicUrl: string;
+    mediaType: "image" | "video";
+    altText: string;
+    caption: string;
+};
+
 function safeFileName(value: string) {
     return value
         .normalize("NFKD")
@@ -45,6 +53,8 @@ export async function storeMediaAssets({
     altText: string | null;
     caption: string | null;
 }) {
+    const storedAssets: StoredMediaAsset[] = [];
+
     for (const [index, file] of files.entries()) {
         if (!allowedMimeTypes.has(file.type)) {
             throw new Error(`${file.name} is not a supported image or video format.`);
@@ -65,7 +75,7 @@ export async function storeMediaAssets({
         if (uploadError) throw new Error(uploadError.message);
 
         const publicUrl = supabase.storage.from(bucket).getPublicUrl(objectPath).data.publicUrl;
-        const { error: recordError } = await supabase
+        const { data: record, error: recordError } = await supabase
             .from("editorial_media_assets")
             .insert({
                 article_id: articleId,
@@ -80,11 +90,23 @@ export async function storeMediaAssets({
                 caption,
                 sort_order: index,
                 uploaded_by: userId,
-            });
+            })
+            .select("id,public_url,media_type,alt_text,caption")
+            .single();
 
-        if (recordError) {
+        if (recordError || !record) {
             await supabase.storage.from(bucket).remove([objectPath]);
-            throw new Error(recordError.message);
+            throw new Error(recordError?.message ?? "Media record was not created.");
         }
+
+        storedAssets.push({
+            id: record.id,
+            publicUrl: record.public_url,
+            mediaType: record.media_type as "image" | "video",
+            altText: record.alt_text ?? "",
+            caption: record.caption ?? "",
+        });
     }
+
+    return storedAssets;
 }

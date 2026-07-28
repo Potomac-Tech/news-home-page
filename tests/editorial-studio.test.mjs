@@ -120,7 +120,13 @@ test("editorial media, scalable dashboard, and author pages are wired", () => {
     assert.match(workflowMigration, /editorial-media/);
     assert.match(actions, /storeMediaAssets/);
     assert.match(actions, /removeArticleMedia/);
+    assert.match(actions, /updateArticleMediaMetadata/);
+    assert.match(actions, /return \{ articleId: article\.id, uploadedMedia \}/);
     assert.match(actions, /\.storage[\s\S]*\.remove/);
+    assert.match(studioUi, /Ready to upload:/);
+    assert.match(studioUi, /Save media details/);
+    assert.match(studioUi, /Media description and caption saved\./);
+    assert.match(studioUi, /mediaAssets: \[\.\.\.current\.mediaAssets, \.\.\.result\.uploadedMedia\]/);
     assert.match(studioUi, /Remove media/);
     assert.match(dashboard, /50 per page/);
     assert.match(dashboard, /scheduled_for/);
@@ -147,6 +153,8 @@ test("studio preserves headline case and separates story paragraphs", () => {
 });
 
 test("new stories, safe rich text, and standard article rendering are enforced", () => {
+    assert.match(studioPage, /redirect\("\/studio\/dashboard"\)/);
+    assert.match(studioPage, /!selectedArticleId && newStory !== "1"/);
     assert.match(studioPage, /newStory === "1"/);
     assert.match(studioUi, /href="\/studio\?new=1"/);
     assert.match(dashboard, /href="\/studio\?new=1"/);

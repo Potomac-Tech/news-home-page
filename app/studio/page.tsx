@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { requireEditorialStaff } from "../../lib/auth/editorial";
 import { EditorialStudio, type StudioArticle } from "./EditorialStudio";
 
@@ -43,6 +44,11 @@ export default async function StudioPage({
         article: selectedArticleId,
         new: newStory,
     } = await searchParams;
+
+    if (!selectedArticleId && newStory !== "1") {
+        redirect("/studio/dashboard");
+    }
+
     const { supabase } = await requireEditorialStaff("/studio");
     const { data: articleRows, error: articleError } = await supabase
         .from("editorial_articles")
