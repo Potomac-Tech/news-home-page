@@ -93,6 +93,15 @@ body {
     pointer-events: none;
 }
 
+.studio-rich-editor {
+    caret-color: white;
+    color: white;
+}
+
+.studio-rich-editor :where(p, div, span, strong, em, u, s, li) {
+    color: white !important;
+}
+
 .studio-rich-editor p {
     margin: 0 0 1.25rem;
 }

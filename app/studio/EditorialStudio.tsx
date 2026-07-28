@@ -547,7 +547,7 @@ export function EditorialStudio({
                                     data-placeholder="Start writing..."
                                     onInput={(event) => setBodyHtml(event.currentTarget.innerHTML)}
                                     dangerouslySetInnerHTML={{ __html: bodyHtml }}
-                                    className="studio-rich-editor min-h-[32rem] w-full border-0 bg-transparent py-3 text-lg leading-8 text-potomac-cream/90 outline-none"
+                                    className="studio-rich-editor min-h-[32rem] w-full border-0 bg-transparent py-3 text-lg leading-8 text-white outline-none"
                                 />
                             </section>
 

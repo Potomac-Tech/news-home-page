@@ -131,6 +131,8 @@ test("studio preserves headline case and separates story paragraphs", () => {
     assert.match(articlePage, /split\(\/\\n\\s\*\\n\/\)/);
     assert.match(studioUi, /aria-label="Story body"/);
     assert.match(studioUi, /contentEditable/);
+    assert.match(studioUi, /studio-rich-editor[^"]*text-white/);
+    assert.match(readFileSync("app/globals.css", "utf8"), /\.studio-rich-editor[\s\S]*caret-color: white;[\s\S]*color: white;/);
     assert.match(studioUi, /runEditorCommand\("bold"\)/);
     assert.match(studioUi, /runEditorCommand\("underline"\)/);
     assert.match(studioUi, /setBodyHtml/);
