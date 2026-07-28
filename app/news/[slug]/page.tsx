@@ -573,7 +573,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         <section className="mt-10 space-y-5">
                             {mediaAssets.filter((asset) => asset.mediaType === "video").map((asset) => (
                                 <figure key={asset.id} className="glass-card rounded p-4">
-                                    <video src={asset.publicUrl} controls preload="metadata" className="w-full rounded" />
+                                    <video
+                                        src={asset.publicUrl}
+                                        controls
+                                        preload="metadata"
+                                        playsInline
+                                        aria-label={asset.altText || "Article video"}
+                                        className="w-full rounded"
+                                    />
                                     {asset.caption ? <figcaption className="mt-3 text-sm text-potomac-cream/60">{asset.caption}</figcaption> : null}
                                 </figure>
                             ))}

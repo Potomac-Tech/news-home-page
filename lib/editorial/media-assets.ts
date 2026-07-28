@@ -9,6 +9,8 @@ const allowedMimeTypes = new Set([
     "image/gif",
     "video/mp4",
     "video/webm",
+    "video/quicktime",
+    "video/x-m4v",
 ]);
 
 type EditorialSupabaseClient = Awaited<

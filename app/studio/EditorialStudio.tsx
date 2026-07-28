@@ -155,6 +155,8 @@ function MediaAssetEditor({
                     className="aspect-video w-full object-cover"
                     controls
                     preload="metadata"
+                    playsInline
+                    aria-label={altText || "Article video"}
                 />
             ) : (
                 <img
@@ -700,7 +702,7 @@ export function EditorialStudio({
                                             name="story_media"
                                             type="file"
                                             multiple
-                                            accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
+                                            accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,video/x-m4v,.mov,.m4v"
                                             className={inputClass}
                                             onChange={(event) =>
                                                 setSelectedMediaNames(
@@ -710,7 +712,7 @@ export function EditorialStudio({
                                                 )
                                             }
                                         />
-                                        <span className="mt-2 block text-[0.58rem] text-potomac-regolith">JPG, PNG, WebP, GIF, MP4, or WebM. 50 MB maximum per file.</span>
+                                        <span className="mt-2 block text-[0.58rem] text-potomac-regolith">JPG, PNG, WebP, GIF, MP4, WebM, MOV, or M4V. 50 MB maximum per file.</span>
                                         {selectedMediaNames.length ? (
                                             <span className="mt-2 block normal-case text-white">
                                                 Ready to upload: {selectedMediaNames.join(", ")}

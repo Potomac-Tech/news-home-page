@@ -66,7 +66,14 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
                 </section>
                 {(media ?? []).filter((asset) => asset.media_type === "video").map((asset) => (
                     <figure key={asset.id} className="border border-white/10 p-3">
-                        <video src={asset.public_url} controls className="w-full" />
+                        <video
+                            src={asset.public_url}
+                            controls
+                            preload="metadata"
+                            playsInline
+                            aria-label={asset.alt_text ?? "Article video"}
+                            className="w-full"
+                        />
                         {asset.caption ? <figcaption className="mt-3 text-sm text-potomac-regolith">{asset.caption}</figcaption> : null}
                     </figure>
                 ))}

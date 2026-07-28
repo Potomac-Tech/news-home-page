@@ -3,7 +3,8 @@ const nextConfig = {
     reactStrictMode: true,
     experimental: {
         serverActions: {
-            bodySizeLimit: "50mb",
+            // Leave room for multipart metadata around the 50 MB per-file limit.
+            bodySizeLimit: "100mb",
         },
     },
     async headers() {

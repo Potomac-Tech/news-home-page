@@ -7,6 +7,7 @@ const studioUi = readFileSync("app/studio/EditorialStudio.tsx", "utf8");
 const loginPage = readFileSync("app/studio/login/page.tsx", "utf8");
 const actions = readFileSync("app/admin/editorial/actions.ts", "utf8");
 const sourceDocuments = readFileSync("lib/editorial/source-documents.ts", "utf8");
+const mediaAssets = readFileSync("lib/editorial/media-assets.ts", "utf8");
 const migration = readFileSync("supabase/migrations/20260720025828_editorial_studio_source_documents.sql", "utf8");
 const workflowMigration = readFileSync("supabase/migrations/20260727170007_editorial_preview_scheduling_media.sql", "utf8");
 const previewPage = readFileSync("app/studio/preview/[id]/page.tsx", "utf8");
@@ -25,6 +26,7 @@ const articlePage = readFileSync("app/news/[slug]/page.tsx", "utf8");
 const homepage = readFileSync("app/page.tsx", "utf8");
 const richText = readFileSync("lib/editorial/rich-text.ts", "utf8");
 const nextConfig = readFileSync("next.config.mjs", "utf8");
+const videoMigration = readFileSync("supabase/migrations/20260728172344_allow_editorial_quicktime_video.sql", "utf8");
 
 test("editorial studio uses the existing editor and admin authorization boundary", () => {
     assert.match(studioPage, /requireEditorialStaff\("\/studio"\)/);
@@ -67,6 +69,25 @@ test("studio supports journalist drafting without layout knowledge", () => {
         "Story images and video",
         "Intended publishing date and time",
     ]) assert.ok(studioUi.includes(token), `missing ${token}`);
+});
+
+test("studio accepts and renders common article video formats", () => {
+    for (const mimeType of [
+        "video/mp4",
+        "video/webm",
+        "video/quicktime",
+        "video/x-m4v",
+    ]) {
+        assert.ok(mediaAssets.includes(mimeType), `missing server validation for ${mimeType}`);
+        assert.ok(studioUi.includes(mimeType), `missing file-picker support for ${mimeType}`);
+        assert.ok(videoMigration.includes(mimeType), `missing bucket support for ${mimeType}`);
+    }
+    assert.match(nextConfig, /bodySizeLimit: "100mb"/);
+    assert.match(studioUi, /aria-label=\{altText \|\| "Article video"\}/);
+    assert.match(previewRender, /aria-label=\{asset\.alt_text \?\? "Article video"\}/);
+    assert.match(articlePage, /aria-label=\{asset\.altText \|\| "Article video"\}/);
+    assert.match(previewRender, /playsInline/);
+    assert.match(articlePage, /playsInline/);
 });
 
 test("studio saves source documents and retains article version history", () => {
