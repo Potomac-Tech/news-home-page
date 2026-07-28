@@ -22,6 +22,7 @@ const newsPage = readFileSync("app/news/page.tsx", "utf8");
 const carouselLoader = readFileSync("app/_data/homepageCarousel.ts", "utf8");
 const authorPage = readFileSync("app/authors/[slug]/page.tsx", "utf8");
 const articlePage = readFileSync("app/news/[slug]/page.tsx", "utf8");
+const homepage = readFileSync("app/page.tsx", "utf8");
 const richText = readFileSync("lib/editorial/rich-text.ts", "utf8");
 const nextConfig = readFileSync("next.config.mjs", "utf8");
 
@@ -161,6 +162,7 @@ test("article sections and carousel positions are editor controlled", () => {
     assert.match(carouselControl, /<option value="">N\/A<\/option>/);
     assert.match(carouselControl, /router\.refresh\(\)/);
     assert.match(carouselControl, /setMessage\("Saved"\)/);
+    assert.match(carouselControl, /Appears after this article is published\./);
     assert.match(dashboardActions, /updateCarouselPosition/);
     assert.match(dashboardActions, /savedArticle\.carousel_position !== position/);
     assert.match(actions, /updateArticleSectionTags/);
@@ -168,6 +170,9 @@ test("article sections and carousel positions are editor controlled", () => {
     assert.match(studioUi, /Article sections saved\./);
     assert.match(carouselLoader, /\.not\("carousel_position", "is", null\)/);
     assert.match(carouselLoader, /displayRank: Number\(article\.carousel_position\)/);
+    assert.match(carouselLoader, /if \(auto\.length\)/);
+    assert.match(carouselLoader, /left\.displayRank - right\.displayRank/);
+    assert.doesNotMatch(homepage, /homepage-editorial-lead/);
 });
 
 test("studio preserves headline case and separates story paragraphs", () => {

@@ -174,6 +174,12 @@ export async function loadHomepageCarousel(
             freshnessAt: String(article.published_at),
             expiresAt: new Date(Date.now() + 14 * 86_400_000).toISOString(),
         }));
+    if (auto.length) {
+        return auto
+            .sort((left, right) => left.displayRank - right.displayRank)
+            .slice(0, 5);
+    }
+
     let customCards: HomepageCarouselSlide[] = [];
     if (isCompleteMember && viewer.personalizationEnabled && viewer.qualifyingEvents >= 5) {
         await supabase.rpc("refresh_my_custom_intelligence_cards");

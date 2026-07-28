@@ -127,6 +127,7 @@ export default async function ArticleDashboard({
                                             <CarouselPositionControl
                                                 articleId={article.id}
                                                 articleTitle={article.title}
+                                                articleStatus={article.status}
                                                 initialPosition={article.carousel_position}
                                             />
                                         </td>

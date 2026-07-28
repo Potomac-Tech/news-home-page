@@ -334,29 +334,6 @@ export default async function HomePage() {
             freshnessAt: featuredStory.publishedAt,
             expiresAt: new Date(Date.now() + 14 * 86_400_000).toISOString(),
         }];
-    } else if (featuredStory) {
-        const editorialLead: HomepageCarouselSlide = {
-            id: "homepage-editorial-lead",
-            articleId: null,
-            slideType: "morning_read",
-            title: featuredStory.title,
-            summary: featuredStory.summary || siteConfig.description,
-            visualAssetUrl: featuredStory.imageUrl ?? potomacBrand.assets.cabeusHero,
-            visualAssetAlt: featuredStory.imageAlt ?? "Lunar industrial base under a crescent moon",
-            ctaLabel: "Full story",
-            ctaRoute: featuredStory.href,
-            minimumTier: "public",
-            isRequired: true,
-            isPinned: true,
-            displayRank: 0,
-            sourceNote: "Current homepage editorial lead.",
-            freshnessAt: featuredStory.publishedAt,
-            expiresAt: new Date(Date.now() + 14 * 86_400_000).toISOString(),
-        };
-        carouselSlides = [
-            editorialLead,
-            ...carouselSlides.filter((slide) => slide.ctaRoute !== editorialLead.ctaRoute),
-        ].slice(0, 5);
     }
     const homepageSponsorUnits = [
         sponsorUnits.get(sponsorPlacementKeys.homepageLeadRail)!,
