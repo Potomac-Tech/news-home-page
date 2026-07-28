@@ -2,10 +2,14 @@
 
 import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { editorialSections } from "../../lib/editorial/section-tags";
+import {
+    type EditorialSectionSlug,
+    editorialSections,
+} from "../../lib/editorial/section-tags";
 import {
     createArticleDraft,
     removeArticleMedia,
+    updateArticleSectionTags,
     updateArticleDraft,
     updateArticleMediaMetadata,
 } from "../admin/editorial/actions";
@@ -27,7 +31,7 @@ export type StudioArticle = {
     aeoSummary: string;
     publishAt: string;
     updatedAt: string;
-    sectionTags: string[];
+    sectionTags: EditorialSectionSlug[];
     sourceDocuments: Array<{
         id: string;
         fileName: string;
@@ -214,6 +218,7 @@ export function EditorialStudio({
     );
     const [draft, setDraft] = useState(selected);
     const [bodyHtml, setBodyHtml] = useState(() => toEditorHtml(selected.body));
+    const bodyHtmlRef = useRef(bodyHtml);
     const [query, setQuery] = useState("");
     const [importStatus, setImportStatus] = useState<string>("");
     const [saveStatus, setSaveStatus] = useState("");
@@ -224,20 +229,26 @@ export function EditorialStudio({
     const fileInputRef = useRef<HTMLInputElement>(null);
     const mediaInputRef = useRef<HTMLInputElement>(null);
     const bodyRef = useRef<HTMLDivElement>(null);
+    const bodyInputRef = useRef<HTMLInputElement>(null);
     const formId = "editorial-studio-story-form";
 
     const filteredArticles = articles.filter((article) =>
         `${article.title} ${article.authorName} ${article.status}`.toLowerCase().includes(query.toLowerCase())
     );
-    const bodyMarkdown = bodyHtml.trim();
     const action = draft.id === "new" ? createArticleDraft : updateArticleDraft;
+
+    function replaceBodyHtml(nextBody: string) {
+        bodyHtmlRef.current = nextBody;
+        setBodyHtml(nextBody);
+        if (bodyRef.current) bodyRef.current.innerHTML = nextBody;
+        if (bodyInputRef.current) bodyInputRef.current.value = nextBody;
+    }
 
     function chooseArticle(article: StudioArticle) {
         setSelectedId(article.id);
         setDraft(article);
         const nextBody = toEditorHtml(article.body);
-        setBodyHtml(nextBody);
-        if (bodyRef.current) bodyRef.current.innerHTML = nextBody;
+        replaceBodyHtml(nextBody);
         setImportStatus("");
         if (fileInputRef.current) fileInputRef.current.value = "";
         if (mediaInputRef.current) mediaInputRef.current.value = "";
@@ -250,8 +261,7 @@ export function EditorialStudio({
         const next = emptyArticle();
         setSelectedId("new");
         setDraft(next);
-        setBodyHtml("");
-        if (bodyRef.current) bodyRef.current.innerHTML = "";
+        replaceBodyHtml("");
         setImportStatus("");
         if (fileInputRef.current) fileInputRef.current.value = "";
         if (mediaInputRef.current) mediaInputRef.current.value = "";
@@ -351,16 +361,48 @@ export function EditorialStudio({
         setDraft((current) => ({ ...current, [field]: value }));
     }
 
-    function toggleSectionTag(slug: string) {
-        setDraft((current) => {
-            const selected = current.sectionTags.includes(slug)
-                ? current.sectionTags.filter((tag) => tag !== slug)
-                : [...current.sectionTags, slug];
-            return {
+    async function toggleSectionTag(slug: EditorialSectionSlug) {
+        if (isSaving) return;
+        const previousSections = draft.sectionTags;
+        const selected = previousSections.includes(slug)
+            ? previousSections.filter((tag) => tag !== slug)
+            : [...previousSections, slug];
+        const nextSections: EditorialSectionSlug[] = selected.length
+            ? selected
+            : ["news"];
+
+        setDraft((current) => ({ ...current, sectionTags: nextSections }));
+        if (draft.id === "new") {
+            setSaveStatus("Sections will save with the draft.");
+            return;
+        }
+
+        setIsSaving(true);
+        setSaveStatus("Saving article sections...");
+        try {
+            const result = await updateArticleSectionTags(
+                draft.id,
+                nextSections
+            );
+            setDraft((current) => ({
                 ...current,
-                sectionTags: selected.length ? selected : ["news"],
-            };
-        });
+                sectionTags: result.sectionTags,
+            }));
+            setSaveStatus("Article sections saved.");
+            router.refresh();
+        } catch (error) {
+            setDraft((current) => ({
+                ...current,
+                sectionTags: previousSections,
+            }));
+            setSaveStatus(
+                error instanceof Error
+                    ? error.message
+                    : "Article sections could not be saved."
+            );
+        } finally {
+            setIsSaving(false);
+        }
     }
 
     async function importWordDocument(file: File) {
@@ -398,8 +440,7 @@ export function EditorialStudio({
                 .map((paragraph) => `<p>${escapeHtml(paragraph).replaceAll("\n", "<br>")}</p>`)
                 .join("");
 
-            setBodyHtml(nextBody);
-            if (bodyRef.current) bodyRef.current.innerHTML = nextBody;
+            replaceBodyHtml(nextBody);
             setDraft((current) => {
                 const headline = current.title || (probableHeadline.length <= 180 ? probableHeadline : "");
                 const firstBody = nextBodyParagraphs[0] ?? "";
@@ -429,7 +470,7 @@ export function EditorialStudio({
     }
 
     function draftTeaser() {
-        const source = draft.publicSummary || editorPlainText(bodyHtml);
+        const source = draft.publicSummary || editorPlainText(bodyHtmlRef.current);
         const normalized = source.replace(/\s+/g, " ").trim();
         updateDraft("publicTeaser", normalized.length > 320 ? `${normalized.slice(0, 317).trimEnd()}...` : normalized);
     }
@@ -437,7 +478,9 @@ export function EditorialStudio({
     function runEditorCommand(command: string, value?: string) {
         bodyRef.current?.focus();
         document.execCommand(command, false, value);
-        setBodyHtml(bodyRef.current?.innerHTML ?? "");
+        const nextBody = bodyRef.current?.innerHTML ?? "";
+        bodyHtmlRef.current = nextBody;
+        if (bodyInputRef.current) bodyInputRef.current.value = nextBody;
     }
 
     function addLink() {
@@ -524,7 +567,12 @@ export function EditorialStudio({
                     <form id={formId} action={saveStory}>
                         <input type="hidden" name="studio_context" value="studio" />
                         {draft.id !== "new" ? <input type="hidden" name="article_id" value={draft.id} /> : null}
-                        <input type="hidden" name="body_markdown" value={bodyMarkdown} />
+                        <input
+                            ref={bodyInputRef}
+                            type="hidden"
+                            name="body_markdown"
+                            defaultValue={bodyHtml.trim()}
+                        />
                         <input type="hidden" name="body_excerpt" value={draft.bodyExcerpt || draft.publicTeaser} />
 
                         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-potomac-regolith/25 pb-4">
@@ -558,6 +606,7 @@ export function EditorialStudio({
                                             value={section.slug}
                                             checked={draft.sectionTags.includes(section.slug)}
                                             onChange={() => toggleSectionTag(section.slug)}
+                                            disabled={isSaving}
                                             className="h-4 w-4 accent-potomac-gold"
                                         />
                                         {section.label}
@@ -726,7 +775,13 @@ export function EditorialStudio({
                                     role="textbox"
                                     aria-multiline="true"
                                     data-placeholder="Start writing..."
-                                    onInput={(event) => setBodyHtml(event.currentTarget.innerHTML)}
+                                    onInput={(event) => {
+                                        const nextBody = event.currentTarget.innerHTML;
+                                        bodyHtmlRef.current = nextBody;
+                                        if (bodyInputRef.current) {
+                                            bodyInputRef.current.value = nextBody;
+                                        }
+                                    }}
                                     dangerouslySetInnerHTML={{ __html: bodyHtml }}
                                     className="studio-rich-editor min-h-[32rem] w-full border-0 bg-transparent py-3 text-lg leading-8 text-white outline-none"
                                 />

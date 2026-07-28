@@ -15,6 +15,7 @@ const previewActions = readFileSync("app/studio/preview/[id]/PreviewActions.tsx"
 const devicePreview = readFileSync("app/studio/preview/[id]/DevicePreview.tsx", "utf8");
 const dashboard = readFileSync("app/studio/dashboard/page.tsx", "utf8");
 const dashboardActions = readFileSync("app/studio/dashboard/actions.ts", "utf8");
+const carouselControl = readFileSync("app/studio/dashboard/CarouselPositionControl.tsx", "utf8");
 const sectionTags = readFileSync("lib/editorial/section-tags.ts", "utf8");
 const sectionMigration = readFileSync("supabase/migrations/20260728135218_editorial_sections_and_carousel_positions.sql", "utf8");
 const newsPage = readFileSync("app/news/page.tsx", "utf8");
@@ -156,9 +157,15 @@ test("article sections and carousel positions are editor controlled", () => {
     assert.match(newsPage, /section=\$\{item\.slug\}/);
     assert.match(sectionMigration, /carousel_position between 1 and 5/);
     assert.match(sectionMigration, /set_editorial_article_carousel_position/);
-    assert.match(dashboard, /Carousel position for/);
-    assert.match(dashboard, /<option value="">N\/A<\/option>/);
+    assert.match(carouselControl, /Carousel position for/);
+    assert.match(carouselControl, /<option value="">N\/A<\/option>/);
+    assert.match(carouselControl, /router\.refresh\(\)/);
+    assert.match(carouselControl, /setMessage\("Saved"\)/);
     assert.match(dashboardActions, /updateCarouselPosition/);
+    assert.match(dashboardActions, /savedArticle\.carousel_position !== position/);
+    assert.match(actions, /updateArticleSectionTags/);
+    assert.match(actions, /Article sections were not saved/);
+    assert.match(studioUi, /Article sections saved\./);
     assert.match(carouselLoader, /\.not\("carousel_position", "is", null\)/);
     assert.match(carouselLoader, /displayRank: Number\(article\.carousel_position\)/);
 });
@@ -177,6 +184,8 @@ test("studio preserves headline case and separates story paragraphs", () => {
     assert.match(studioUi, /runEditorCommand\("bold"\)/);
     assert.match(studioUi, /runEditorCommand\("underline"\)/);
     assert.match(studioUi, /setBodyHtml/);
+    assert.match(studioUi, /bodyHtmlRef\.current = nextBody/);
+    assert.doesNotMatch(studioUi, /onInput=\{\(event\) => setBodyHtml/);
     assert.doesNotMatch(studioUi, /Add section|\+ Paragraph|Move section|Remove section|draggable/);
     assert.match(studioUi, /Unsaved draft/);
     assert.match(studioUi, /aria-label="Text style"/);

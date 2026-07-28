@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { requireEditorialStaff } from "../../../lib/auth/editorial";
 import { editorialSections } from "../../../lib/editorial/section-tags";
-import { updateCarouselPosition } from "./actions";
+import { CarouselPositionControl } from "./CarouselPositionControl";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Article dashboard", robots: { index: false, follow: false } };
@@ -124,23 +124,11 @@ export default async function ArticleDashboard({
                                         <td className="p-4 font-mono text-xs uppercase text-potomac-gold">{article.status}</td>
                                         <td className="p-4 text-sm">{publishDate ? new Date(publishDate).toLocaleString() : "Not set"}</td>
                                         <td className="p-4">
-                                            <form action={updateCarouselPosition} className="flex items-center gap-2">
-                                                <input type="hidden" name="article_id" value={article.id} />
-                                                <select
-                                                    name="carousel_position"
-                                                    defaultValue={article.carousel_position ?? ""}
-                                                    aria-label={`Carousel position for ${article.title}`}
-                                                    className="border border-potomac-regolith/30 bg-potomac-primary px-2 py-2 text-sm text-white"
-                                                >
-                                                    <option value="">N/A</option>
-                                                    {[1, 2, 3, 4, 5].map((position) => (
-                                                        <option key={position} value={position}>{position}</option>
-                                                    ))}
-                                                </select>
-                                                <button className="border border-potomac-gold px-3 py-2 font-mono text-[0.6rem] font-bold uppercase text-potomac-gold">
-                                                    Save
-                                                </button>
-                                            </form>
+                                            <CarouselPositionControl
+                                                articleId={article.id}
+                                                articleTitle={article.title}
+                                                initialPosition={article.carousel_position}
+                                            />
                                         </td>
                                         <td className="p-4 text-sm">{new Date(article.updated_at).toLocaleString()}</td>
                                         <td className="p-4"><div className="flex gap-3"><Link href={`/studio?article=${article.id}`} className="font-mono text-xs font-bold uppercase text-potomac-cream">Edit</Link><Link href={`/studio/preview/${article.id}`} className="font-mono text-xs font-bold uppercase text-potomac-gold">Preview</Link></div></td>

@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { requireEditorialStaff } from "../../lib/auth/editorial";
-import { editorialSections } from "../../lib/editorial/section-tags";
+import {
+    type EditorialSectionSlug,
+    editorialSections,
+} from "../../lib/editorial/section-tags";
 import { EditorialStudio, type StudioArticle } from "./EditorialStudio";
 
 export const dynamic = "force-dynamic";
@@ -112,12 +115,15 @@ export default async function StudioPage({
     const sectionSlugById = new Map(
         (sectionTagsResult.data ?? []).map((tag) => [tag.id, tag.slug])
     );
-    const sectionsByArticle = new Map<string, string[]>();
+    const sectionsByArticle = new Map<string, EditorialSectionSlug[]>();
     for (const articleTag of articleTagsResult.data ?? []) {
         const slug = sectionSlugById.get(articleTag.tag_id);
-        if (!slug) continue;
+        if (
+            !slug
+            || !editorialSections.some((section) => section.slug === slug)
+        ) continue;
         const sections = sectionsByArticle.get(articleTag.article_id) ?? [];
-        sections.push(slug);
+        sections.push(slug as EditorialSectionSlug);
         sectionsByArticle.set(articleTag.article_id, sections);
     }
     for (const document of documentsResult.data ?? []) {

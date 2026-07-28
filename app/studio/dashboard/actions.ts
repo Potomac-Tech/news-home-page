@@ -3,14 +3,15 @@
 import { revalidatePath } from "next/cache";
 import { requireEditorialStaff } from "../../../lib/auth/editorial";
 
-export async function updateCarouselPosition(formData: FormData) {
+type CarouselPosition = 1 | 2 | 3 | 4 | 5 | null;
+
+export async function updateCarouselPosition(
+    articleId: string,
+    position: CarouselPosition
+) {
     const { supabase } = await requireEditorialStaff("/studio/dashboard");
-    const articleId = String(formData.get("article_id") ?? "").trim();
-    const rawPosition = String(formData.get("carousel_position") ?? "").trim();
 
     if (!articleId) throw new Error("Missing article.");
-
-    const position = rawPosition ? Number.parseInt(rawPosition, 10) : null;
     if (
         position !== null
         && (!Number.isInteger(position) || position < 1 || position > 5)
@@ -27,7 +28,18 @@ export async function updateCarouselPosition(formData: FormData) {
     );
     if (error) throw new Error(error.message);
 
+    const { data: savedArticle, error: savedArticleError } = await supabase
+        .from("editorial_articles")
+        .select("carousel_position")
+        .eq("id", articleId)
+        .single();
+    if (savedArticleError) throw new Error(savedArticleError.message);
+    if (savedArticle.carousel_position !== position) {
+        throw new Error("Carousel position was not saved. Please try again.");
+    }
+
     revalidatePath("/");
     revalidatePath("/studio");
     revalidatePath("/studio/dashboard");
+    return { position: savedArticle.carousel_position as CarouselPosition };
 }

@@ -12,6 +12,8 @@ import {
 } from "../../../lib/editorial/media-assets";
 import { sanitizeArticleHtml } from "../../../lib/editorial/rich-text";
 import {
+    type EditorialSectionSlug,
+    editorialSections,
     sectionTagsFrom,
     syncArticleSectionTags,
 } from "../../../lib/editorial/section-tags";
@@ -404,6 +406,63 @@ export async function updateArticleDraft(formData: FormData) {
     revalidatePath("/admin/editorial");
     revalidatePath("/studio");
     return { articleId: article.id, uploadedMedia };
+}
+
+export async function updateArticleSectionTags(
+    articleId: string,
+    sectionSlugs: EditorialSectionSlug[]
+) {
+    const { supabase } = await requireEditorialStaff("/studio");
+    if (!articleId) throw new Error("Save the draft before assigning sections.");
+
+    const allowedSections = new Set<string>(
+        editorialSections.map((section) => section.slug)
+    );
+    const uniqueSections = Array.from(new Set(sectionSlugs));
+    if (
+        !uniqueSections.length
+        || uniqueSections.some((slug) => !allowedSections.has(slug))
+    ) {
+        throw new Error("Select at least one valid article section.");
+    }
+
+    await syncArticleSectionTags({
+        supabase,
+        articleId,
+        sectionSlugs: uniqueSections,
+    });
+
+    const { data: assignedTags, error: assignedTagsError } = await supabase
+        .from("editorial_article_tags")
+        .select("editorial_tags!inner(slug)")
+        .eq("article_id", articleId)
+        .in(
+            "editorial_tags.slug",
+            editorialSections.map((section) => section.slug)
+        );
+    if (assignedTagsError) throw new Error(assignedTagsError.message);
+
+    const persistedSections = (assignedTags ?? [])
+        .map((row) => {
+            const tag = Array.isArray(row.editorial_tags)
+                ? row.editorial_tags[0]
+                : row.editorial_tags;
+            return tag?.slug;
+        })
+        .filter((slug): slug is EditorialSectionSlug =>
+            typeof slug === "string" && allowedSections.has(slug)
+        )
+        .sort();
+    const expectedSections = [...uniqueSections].sort();
+    if (persistedSections.join(",") !== expectedSections.join(",")) {
+        throw new Error("Article sections were not saved. Please try again.");
+    }
+
+    revalidatePath("/");
+    revalidatePath("/news");
+    revalidatePath("/studio");
+    revalidatePath("/studio/dashboard");
+    return { sectionTags: persistedSections };
 }
 
 export async function publishArticle(formData: FormData) {
