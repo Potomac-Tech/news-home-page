@@ -382,7 +382,7 @@ export default async function HomePage() {
                     <aside className="order-2 border-potomac-regolith/20 px-5 py-8 lg:order-1 lg:border-r lg:py-10">
                         <div className="flex items-center justify-between border-b border-potomac-regolith/25 pb-4">
                             <h2 className="font-serif text-2xl uppercase text-white">Recent stories</h2>
-                            <Link href="/news" className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">All</Link>
+                            <Link href="/archives" className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Archives</Link>
                         </div>
                         <div>
                             {latestStories.slice(0, 4).map((story) => (
@@ -455,7 +455,7 @@ export default async function HomePage() {
                 <div className="mx-auto w-full max-w-[92rem] px-4 py-10 md:px-8">
                     <div className="flex items-end justify-between border-b border-potomac-regolith/25 pb-4">
                         <h2 className="font-serif text-3xl uppercase text-white">Top reads</h2>
-                        <Link href="/news" className="font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">Latest intelligence →</Link>
+                        <Link href="/archives" className="font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">News archives →</Link>
                     </div>
                     <div className="mt-6 grid gap-y-8 md:grid-cols-3">
                         {latestStories.slice(0, 3).map((story) => (

@@ -101,6 +101,13 @@ export function CarouselPositionControl({
                     Appears after this article is published.
                 </p>
             ) : null}
+            {articleStatus === "published" ? (
+                <p className="mt-2 max-w-52 text-xs leading-4 text-potomac-regolith">
+                    {selectedPosition
+                        ? "Featured on the homepage and retained in Archives."
+                        : "Published in Archives; not featured on the homepage."}
+                </p>
+            ) : null}
         </div>
     );
 }

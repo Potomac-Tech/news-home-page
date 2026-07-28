@@ -137,7 +137,39 @@ export async function loadHomepageCarousel(
         ? await query
         : await query.eq("content_visibility", "public_teaser");
     if (result.error) throw new Error(result.error.message);
-    const manual = ((result.data ?? []) as Record<string, unknown>[]).map(mapSlide);
+    let manual = ((result.data ?? []) as Record<string, unknown>[]).map(mapSlide);
+    const manualArticleIds = manual.flatMap((slide) => slide.articleId ?? []);
+    if (manualArticleIds.length) {
+        const { data: linkedArticles, error: linkedArticleError } = await supabase
+            .from("editorial_articles")
+            .select("id,slug,title,public_summary,dek,hero_image_url,hero_image_alt,published_at")
+            .in("id", manualArticleIds)
+            .eq("status", "published");
+        if (linkedArticleError) throw new Error(linkedArticleError.message);
+        const linkedArticleById = new Map(
+            ((linkedArticles ?? []) as Array<Record<string, unknown>>)
+                .map((article) => [String(article.id), article])
+        );
+        manual = manual.map((slide) => {
+            if (!slide.articleId) return slide;
+            const article = linkedArticleById.get(slide.articleId);
+            if (!article) return slide;
+            return {
+                ...slide,
+                title: String(article.title),
+                summary: String(article.public_summary ?? article.dek ?? slide.summary),
+                visualAssetUrl: typeof article.hero_image_url === "string"
+                    ? article.hero_image_url
+                    : slide.visualAssetUrl,
+                visualAssetAlt: typeof article.hero_image_alt === "string"
+                    ? article.hero_image_alt
+                    : slide.visualAssetAlt,
+                ctaRoute: `/news/${String(article.slug)}`,
+                freshnessAt: String(article.published_at ?? slide.freshnessAt),
+                sourceNote: "Linked CMS article and editor-selected thumbnail.",
+            };
+        });
+    }
     const articleIds = new Set(manual.flatMap((slide) => slide.articleId ?? []));
     const { data: articles, error: articleError } = await supabase
         .from("editorial_articles")

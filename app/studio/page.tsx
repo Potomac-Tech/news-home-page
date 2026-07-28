@@ -27,6 +27,7 @@ type ArticleRow = {
     seo_title: string | null;
     seo_description: string | null;
     aeo_summary: string | null;
+    hero_image_url: string | null;
     scheduled_for: string | null;
     published_at: string | null;
     updated_at: string;
@@ -56,7 +57,7 @@ export default async function StudioPage({
     const { supabase } = await requireEditorialStaff("/studio");
     const { data: articleRows, error: articleError } = await supabase
         .from("editorial_articles")
-        .select("id,slug,status,access_tier_required,title,primary_author_id,public_summary,public_teaser_markdown,intro_markdown,seo_title,seo_description,aeo_summary,scheduled_for,published_at,updated_at")
+        .select("id,slug,status,access_tier_required,title,primary_author_id,public_summary,public_teaser_markdown,intro_markdown,seo_title,seo_description,aeo_summary,hero_image_url,scheduled_for,published_at,updated_at")
         .order("updated_at", { ascending: false })
         .limit(100);
 
@@ -167,6 +168,7 @@ export default async function StudioPage({
             seoTitle: row.seo_title ?? "",
             seoDescription: row.seo_description ?? "",
             aeoSummary: row.aeo_summary ?? "",
+            heroImageUrl: row.hero_image_url ?? "",
             publishAt: localDateTime(row.scheduled_for ?? row.published_at),
             updatedAt: row.updated_at,
             sectionTags: sectionsByArticle.get(row.id) ?? ["news"],

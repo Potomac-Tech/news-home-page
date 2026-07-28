@@ -9,7 +9,7 @@ const publicRoutes = [
     { path: "/", changeFrequency: "daily", priority: 1 },
     { path: "/terminal", changeFrequency: "weekly", priority: 0.9 },
     { path: "/search", changeFrequency: "weekly", priority: 0.9 },
-    { path: "/news", changeFrequency: "daily", priority: 0.9 },
+    { path: "/archives", changeFrequency: "daily", priority: 0.9 },
     { path: "/authors", changeFrequency: "weekly", priority: 0.7 },
     { path: "/contact", changeFrequency: "monthly", priority: 0.7 },
     { path: "/launches", changeFrequency: "weekly", priority: 0.75 },

@@ -1,6 +1,12 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import {
+    type ClipboardEvent,
+    type DragEvent,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import { useRouter } from "next/navigation";
 import {
     type EditorialSectionSlug,
@@ -9,6 +15,8 @@ import {
 import {
     createArticleDraft,
     removeArticleMedia,
+    setArticleHeroMedia,
+    uploadArticleMedia,
     updateArticleSectionTags,
     updateArticleDraft,
     updateArticleMediaMetadata,
@@ -29,6 +37,7 @@ export type StudioArticle = {
     seoTitle: string;
     seoDescription: string;
     aeoSummary: string;
+    heroImageUrl: string;
     publishAt: string;
     updatedAt: string;
     sectionTags: EditorialSectionSlug[];
@@ -72,7 +81,7 @@ function escapeHtml(value: string) {
 }
 
 function toEditorHtml(value: string) {
-    if (/<(?:p|br|strong|b|em|i|u|s|h2|h3|blockquote|ul|ol|li|a)(?:\s|>)/i.test(value)) {
+    if (/<(?:p|br|strong|b|em|i|u|s|h2|h3|blockquote|ul|ol|li|a|font|figure|figcaption|img|video)(?:\s|>)/i.test(value)) {
         return value;
     }
 
@@ -109,6 +118,7 @@ function emptyArticle(): StudioArticle {
         seoTitle: "",
         seoDescription: "",
         aeoSummary: "",
+        heroImageUrl: "",
         publishAt: "",
         updatedAt: "",
         sectionTags: ["news"],
@@ -138,17 +148,30 @@ function MediaAssetEditor({
     disabled,
     onSave,
     onRemove,
+    onInsert,
+    onUseAsThumbnail,
+    isThumbnail,
 }: {
     asset: StudioArticle["mediaAssets"][number];
     disabled: boolean;
     onSave: (assetId: string, altText: string, caption: string) => Promise<void>;
     onRemove: (assetId: string) => Promise<void>;
+    onInsert: (asset: StudioArticle["mediaAssets"][number]) => void;
+    onUseAsThumbnail: (assetId: string) => Promise<void>;
+    isThumbnail: boolean;
 }) {
     const [altText, setAltText] = useState(asset.altText);
     const [caption, setCaption] = useState(asset.caption);
 
     return (
-        <figure className="border border-potomac-regolith/25 p-2">
+        <figure
+            draggable
+            onDragStart={(event) => {
+                event.dataTransfer.effectAllowed = "copy";
+                event.dataTransfer.setData("application/x-cabeus-media", asset.id);
+            }}
+            className="border border-potomac-regolith/25 p-2"
+        >
             {asset.mediaType === "video" ? (
                 <video
                     src={asset.publicUrl}
@@ -183,6 +206,28 @@ function MediaAssetEditor({
                     placeholder="Optional caption or credit"
                 />
             </label>
+            <button
+                type="button"
+                disabled={disabled}
+                onClick={() => onInsert({
+                    ...asset,
+                    altText,
+                    caption,
+                })}
+                className="mt-3 w-full bg-potomac-gold px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-potomac-primary disabled:opacity-40"
+            >
+                Insert at cursor
+            </button>
+            {asset.mediaType === "image" ? (
+                <button
+                    type="button"
+                    disabled={disabled || isThumbnail}
+                    onClick={() => void onUseAsThumbnail(asset.id)}
+                    className="mt-2 w-full border border-potomac-gold/55 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-potomac-gold disabled:opacity-55"
+                >
+                    {isThumbnail ? "Main-page thumbnail" : "Use as thumbnail"}
+                </button>
+            ) : null}
             <button
                 type="button"
                 disabled={disabled}
@@ -232,6 +277,8 @@ export function EditorialStudio({
     const mediaInputRef = useRef<HTMLInputElement>(null);
     const bodyRef = useRef<HTMLDivElement>(null);
     const bodyInputRef = useRef<HTMLInputElement>(null);
+    const savedSelectionRef = useRef<Range | null>(null);
+    const insertUploadedMediaRef = useRef(false);
     const formId = "editorial-studio-story-form";
 
     const filteredArticles = articles.filter((article) =>
@@ -244,6 +291,76 @@ export function EditorialStudio({
         setBodyHtml(nextBody);
         if (bodyRef.current) bodyRef.current.innerHTML = nextBody;
         if (bodyInputRef.current) bodyInputRef.current.value = nextBody;
+    }
+
+    function syncBodyFromEditor() {
+        const nextBody = bodyRef.current?.innerHTML ?? "";
+        bodyHtmlRef.current = nextBody;
+        if (bodyInputRef.current) bodyInputRef.current.value = nextBody;
+    }
+
+    function rememberEditorSelection() {
+        const selection = window.getSelection();
+        if (
+            selection?.rangeCount
+            && bodyRef.current?.contains(selection.anchorNode)
+        ) {
+            savedSelectionRef.current = selection.getRangeAt(0).cloneRange();
+        }
+    }
+
+    function mediaMarkup(asset: StudioArticle["mediaAssets"][number]) {
+        const description = escapeHtml(
+            asset.altText || (asset.mediaType === "video" ? "Article video" : "Article image")
+        );
+        const caption = asset.caption
+            ? `<figcaption>${escapeHtml(asset.caption)}</figcaption>`
+            : "";
+        const media = asset.mediaType === "video"
+            ? `<video src="${escapeHtml(asset.publicUrl)}" controls preload="metadata" playsinline aria-label="${description}"></video>`
+            : `<img src="${escapeHtml(asset.publicUrl)}" alt="${description}" loading="lazy">`;
+        return `<figure data-media-id="${escapeHtml(asset.id)}" contenteditable="false">${media}${caption}</figure><p><br></p>`;
+    }
+
+    function insertMediaAtCursor(asset: StudioArticle["mediaAssets"][number]) {
+        bodyRef.current?.focus();
+        const selection = window.getSelection();
+        const range = savedSelectionRef.current;
+        if (selection && range && bodyRef.current?.contains(range.commonAncestorContainer)) {
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+        document.execCommand("insertHTML", false, mediaMarkup(asset));
+        syncBodyFromEditor();
+        rememberEditorSelection();
+        setSaveStatus("Media inserted in the story. Save the draft to keep its position.");
+    }
+
+    function handleEditorDrop(event: DragEvent<HTMLDivElement>) {
+        const assetId = event.dataTransfer.getData("application/x-cabeus-media");
+        if (!assetId) return;
+        const asset = draft.mediaAssets.find((item) => item.id === assetId);
+        if (!asset) return;
+        event.preventDefault();
+        const caretRange = document.caretRangeFromPoint?.(
+            event.clientX,
+            event.clientY
+        );
+        if (caretRange) savedSelectionRef.current = caretRange;
+        insertMediaAtCursor(asset);
+    }
+
+    function handlePlainTextPaste(event: ClipboardEvent<HTMLDivElement>) {
+        event.preventDefault();
+        const text = event.clipboardData.getData("text/plain");
+        const html = text
+            .split(/\n\s*\n/)
+            .map((paragraph) => paragraph.trim())
+            .filter(Boolean)
+            .map((paragraph) => `<p>${escapeHtml(paragraph).replaceAll("\n", "<br>")}</p>`)
+            .join("");
+        document.execCommand("insertHTML", false, html || escapeHtml(text));
+        syncBodyFromEditor();
     }
 
     function chooseArticle(article: StudioArticle) {
@@ -281,6 +398,10 @@ export function EditorialStudio({
             setDraft((current) => ({
                 ...current,
                 id: result.articleId,
+                heroImageUrl:
+                    current.heroImageUrl
+                    || result.uploadedMedia.find((asset) => asset.mediaType === "image")?.publicUrl
+                    || "",
                 mediaAssets: [...current.mediaAssets, ...result.uploadedMedia],
             }));
             if (fileInputRef.current) fileInputRef.current.value = "";
@@ -313,6 +434,11 @@ export function EditorialStudio({
             await removeArticleMedia(formData);
             setDraft((current) => ({
                 ...current,
+                heroImageUrl:
+                    current.mediaAssets.find((asset) => asset.id === assetId)?.publicUrl
+                    === current.heroImageUrl
+                        ? ""
+                        : current.heroImageUrl,
                 mediaAssets: current.mediaAssets.filter((asset) => asset.id !== assetId),
             }));
             setSaveStatus("Media removed. Preview approval must be renewed.");
@@ -353,6 +479,83 @@ export function EditorialStudio({
                 error instanceof Error
                     ? error.message
                     : "Media details could not be saved."
+            );
+        } finally {
+            setIsSaving(false);
+        }
+    }
+
+    async function uploadMediaImmediately(files: FileList | null) {
+        const selectedFiles = Array.from(files ?? []);
+        setSelectedMediaNames(selectedFiles.map((file) => file.name));
+        if (!selectedFiles.length) return;
+        if (draft.id === "new") {
+            insertUploadedMediaRef.current = false;
+            setSaveStatus("Save the draft once before inserting media into the story.");
+            return;
+        }
+
+        setIsSaving(true);
+        setSaveStatus("Uploading media...");
+        const formData = new FormData();
+        formData.set("studio_context", "studio");
+        formData.set("article_id", draft.id);
+        formData.set("media_alt_text", mediaAltText);
+        formData.set("media_caption", mediaCaption);
+        selectedFiles.forEach((file) => formData.append("story_media", file));
+        try {
+            const result = await uploadArticleMedia(formData);
+            setDraft((current) => ({
+                ...current,
+                heroImageUrl:
+                    current.heroImageUrl
+                    || result.uploadedMedia.find((asset) => asset.mediaType === "image")?.publicUrl
+                    || "",
+                mediaAssets: [...current.mediaAssets, ...result.uploadedMedia],
+            }));
+            if (insertUploadedMediaRef.current && result.uploadedMedia[0]) {
+                insertMediaAtCursor(result.uploadedMedia[0]);
+            } else {
+                setSaveStatus(
+                    `${result.uploadedMedia.length} media file${result.uploadedMedia.length === 1 ? "" : "s"} uploaded.`
+                );
+            }
+            setMediaAltText("");
+            setMediaCaption("");
+            setSelectedMediaNames([]);
+            router.refresh();
+        } catch (error) {
+            setSaveStatus(
+                error instanceof Error ? error.message : "Media could not be uploaded."
+            );
+        } finally {
+            insertUploadedMediaRef.current = false;
+            if (mediaInputRef.current) mediaInputRef.current.value = "";
+            setIsSaving(false);
+        }
+    }
+
+    async function useAsThumbnail(assetId: string) {
+        if (draft.id === "new") return;
+        setIsSaving(true);
+        setSaveStatus("Updating main-page thumbnail...");
+        const formData = new FormData();
+        formData.set("studio_context", "studio");
+        formData.set("article_id", draft.id);
+        formData.set("asset_id", assetId);
+        try {
+            const result = await setArticleHeroMedia(formData);
+            setDraft((current) => ({
+                ...current,
+                heroImageUrl: result.publicUrl,
+            }));
+            setSaveStatus("Main-page thumbnail updated for the article and carousel.");
+            router.refresh();
+        } catch (error) {
+            setSaveStatus(
+                error instanceof Error
+                    ? error.message
+                    : "Main-page thumbnail could not be updated."
             );
         } finally {
             setIsSaving(false);
@@ -479,10 +682,15 @@ export function EditorialStudio({
 
     function runEditorCommand(command: string, value?: string) {
         bodyRef.current?.focus();
+        const selection = window.getSelection();
+        const range = savedSelectionRef.current;
+        if (selection && range && bodyRef.current?.contains(range.commonAncestorContainer)) {
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
         document.execCommand(command, false, value);
-        const nextBody = bodyRef.current?.innerHTML ?? "";
-        bodyHtmlRef.current = nextBody;
-        if (bodyInputRef.current) bodyInputRef.current.value = nextBody;
+        syncBodyFromEditor();
+        rememberEditorSelection();
     }
 
     function addLink() {
@@ -516,16 +724,70 @@ export function EditorialStudio({
                             aria-label="Text style"
                             defaultValue=""
                             onChange={(event) => {
-                                if (event.target.value === "heading") {
-                                    runEditorCommand("formatBlock", "h2");
+                                if (event.target.value) {
+                                    runEditorCommand("formatBlock", event.target.value);
                                 }
                                 event.target.value = "";
                             }}
                             className="h-9 border-0 bg-transparent px-2 text-sm text-potomac-cream outline-none"
                         >
                             <option value="" className="bg-potomac-primary">Style</option>
-                            <option value="heading" className="bg-potomac-primary">Heading</option>
+                            <option value="p" className="bg-potomac-primary">Body</option>
+                            <option value="h2" className="bg-potomac-primary">Heading 2</option>
+                            <option value="h3" className="bg-potomac-primary">Heading 3</option>
+                            <option value="blockquote" className="bg-potomac-primary">Quote</option>
                         </select>
+                        <select
+                            aria-label="Font family"
+                            defaultValue=""
+                            onChange={(event) => {
+                                if (event.target.value) runEditorCommand("fontName", event.target.value);
+                                event.target.value = "";
+                            }}
+                            className="h-9 border-0 bg-transparent px-2 text-sm text-potomac-cream outline-none"
+                        >
+                            <option value="" className="bg-potomac-primary">Font</option>
+                            <option value="Arial" className="bg-potomac-primary">Sans</option>
+                            <option value="Georgia" className="bg-potomac-primary">Serif</option>
+                            <option value="Courier New" className="bg-potomac-primary">Mono</option>
+                        </select>
+                        <select
+                            aria-label="Font size"
+                            defaultValue=""
+                            onChange={(event) => {
+                                if (event.target.value) runEditorCommand("fontSize", event.target.value);
+                                event.target.value = "";
+                            }}
+                            className="h-9 border-0 bg-transparent px-2 text-sm text-potomac-cream outline-none"
+                        >
+                            <option value="" className="bg-potomac-primary">Size</option>
+                            <option value="2" className="bg-potomac-primary">Small</option>
+                            <option value="3" className="bg-potomac-primary">Body</option>
+                            <option value="4" className="bg-potomac-primary">Large</option>
+                            <option value="5" className="bg-potomac-primary">Display</option>
+                        </select>
+                        <button
+                            type="button"
+                            title="Clear formatting"
+                            aria-label="Clear formatting"
+                            onClick={() => runEditorCommand("removeFormat")}
+                            className="h-9 px-2 font-mono text-xs font-bold hover:bg-white/5"
+                        >
+                            Tx
+                        </button>
+                        <button
+                            type="button"
+                            title="Upload media into story"
+                            aria-label="Upload media into story"
+                            onClick={() => {
+                                rememberEditorSelection();
+                                insertUploadedMediaRef.current = true;
+                                mediaInputRef.current?.click();
+                            }}
+                            className="h-9 px-2 font-mono text-xs font-bold hover:bg-white/5"
+                        >
+                            Media
+                        </button>
                         <span className="mx-2 h-5 w-px bg-white/15" />
                         <button type="button" title="Bold" aria-label="Bold" onClick={() => runEditorCommand("bold")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">B</button>
                         <button type="button" title="Italic" aria-label="Italic" onClick={() => runEditorCommand("italic")} className="h-9 w-9 font-serif text-lg italic hover:bg-white/5">I</button>
@@ -704,15 +966,10 @@ export function EditorialStudio({
                                             multiple
                                             accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,video/x-m4v,.mov,.m4v"
                                             className={inputClass}
-                                            onChange={(event) =>
-                                                setSelectedMediaNames(
-                                                    Array.from(event.target.files ?? []).map(
-                                                        (file) => file.name
-                                                    )
-                                                )
-                                            }
+                                            onChange={(event) => void uploadMediaImmediately(event.target.files)}
                                         />
                                         <span className="mt-2 block text-[0.58rem] text-potomac-regolith">JPG, PNG, WebP, GIF, MP4, WebM, MOV, or M4V. 50 MB maximum per file.</span>
+                                        <span className="mt-1 block text-[0.58rem] text-potomac-regolith">After upload, drag media into the story, use Insert at cursor, and choose one image as the main-page thumbnail.</span>
                                         {selectedMediaNames.length ? (
                                             <span className="mt-2 block normal-case text-white">
                                                 Ready to upload: {selectedMediaNames.join(", ")}
@@ -749,6 +1006,9 @@ export function EditorialStudio({
                                                 disabled={isSaving}
                                                 onSave={saveMediaDetails}
                                                 onRemove={removeMedia}
+                                                onInsert={insertMediaAtCursor}
+                                                onUseAsThumbnail={useAsThumbnail}
+                                                isThumbnail={asset.publicUrl === draft.heroImageUrl}
                                             />
                                         ))}
                                     </div>
@@ -784,6 +1044,17 @@ export function EditorialStudio({
                                             bodyInputRef.current.value = nextBody;
                                         }
                                     }}
+                                    onMouseUp={rememberEditorSelection}
+                                    onKeyUp={rememberEditorSelection}
+                                    onFocus={rememberEditorSelection}
+                                    onDrop={handleEditorDrop}
+                                    onDragOver={(event) => {
+                                        if (event.dataTransfer.types.includes("application/x-cabeus-media")) {
+                                            event.preventDefault();
+                                            event.dataTransfer.dropEffect = "copy";
+                                        }
+                                    }}
+                                    onPaste={handlePlainTextPaste}
                                     dangerouslySetInnerHTML={{ __html: bodyHtml }}
                                     className="studio-rich-editor min-h-[32rem] w-full border-0 bg-transparent py-3 text-lg leading-8 text-white outline-none"
                                 />

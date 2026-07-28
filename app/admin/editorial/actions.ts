@@ -199,6 +199,88 @@ async function promoteFirstImageToHero(
     if (error) throw new Error(error.message);
 }
 
+export async function uploadArticleMedia(formData: FormData) {
+    const { supabase, userId } = await requireEditorialStaff(
+        editorialNextPath(formData)
+    );
+    const articleId = getRequiredString(formData, "article_id");
+    const files = mediaFilesFrom(formData);
+    if (!files.length) throw new Error("Select at least one media file.");
+
+    const uploadedMedia = await storeMediaAssets({
+        supabase,
+        userId,
+        articleId,
+        files,
+        altText: getOptionalString(formData, "media_alt_text"),
+        caption: getOptionalString(formData, "media_caption"),
+    });
+    await promoteFirstImageToHero(supabase, articleId, userId);
+
+    const { error: previewResetError } = await supabase
+        .from("editorial_preview_approvals")
+        .delete()
+        .eq("article_id", articleId);
+    if (previewResetError) throw new Error(previewResetError.message);
+
+    revalidatePath("/");
+    revalidatePath("/archives");
+    revalidatePath("/studio");
+    revalidatePath("/studio/dashboard");
+    revalidatePath(`/studio/preview/${articleId}`);
+    revalidatePath("/news/[slug]", "page");
+    return { articleId, uploadedMedia };
+}
+
+export async function setArticleHeroMedia(formData: FormData) {
+    const { supabase, userId } = await requireEditorialStaff(
+        editorialNextPath(formData)
+    );
+    const articleId = getRequiredString(formData, "article_id");
+    const assetId = getRequiredString(formData, "asset_id");
+
+    const { data: asset, error: assetError } = await supabase
+        .from("editorial_media_assets")
+        .select("id,public_url,media_type,alt_text")
+        .eq("id", assetId)
+        .eq("article_id", articleId)
+        .single();
+    if (assetError || !asset) {
+        throw new Error(assetError?.message ?? "Image was not found.");
+    }
+    if (asset.media_type !== "image") {
+        throw new Error("Only an image can be used as the main-page thumbnail.");
+    }
+
+    const { error: articleError } = await supabase
+        .from("editorial_articles")
+        .update({
+            hero_image_url: asset.public_url,
+            hero_image_alt: asset.alt_text || "Article photograph",
+            updated_by: userId,
+        })
+        .eq("id", articleId);
+    if (articleError) throw new Error(articleError.message);
+
+    const { error: previewResetError } = await supabase
+        .from("editorial_preview_approvals")
+        .delete()
+        .eq("article_id", articleId);
+    if (previewResetError) throw new Error(previewResetError.message);
+
+    revalidatePath("/");
+    revalidatePath("/archives");
+    revalidatePath("/studio");
+    revalidatePath("/studio/dashboard");
+    revalidatePath(`/studio/preview/${articleId}`);
+    revalidatePath("/news/[slug]", "page");
+    return {
+        assetId: asset.id,
+        publicUrl: asset.public_url,
+        altText: asset.alt_text ?? "",
+    };
+}
+
 export async function createArticleDraft(formData: FormData) {
     const { supabase, userId } = await requireEditorialStaff(
         editorialNextPath(formData)

@@ -346,7 +346,7 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         "Nexus role",
     ], "Nexus member navigation");
     assertIncludes(migrationShell, [
-        '{ href: "/news", label: "News" }',
+        '{ href: "/", label: "News" }',
         'label: "Space Investment Forum"',
         'label: "Space Industrialist Week"',
         'label: "Cabeus Games"',

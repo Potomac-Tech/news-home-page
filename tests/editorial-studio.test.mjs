@@ -20,6 +20,7 @@ const carouselControl = readFileSync("app/studio/dashboard/CarouselPositionContr
 const sectionTags = readFileSync("lib/editorial/section-tags.ts", "utf8");
 const sectionMigration = readFileSync("supabase/migrations/20260728135218_editorial_sections_and_carousel_positions.sql", "utf8");
 const newsPage = readFileSync("app/news/page.tsx", "utf8");
+const archivesPage = readFileSync("app/archives/page.tsx", "utf8");
 const carouselLoader = readFileSync("app/_data/homepageCarousel.ts", "utf8");
 const authorPage = readFileSync("app/authors/[slug]/page.tsx", "utf8");
 const articlePage = readFileSync("app/news/[slug]/page.tsx", "utf8");
@@ -125,7 +126,7 @@ test("preview approval gates immediate and scheduled publication", () => {
 test("unnamed editorial-desk stories cannot reach public news surfaces", () => {
     const publicLoaders = [
         readFileSync("app/page.tsx", "utf8"),
-        readFileSync("app/news/page.tsx", "utf8"),
+        archivesPage,
         readFileSync("app/news/[slug]/page.tsx", "utf8"),
         readFileSync("app/sitemap.ts", "utf8"),
         readFileSync("app/news-sitemap.xml/route.ts", "utf8"),
@@ -175,8 +176,9 @@ test("article sections and carousel positions are editor controlled", () => {
     assert.match(studioUi, /name="section_tags"/);
     assert.match(actions, /syncArticleSectionTags/);
     assert.match(studioPage, /editorial_article_tags/);
-    assert.match(newsPage, /editorial_article_tags/);
-    assert.match(newsPage, /section=\$\{item\.slug\}/);
+    assert.match(newsPage, /redirect\("\/"\)/);
+    assert.match(archivesPage, /editorial_article_tags/);
+    assert.match(archivesPage, /section=\$\{item\.slug\}/);
     assert.match(sectionMigration, /carousel_position between 1 and 5/);
     assert.match(sectionMigration, /set_editorial_article_carousel_position/);
     assert.match(carouselControl, /Carousel position for/);
@@ -212,7 +214,11 @@ test("studio preserves headline case and separates story paragraphs", () => {
     assert.match(studioUi, /setBodyHtml/);
     assert.match(studioUi, /bodyHtmlRef\.current = nextBody/);
     assert.doesNotMatch(studioUi, /onInput=\{\(event\) => setBodyHtml/);
-    assert.doesNotMatch(studioUi, /Add section|\+ Paragraph|Move section|Remove section|draggable/);
+    assert.doesNotMatch(studioUi, /Add section|\+ Paragraph|Move section|Remove section/);
+    assert.match(studioUi, /application\/x-cabeus-media/);
+    assert.match(studioUi, /Use as thumbnail/);
+    assert.match(studioUi, /aria-label="Font family"/);
+    assert.match(studioUi, /aria-label="Font size"/);
     assert.match(studioUi, /Unsaved draft/);
     assert.match(studioUi, /aria-label="Text style"/);
     assert.match(devicePreview, /Computer/);

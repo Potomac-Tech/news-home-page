@@ -16,6 +16,11 @@ const allowedTags = [
     "ol",
     "li",
     "a",
+    "font",
+    "figure",
+    "figcaption",
+    "img",
+    "video",
 ];
 
 export function sanitizeArticleHtml(value: string) {
@@ -23,6 +28,16 @@ export function sanitizeArticleHtml(value: string) {
         allowedTags,
         allowedAttributes: {
             a: ["href", "target", "rel"],
+            font: ["face", "size"],
+            figure: ["data-media-id", "contenteditable"],
+            img: ["src", "alt", "loading"],
+            video: [
+                "src",
+                "controls",
+                "preload",
+                "playsinline",
+                "aria-label",
+            ],
         },
         allowedSchemes: ["http", "https", "mailto"],
         transformTags: {
@@ -39,7 +54,7 @@ export function sanitizeArticleHtml(value: string) {
 }
 
 export function isRichArticleHtml(value: string) {
-    return /<(?:p|br|strong|b|em|i|u|s|h2|h3|blockquote|ul|ol|li|a)(?:\s|>)/i.test(value);
+    return /<(?:p|br|strong|b|em|i|u|s|h2|h3|blockquote|ul|ol|li|a|font|figure|figcaption|img|video)(?:\s|>)/i.test(value);
 }
 
 export function articlePlainText(value: string) {

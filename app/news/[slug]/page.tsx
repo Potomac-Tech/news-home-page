@@ -432,6 +432,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     }
 
     const { article, fullBody, access, mediaAssets } = loaded;
+    const inlineMediaIds = new Set(
+        Array.from((fullBody ?? "").matchAll(/data-media-id="([^"]+)"/g))
+            .map((match) => match[1])
+    );
     const articleSponsorUnit = sponsorUnits.get(
         sponsorPlacementKeys.articleSidebar
     )!;
@@ -569,9 +573,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             </div>
                         </>
                     )}
-                    {mediaAssets.some((asset) => asset.mediaType === "video") ? (
+                    {mediaAssets.some((asset) =>
+                        asset.mediaType === "video" && !inlineMediaIds.has(asset.id)
+                    ) ? (
                         <section className="mt-10 space-y-5">
-                            {mediaAssets.filter((asset) => asset.mediaType === "video").map((asset) => (
+                            {mediaAssets.filter((asset) =>
+                                asset.mediaType === "video" && !inlineMediaIds.has(asset.id)
+                            ).map((asset) => (
                                 <figure key={asset.id} className="glass-card rounded p-4">
                                     <video
                                         src={asset.publicUrl}

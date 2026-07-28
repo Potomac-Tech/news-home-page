@@ -148,6 +148,58 @@ body {
     text-decoration: underline;
 }
 
+.studio-rich-editor figure,
+.article-rich-text figure {
+    border: 1px solid rgb(139 137 128 / 0.35);
+    margin: 2rem 0;
+    padding: 0.65rem;
+}
+
+.studio-rich-editor figure {
+    cursor: grab;
+}
+
+.studio-rich-editor figure img,
+.studio-rich-editor figure video,
+.article-rich-text figure img,
+.article-rich-text figure video {
+    background: #080a0c;
+    display: block;
+    height: auto;
+    max-height: 46rem;
+    object-fit: contain;
+    object-position: top;
+    width: 100%;
+}
+
+.studio-rich-editor figcaption,
+.article-rich-text figcaption {
+    color: rgb(239 236 224 / 0.62) !important;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin-top: 0.65rem;
+}
+
+.studio-rich-editor font[size="2"],
+.article-rich-text font[size="2"] {
+    font-size: 0.875rem;
+}
+
+.studio-rich-editor font[size="3"],
+.article-rich-text font[size="3"] {
+    font-size: 1rem;
+}
+
+.studio-rich-editor font[size="4"],
+.article-rich-text font[size="4"] {
+    font-size: 1.25rem;
+}
+
+.studio-rich-editor font[size="5"],
+.article-rich-text font[size="5"] {
+    font-size: 1.5rem;
+}
+
 .article-rich-text > * + * {
     margin-top: 1.35rem;
 }

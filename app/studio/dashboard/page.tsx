@@ -9,6 +9,14 @@ export const metadata: Metadata = { title: "Article dashboard", robots: { index:
 
 const pageSize = 50;
 const statuses = ["all", "draft", "in_review", "scheduled", "published", "archived"] as const;
+const statusLabels: Record<(typeof statuses)[number], string> = {
+    all: "all",
+    draft: "draft",
+    in_review: "in review",
+    scheduled: "scheduled",
+    published: "published",
+    archived: "withdrawn",
+};
 
 export default async function ArticleDashboard({
     searchParams,
@@ -83,6 +91,11 @@ export default async function ArticleDashboard({
                         <p className="font-mono text-xs font-bold uppercase text-potomac-gold">Cabeus newsroom</p>
                         <h1 className="mt-2 font-serif text-4xl uppercase text-white">Article dashboard</h1>
                         <p className="mt-2 text-sm text-potomac-regolith">{articlesResult.count ?? 0} matching articles · 50 per page</p>
+                        <p className="mt-3 max-w-3xl text-sm leading-6 text-potomac-cream/70">
+                            Published stories remain in the public Archives after their
+                            carousel position is set to N/A. Archived status withdraws
+                            a story from the public site.
+                        </p>
                     </div>
                     <Link href="/studio?new=1" className="bg-potomac-gold px-5 py-3 font-mono text-xs font-bold uppercase text-potomac-primary">New story</Link>
                 </header>
@@ -99,7 +112,7 @@ export default async function ArticleDashboard({
                 <form className="mt-6 flex flex-wrap gap-3">
                     <input name="q" defaultValue={query} type="search" placeholder="Search headline or URL" className="min-w-64 flex-1 border border-potomac-regolith/30 bg-potomac-primary px-4 py-3 text-white" />
                     <select name="status" defaultValue={activeStatus} className="border border-potomac-regolith/30 bg-potomac-primary px-4 py-3 text-white">
-                        {statuses.map((status) => <option key={status} value={status}>{status.replace("_", " ")}</option>)}
+                        {statuses.map((status) => <option key={status} value={status}>{statusLabels[status]}</option>)}
                     </select>
                     <button className="border border-potomac-gold px-5 py-3 font-mono text-xs font-bold uppercase text-potomac-gold">Filter</button>
                 </form>
@@ -121,7 +134,9 @@ export default async function ArticleDashboard({
                                                 .map((slug) => sectionLabelBySlug.get(slug) ?? slug)
                                                 .join(", ")}
                                         </td>
-                                        <td className="p-4 font-mono text-xs uppercase text-potomac-gold">{article.status}</td>
+                                        <td className="p-4 font-mono text-xs uppercase text-potomac-gold">
+                                            {article.status === "archived" ? "withdrawn" : article.status.replace("_", " ")}
+                                        </td>
                                         <td className="p-4 text-sm">{publishDate ? new Date(publishDate).toLocaleString() : "Not set"}</td>
                                         <td className="p-4">
                                             <CarouselPositionControl

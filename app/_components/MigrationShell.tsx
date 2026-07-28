@@ -16,14 +16,15 @@ const primaryNavItems: Array<{
     href: string;
     label: string;
 }> = [
-    { href: "/news", label: "News" },
-    { href: "/news?section=space-investment-forum", label: "Space Investment Forum" },
-    { href: "/news?section=space-industrialist-week", label: "Space Industrialist Week" },
-    { href: "/news?section=cabeus-games", label: "Cabeus Games" },
+    { href: "/", label: "News" },
+    { href: "/archives?section=space-investment-forum", label: "Space Investment Forum" },
+    { href: "/archives?section=space-industrialist-week", label: "Space Industrialist Week" },
+    { href: "/archives?section=cabeus-games", label: "Cabeus Games" },
     { href: "/terminal", label: "Terminal" },
 ];
 
 const footerNavItems = [
+    { href: "/archives", label: "News archives" },
     { href: "/terminal", label: "Terminal" },
     { href: "/tracker/launches", label: "Launches & Missions" },
     { href: "/calculators", label: "Calculators" },

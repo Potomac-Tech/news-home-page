@@ -20,6 +20,11 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
         supabase.from("editorial_media_assets").select("id,public_url,media_type,alt_text,caption").eq("article_id", id).order("sort_order"),
     ]);
     const date = article.scheduled_for ?? article.published_at ?? new Date().toISOString();
+    const bodyHtml = String(body?.body_markdown ?? "");
+    const inlineMediaIds = new Set(
+        Array.from(bodyHtml.matchAll(/data-media-id="([^"]+)"/g))
+            .map((match) => match[1])
+    );
     const heroAsset = article.hero_image_url
         ? media?.find((asset) => asset.public_url === article.hero_image_url)
         : media?.find((asset) => asset.media_type === "image");
@@ -60,11 +65,13 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
                     <div
                         className="article-rich-text mt-6 text-lg leading-8 text-potomac-cream/85"
                         dangerouslySetInnerHTML={{
-                            __html: renderArticleHtml(body?.body_markdown ?? ""),
+                            __html: renderArticleHtml(bodyHtml),
                         }}
                     />
                 </section>
-                {(media ?? []).filter((asset) => asset.media_type === "video").map((asset) => (
+                {(media ?? []).filter((asset) =>
+                    asset.media_type === "video" && !inlineMediaIds.has(asset.id)
+                ).map((asset) => (
                     <figure key={asset.id} className="border border-white/10 p-3">
                         <video
                             src={asset.public_url}
