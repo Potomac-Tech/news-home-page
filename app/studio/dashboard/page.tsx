@@ -86,7 +86,7 @@ export default async function ArticleDashboard({
                                 return (
                                     <tr key={article.id} className="border-t border-potomac-regolith/20">
                                         <td className="p-4"><strong className="block text-white">{article.title}</strong><span className="mt-1 block font-mono text-xs text-potomac-regolith">/news/{article.slug}</span></td>
-                                        <td className="p-4 text-sm">{article.primary_author_id ? authorById.get(article.primary_author_id) ?? "Unknown" : "Editorial Desk"}</td>
+                                        <td className="p-4 text-sm">{article.primary_author_id ? authorById.get(article.primary_author_id) ?? "Unknown" : "Byline not set"}</td>
                                         <td className="p-4 font-mono text-xs uppercase text-potomac-gold">{article.status}</td>
                                         <td className="p-4 text-sm">{publishDate ? new Date(publishDate).toLocaleString() : "Not set"}</td>
                                         <td className="p-4 text-sm">{new Date(article.updated_at).toLocaleString()}</td>

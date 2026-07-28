@@ -65,7 +65,7 @@ Never use Supabase project `nwoluvjdojzayozyzlob` for this release.
 - [x] Routine alerts digest, queue, defer, or remain in app before the operational reserve is consumed.
 - [x] Public forms persist the lead first and show sent, queued, delayed, or configuration-needed status accurately.
 - [x] `/admin/email` shows quota usage, reset time, queue backlog, held/failed deliveries, and authorized retry controls.
-- [ ] Manual retry and capped-delivery procedures in `docs/resend-free-operations.md` were reviewed by the release owner.
+- [x] Manual retry and capped-delivery procedures in `docs/resend-free-operations.md` were reviewed by release owner Jacob Matthews on July 27, 2026; the live Resend dashboard confirmed the Free plan, disabled paid overage, one verified sending domain, sending-only production credentials, and recent Supabase Auth delivery records.
 
 ## Trust And Operations Gate
 

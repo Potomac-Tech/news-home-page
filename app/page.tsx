@@ -54,6 +54,7 @@ type EditorialArticleRow = {
     id: string;
     slug: string;
     title: string;
+    primary_author_id: string;
     dek: string | null;
     public_summary: string | null;
     public_teaser_markdown: string | null;
@@ -139,9 +140,10 @@ async function getHomepageStories(): Promise<HomeStory[]> {
         const { data, error } = await supabase
             .from("editorial_articles")
             .select(
-                "id,slug,title,dek,public_summary,public_teaser_markdown,access_tier_required,hero_image_url,hero_image_alt,published_at"
+                "id,slug,title,primary_author_id,dek,public_summary,public_teaser_markdown,access_tier_required,hero_image_url,hero_image_alt,published_at"
             )
             .eq("status", "published")
+            .not("primary_author_id", "is", null)
             .lte("published_at", new Date().toISOString())
             .order("published_at", { ascending: false })
             .limit(6);
@@ -151,12 +153,24 @@ async function getHomepageStories(): Promise<HomeStory[]> {
         }
 
         const articleRows = data as EditorialArticleRow[];
-        const { data: media } = await supabase
-            .from("editorial_media_assets")
-            .select("article_id,public_url,alt_text,media_type,sort_order")
-            .in("article_id", articleRows.map((article) => article.id))
-            .eq("media_type", "image")
-            .order("sort_order");
+        const [{ data: media }, { data: authors }] = await Promise.all([
+            supabase
+                .from("editorial_media_assets")
+                .select("article_id,public_url,alt_text,media_type,sort_order")
+                .in("article_id", articleRows.map((article) => article.id))
+                .eq("media_type", "image")
+                .order("sort_order"),
+            supabase
+                .from("editorial_authors")
+                .select("id,display_name")
+                .in(
+                    "id",
+                    articleRows.map((article) => article.primary_author_id)
+                ),
+        ]);
+        const authorById = new Map(
+            (authors ?? []).map((author) => [author.id, author.display_name])
+        );
         const firstImageByArticle = new Map<string, { url: string; alt: string }>();
         for (const asset of media ?? []) {
             if (!firstImageByArticle.has(asset.article_id)) {
@@ -184,7 +198,8 @@ async function getHomepageStories(): Promise<HomeStory[]> {
                 href: articleHref(article.slug),
                 publishedAt: article.published_at ?? new Date().toISOString(),
                 accessTier: normalizeAccessTier(article.access_tier_required),
-                sourceLabel: "Editorial desk",
+                sourceLabel:
+                    authorById.get(article.primary_author_id) ?? "Cabeus Explorer",
                 imageUrl: article.hero_image_url ?? firstImageByArticle.get(article.id)?.url,
                 imageAlt: article.hero_image_alt ?? firstImageByArticle.get(article.id)?.alt,
             };
@@ -410,7 +425,7 @@ export default async function HomePage() {
                             <section className="flex min-h-[500px] items-center px-8 py-16">
                                 <div>
                                     <p className="font-mono text-xs font-bold uppercase text-potomac-gold">
-                                        Editorial desk
+                                        Cabeus newsroom
                                     </p>
                                     <h1 className="mt-4 font-serif text-4xl uppercase text-white">
                                         News feed temporarily unavailable

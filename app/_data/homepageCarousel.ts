@@ -143,6 +143,7 @@ export async function loadHomepageCarousel(
         .from("editorial_articles")
         .select("id,slug,title,public_summary,hero_image_url,hero_image_alt,published_at")
         .eq("status", "published")
+        .not("primary_author_id", "is", null)
         .order("published_at", { ascending: false })
         .limit(10);
     if (articleError) throw new Error(articleError.message);

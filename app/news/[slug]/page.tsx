@@ -149,7 +149,7 @@ function mapArticle(
         id: row.id,
         slug: row.slug,
         title: row.title,
-        authorName: author?.display_name ?? "Cabeus Explorer Editorial Desk",
+        authorName: author?.display_name ?? "Cabeus Explorer",
         authorSlug: author?.slug,
         dek: row.dek ?? row.public_summary ?? "Cabeus Explorer intelligence brief.",
         summary: row.public_summary ?? row.dek ?? "Cabeus Explorer intelligence brief.",
@@ -182,6 +182,7 @@ async function getPublishedCmsArticle(slug: string) {
         )
         .eq("slug", slug)
         .eq("status", "published")
+        .not("primary_author_id", "is", null)
         .lte("published_at", now)
         .maybeSingle();
 
@@ -511,7 +512,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             {article.authorSlug ? (
                                 <Link href={`/authors/${article.authorSlug}`}>By {article.authorName}</Link>
                             ) : (
-                                <span>By {article.authorName ?? "Cabeus Explorer Editorial Desk"}</span>
+                                <span>By {article.authorName ?? "Cabeus Explorer"}</span>
                             )}
                             <time dateTime={article.publishedAt}>
                                 Published {formatDate(article.publishedAt)}

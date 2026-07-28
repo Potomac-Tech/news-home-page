@@ -78,6 +78,8 @@ test("preview approval gates immediate and scheduled publication", () => {
     assert.match(actions, /approveArticlePreview/);
     assert.match(actions, /scheduleArticle/);
     assert.match(actions, /Open the device preview/);
+    assert.match(actions, /Assign a named author before publishing/);
+    assert.match(actions, /Assign a named author before scheduling/);
     assert.match(previewActions, /publishArticle/);
     assert.match(previewActions, /scheduleArticle/);
     assert.match(previewPage, /current revision approved/);
@@ -86,6 +88,27 @@ test("preview approval gates immediate and scheduled publication", () => {
     }
     assert.match(workflowMigration, /publish_due_editorial_articles/);
     assert.match(workflowMigration, /\*\/5 \* \* \* \*/);
+});
+
+test("unnamed editorial-desk stories cannot reach public news surfaces", () => {
+    const publicLoaders = [
+        readFileSync("app/page.tsx", "utf8"),
+        readFileSync("app/news/page.tsx", "utf8"),
+        readFileSync("app/news/[slug]/page.tsx", "utf8"),
+        readFileSync("app/sitemap.ts", "utf8"),
+        readFileSync("app/news-sitemap.xml/route.ts", "utf8"),
+        readFileSync("app/_data/homepageCarousel.ts", "utf8"),
+    ];
+    for (const loader of publicLoaders) {
+        assert.match(loader, /\.not\("primary_author_id", "is", null\)/);
+    }
+    assert.doesNotMatch(readFileSync("app/page.tsx", "utf8"), /Editorial desk/i);
+    assert.doesNotMatch(articlePage, /Editorial Desk/i);
+    const authorGateMigration = readFileSync(
+        "supabase/migrations/20260728022500_require_named_author_for_scheduled_publication.sql",
+        "utf8"
+    );
+    assert.match(authorGateMigration, /primary_author_id is not null/);
 });
 
 test("editorial media, scalable dashboard, and author pages are wired", () => {

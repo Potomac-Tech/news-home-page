@@ -29,6 +29,7 @@ export async function GET() {
                 .from("editorial_articles")
                 .select("slug,title,published_at")
                 .eq("status", "published")
+                .not("primary_author_id", "is", null)
                 .gte("published_at", cutoff.toISOString())
                 .lte("published_at", now.toISOString())
                 .order("published_at", { ascending: false })

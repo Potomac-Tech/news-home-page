@@ -49,6 +49,7 @@ async function loadPublishedArticleEntries(): Promise<MetadataRoute.Sitemap> {
             .from("editorial_articles")
             .select("slug,published_at,updated_at")
             .eq("status", "published")
+            .not("primary_author_id", "is", null)
             .lte("published_at", new Date().toISOString())
             .order("published_at", { ascending: false });
 

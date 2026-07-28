@@ -48,6 +48,7 @@ async function loadArticles(): Promise<NewsTeaser[]> {
             .from("editorial_articles")
             .select("slug,title,public_summary,dek,published_at")
             .eq("status", "published")
+            .not("primary_author_id", "is", null)
             .lte("published_at", new Date().toISOString())
             .order("published_at", { ascending: false })
             .limit(48);

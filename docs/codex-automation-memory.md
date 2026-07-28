@@ -261,3 +261,13 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 - Slack sync is blocked because the ChatGPT Slack plugin has reverted to `jmatthews@leasepassport.com`; the Potomac channel returns `INVALID_ARGUMENT`, and connector channel search finds no Potomac match.
 - Potomac remains present in the signed-in Slack desktop workspace switcher, but the Slack window is positioned outside the automation input bounds and could not be switched safely.
 - No Slack messages were read, no tasks or replies were created, and the actionable-parent marker remains `1784822231.883139`. Reconnecting the plugin to Potomac requires a new user-confirmed OAuth action; confirmation has not yet been received.
+
+### 2026-07-27 22:30 EDT - Editorial Desk stories removed and Resend blocker cleared
+
+- Archived the four published canonical Supabase articles that had no named author and were presented as `Editorial Desk`; the named Space Investment Forum article remains published.
+- Public homepage, news index, article route, carousel auto-fill, standard sitemap, and Google News sitemap now exclude any article without `primary_author_id`.
+- Immediate, scheduled, and Cron-driven publishing now require a named author. Migration `require_named_author_for_scheduled_publication` was applied only to canonical project `xlpkdoeldtlhearqajat`.
+- Removed visible `Editorial Desk` fallback labels from the homepage, article view, preview, and studio dashboard.
+- Resend live review confirmed exactly one verified `potomacdb.com` domain, Free plan, paid overage unavailable, sending-only production keys, and recent delivered Supabase Auth magic-link, reset, and signup messages.
+- Release owner Jacob Matthews directed resolution of the Resend blocker; the manual retry and capped-delivery runbook review is signed in the production checklist.
+- Task 121 remains unchecked and NO-GO only until a named technical release owner records approval.

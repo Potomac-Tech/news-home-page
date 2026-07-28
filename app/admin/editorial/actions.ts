@@ -390,11 +390,14 @@ export async function publishArticle(formData: FormData) {
 
     const { data: currentArticle, error: currentArticleError } = await supabase
         .from("editorial_articles")
-        .select("updated_at")
+        .select("updated_at,primary_author_id")
         .eq("id", articleId)
         .single();
     if (currentArticleError || !currentArticle) {
         throw new Error(currentArticleError?.message ?? "Article not found.");
+    }
+    if (!currentArticle.primary_author_id) {
+        throw new Error("Assign a named author before publishing.");
     }
 
     const { data: approval, error: approvalError } = await supabase
@@ -488,11 +491,14 @@ export async function scheduleArticle(formData: FormData) {
 
     const { data: article, error: articleError } = await supabase
         .from("editorial_articles")
-        .select("updated_at")
+        .select("updated_at,primary_author_id")
         .eq("id", articleId)
         .single();
     if (articleError || !article) {
         throw new Error(articleError?.message ?? "Article not found.");
+    }
+    if (!article.primary_author_id) {
+        throw new Error("Assign a named author before scheduling.");
     }
     const { data: approval, error: approvalError } = await supabase
         .from("editorial_preview_approvals")
