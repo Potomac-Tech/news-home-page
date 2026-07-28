@@ -54,7 +54,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                 if (event.key === "ArrowRight") { event.preventDefault(); move(1); }
                 if (event.key === " ") { event.preventDefault(); setPaused((value) => !value); }
             }}
-            className="relative min-h-[70rem] overflow-hidden bg-potomac-primary outline-none sm:min-h-[58rem] lg:min-h-[760px]"
+            className="bg-potomac-primary outline-none"
         >
             {slides.map((slide, index) => (
                 <article
@@ -63,9 +63,9 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                     aria-label={`${index + 1} of ${count}`}
                     aria-hidden={index !== activeIndex}
                     inert={index !== activeIndex ? true : undefined}
-                    className={`absolute inset-0 transition-opacity duration-500 motion-reduce:transition-none ${index === activeIndex ? "z-10 opacity-100" : "pointer-events-none opacity-0"}`}
+                    className={index === activeIndex ? "block" : "hidden"}
                 >
-                    <div className="h-full px-5 pb-24 pt-8 lg:px-8 lg:pt-10">
+                    <div className="px-5 pb-7 pt-8 lg:px-8 lg:pt-10">
                         <p className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
                             Cabeus Explorer / {slide.slideType.replaceAll("_", " ")}
                         </p>
@@ -104,7 +104,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                 </article>
             ))}
 
-            <div className="absolute bottom-4 left-0 right-0 z-20 flex flex-col items-start justify-between gap-3 px-5 sm:flex-row sm:items-center lg:px-8">
+            <div className="flex flex-col items-start justify-between gap-3 border-t border-white/10 px-5 py-4 sm:flex-row sm:items-center lg:px-8">
                 <div className="flex items-center gap-2" role="tablist" aria-label="Choose story">
                     {slides.map((slide, index) => (
                         <button

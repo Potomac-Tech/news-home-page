@@ -1350,11 +1350,11 @@ test("homepage carousel UI rotates accessibly and fails closed without approved 
         'sizes="(min-width: 1024px) 55vw, 100vw"',
         "lg:grid-cols-[minmax(17rem,0.72fr)_minmax(0,1.28fr)]",
         'loading={index === 0 ? "eager" : "lazy"}',
-        "motion-reduce:transition-none",
-        "min-h-[70rem]",
-        "lg:min-h-[760px]",
+        'className={index === activeIndex ? "block" : "hidden"}',
+        "border-t border-white/10",
         "sm:flex-row",
     ], "accessible rotating carousel");
+    assert.doesNotMatch(component, /min-h-\[70rem\]|lg:min-h-\[760px\]|absolute bottom-4/);
     assertIncludes(homepage, [
         "loadHomepageCarousel",
         "getProfileGateContext",
