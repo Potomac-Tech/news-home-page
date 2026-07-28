@@ -20,7 +20,10 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
         supabase.from("editorial_media_assets").select("id,public_url,media_type,alt_text,caption").eq("article_id", id).order("sort_order"),
     ]);
     const date = article.scheduled_for ?? article.published_at ?? new Date().toISOString();
-    const hero = article.hero_image_url ?? media?.find((asset) => asset.media_type === "image")?.public_url;
+    const heroAsset = article.hero_image_url
+        ? media?.find((asset) => asset.public_url === article.hero_image_url)
+        : media?.find((asset) => asset.media_type === "image");
+    const hero = article.hero_image_url ?? heroAsset?.public_url;
 
     return (
         <article className="min-h-screen bg-potomac-primary text-potomac-cream">
@@ -35,7 +38,20 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
                             <time>{new Date(date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</time>
                         </div>
                     </div>
-                    {hero ? <img src={hero} alt={article.hero_image_alt ?? "Story image"} className="max-h-[34rem] w-full border border-white/10 bg-black object-contain object-top" /> : null}
+                    {hero ? (
+                        <figure>
+                            <img
+                                src={hero}
+                                alt={article.hero_image_alt ?? heroAsset?.alt_text ?? "Story image"}
+                                className="max-h-[34rem] w-full border border-white/10 bg-black object-contain object-top"
+                            />
+                            {heroAsset?.caption ? (
+                                <figcaption className="mt-3 text-sm leading-6 text-potomac-cream/60">
+                                    {heroAsset.caption}
+                                </figcaption>
+                            ) : null}
+                        </figure>
+                    ) : null}
                 </div>
             </header>
             <div className="mx-auto w-full max-w-3xl px-4 py-12 md:px-8">
