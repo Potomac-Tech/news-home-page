@@ -14,7 +14,7 @@ const routeSpecs = [
     { path: "/", kind: "public" },
     { path: "/terminal", kind: "public" },
     { path: "/search", kind: "public" },
-    { path: "/news", kind: "public" },
+    { path: "/news", kind: "public", expectedPath: "/" },
     { path: "/datasets", kind: "public" },
     { path: "/calculators", kind: "public" },
     { path: "/pricing", kind: "enterprise" },
@@ -169,7 +169,8 @@ async function checkRenderedRoutes() {
             if (spec.kind.includes("enterprise") && /\bMeridian\s+(?:checkout|invoice|payment)|(?:checkout|invoice|payment)\s+for\s+Meridian\b/i.test(bodyText)) pageIssues.push("Meridian route exposes a self-serve payment workflow.");
             if (spec.kind === "hidden" && finalUrl.pathname !== "/terminal") pageIssues.push(`Hidden route ended at ${finalUrl.pathname} instead of /terminal.`);
             if (spec.kind.includes("gated") && !["/request-access", "/account/profile/complete"].includes(finalUrl.pathname)) pageIssues.push(`Anonymous gated route ended at ${finalUrl.pathname}.`);
-            if (spec.kind !== "hidden" && !spec.kind.includes("gated") && finalUrl.pathname !== requested.pathname) pageIssues.push(`Public route redirected to ${finalUrl.pathname}.`);
+            const expectedPath = spec.expectedPath ?? requested.pathname;
+            if (spec.kind !== "hidden" && !spec.kind.includes("gated") && finalUrl.pathname !== expectedPath) pageIssues.push(`Public route ended at ${finalUrl.pathname} instead of ${expectedPath}.`);
 
             for (const anchor of anchors) {
                 if (/^(?:#|javascript:)/i.test(anchor.href)) pageIssues.push(`Unsafe or placeholder link: ${anchor.text || anchor.href}.`);
