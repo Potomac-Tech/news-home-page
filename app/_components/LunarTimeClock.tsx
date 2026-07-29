@@ -49,7 +49,7 @@ export function LunarTimeClock({ initialUtcIso }: { initialUtcIso: string }) {
                         className="h-2 w-2 shrink-0 bg-cabeus-gold"
                     />
                     <div>
-                        <p className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-gold">
+                        <p className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-bronze">
                             Cislunar reference
                         </p>
                         <p className="text-xs text-cabeus-muted">
@@ -65,7 +65,7 @@ export function LunarTimeClock({ initialUtcIso }: { initialUtcIso: string }) {
                 >
                     <div className="min-w-0 border-r border-cabeus-line px-3 py-2">
                         <div className="flex items-center justify-between gap-2">
-                            <span className="font-mono text-[0.6rem] font-bold uppercase text-cabeus-gold">
+                            <span className="font-mono text-[0.6rem] font-bold uppercase text-cabeus-bronze">
                                 Estimated LTC
                             </span>
                             <span className="hidden font-mono text-[0.56rem] uppercase text-cabeus-muted sm:inline">

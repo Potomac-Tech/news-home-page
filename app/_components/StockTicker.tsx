@@ -32,7 +32,7 @@ export function StockTicker({ items }: { items: TickerItem[] }) {
                     <span className="font-mono text-[0.52rem] text-cabeus-muted">
                         {String(item.rank).padStart(2, "0")}
                     </span>
-                    <strong className="font-mono text-[0.66rem] uppercase text-cabeus-gold">
+                    <strong className="font-mono text-[0.66rem] uppercase text-cabeus-bronze">
                         {item.symbol}
                     </strong>
                 </div>
@@ -52,7 +52,7 @@ export function StockTicker({ items }: { items: TickerItem[] }) {
         >
             <div className="mx-auto grid w-full max-w-[92rem] grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] gap-2 px-2 py-2 lg:flex lg:gap-0">
                 <div className="flex min-h-12 shrink-0 flex-col justify-center border border-cabeus-line px-3 lg:w-52 lg:px-4">
-                    <p className="font-mono text-[0.58rem] font-bold uppercase text-cabeus-gold">
+                    <p className="font-mono text-[0.58rem] font-bold uppercase text-cabeus-bronze">
                         Space Market 10
                     </p>
                     <p className="mt-0.5 text-[0.68rem] font-semibold uppercase text-cabeus-ink">
@@ -87,7 +87,7 @@ export function StockTicker({ items }: { items: TickerItem[] }) {
                             href={items[0].sourceUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="font-mono text-[0.52rem] uppercase leading-4 text-cabeus-gold hover:text-cabeus-ink"
+                            className="font-mono text-[0.52rem] uppercase leading-4 text-cabeus-bronze hover:text-cabeus-ink"
                         >
                             Source: Alpha Vantage end-of-day quote
                         </a>

@@ -246,7 +246,7 @@ function SectionHeading({
 function StoryMeta({ story }: { story: HomeStory }) {
     return (
         <div className="flex flex-wrap items-center gap-3 font-mono text-[0.64rem] font-semibold uppercase text-cabeus-muted">
-            <span className="text-cabeus-gold">{story.sourceLabel}</span>
+            <span className="text-cabeus-bronze">{story.sourceLabel}</span>
             <time dateTime={story.publishedAt}>{formatDate(story.publishedAt)}</time>
             <span>{story.accessTier}+ full story</span>
         </div>
@@ -452,7 +452,7 @@ export default async function HomePage() {
                         <span className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-gold">Mission pulse</span>
                         <span className="font-serif text-2xl text-cabeus-paper">{launchSummary.reviewedCount} reviewed</span>
                         <span className="font-mono text-[0.62rem] uppercase text-cabeus-paper/75">{launchSummary.lunarCount} lunar / cislunar</span>
-                        <span className="font-mono text-[0.58rem] uppercase text-cabeus-paper/45">
+                        <span className="font-mono text-[0.58rem] uppercase text-cabeus-paper/70">
                             {launchSummary.freshnessAt
                                 ? `Updated ${new Date(launchSummary.freshnessAt).toLocaleString()}`
                                 : "No reviewed records in the current window"}

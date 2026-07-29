@@ -33,7 +33,7 @@ export function SponsorUnit({ unit, variant = "compact" }: SponsorUnitProps) {
             </p>
             <div className="flex items-start justify-between gap-4">
                 <div>
-                    <p className="font-mono text-xs font-bold uppercase text-cabeus-gold">
+                    <p className="font-mono text-xs font-bold uppercase text-cabeus-bronze">
                         {unit.label}
                     </p>
                     <h3 className="mt-3 font-serif text-2xl leading-snug text-cabeus-ink">

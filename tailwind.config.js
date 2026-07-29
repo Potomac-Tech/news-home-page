@@ -19,6 +19,7 @@ export default {
                     line: "#D8D2C8",
                     muted: "#68645E",
                     gold: "#AF9254",
+                    bronze: "#725A26",
                     smoke: "#E9E5DE",
                 },
             },

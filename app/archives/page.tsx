@@ -150,7 +150,7 @@ export default async function ArchivesPage({
                             className={`px-4 py-3 font-mono text-[0.68rem] font-bold uppercase ${
                                 item.slug === section.slug
                                     ? "bg-cabeus-ink text-cabeus-paper"
-                                    : "bg-transparent text-cabeus-muted hover:text-cabeus-gold"
+                                    : "bg-transparent text-cabeus-muted hover:text-cabeus-bronze"
                             }`}
                         >
                             {item.label}
@@ -171,7 +171,7 @@ export default async function ArchivesPage({
                                 className="grid gap-5 py-7 md:grid-cols-[5rem_minmax(0,1fr)_minmax(15rem,24rem)] md:items-center"
                             >
                                 <div className="font-mono">
-                                    <span className="block text-3xl text-cabeus-gold">
+                                    <span className="block text-3xl text-cabeus-bronze">
                                         {String(index + 1).padStart(2, "0")}
                                     </span>
                                     <time className="mt-2 block text-[0.62rem] uppercase text-cabeus-muted">
@@ -184,11 +184,11 @@ export default async function ArchivesPage({
                                 </div>
                                 <div>
                                     <div className="flex flex-wrap gap-2 font-mono text-[0.6rem] font-bold uppercase">
-                                        <span className="text-cabeus-gold">{section.label}</span>
+                                        <span className="text-cabeus-bronze">{section.label}</span>
                                         {article.isFeatured ? <span className="text-cabeus-muted">Homepage featured</span> : null}
                                     </div>
                                     <h2 className="mt-3 max-w-3xl font-serif text-3xl font-medium leading-tight text-cabeus-ink md:text-4xl">
-                                        <Link href={article.href} className="hover:text-cabeus-gold">
+                                        <Link href={article.href} className="hover:text-cabeus-bronze">
                                             {article.title}
                                         </Link>
                                     </h2>

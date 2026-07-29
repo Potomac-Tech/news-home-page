@@ -111,7 +111,7 @@ export function ConveningPage({
                                     key={section.number}
                                     className={`grid gap-4 border-b py-7 sm:grid-cols-[4rem_1fr] ${rule}`}
                                 >
-                                    <p className="font-mono text-xs font-semibold text-cabeus-gold">
+                                    <p className={`font-mono text-xs font-semibold ${dark ? "text-cabeus-gold" : "text-cabeus-bronze"}`}>
                                         {section.number}
                                     </p>
                                     <div>

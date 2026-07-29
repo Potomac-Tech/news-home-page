@@ -55,7 +55,7 @@ export function EconomySummaryWidget({
         <article className="mt-8 border-y border-cabeus-line py-7">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                 <div>
-                    <p className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-gold">
+                    <p className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
                         Lunar economy tracker
                     </p>
                     <h3 className="mt-4 font-serif text-5xl font-medium leading-tight text-cabeus-ink md:text-7xl">
@@ -66,7 +66,7 @@ export function EconomySummaryWidget({
                     </p>
                 </div>
                 <div className="border-l border-cabeus-line p-4 lg:min-w-56">
-                    <p className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-gold">
+                    <p className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
                         Public range
                     </p>
                     <p className="mt-2 text-lg font-semibold text-cabeus-ink">
@@ -84,7 +84,7 @@ export function EconomySummaryWidget({
 
             <dl className="mt-6 grid gap-4 text-sm text-cabeus-muted sm:grid-cols-3">
                 <div className="border-l border-cabeus-gold pl-4">
-                    <dt className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-gold">
+                    <dt className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
                         Confidence
                     </dt>
                     <dd className="mt-1">
@@ -93,13 +93,13 @@ export function EconomySummaryWidget({
                     </dd>
                 </div>
                 <div className="border-l border-cabeus-line pl-4">
-                    <dt className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-gold">
+                    <dt className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
                         Sources
                     </dt>
                     <dd className="mt-1">{summary.sourceCount} reviewed</dd>
                 </div>
                 <div className="border-l border-cabeus-line pl-4">
-                    <dt className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-gold">
+                    <dt className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
                         Freshness
                     </dt>
                     <dd className="mt-1">{formatDate(summary.freshnessAt)}</dd>
