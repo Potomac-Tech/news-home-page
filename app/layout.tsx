@@ -33,11 +33,26 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
     metadataBase: new URL(siteConfig.url),
+    manifest: "/manifest.json",
     title: {
         default: siteConfig.name,
         template: `%s | ${siteConfig.name}`,
     },
     description: siteConfig.description,
+    icons: {
+        icon: [
+            { url: "/favicon.ico", sizes: "any" },
+            { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+            { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+        ],
+        apple: [
+            {
+                url: "/apple-touch-icon.png",
+                type: "image/png",
+                sizes: "180x180",
+            },
+        ],
+    },
     openGraph: {
         title: siteConfig.name,
         description: siteConfig.description,
