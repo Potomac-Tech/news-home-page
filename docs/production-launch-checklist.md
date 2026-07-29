@@ -8,10 +8,10 @@ post-deploy checks pass against the production Cloudflare URL.
 
 - Production URL: `https://cabeus-explorer.jake-249.workers.dev/`
 - Canonical Supabase project: `xlpkdoeldtlhearqajat`
-- Release commit reviewed: `c8f3fd7`
-- Cloudflare version reviewed: `7ec4fd12-01a0-4f2f-a8e3-309912cc6c9a`
-- Previous known-good commit: `100ee72`
-- Previous known-good Cloudflare version: `a5bb4090-d643-4596-9e79-25c14bdd5310`
+- Release commit reviewed: `1d27be8`
+- Cloudflare version reviewed: `058700a5-b4ce-44f0-b582-77c2d680f15e`
+- Previous known-good commit: `c8f3fd7`
+- Previous known-good Cloudflare version: `7ec4fd12-01a0-4f2f-a8e3-309912cc6c9a`
 - Release review date/time (UTC): `2026-07-29T12:45:38Z`
 - Content owner: Jacob Matthews (approval recorded by Task 118)
 - Editor or admin approver: `jake@potomacdb.com` (active editor; approval recorded by Task 118)
@@ -140,7 +140,7 @@ Technical release approval: Jacob Matthews  Date: 2026-07-29
 - Launch tracker: run `f8a4e14e-b512-4e03-b3dc-3d9663f9b014` completed at `2026-07-29T12:45:38Z` from a current source response, evaluated 12 upcoming launches, and found zero lunar/cislunar records in the two-week review window.
 - Stock tracker: Alpha Vantage run `a80c472a-8754-4547-830d-4cb4cb36d963` completed with all five retried symbols updated and no failures. The guarded daily total remained below the 20-call limit.
 - Contract tracker: run `3ffa6736-e9b7-4736-b6cc-f1ee3364cfbb` completed with ten records checked, two relevant records, and no error.
-- Reviewed release application commit: `c8f3fd7`. Reviewed Cloudflare version: `7ec4fd12-01a0-4f2f-a8e3-309912cc6c9a`. Recorded rollback commit: `100ee72`. Recorded rollback Cloudflare version: `a5bb4090-d643-4596-9e79-25c14bdd5310`.
+- Reviewed release commit: `1d27be8`. Reviewed Cloudflare version: `058700a5-b4ce-44f0-b582-77c2d680f15e`. Recorded rollback commit: `c8f3fd7`. Recorded rollback Cloudflare version: `7ec4fd12-01a0-4f2f-a8e3-309912cc6c9a`. The post-deploy crawl visited 61 internal destinations with zero issues.
 
 ## July 24 Verification Evidence
 

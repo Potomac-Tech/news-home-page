@@ -283,10 +283,11 @@ Do not calculate the benchmark from only the `$10M` data addendum.
 ### 2026-07-29 08:45 EDT - Task 121 approved and signed GO
 
 - Jacob Matthews explicitly approved as the named technical release owner. Task 121 is complete and the production checklist decision is GO.
-- Release application commit `c8f3fd7` and Cloudflare version `7ec4fd12-01a0-4f2f-a8e3-309912cc6c9a` were reviewed. Rollback coordinates are commit `100ee72` and Cloudflare version `a5bb4090-d643-4596-9e79-25c14bdd5310`.
+- Release commit `1d27be8` deployed as Cloudflare version `058700a5-b4ce-44f0-b582-77c2d680f15e`. Rollback coordinates are commit `c8f3fd7` and Cloudflare version `7ec4fd12-01a0-4f2f-a8e3-309912cc6c9a`.
 - Verification passed lint, 171 unit/integration tests, 21 email-operation tests, production build, 6 E2E journeys, a 24-route release audit, ten mobile/desktop quality checks, an approximately 60-destination production crawl, and six observability-budget tests.
 - Alpha Vantage run `a80c472a-8754-4547-830d-4cb4cb36d963` updated all five retried symbols with no failures and remained inside the guarded free-tier budget.
 - Launch Library shared egress was throttled, so a current response retrieved directly from the canonical provider was stored through the existing service-only six-hour snapshot fallback. Canonical ingestion run `f8a4e14e-b512-4e03-b3dc-3d9663f9b014` then completed with 12 fetched records, zero lunar/cislunar matches, and no error.
 - Contract run `3ffa6736-e9b7-4736-b6cc-f1ee3364cfbb` completed with ten records checked and two relevant records.
 - Resend remains on the reviewed Free-plan operating model with one verified `potomacdb.com` domain, paid overage unavailable, sending-only production credentials, and delivered Supabase Auth messages.
 - Altered tracked files: `tests/potomac-e2e-flows.e2e.test.mjs`, `docs/production-launch-checklist.md`, `docs/potomac-news-intelligence-tasks.md`, and this memory file.
+- Post-deploy verification: the production crawler visited 61 internal destinations with zero console, JavaScript, network, CSP, runtime, or routing issues.
