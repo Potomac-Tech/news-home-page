@@ -1,4 +1,5 @@
 import type { requireEditorialStaff } from "../auth/editorial";
+import { parseYouTubeVideoUrl } from "./youtube";
 
 const bucket = "editorial-media";
 const maxMediaBytes = 50 * 1024 * 1024;
@@ -21,6 +22,8 @@ export type StoredMediaAsset = {
     id: string;
     publicUrl: string;
     mediaType: "image" | "video";
+    hostingProvider: "supabase" | "youtube";
+    sourceUrl: string;
     altText: string;
     caption: string;
 };
@@ -86,6 +89,7 @@ export async function storeMediaAssets({
                 public_url: publicUrl,
                 original_file_name: file.name,
                 media_type: file.type.startsWith("video/") ? "video" : "image",
+                hosting_provider: "supabase",
                 mime_type: file.type,
                 size_bytes: file.size,
                 alt_text: altText,
@@ -93,7 +97,7 @@ export async function storeMediaAssets({
                 sort_order: index,
                 uploaded_by: userId,
             })
-            .select("id,public_url,media_type,alt_text,caption")
+            .select("id,public_url,media_type,hosting_provider,source_url,alt_text,caption")
             .single();
 
         if (recordError || !record) {
@@ -105,10 +109,68 @@ export async function storeMediaAssets({
             id: record.id,
             publicUrl: record.public_url,
             mediaType: record.media_type as "image" | "video",
+            hostingProvider: "supabase",
+            sourceUrl: record.source_url ?? record.public_url,
             altText: record.alt_text ?? "",
             caption: record.caption ?? "",
         });
     }
 
     return storedAssets;
+}
+
+export async function storeYouTubeAsset({
+    supabase,
+    userId,
+    articleId,
+    youtubeUrl,
+    altText,
+    caption,
+}: {
+    supabase: EditorialSupabaseClient;
+    userId: string;
+    articleId: string;
+    youtubeUrl: string;
+    altText: string | null;
+    caption: string | null;
+}) {
+    const reference = parseYouTubeVideoUrl(youtubeUrl);
+    const { data: record, error } = await supabase
+        .from("editorial_media_assets")
+        .insert({
+            article_id: articleId,
+            storage_bucket: null,
+            storage_object_path: null,
+            public_url: reference.embedUrl,
+            original_file_name: null,
+            media_type: "video",
+            hosting_provider: "youtube",
+            external_video_id: reference.videoId,
+            source_url: reference.watchUrl,
+            mime_type: null,
+            size_bytes: null,
+            alt_text: altText,
+            caption,
+            sort_order: 0,
+            uploaded_by: userId,
+        })
+        .select("id,public_url,media_type,hosting_provider,source_url,alt_text,caption")
+        .single();
+
+    if (error || !record) {
+        if (error?.code === "23505") {
+            throw new Error("This YouTube video is already attached to the story.");
+        }
+        throw new Error(error?.message ?? "YouTube video was not attached.");
+    }
+
+    return {
+        id: record.id,
+        publicUrl: record.public_url,
+        mediaType: "video" as const,
+        hostingProvider: "youtube" as const,
+        sourceUrl: record.source_url ?? reference.watchUrl,
+        altText: record.alt_text ?? "",
+        caption: record.caption ?? "",
+    };
 }

@@ -1,4 +1,5 @@
 import sanitizeHtml from "sanitize-html";
+import { isYouTubeEmbedUrl } from "./youtube";
 
 const allowedTags = [
     "p",
@@ -21,6 +22,7 @@ const allowedTags = [
     "figcaption",
     "img",
     "video",
+    "iframe",
 ];
 
 export function sanitizeArticleHtml(value: string) {
@@ -38,8 +40,17 @@ export function sanitizeArticleHtml(value: string) {
                 "playsinline",
                 "aria-label",
             ],
+            iframe: [
+                "src",
+                "title",
+                "loading",
+                "allow",
+                "allowfullscreen",
+                "referrerpolicy",
+            ],
         },
         allowedSchemes: ["http", "https", "mailto"],
+        allowedIframeHostnames: ["www.youtube-nocookie.com"],
         transformTags: {
             a: (_tagName, attributes) => ({
                 tagName: "a",
@@ -49,12 +60,35 @@ export function sanitizeArticleHtml(value: string) {
                     rel: "noopener noreferrer",
                 },
             }),
+            iframe: (_tagName, attributes) => {
+                if (!isYouTubeEmbedUrl(attributes.src ?? "")) {
+                    const removedAttributes: Record<string, string> = {
+                        class: "removed-unsupported-embed",
+                    };
+                    return {
+                        tagName: "span",
+                        attribs: removedAttributes,
+                    };
+                }
+                const iframeAttributes: Record<string, string> = {
+                    src: attributes.src,
+                    title: attributes.title || "YouTube article video",
+                    loading: "lazy",
+                    allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+                    allowfullscreen: "",
+                    referrerpolicy: "strict-origin-when-cross-origin",
+                };
+                return {
+                    tagName: "iframe",
+                    attribs: iframeAttributes,
+                };
+            },
         },
     }).trim();
 }
 
 export function isRichArticleHtml(value: string) {
-    return /<(?:p|br|strong|b|em|i|u|s|h2|h3|blockquote|ul|ol|li|a|font|figure|figcaption|img|video)(?:\s|>)/i.test(value);
+    return /<(?:p|br|strong|b|em|i|u|s|h2|h3|blockquote|ul|ol|li|a|font|figure|figcaption|img|video|iframe)(?:\s|>)/i.test(value);
 }
 
 export function articlePlainText(value: string) {

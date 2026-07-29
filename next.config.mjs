@@ -46,7 +46,7 @@ const nextConfig = {
                     "object-src 'none'",
                     "img-src 'self' data: https:",
                     "media-src 'self' https://*.supabase.co",
-                    "frame-src 'self'",
+                    "frame-src 'self' https://www.youtube-nocookie.com",
                     "font-src 'self' data: https://fonts.gstatic.com",
                     "connect-src 'self' https://*.supabase.co https://api.stripe.com",
                     "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",

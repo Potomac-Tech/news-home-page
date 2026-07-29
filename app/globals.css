@@ -232,8 +232,10 @@ body {
 
 .studio-rich-editor figure img,
 .studio-rich-editor figure video,
+.studio-rich-editor figure iframe,
 .article-rich-text figure img,
-.article-rich-text figure video {
+.article-rich-text figure video,
+.article-rich-text figure iframe {
     background: #080a0c;
     display: block;
     height: auto;
@@ -241,6 +243,13 @@ body {
     object-fit: contain;
     object-position: top;
     width: 100%;
+}
+
+.studio-rich-editor figure iframe,
+.article-rich-text figure iframe {
+    aspect-ratio: 16 / 9;
+    border: 0;
+    max-height: none;
 }
 
 .studio-rich-editor figcaption {

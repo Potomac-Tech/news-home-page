@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireEditorialStaff } from "../../../../../lib/auth/editorial";
 import { renderArticleHtml } from "../../../../../lib/editorial/rich-text";
+import { EditorialVideo } from "../../../../_components/EditorialVideo";
 
 export default async function PreviewRenderPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -17,7 +18,7 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
         article.primary_author_id
             ? supabase.from("editorial_authors").select("display_name,slug").eq("id", article.primary_author_id).maybeSingle()
             : Promise.resolve({ data: null }),
-        supabase.from("editorial_media_assets").select("id,public_url,media_type,alt_text,caption").eq("article_id", id).order("sort_order"),
+        supabase.from("editorial_media_assets").select("id,public_url,media_type,hosting_provider,source_url,alt_text,caption").eq("article_id", id).order("sort_order"),
     ]);
     const date = article.scheduled_for ?? article.published_at ?? new Date().toISOString();
     const bodyHtml = String(body?.body_markdown ?? "");
@@ -73,13 +74,10 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
                     asset.media_type === "video" && !inlineMediaIds.has(asset.id)
                 ).map((asset) => (
                     <figure key={asset.id} className="border border-white/10 p-3">
-                        <video
-                            src={asset.public_url}
-                            controls
-                            preload="metadata"
-                            playsInline
-                            aria-label={asset.alt_text ?? "Article video"}
-                            className="w-full"
+                        <EditorialVideo
+                            publicUrl={asset.public_url}
+                            hostingProvider={asset.hosting_provider as "supabase" | "youtube"}
+                            title={asset.alt_text ?? "Article video"}
                         />
                         {asset.caption ? <figcaption className="mt-3 text-sm text-potomac-regolith">{asset.caption}</figcaption> : null}
                     </figure>

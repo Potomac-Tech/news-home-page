@@ -28,6 +28,7 @@ import {
 } from "../../_data/sponsorAds";
 import { publicTierName, tierConfig } from "../../_data/tiers";
 import { renderArticleHtml } from "../../../lib/editorial/rich-text";
+import { EditorialVideo } from "../../_components/EditorialVideo";
 
 export const dynamic = "force-dynamic";
 
@@ -76,6 +77,8 @@ type LoadedArticle = {
         id: string;
         publicUrl: string;
         mediaType: "image" | "video";
+        hostingProvider: "supabase" | "youtube";
+        sourceUrl: string;
         altText: string;
         caption: string | null;
     }>;
@@ -289,7 +292,7 @@ async function loadArticle(slug: string): Promise<LoadedArticle | null> {
     const { data: mediaRows, error: mediaError } = article.id
         ? await supabase
             .from("editorial_media_assets")
-            .select("id,public_url,media_type,alt_text,caption")
+            .select("id,public_url,media_type,hosting_provider,source_url,alt_text,caption")
             .eq("article_id", article.id)
             .order("sort_order")
         : { data: [], error: null };
@@ -299,6 +302,8 @@ async function loadArticle(slug: string): Promise<LoadedArticle | null> {
         id: asset.id,
         publicUrl: asset.public_url,
         mediaType: asset.media_type as "image" | "video",
+        hostingProvider: asset.hosting_provider as "supabase" | "youtube",
+        sourceUrl: asset.source_url ?? asset.public_url,
         altText: asset.alt_text ?? "",
         caption: asset.caption,
     }));
@@ -581,13 +586,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                                 asset.mediaType === "video" && !inlineMediaIds.has(asset.id)
                             ).map((asset) => (
                                 <figure key={asset.id} className="border border-cabeus-line p-4">
-                                    <video
-                                        src={asset.publicUrl}
-                                        controls
-                                        preload="metadata"
-                                        playsInline
-                                        aria-label={asset.altText || "Article video"}
-                                        className="w-full"
+                                    <EditorialVideo
+                                        publicUrl={asset.publicUrl}
+                                        hostingProvider={asset.hostingProvider}
+                                        title={asset.altText || "Article video"}
                                     />
                                     {asset.caption ? <figcaption className="mt-3 text-sm text-cabeus-muted">{asset.caption}</figcaption> : null}
                                 </figure>

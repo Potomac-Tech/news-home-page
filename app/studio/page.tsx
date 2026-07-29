@@ -82,7 +82,7 @@ export default async function StudioPage({
             authorIds.length
                 ? supabase.from("editorial_authors").select("id,display_name").in("id", authorIds)
                 : Promise.resolve({ data: [], error: null }),
-            supabase.from("editorial_media_assets").select("id,article_id,public_url,media_type,alt_text,caption").in("article_id", ids).order("sort_order"),
+            supabase.from("editorial_media_assets").select("id,article_id,public_url,media_type,hosting_provider,source_url,alt_text,caption").in("article_id", ids).order("sort_order"),
             supabase.from("editorial_article_tags").select("article_id,tag_id").in("article_id", ids),
             supabase.from("editorial_tags").select("id,slug").in(
                 "slug",
@@ -143,6 +143,8 @@ export default async function StudioPage({
             id: asset.id,
             publicUrl: asset.public_url,
             mediaType: asset.media_type,
+            hostingProvider: asset.hosting_provider,
+            sourceUrl: asset.source_url ?? asset.public_url,
             altText: asset.alt_text ?? "",
             caption: asset.caption ?? "",
         });

@@ -28,6 +28,9 @@ const homepage = readFileSync("app/page.tsx", "utf8");
 const richText = readFileSync("lib/editorial/rich-text.ts", "utf8");
 const nextConfig = readFileSync("next.config.mjs", "utf8");
 const videoMigration = readFileSync("supabase/migrations/20260728172344_allow_editorial_quicktime_video.sql", "utf8");
+const youtubeMigration = readFileSync("supabase/migrations/20260729045803_add_youtube_editorial_media.sql", "utf8");
+const youtube = readFileSync("lib/editorial/youtube.ts", "utf8");
+const editorialVideo = readFileSync("app/_components/EditorialVideo.tsx", "utf8");
 
 test("editorial studio uses the existing editor and admin authorization boundary", () => {
     assert.match(studioPage, /requireEditorialStaff\("\/studio"\)/);
@@ -85,10 +88,37 @@ test("studio accepts and renders common article video formats", () => {
     }
     assert.match(nextConfig, /bodySizeLimit: "100mb"/);
     assert.match(studioUi, /aria-label=\{altText \|\| "Article video"\}/);
-    assert.match(previewRender, /aria-label=\{asset\.alt_text \?\? "Article video"\}/);
-    assert.match(articlePage, /aria-label=\{asset\.altText \|\| "Article video"\}/);
-    assert.match(previewRender, /playsInline/);
-    assert.match(articlePage, /playsInline/);
+    assert.match(previewRender, /<EditorialVideo/);
+    assert.match(articlePage, /<EditorialVideo/);
+    assert.match(editorialVideo, /aria-label=\{title\}/);
+    assert.match(editorialVideo, /playsInline/);
+});
+
+test("studio integrates privacy-enhanced YouTube Unlisted hosting", () => {
+    for (const token of [
+        "UCVEihTOMM2801sGKtplQ7qw",
+        "youtu.be",
+        "youtube.com",
+        "youtube-nocookie.com",
+        "watch?v=",
+        "embedUrl",
+    ]) assert.ok(youtube.includes(token), `missing YouTube integration token ${token}`);
+
+    assert.match(youtubeMigration, /hosting_provider in \('supabase', 'youtube'\)/);
+    assert.match(youtubeMigration, /external_video_id ~ '\^\[A-Za-z0-9_-\]\{11\}\$'/);
+    assert.match(youtubeMigration, /editorial_media_assets_article_youtube_unique/);
+    assert.match(mediaAssets, /storeYouTubeAsset/);
+    assert.match(actions, /addYouTubeArticleMedia/);
+    assert.match(actions, /asset\.hosting_provider === "supabase"/);
+    assert.match(studioUi, /YouTube Unlisted video/);
+    assert.match(studioUi, /Upload on YouTube/);
+    assert.match(studioUi, /Attach video/);
+    assert.match(studioUi, /CABEUS_YOUTUBE_CHANNEL_URL/);
+    assert.match(studioUi, /hostingProvider === "youtube"/);
+    assert.match(richText, /allowedIframeHostnames: \["www\.youtube-nocookie\.com"\]/);
+    assert.match(editorialVideo, /allowFullScreen/);
+    assert.match(editorialVideo, /referrerPolicy="strict-origin-when-cross-origin"/);
+    assert.match(nextConfig, /frame-src 'self' https:\/\/www\.youtube-nocookie\.com/);
 });
 
 test("studio saves source documents and retains article version history", () => {

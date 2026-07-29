@@ -13,6 +13,7 @@ import {
     editorialSections,
 } from "../../lib/editorial/section-tags";
 import {
+    addYouTubeArticleMedia,
     createArticleDraft,
     removeArticleMedia,
     setArticleHeroMedia,
@@ -21,6 +22,10 @@ import {
     updateArticleDraft,
     updateArticleMediaMetadata,
 } from "../admin/editorial/actions";
+import {
+    CABEUS_YOUTUBE_CHANNEL_URL,
+    YOUTUBE_UPLOAD_URL,
+} from "../../lib/editorial/youtube";
 
 export type StudioArticle = {
     id: string;
@@ -51,6 +56,8 @@ export type StudioArticle = {
         id: string;
         publicUrl: string;
         mediaType: "image" | "video";
+        hostingProvider: "supabase" | "youtube";
+        sourceUrl: string;
         altText: string;
         caption: string;
     }>;
@@ -81,7 +88,7 @@ function escapeHtml(value: string) {
 }
 
 function toEditorHtml(value: string) {
-    if (/<(?:p|br|strong|b|em|i|u|s|h2|h3|blockquote|ul|ol|li|a|font|figure|figcaption|img|video)(?:\s|>)/i.test(value)) {
+    if (/<(?:p|br|strong|b|em|i|u|s|h2|h3|blockquote|ul|ol|li|a|font|figure|figcaption|img|video|iframe)(?:\s|>)/i.test(value)) {
         return value;
     }
 
@@ -172,7 +179,17 @@ function MediaAssetEditor({
             }}
             className="border border-potomac-regolith/25 p-2"
         >
-            {asset.mediaType === "video" ? (
+            {asset.hostingProvider === "youtube" ? (
+                <iframe
+                    src={asset.publicUrl}
+                    title={altText || "YouTube article video"}
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                    className="aspect-video w-full"
+                />
+            ) : asset.mediaType === "video" ? (
                 <video
                     src={asset.publicUrl}
                     className="aspect-video w-full object-cover"
@@ -188,6 +205,16 @@ function MediaAssetEditor({
                     className="aspect-video w-full object-cover"
                 />
             )}
+            {asset.hostingProvider === "youtube" ? (
+                <a
+                    href={asset.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-block font-mono text-[0.58rem] font-bold uppercase text-potomac-gold underline"
+                >
+                    Open on YouTube
+                </a>
+            ) : null}
             <label className={`${labelClass} mt-3`}>
                 Media description
                 <input
@@ -272,6 +299,7 @@ export function EditorialStudio({
     const [isSaving, setIsSaving] = useState(false);
     const [mediaAltText, setMediaAltText] = useState("");
     const [mediaCaption, setMediaCaption] = useState("");
+    const [youtubeUrl, setYoutubeUrl] = useState("");
     const [selectedMediaNames, setSelectedMediaNames] = useState<string[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const mediaInputRef = useRef<HTMLInputElement>(null);
@@ -316,8 +344,10 @@ export function EditorialStudio({
         const caption = asset.caption
             ? `<figcaption>${escapeHtml(asset.caption)}</figcaption>`
             : "";
-        const media = asset.mediaType === "video"
-            ? `<video src="${escapeHtml(asset.publicUrl)}" controls preload="metadata" playsinline aria-label="${description}"></video>`
+        const media = asset.hostingProvider === "youtube"
+            ? `<iframe src="${escapeHtml(asset.publicUrl)}" title="${description}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
+            : asset.mediaType === "video"
+              ? `<video src="${escapeHtml(asset.publicUrl)}" controls preload="metadata" playsinline aria-label="${description}"></video>`
             : `<img src="${escapeHtml(asset.publicUrl)}" alt="${description}" loading="lazy">`;
         return `<figure data-media-id="${escapeHtml(asset.id)}" contenteditable="false">${media}${caption}</figure><p><br></p>`;
     }
@@ -373,6 +403,7 @@ export function EditorialStudio({
         if (mediaInputRef.current) mediaInputRef.current.value = "";
         setMediaAltText("");
         setMediaCaption("");
+        setYoutubeUrl("");
         setSelectedMediaNames([]);
     }
 
@@ -531,6 +562,47 @@ export function EditorialStudio({
         } finally {
             insertUploadedMediaRef.current = false;
             if (mediaInputRef.current) mediaInputRef.current.value = "";
+            setIsSaving(false);
+        }
+    }
+
+    async function attachYouTubeVideo() {
+        if (draft.id === "new") {
+            setSaveStatus("Save the draft once before attaching a YouTube video.");
+            return;
+        }
+        if (!youtubeUrl.trim()) {
+            setSaveStatus("Paste a YouTube video URL first.");
+            return;
+        }
+
+        setIsSaving(true);
+        setSaveStatus("Attaching YouTube video...");
+        const formData = new FormData();
+        formData.set("studio_context", "studio");
+        formData.set("article_id", draft.id);
+        formData.set("youtube_url", youtubeUrl);
+        formData.set("media_alt_text", mediaAltText);
+        formData.set("media_caption", mediaCaption);
+
+        try {
+            const result = await addYouTubeArticleMedia(formData);
+            setDraft((current) => ({
+                ...current,
+                mediaAssets: [...current.mediaAssets, ...result.uploadedMedia],
+            }));
+            setYoutubeUrl("");
+            setMediaAltText("");
+            setMediaCaption("");
+            setSaveStatus("YouTube video attached. Insert it at the intended story position.");
+            router.refresh();
+        } catch (error) {
+            setSaveStatus(
+                error instanceof Error
+                    ? error.message
+                    : "YouTube video could not be attached."
+            );
+        } finally {
             setIsSaving(false);
         }
     }
@@ -976,6 +1048,52 @@ export function EditorialStudio({
                                             </span>
                                         ) : null}
                                     </label>
+                                    <div className="border border-potomac-regolith/25 p-4 md:col-span-2">
+                                        <div className="flex flex-wrap items-start justify-between gap-3">
+                                            <div>
+                                                <p className={labelClass}>YouTube Unlisted video</p>
+                                                <p className="mt-2 max-w-2xl text-xs leading-5 text-potomac-regolith">
+                                                    Upload the video to the Cabeus channel with visibility set to Unlisted, then paste its YouTube watch or share URL. Anyone with access to the published article can play the video.
+                                                </p>
+                                            </div>
+                                            <div className="flex flex-wrap gap-2">
+                                                <a
+                                                    href={CABEUS_YOUTUBE_CHANNEL_URL}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="border border-potomac-regolith/40 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-white"
+                                                >
+                                                    Cabeus channel
+                                                </a>
+                                                <a
+                                                    href={YOUTUBE_UPLOAD_URL}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="border border-potomac-gold/55 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-potomac-gold"
+                                                >
+                                                    Upload on YouTube
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                                            <input
+                                                type="url"
+                                                value={youtubeUrl}
+                                                onChange={(event) => setYoutubeUrl(event.target.value)}
+                                                className={`${inputClass} mt-0 flex-1`}
+                                                placeholder="https://youtu.be/... or https://www.youtube.com/watch?v=..."
+                                                aria-label="YouTube Unlisted video URL"
+                                            />
+                                            <button
+                                                type="button"
+                                                disabled={isSaving || !youtubeUrl.trim()}
+                                                onClick={() => void attachYouTubeVideo()}
+                                                className="bg-potomac-gold px-5 py-3 font-mono text-[0.62rem] font-bold uppercase text-potomac-primary disabled:opacity-40"
+                                            >
+                                                Attach video
+                                            </button>
+                                        </div>
+                                    </div>
                                     <label className={labelClass}>
                                         Media description
                                         <input
