@@ -237,7 +237,8 @@ test("Scout dashboard path is browser-reachable and protected", { timeout: 60000
 
         await page.waitForURL(/\/request-access\?tab=signin&next=%2Fmember%2Fdeveloper/);
         await assertVisibleText(page, "Sign in");
-        await assertVisibleText(page, "Start with free Explorer access");
+        await assertVisibleText(page, "Sign in to Cabeus Explorer");
+        await assertVisibleText(page, "Use a secure email link or your password");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
         await closePage(page);
@@ -246,12 +247,12 @@ test("Scout dashboard path is browser-reachable and protected", { timeout: 60000
 
 test("chat, forums, and RFQs expose their access gates without blank screens", { timeout: 60000 }, async () => {
     const routes = [
-        ["/member/chat", "Start with free Explorer access"],
-        ["/member/forums", "Start with free Explorer access"],
-        ["/member/rfqs", "Start with free Explorer access"],
+        "/member/chat",
+        "/member/forums",
+        "/member/rfqs",
     ];
 
-    for (const [route, detail] of routes) {
+    for (const route of routes) {
         const { page, consoleMessages } = await newPage();
 
         try {
@@ -260,7 +261,7 @@ test("chat, forums, and RFQs expose their access gates without blank screens", {
             });
             await page.waitForURL(/\/request-access\?tab=signin&next=%2Fmember%2F/);
             await assertVisibleText(page, "Sign in");
-            await assertVisibleText(page, detail);
+            await assertVisibleText(page, "Sign in to Cabeus Explorer");
             await expectNoFrameworkOverlay(page, consoleMessages);
         } finally {
             await closePage(page);
@@ -274,19 +275,19 @@ test("lunar terminal navigation exposes the core intelligence modules", { timeou
     try {
         await page.goto(`${baseUrl}/terminal`, { waitUntil: "domcontentloaded" });
 
-        await assertVisibleText(page, "Cabeus Explorer lunar industry terminal");
-        await assertVisibleText(page, "Lunar industry terminal");
-        await assertVisibleText(page, "Launches");
-        await assertVisibleText(page, "Lunar news");
-        await assertVisibleText(page, "Datasets");
-        await assertVisibleText(page, "Calculators");
+        await assertVisibleText(page, "Intelligence for decisions that move the industry");
+        await assertVisibleText(page, "Contracts & funding");
+        await assertVisibleText(page, "Investment due diligence");
+        await assertVisibleText(page, "Organization & market intelligence");
+        await assertVisibleText(page, "Mission intelligence");
+        await assertVisibleText(page, "Workforce development");
 
         await page
-            .getByRole("link", { name: /Calculators/i })
+            .getByRole("link", { name: /Investment due diligence/i })
             .first()
             .click();
-        await page.waitForURL(/\/calculators/);
-        await assertVisibleText(page, "Lunar mission calculators");
+        await page.waitForURL(/\/terminal\/diligence/);
+        await assertVisibleText(page, "Investment due diligence");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
         await closePage(page);
@@ -298,8 +299,8 @@ test("Meridian public and protected flows preserve the approved access path", { 
 
     try {
         await page.goto(`${baseUrl}/pricing`, { waitUntil: "domcontentloaded" });
-        await assertVisibleText(page, "Explorer, Scout, and Meridian access");
-        await assertVisibleText(page, "request Meridian");
+        await assertVisibleText(page, "Intelligence built for your advantage");
+        await assertVisibleText(page, "Request Meridian");
 
         await page.goto(`${baseUrl}/command`, { waitUntil: "domcontentloaded" });
         await page.waitForURL(/\/request-access\?tab=signin&next=%2Fcommand/);

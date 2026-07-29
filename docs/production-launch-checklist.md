@@ -8,14 +8,14 @@ post-deploy checks pass against the production Cloudflare URL.
 
 - Production URL: `https://cabeus-explorer.jake-249.workers.dev/`
 - Canonical Supabase project: `xlpkdoeldtlhearqajat`
-- Release commit reviewed: `b9f61ea`
-- Cloudflare version reviewed: `e3cea93a-6465-4a61-8f79-79afa3b6282f`
-- Previous known-good commit: `92ee8dd`
-- Previous known-good Cloudflare version: `acbe46cd-1def-48a4-9a33-61e068e8d3c8`
-- Release review date/time (UTC): `2026-07-24T07:57:20Z`
+- Release commit reviewed: `c8f3fd7`
+- Cloudflare version reviewed: `7ec4fd12-01a0-4f2f-a8e3-309912cc6c9a`
+- Previous known-good commit: `100ee72`
+- Previous known-good Cloudflare version: `a5bb4090-d643-4596-9e79-25c14bdd5310`
+- Release review date/time (UTC): `2026-07-29T12:45:38Z`
 - Content owner: Jacob Matthews (approval recorded by Task 118)
 - Editor or admin approver: `jake@potomacdb.com` (active editor; approval recorded by Task 118)
-- Technical release owner: Not assigned or approved
+- Technical release owner: Jacob Matthews
 
 Never use Supabase project `nwoluvjdojzayozyzlob` for this release.
 
@@ -121,16 +121,26 @@ npm run test:production-crawl
 
 ## Decision
 
-- [ ] `GO`: every required item is checked and all three named owners approve.
-- [x] `NO-GO`: record the blocker, owner, remediation, and next review time below.
+- [x] `GO`: every required item is checked and all three named owners approve.
+- [ ] `NO-GO`: record the blocker, owner, remediation, and next review time below.
 
-Blocker or exception: Launch ingestion, both stock batches, and Contract Awards are current and healthy. The Resend manual retry procedure has not been signed as reviewed, and a named technical release owner has not approved the release. Owner: the release owner and the unassigned technical release owner. Remediation: sign the Resend operating-procedure review and record technical approval. Next review: immediately after those gates pass.
+Blocker or exception: None.
 
 Content owner approval: Jacob Matthews  Date: 2026-07-23
 
 Editor/admin approval: `jake@potomacdb.com`  Date: 2026-07-23
 
-Technical release approval: Not approved  Date: Not recorded
+Technical release approval: Jacob Matthews  Date: 2026-07-29
+
+## July 29 GO Evidence
+
+- Approval: Jacob Matthews approved as the named technical release owner on July 29, 2026. Content-owner, editor/admin, Resend operations, and technical approvals are all recorded.
+- Local checks: lint passed; 171/171 unit and integration tests passed; 21/21 email-operation tests passed; production build passed; 6/6 E2E browser journeys passed; 6/6 observability-budget tests passed.
+- Production checks: the 24-route release audit, ten mobile/desktop quality checks, and approximately 60-destination production crawl reported zero release issues. A first cold mobile homepage sample exceeded the FCP budget, while the immediate full warm rerun passed every performance, accessibility, layout-shift, and overflow budget.
+- Launch tracker: run `f8a4e14e-b512-4e03-b3dc-3d9663f9b014` completed at `2026-07-29T12:45:38Z` from a current source response, evaluated 12 upcoming launches, and found zero lunar/cislunar records in the two-week review window.
+- Stock tracker: Alpha Vantage run `a80c472a-8754-4547-830d-4cb4cb36d963` completed with all five retried symbols updated and no failures. The guarded daily total remained below the 20-call limit.
+- Contract tracker: run `3ffa6736-e9b7-4736-b6cc-f1ee3364cfbb` completed with ten records checked, two relevant records, and no error.
+- Reviewed release application commit: `c8f3fd7`. Reviewed Cloudflare version: `7ec4fd12-01a0-4f2f-a8e3-309912cc6c9a`. Recorded rollback commit: `100ee72`. Recorded rollback Cloudflare version: `a5bb4090-d643-4596-9e79-25c14bdd5310`.
 
 ## July 24 Verification Evidence
 
