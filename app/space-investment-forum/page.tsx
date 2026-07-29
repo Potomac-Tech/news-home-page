@@ -32,10 +32,15 @@ const program = [
 const partnerWordmarks = [
     { name: "Meet the Future", src: "/partner-mtf.png", dark: true },
     { name: "Space Force Association", src: "/partner-sfa.png", dark: true },
-    { name: "Quantum Space", src: "/partner-quantum-space.svg", dark: false },
+    { name: "Quantum Space", src: "/partner-quantum-space.svg", dark: true },
     { name: "Potomac Database Systems", src: "/Potomac Logo Transparent.png", dark: false },
     { name: "PSW Science", src: "/partner-psw-science.png", dark: false },
 ] as const;
+
+const keynoteImage = {
+    src: "https://xlpkdoeldtlhearqajat.supabase.co/storage/v1/object/public/editorial-media/62870429-f2fa-4c8e-b6c2-0175cf8ecc77/d905640d-98f3-4810-94ad-9d8bc1389cea/38629897-b400-4544-9c87-8b4e42d6ee83-dscf9143.jpg",
+    alt: "Former NASA administrator Jim Bridenstine keynotes the Cabeus Explorer Space Investment Forum.",
+} as const;
 
 export default function SpaceInvestmentForumPage() {
     return (
@@ -62,16 +67,25 @@ export default function SpaceInvestmentForumPage() {
                             </Link>
                         </div>
                     </div>
-                    <div className="flex flex-col justify-end bg-cabeus-ink px-5 py-12 text-cabeus-paper md:px-10 md:py-16">
-                        <p className="font-mono text-xs font-bold uppercase text-cabeus-gold">
-                            Keynote conversation
-                        </p>
-                        <p className="mt-5 font-serif text-5xl leading-[0.98]">
-                            American Strength in Space
-                        </p>
-                        <p className="mt-5 text-sm leading-6 text-cabeus-paper/75">
-                            Capital, industry, and strategic competition.
-                        </p>
+                    <div className="flex min-h-[39rem] flex-col bg-cabeus-ink text-cabeus-paper">
+                        <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden px-5 pt-8 md:px-10 md:pt-12">
+                            <img
+                                src={keynoteImage.src}
+                                alt={keynoteImage.alt}
+                                className="h-full max-h-[25rem] w-full object-contain object-center"
+                            />
+                        </div>
+                        <div className="px-5 pb-12 pt-8 md:px-10 md:pb-16">
+                            <p className="font-mono text-xs font-bold uppercase text-cabeus-gold">
+                                Keynote conversation
+                            </p>
+                            <p className="mt-5 font-serif text-5xl leading-[0.98]">
+                                American Strength in Space
+                            </p>
+                            <p className="mt-5 text-sm leading-6 text-cabeus-paper/75">
+                                Capital, industry, and strategic competition.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>

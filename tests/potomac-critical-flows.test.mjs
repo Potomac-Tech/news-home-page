@@ -382,6 +382,17 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
     );
 });
 
+test("Space Investment Forum reuses the Bridenstine story image and dark Quantum branding", () => {
+    const forumPage = read("app/space-investment-forum/page.tsx");
+
+    assertIncludes(forumPage, [
+        "38629897-b400-4544-9c87-8b4e42d6ee83-dscf9143.jpg",
+        "Former NASA administrator Jim Bridenstine keynotes",
+        'className="h-full max-h-[25rem] w-full object-contain object-center"',
+        '{ name: "Quantum Space", src: "/partner-quantum-space.svg", dark: true }',
+    ], "Space Investment Forum keynote and partner presentation");
+});
+
 test("production tracker ingestion is authenticated, scheduled, cited, and review-gated", () => {
     const ingestion = read("lib/trackers/production-ingestion.ts");
     const route = read("app/api/internal/trackers/ingest/route.ts");
