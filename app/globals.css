@@ -8,11 +8,7 @@
     }
 
     .industrial-divider {
-        background: linear-gradient(
-            90deg,
-            rgba(243, 167, 18, 0.88),
-            rgba(243, 167, 18, 0)
-        );
+        background: #af9254;
     }
 }
 
@@ -26,17 +22,92 @@
 }
 
 html {
-    background: #0d1114;
+    background: #f4f1ea;
 }
 
 body {
-    @apply bg-potomac-secondary text-potomac-cream;
+    background: #f4f1ea;
+    color: #151513;
     margin: 0;
     padding: 0;
     font-feature-settings: "ss01" 1, "tnum" 1;
-    background:
-        radial-gradient(circle at 85% 0%, rgba(185, 169, 139, 0.11), transparent 28rem),
-        linear-gradient(180deg, #0d1114 0%, #161b20 48%, #0d1114 100%);
+}
+
+::selection {
+    background: #151513;
+    color: #f4f1ea;
+}
+
+.brand-shell {
+    background: #f4f1ea;
+    color: #151513;
+}
+
+.brand-wordmark {
+    color: #151513;
+    display: inline-grid;
+    font-family: var(--font-dm-sans), sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.42em;
+    line-height: 1.45;
+    text-transform: uppercase;
+}
+
+.brand-wordmark > span {
+    display: block;
+    white-space: nowrap;
+}
+
+.brand-wordmark > span + span {
+    border-top: 1px solid #af9254;
+    margin-top: 0.18rem;
+    padding-top: 0.18rem;
+}
+
+.brand-kicker {
+    color: #68645e;
+    font-family: var(--font-dm-sans), sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.brand-button {
+    align-items: center;
+    background: #151513;
+    border: 1px solid #151513;
+    color: #f4f1ea;
+    font-family: var(--font-dm-sans), sans-serif;
+    font-size: 0.66rem;
+    font-weight: 600;
+    justify-content: center;
+    letter-spacing: 0.12em;
+    min-height: 2.75rem;
+    padding: 0.75rem 1.25rem;
+    text-transform: uppercase;
+    transition: background-color 160ms ease, color 160ms ease;
+}
+
+.brand-button:hover {
+    background: transparent;
+    color: #151513;
+}
+
+.brand-button-outline {
+    background: transparent;
+    color: #151513;
+}
+
+.brand-button-outline:hover {
+    background: #151513;
+    color: #f4f1ea;
+}
+
+.brand-rule {
+    background: #af9254;
+    height: 1px;
 }
 
 .stock-ticker-viewport {
@@ -109,7 +180,7 @@ body {
 .studio-rich-editor h2,
 .studio-rich-editor h3 {
     color: white;
-    font-family: var(--font-oswald), sans-serif;
+    font-family: var(--font-cormorant), Georgia, serif;
     font-weight: 600;
     margin: 2rem 0 0.75rem;
 }
@@ -172,9 +243,15 @@ body {
     width: 100%;
 }
 
-.studio-rich-editor figcaption,
-.article-rich-text figcaption {
+.studio-rich-editor figcaption {
     color: rgb(239 236 224 / 0.62) !important;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin-top: 0.65rem;
+}
+
+.article-rich-text figcaption {
+    color: #68645e !important;
     font-size: 0.82rem;
     line-height: 1.5;
     margin-top: 0.65rem;
@@ -206,8 +283,8 @@ body {
 
 .article-rich-text h2,
 .article-rich-text h3 {
-    color: white;
-    font-family: var(--font-oswald), sans-serif;
+    color: #151513;
+    font-family: var(--font-cormorant), Georgia, serif;
     font-weight: 600;
     line-height: 1.2;
     margin-top: 2.5rem;
@@ -222,8 +299,8 @@ body {
 }
 
 .article-rich-text blockquote {
-    border-left: 3px solid #e9a93f;
-    color: rgb(239 236 224 / 0.78);
+    border-left: 3px solid #af9254;
+    color: #68645e;
     padding-left: 1.25rem;
 }
 
@@ -241,6 +318,6 @@ body {
 }
 
 .article-rich-text a {
-    color: #e9a93f;
+    color: #8b713c;
     text-decoration: underline;
 }

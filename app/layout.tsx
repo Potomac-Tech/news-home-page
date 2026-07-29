@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Oswald, Source_Sans_3 } from "next/font/google";
+import {
+    Cormorant_Garamond,
+    DM_Sans,
+    IBM_Plex_Mono,
+} from "next/font/google";
 import "./globals.css";
 import { MigrationShell } from "./_components/MigrationShell";
 import { siteConfig } from "./_data/site";
@@ -8,14 +12,16 @@ import { ConsentTelemetry } from "./_components/ConsentTelemetry";
 // The shared shell reads the Supabase session cookie for member-aware navigation.
 export const dynamic = "force-dynamic";
 
-const sourceSans = Source_Sans_3({
+const dmSans = DM_Sans({
     subsets: ["latin"],
-    variable: "--font-source-sans",
+    variable: "--font-dm-sans",
+    weight: ["400", "500", "600", "700"],
     display: "optional",
 });
-const oswald = Oswald({
+const cormorant = Cormorant_Garamond({
     subsets: ["latin"],
-    variable: "--font-oswald",
+    variable: "--font-cormorant",
+    weight: ["400", "500", "600"],
     display: "optional",
 });
 const ibmPlexMono = IBM_Plex_Mono({
@@ -48,7 +54,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${sourceSans.variable} ${oswald.variable} ${ibmPlexMono.variable}`}>
+            <body className={`${dmSans.variable} ${cormorant.variable} ${ibmPlexMono.variable}`}>
                 <ConsentTelemetry />
                 <MigrationShell>{children}</MigrationShell>
             </body>

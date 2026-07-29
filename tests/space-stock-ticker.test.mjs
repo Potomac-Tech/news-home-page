@@ -21,7 +21,7 @@ test("homepage requests and renders the market-cap-ranked top ten ticker", () =>
         "Market-cap leaders",
         "Delayed |",
         "Source: Alpha Vantage end-of-day quote",
-        "min-h-14",
+        "min-h-12",
         "grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]",
         "stock-ticker-track",
         "stock-ticker-duplicate",

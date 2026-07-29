@@ -374,14 +374,14 @@ function GatePanel({
     const tierLabel = accessTierLabel(tier);
 
     return (
-        <section className="member-gated-content glass-card rounded p-6">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+        <section className="member-gated-content border-y border-cabeus-line py-7">
+            <p className="brand-kicker">
                 {tierLabel}+ full story
             </p>
-            <h2 className="mt-4 font-serif text-3xl leading-tight text-white">
+            <h2 className="mt-4 font-serif text-4xl font-medium leading-tight text-cabeus-ink">
                 Full analysis is reserved for approved members.
             </h2>
-            <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
+            <p className="mt-4 text-sm leading-6 text-cabeus-muted">
                 Public readers can review the headline, summary, key points,
                 intro, and citations. Approved members can read the full
                 analysis once their role is active.
@@ -390,7 +390,7 @@ function GatePanel({
                 {access.state === "signed_out" ? (
                     <Link
                         href={access.loginHref}
-                        className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
+                        className="brand-button inline-flex"
                     >
                         Sign in
                     </Link>
@@ -398,20 +398,20 @@ function GatePanel({
                 {access.state === "profile_incomplete" && access.profileHref ? (
                     <Link
                         href={access.profileHref}
-                        className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
+                        className="brand-button inline-flex"
                     >
                         Complete profile
                     </Link>
                 ) : null}
                 <Link
                     href="/request-access"
-                    className="rounded border border-potomac-gold/50 px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+                    className="brand-button brand-button-outline inline-flex"
                 >
                     Request Explorer access
                 </Link>
                 <Link
                     href={`/upgrade?tier=meridian&source=article&content=news&object=${encodeURIComponent(slug)}&next=${encodeURIComponent(`/news/${slug}`)}`}
-                    className="rounded border border-white/15 px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold"
+                    className="brand-button brand-button-outline inline-flex"
                 >
                     {tierConfig.enterprise.publicName} access
                 </Link>
@@ -490,29 +490,29 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     };
 
     return (
-        <article className="bg-grid-pattern">
+        <article className="bg-cabeus-paper text-cabeus-ink">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html: jsonLdScript(articleJsonLd),
                 }}
             />
-            <header className="border-b border-white/10">
+            <header className="border-b border-cabeus-line">
                 <div className="mx-auto w-full max-w-5xl px-4 py-12 md:px-8 lg:py-16">
                     <div className="max-w-4xl">
                         <Link
                             href="/news"
-                            className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold hover:text-potomac-cream"
+                            className="brand-kicker hover:text-cabeus-ink"
                         >
                             Back to news
                         </Link>
-                        <h1 className="mt-6 font-serif text-4xl leading-tight text-white md:text-6xl">
+                        <h1 className="mt-6 font-serif text-5xl font-medium leading-[0.94] text-cabeus-ink md:text-7xl">
                             {article.title}
                         </h1>
-                        <p className="mt-6 max-w-3xl text-lg leading-8 text-potomac-cream/80">
+                        <p className="mt-6 max-w-3xl text-lg leading-8 text-cabeus-muted">
                             {article.dek}
                         </p>
-                        <div className="mt-6 flex flex-wrap gap-3 text-xs font-bold uppercase tracking-[0.14em] text-potomac-cream/50">
+                        <div className="mt-6 flex flex-wrap gap-3 font-mono text-xs font-bold uppercase text-cabeus-muted">
                             {article.authorSlug ? (
                                 <Link href={`/authors/${article.authorSlug}`}>By {article.authorName}</Link>
                             ) : (
@@ -535,10 +535,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         <img
                             src={article.heroImageUrl}
                             alt={article.heroImageAlt}
-                            className="max-h-[42rem] w-full bg-black object-contain object-top"
+                            className="max-h-[42rem] w-full bg-cabeus-smoke object-contain object-top"
                         />
                         {mediaAssets.find((asset) => asset.publicUrl === article.heroImageUrl)?.caption ? (
-                            <figcaption className="mt-3 text-sm leading-6 text-potomac-cream/60">
+                            <figcaption className="mt-3 text-sm leading-6 text-cabeus-muted">
                                 {mediaAssets.find((asset) => asset.publicUrl === article.heroImageUrl)?.caption}
                             </figcaption>
                         ) : null}
@@ -551,11 +551,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <main>
                     {fullBody ? (
                         <section className="member-gated-content">
-                            <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                            <p className="brand-kicker">
                                 Member full story
                             </p>
                             <div
-                                className="article-rich-text mt-6 text-lg leading-8 text-potomac-cream/85"
+                                className="article-rich-text mt-6 text-lg leading-8 text-cabeus-ink/85"
                                 dangerouslySetInnerHTML={{
                                     __html: renderArticleHtml(fullBody),
                                 }}
@@ -563,7 +563,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         </section>
                     ) : (
                         <>
-                            <div className="article-rich-text text-lg leading-8 text-potomac-cream/80">
+                            <div className="article-rich-text text-lg leading-8 text-cabeus-ink/80">
                                 {renderParagraphs(article.teaser || article.summary).map((paragraph) => (
                                     <p key={paragraph}>{paragraph}</p>
                                 ))}
@@ -580,16 +580,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             {mediaAssets.filter((asset) =>
                                 asset.mediaType === "video" && !inlineMediaIds.has(asset.id)
                             ).map((asset) => (
-                                <figure key={asset.id} className="glass-card rounded p-4">
+                                <figure key={asset.id} className="border border-cabeus-line p-4">
                                     <video
                                         src={asset.publicUrl}
                                         controls
                                         preload="metadata"
                                         playsInline
                                         aria-label={asset.altText || "Article video"}
-                                        className="w-full rounded"
+                                        className="w-full"
                                     />
-                                    {asset.caption ? <figcaption className="mt-3 text-sm text-potomac-cream/60">{asset.caption}</figcaption> : null}
+                                    {asset.caption ? <figcaption className="mt-3 text-sm text-cabeus-muted">{asset.caption}</figcaption> : null}
                                 </figure>
                             ))}
                         </section>
@@ -599,17 +599,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 <aside className="space-y-6">
                     <SponsorUnit unit={articleSponsorUnit} />
 
-                    <section className="glass-card rounded p-6">
-                        <h2 className="font-serif text-2xl text-white">
+                    <section className="border-y border-cabeus-line py-6">
+                        <h2 className="font-serif text-3xl text-cabeus-ink">
                             Source Citations
                         </h2>
                         <div className="mt-5 space-y-5">
                             {article.citations.map((citation) => (
                                 <div
                                     key={`${citation.label}-${citation.title}`}
-                                    className="border-b border-white/10 pb-5 last:border-0 last:pb-0"
+                                    className="border-b border-cabeus-line pb-5 last:border-0 last:pb-0"
                                 >
-                                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
+                                    <p className="brand-kicker">
                                         {citation.label}
                                     </p>
                                     {citation.url ? (
@@ -625,19 +625,19 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                                                     ? "noopener noreferrer"
                                                     : undefined
                                             }
-                                            className="mt-2 block font-semibold leading-6 text-white transition hover:text-potomac-gold"
+                                            className="mt-2 block font-semibold leading-6 text-cabeus-ink transition hover:text-cabeus-gold"
                                         >
                                             {citation.title}
                                         </a>
                                     ) : (
-                                        <p className="mt-2 font-semibold leading-6 text-white">
+                                        <p className="mt-2 font-semibold leading-6 text-cabeus-ink">
                                             {citation.title}
                                         </p>
                                     )}
-                                    <p className="mt-1 text-xs uppercase tracking-[0.12em] text-potomac-cream/45">
+                                    <p className="mt-1 font-mono text-xs uppercase text-cabeus-muted">
                                         {citation.publisher}
                                     </p>
-                                    <p className="mt-3 text-sm leading-6 text-potomac-cream/65">
+                                    <p className="mt-3 text-sm leading-6 text-cabeus-muted">
                                         {citation.summary}
                                     </p>
                                 </div>
@@ -645,11 +645,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         </div>
                     </section>
 
-                    <section className="glass-card rounded p-6">
-                        <h2 className="font-serif text-2xl text-white">
+                    <section className="border-y border-cabeus-line py-6">
+                        <h2 className="font-serif text-3xl text-cabeus-ink">
                             Access Path
                         </h2>
-                        <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
+                        <p className="mt-4 text-sm leading-6 text-cabeus-muted">
                             Free Explorer access unlocks full public-story bodies
                             after verification and profile completion. Scout and
                             {tierConfig.enterprise.publicName} paths unlock deeper intelligence in later
@@ -657,7 +657,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         </p>
                         <Link
                             href="/request-access"
-                            className="mt-6 inline-flex rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
+                            className="brand-button mt-6 inline-flex"
                         >
                             Request access
                         </Link>

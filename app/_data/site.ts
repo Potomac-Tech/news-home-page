@@ -10,8 +10,8 @@ export const siteConfig = {
     legalName: "Potomac Database Systems",
     url: publicSiteUrl,
     description:
-        "Lunar industrial intelligence, market signals, readiness tools, and member-gated context for builders of the lunar economy.",
-    logoPath: "/cabeus-lunar-industrial-hero.png",
+        "Trusted intelligence, proprietary data, and strategic context for leaders shaping the new space age.",
+    logoPath: "/cabeus-moon-editorial-hero.png",
     publisherEmail: "info@potomacdb.com",
     publisherLocation: "Washington, DC, United States",
 } as const;

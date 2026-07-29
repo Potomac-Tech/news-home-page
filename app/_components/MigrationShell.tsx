@@ -16,22 +16,37 @@ const primaryNavItems: Array<{
     href: string;
     label: string;
 }> = [
-    { href: "/", label: "News" },
-    { href: "/archives?section=space-investment-forum", label: "Space Investment Forum" },
-    { href: "/archives?section=space-industrialist-week", label: "Space Industrialist Week" },
-    { href: "/archives?section=cabeus-games", label: "Cabeus Games" },
-    { href: "/terminal", label: "Terminal" },
+    { href: "/", label: "Home Base" },
+    { href: "/terminal", label: "Intelligence" },
+    { href: "/pricing", label: "Council" },
+];
+
+const conveningNavItems = [
+    { href: "/space-industrialist-week", label: "Space Industrialist Week" },
+    { href: "/space-investment-forum", label: "Space Investment Forum" },
+    { href: "/cabeus-games", label: "Cabeus Games" },
+    { href: "/events", label: "All convenings" },
 ];
 
 const footerNavItems = [
+    { href: "/terminal", label: "Intelligence" },
     { href: "/archives", label: "News archives" },
-    { href: "/terminal", label: "Terminal" },
     { href: "/tracker/launches", label: "Launches & Missions" },
     { href: "/calculators", label: "Calculators" },
-    { href: "/member", label: "Member workspace" },
+    { href: "/datasets", label: "Data" },
+];
+
+const companyNavItems = [
+    { href: "/team", label: "About" },
     { href: "/authors", label: "Author biographies" },
     { href: "/contact", label: "Contact & standards" },
+    { href: "/legal/terms", label: "Terms" },
 ];
+
+const newsletterChannel = externalChannels.find(
+    (channel) => channel.id === "substack" && channel.href
+);
+const newsletterHref = newsletterChannel?.href ?? "/request-access";
 
 async function MemberAwareSearchPalette() {
     let profileGate = null;
@@ -62,147 +77,189 @@ const publicCommandEntries = fallbackCommandEntries.filter(
 export function MigrationShell({ children }: { children: ReactNode }) {
 
     return (
-        <div className="min-h-screen bg-potomac-secondary text-potomac-cream">
+        <div className="brand-shell min-h-screen">
             <CheckoutAnalytics />
-            <header className="sticky top-0 z-40 border-b border-potomac-regolith/25 bg-potomac-primary/95 backdrop-blur-xl">
+            <header className="sticky top-0 z-40 border-b border-cabeus-line bg-cabeus-paper/95 backdrop-blur-xl">
                 <div className="mx-auto w-full max-w-[92rem] px-4 md:px-8">
-                    <div className="grid min-h-20 grid-cols-[1fr_auto] items-center gap-4 py-3 lg:grid-cols-[1fr_auto_1fr]">
-                        <div className="hidden items-center gap-3 font-mono text-[0.62rem] font-semibold uppercase text-potomac-regolith lg:flex">
-                            <span className="h-2 w-2 bg-potomac-gold" />
-                            <span>Lunar industry intelligence</span>
-                        </div>
-                        <Link href="/" className="flex min-w-0 items-center gap-3 lg:justify-center">
-                        <span className="relative h-11 w-14 shrink-0 overflow-hidden border border-potomac-regolith/45 bg-potomac-secondary">
-                            <img
-                                src={potomacBrand.assets.logo}
-                                alt="Cabeus Explorer lunar industrial mark"
-                                className="h-full w-full object-cover object-center opacity-90"
-                            />
-                            <span className="absolute inset-0 border border-black/50" />
-                        </span>
-                        <span className="min-w-0">
-                            <span className="block font-serif text-xl font-semibold uppercase leading-none text-white md:text-3xl">
-                                {potomacBrand.identity.name}
+                    <div className="flex min-h-[5.75rem] items-center justify-between gap-6">
+                        <Link href="/" aria-label="Cabeus Explorer home">
+                            <span className="brand-wordmark text-[0.68rem] sm:text-[0.78rem]">
+                                <span>Cabeus</span>
+                                <span>Explorer</span>
                             </span>
-                            <span className="mt-1 block font-mono text-[0.68rem] uppercase text-potomac-regolith">
-                                {potomacBrand.identity.tagline}
-                            </span>
-                        </span>
                         </Link>
+                        <nav
+                            aria-label="Primary navigation"
+                            className="hidden items-center gap-7 lg:flex"
+                        >
+                            {primaryNavItems.map((item) => (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    className="font-sans text-[0.66rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold"
+                                >
+                                    {item.label}
+                                </Link>
+                            ))}
+                            <details className="group relative">
+                                <summary className="cursor-pointer list-none font-sans text-[0.66rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold">
+                                    Convenings
+                                </summary>
+                                <div className="absolute left-1/2 top-full mt-5 w-64 -translate-x-1/2 border border-cabeus-line bg-cabeus-paper p-2 shadow-xl">
+                                    {conveningNavItems.map((item) => (
+                                        <Link
+                                            key={item.href}
+                                            href={item.href}
+                                            className="block border-b border-cabeus-line px-3 py-3 font-sans text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink last:border-b-0 hover:bg-cabeus-smoke"
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </details>
+                            <a
+                                href={newsletterHref}
+                                target={newsletterChannel ? "_blank" : undefined}
+                                rel={newsletterChannel ? "noopener noreferrer" : undefined}
+                                className="font-sans text-[0.66rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold"
+                            >
+                                Newsletter
+                            </a>
+                        </nav>
                         <div className="flex items-center justify-end gap-2">
                             <Suspense fallback={<SearchCommandPalette entries={publicCommandEntries} />}>
                                 <MemberAwareSearchPalette />
                             </Suspense>
                             <Link
                                 href="/request-access?tab=signin"
-                                className="hidden shrink-0 border border-potomac-regolith/45 px-3 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-cream transition hover:border-potomac-gold hover:text-potomac-gold sm:inline-flex"
+                                className="brand-button brand-button-outline hidden sm:inline-flex"
                             >
                                 Sign in
                             </Link>
                             <Link
                                 href="/request-access"
-                                className="hidden shrink-0 bg-potomac-gold px-3 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-primary transition hover:bg-potomac-cream md:inline-flex"
+                                className="brand-button hidden md:inline-flex"
                             >
-                                Join
+                                Join Council
                             </Link>
                         </div>
                     </div>
-                    <nav
-                        aria-label="Primary navigation"
-                        className="hidden items-center justify-center gap-7 border-t border-potomac-regolith/15 py-3 lg:flex"
-                    >
-                            {primaryNavItems.map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className="shrink-0 font-mono text-[0.66rem] font-semibold uppercase text-potomac-cream/75 transition hover:text-potomac-gold"
-                                >
-                                    {item.label}
-                                </Link>
-                            ))}
-                    </nav>
-                    <details className="border-t border-potomac-regolith/15 lg:hidden">
-                        <summary className="cursor-pointer py-3 font-mono text-[0.66rem] font-bold uppercase text-potomac-gold">
-                            Sections
+                    <details className="border-t border-cabeus-line lg:hidden">
+                        <summary className="cursor-pointer py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.12em] text-cabeus-ink">
+                            Menu
                         </summary>
-                        <nav aria-label="Mobile navigation" className="grid grid-cols-2 gap-px border-t border-potomac-regolith/15 bg-potomac-regolith/15 pb-px">
-                            {primaryNavItems.map((item) => (
+                        <nav aria-label="Mobile navigation" className="grid border-t border-cabeus-line pb-3">
+                            {[...primaryNavItems, ...conveningNavItems].map((item) => (
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    className="bg-potomac-primary px-3 py-3 font-mono text-[0.66rem] font-semibold uppercase text-potomac-cream/75"
+                                    className="border-b border-cabeus-line px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
                                 >
                                     {item.label}
                                 </Link>
                             ))}
+                            <a
+                                href={newsletterHref}
+                                className="px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
+                            >
+                                Newsletter
+                            </a>
+                            <Link
+                                href="/request-access?tab=signin"
+                                className="border-t border-cabeus-line px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
+                            >
+                                Sign in
+                            </Link>
+                            <Link
+                                href="/request-access"
+                                className="px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
+                            >
+                                Join Council
+                            </Link>
                         </nav>
                     </details>
                 </div>
             </header>
             <main>{children}</main>
-            <footer className="border-t border-potomac-regolith/20 bg-potomac-primary">
-                <div className="mx-auto grid w-full max-w-[92rem] gap-8 px-4 py-8 md:px-8 lg:grid-cols-[0.72fr_1.28fr]">
+            <footer className="border-t border-cabeus-line bg-cabeus-paper">
+                <div className="mx-auto grid w-full max-w-[92rem] gap-10 px-4 py-12 md:px-8 lg:grid-cols-[1.15fr_0.75fr_0.75fr_1fr]">
                     <div>
-                        <p className="font-serif text-2xl font-semibold uppercase text-white">
-                            {potomacBrand.identity.name}
-                        </p>
-                        <p className="mt-1 font-mono text-[0.68rem] uppercase text-potomac-regolith">
-                            {potomacBrand.identity.tagline}
-                        </p>
-                        <p className="mt-4 max-w-md text-sm leading-6 text-potomac-cream/62">
-                            Grounded intelligence, operational context, and
-                            commercial signals for lunar industrial leaders.
+                        <span className="brand-wordmark">
+                            <span>Cabeus</span>
+                            <span>Explorer</span>
+                        </span>
+                        <p className="mt-6 max-w-xs font-serif text-2xl leading-tight text-cabeus-ink">
+                            Intelligence for the space industrialist.
                         </p>
                         <nav
                             aria-label="Legal and trust"
-                            className="mt-5 flex flex-wrap gap-x-4 gap-y-2"
+                            className="mt-7 flex flex-wrap gap-x-4 gap-y-2"
                         >
                             {trustRoutes.map((route) => (
                                 <Link
                                     key={route.href}
                                     href={route.href}
-                                    className="font-mono text-[0.68rem] font-semibold uppercase text-potomac-cream/65 transition hover:text-potomac-gold"
-                                >
-                                    {route.label}
-                                </Link>
-                            ))}
-                        </nav>
-                        <nav
-                            aria-label="Terminal routes"
-                            className="mt-5 flex flex-wrap gap-x-4 gap-y-2"
-                        >
-                            {footerNavItems.map((route) => (
-                                <Link
-                                    key={route.href}
-                                    href={route.href}
-                                    className="font-mono text-[0.68rem] font-semibold uppercase text-potomac-regolith/70 transition hover:text-potomac-gold"
+                                    className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-cabeus-muted transition hover:text-cabeus-ink"
                                 >
                                     {route.label}
                                 </Link>
                             ))}
                         </nav>
                     </div>
-                    <nav aria-label="External channels" className="grid gap-3 sm:grid-cols-2">
+                    <nav aria-label="Platform routes">
+                        <p className="brand-kicker text-cabeus-ink">Platform</p>
+                        <div className="mt-5 grid gap-3">
+                            {footerNavItems.map((route) => (
+                                <Link
+                                    key={route.href}
+                                    href={route.href}
+                                    className="text-sm text-cabeus-muted transition hover:text-cabeus-ink"
+                                >
+                                    {route.label}
+                                </Link>
+                            ))}
+                        </div>
+                    </nav>
+                    <nav aria-label="Company routes">
+                        <p className="brand-kicker text-cabeus-ink">Company</p>
+                        <div className="mt-5 grid gap-3">
+                            {companyNavItems.map((route) => (
+                                <Link
+                                    key={route.href}
+                                    href={route.href}
+                                    className="text-sm text-cabeus-muted transition hover:text-cabeus-ink"
+                                >
+                                    {route.label}
+                                </Link>
+                            ))}
+                        </div>
+                    </nav>
+                    <div>
+                        <p className="brand-kicker text-cabeus-ink">The Cabeus Brief</p>
+                        <p className="mt-5 max-w-xs font-serif text-2xl leading-tight text-cabeus-ink">
+                            Daily intelligence delivered.
+                        </p>
+                        <a href={newsletterHref} className="brand-button brand-button-outline mt-6 inline-flex">
+                            Read the newsletter
+                        </a>
+                        <nav aria-label="External channels" className="mt-6 flex flex-wrap gap-4">
                         {externalChannels.map((channel) => (
                             <a
                                 key={channel.id}
                                 href={channel.href!}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="border border-potomac-regolith/25 p-4 transition hover:border-potomac-gold hover:bg-white/5"
+                                className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-cabeus-muted hover:text-cabeus-ink"
                             >
-                                <span className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
-                                    {channel.label}
-                                </span>
-                                <span className="mt-2 block font-mono text-[0.65rem] uppercase text-potomac-cream/65">
-                                    {channel.status}
-                                </span>
-                                <span className="mt-3 block text-sm leading-5 text-potomac-cream/70">
-                                    {channel.description}
-                                </span>
+                                {channel.label}
                             </a>
                         ))}
-                    </nav>
+                        </nav>
+                    </div>
+                </div>
+                <div className="mx-auto flex w-full max-w-[92rem] flex-wrap justify-between gap-3 border-t border-cabeus-line px-4 py-5 text-xs text-cabeus-muted md:px-8">
+                    <span>&copy; 2026 Cabeus Explorer</span>
+                    <span>{potomacBrand.identity.essence}</span>
                 </div>
             </footer>
         </div>

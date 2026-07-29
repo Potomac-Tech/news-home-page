@@ -54,7 +54,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                 if (event.key === "ArrowRight") { event.preventDefault(); move(1); }
                 if (event.key === " ") { event.preventDefault(); setPaused((value) => !value); }
             }}
-            className="bg-potomac-primary outline-none"
+            className="bg-cabeus-paper outline-none"
         >
             {slides.map((slide, index) => (
                 <article
@@ -65,16 +65,26 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                     inert={index !== activeIndex ? true : undefined}
                     className={index === activeIndex ? "block" : "hidden"}
                 >
-                    <div className="px-5 pb-7 pt-8 lg:px-8 lg:pt-10">
-                        <p className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
-                            Cabeus Explorer / {slide.slideType.replaceAll("_", " ")}
+                    <div className="pb-8 pt-6 md:pb-10 md:pt-8">
+                        <p className="brand-kicker">
+                            Latest intelligence / {slide.slideType.replaceAll("_", " ")}
                         </p>
-                        <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(17rem,0.72fr)_minmax(0,1.28fr)] lg:items-start lg:gap-9">
-                            <div>
-                                <h1 className="max-w-[18ch] font-serif text-4xl uppercase leading-[1.04] text-white">
+                        <div className="mt-5 grid gap-7 lg:grid-cols-[minmax(18rem,0.78fr)_minmax(0,1.22fr)] lg:items-start lg:gap-12">
+                            <div className="flex min-h-full flex-col">
+                                <h2 className="max-w-[16ch] font-serif text-[clamp(2.5rem,5vw,5.4rem)] font-medium leading-[0.92] text-cabeus-ink">
                                     {slide.title}
-                                </h1>
-                                <div className="industrial-divider mt-6 h-px w-40" />
+                                </h2>
+                                <div className="brand-rule mt-7 w-28" />
+                                <p className="mt-6 max-w-xl text-base leading-7 text-cabeus-muted md:text-lg md:leading-8">
+                                    {slide.summary}
+                                </p>
+                                <Link
+                                    href={slide.ctaRoute}
+                                    onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel", slideId: slide.id } })}
+                                    className="brand-button mt-7 inline-flex self-start"
+                                >
+                                    {slide.ctaLabel}
+                                </Link>
                             </div>
                             <img
                                 src={slide.visualAssetUrl}
@@ -82,7 +92,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                                 loading={index === 0 ? "eager" : "lazy"}
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 sizes="(min-width: 1024px) 55vw, 100vw"
-                                className={`aspect-video max-h-[22rem] w-full bg-potomac-primary ${
+                                className={`aspect-[16/10] max-h-[31rem] w-full bg-cabeus-smoke ${
                                     slide.visualAssetUrl.includes("space-investment-forum")
                                     || slide.visualAssetUrl.includes("/editorial-media/")
                                         ? "object-contain object-top"
@@ -90,21 +100,11 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                                 }`}
                             />
                         </div>
-                        <p className="mt-6 max-w-4xl text-base leading-7 text-potomac-cream/80">
-                            {slide.summary}
-                        </p>
-                        <Link
-                            href={slide.ctaRoute}
-                            onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel", slideId: slide.id } })}
-                            className="mt-7 inline-flex min-h-11 items-center bg-potomac-gold px-5 py-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-primary transition hover:bg-potomac-cream"
-                        >
-                            {slide.ctaLabel}
-                        </Link>
                     </div>
                 </article>
             ))}
 
-            <div className="flex flex-col items-start justify-between gap-3 border-t border-white/10 px-5 py-4 sm:flex-row sm:items-center lg:px-8">
+            <div className="flex flex-col items-start justify-between gap-3 border-t border-cabeus-line py-4 sm:flex-row sm:items-center">
                 <div className="flex items-center gap-2" role="tablist" aria-label="Choose story">
                     {slides.map((slide, index) => (
                         <button
@@ -114,17 +114,17 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                             aria-selected={index === activeIndex}
                             aria-label={`Show story ${index + 1}: ${slide.title}`}
                             onClick={() => setActiveIndex(index)}
-                            className={`h-11 w-11 border transition ${index === activeIndex ? "border-potomac-gold bg-potomac-gold/20" : "border-white/25 bg-black/25 hover:border-potomac-gold"}`}
+                            className={`h-10 w-10 border transition ${index === activeIndex ? "border-cabeus-ink bg-cabeus-ink" : "border-cabeus-line bg-transparent hover:border-cabeus-gold"}`}
                         >
-                            <span className="font-mono text-xs text-white">{index + 1}</span>
+                            <span className={`font-mono text-xs ${index === activeIndex ? "text-cabeus-paper" : "text-cabeus-ink"}`}>{index + 1}</span>
                         </button>
                     ))}
                 </div>
                 {count > 1 ? (
                     <div className="flex items-center gap-2">
-                        <button type="button" onClick={() => move(-1)} aria-label="Previous story" className="h-11 min-w-11 border border-white/30 bg-black/30 px-3 text-xl text-white hover:border-potomac-gold">&#8592;</button>
-                        <button type="button" onClick={() => setPaused((value) => !value)} aria-label={paused ? "Resume rotation" : "Pause rotation"} className="h-11 border border-white/30 bg-black/30 px-4 font-mono text-[0.65rem] font-bold uppercase text-white hover:border-potomac-gold">{paused ? "Resume" : "Pause"}</button>
-                        <button type="button" onClick={() => move(1)} aria-label="Next story" className="h-11 min-w-11 border border-white/30 bg-black/30 px-3 text-xl text-white hover:border-potomac-gold">&#8594;</button>
+                        <button type="button" onClick={() => move(-1)} aria-label="Previous story" className="h-10 min-w-10 border border-cabeus-line bg-transparent px-3 text-xl text-cabeus-ink hover:border-cabeus-gold">&#8592;</button>
+                        <button type="button" onClick={() => setPaused((value) => !value)} aria-label={paused ? "Resume rotation" : "Pause rotation"} className="h-10 border border-cabeus-line bg-transparent px-4 font-mono text-[0.65rem] font-bold uppercase text-cabeus-ink hover:border-cabeus-gold">{paused ? "Resume" : "Pause"}</button>
+                        <button type="button" onClick={() => move(1)} aria-label="Next story" className="h-10 min-w-10 border border-cabeus-line bg-transparent px-3 text-xl text-cabeus-ink hover:border-cabeus-gold">&#8594;</button>
                     </div>
                 ) : null}
             </div>

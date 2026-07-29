@@ -35,6 +35,21 @@ export const currentRoutes = [
         note: "Public event calendar with teaser fields and member-gated event details.",
     },
     {
+        href: "/space-industrialist-week",
+        source: "app/space-industrialist-week/page.tsx",
+        note: "Branded Space Industrialist Week program and invitation route.",
+    },
+    {
+        href: "/space-investment-forum",
+        source: "app/space-investment-forum/page.tsx",
+        note: "Space Investment Forum recap and coverage route.",
+    },
+    {
+        href: "/cabeus-games",
+        source: "app/cabeus-games/page.tsx",
+        note: "Branded Cabeus Games mission-training and registration-interest route.",
+    },
+    {
         href: "/datasets",
         source: "app/datasets/page.tsx",
         note: "Public dataset catalog with NASA/science archives, Cabeus Explorer proprietary entries, source metadata, availability, tier, sample, and demo indicators.",

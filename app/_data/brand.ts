@@ -9,8 +9,8 @@ export const potomacBrand = {
         machine: "#6D747D",
     },
     fonts: {
-        sans: "Source Sans 3",
-        serif: "Oswald",
+        sans: "DM Sans",
+        serif: "Cormorant Garamond",
         mono: "IBM Plex Mono",
     },
     assets: {
@@ -20,12 +20,15 @@ export const potomacBrand = {
         nexusScreenshot: "/Nexus Screenshot.png",
         sourceRendering: "/Source Rendering.png",
         cabeusHero: "/cabeus-lunar-industrial-hero.png",
+        editorialMoonHero: "/cabeus-moon-editorial-hero.png",
+        industrialistWeekHero: "/space-industrialist-week-hero.png",
+        gamesHero: "/cabeus-games-hero.png",
         pressRelease: "/potomac-lunar-economy-press-release-05182026.pdf",
     },
     identity: {
         name: "Cabeus Explorer",
-        tagline: "INTELLIGENCE FOR THE LUNAR INDUSTRIALIST",
-        essence: "Intelligence for the builders of the lunar economy.",
+        tagline: "INTELLIGENCE FOR THE SPACE INDUSTRIALIST",
+        essence: "Clarity in the new space age.",
     },
     surfaces: {
         page: "bg-potomac-secondary text-potomac-cream",

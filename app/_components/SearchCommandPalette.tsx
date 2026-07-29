@@ -93,12 +93,12 @@ export function SearchCommandPalette({ entries = [] }: SearchCommandPaletteProps
             <button
                 type="button"
                 onClick={() => setOpen(true)}
-                className="shrink-0 rounded border border-white/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-potomac-cream/70 transition hover:border-potomac-gold hover:text-potomac-gold"
+                className="shrink-0 border border-cabeus-line px-3 py-2 font-sans text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-cabeus-ink transition hover:border-cabeus-ink"
                 aria-haspopup="dialog"
                 aria-expanded={open}
             >
                 Search
-                <span className="ml-2 hidden rounded border border-white/10 px-1.5 py-0.5 text-[0.62rem] text-potomac-cream/65 sm:inline">
+                <span className="ml-2 hidden border border-cabeus-line px-1.5 py-0.5 text-[0.56rem] text-cabeus-muted xl:inline">
                     Ctrl K
                 </span>
             </button>

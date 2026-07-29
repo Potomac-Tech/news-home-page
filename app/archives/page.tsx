@@ -116,42 +116,41 @@ export default async function ArchivesPage({
     };
 
     return (
-        <div className="min-h-screen bg-[#080c10] text-potomac-cream">
+        <div className="min-h-screen bg-cabeus-paper text-cabeus-ink">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: jsonLdScript(itemList) }}
             />
-            <header className="relative min-h-[21rem] overflow-hidden border-b border-potomac-gold/35">
+            <header className="relative min-h-[28rem] overflow-hidden border-b border-cabeus-line">
                 <img
-                    src={potomacBrand.assets.cabeusHero}
+                    src={potomacBrand.assets.editorialMoonHero}
                     alt=""
-                    className="absolute inset-0 h-full w-full object-cover object-center opacity-45"
+                    className="absolute inset-0 h-full w-full object-cover object-center"
                 />
-                <div className="absolute inset-0 bg-black/55" />
-                <div className="relative mx-auto flex min-h-[21rem] w-full max-w-[92rem] flex-col justify-end px-4 pb-10 pt-16 md:px-8">
-                    <p className="font-mono text-xs font-bold uppercase text-potomac-gold">
+                <div className="relative mx-auto flex min-h-[28rem] w-full max-w-[92rem] flex-col justify-end px-5 pb-12 pt-16 md:px-10">
+                    <p className="brand-kicker">
                         Lunar intelligence record / {articles.length} published
                     </p>
-                    <h1 className="mt-4 max-w-4xl font-serif text-5xl uppercase leading-none text-white md:text-7xl">
+                    <h1 className="mt-4 max-w-4xl font-serif text-6xl font-medium leading-[0.9] text-cabeus-ink md:text-8xl">
                         {section.label} Archives
                     </h1>
-                    <p className="mt-5 max-w-2xl text-base leading-7 text-potomac-cream/75">
+                    <p className="mt-5 max-w-2xl text-base leading-7 text-cabeus-muted">
                         The permanent record of Cabeus Explorer reporting. Stories
                         remain here after leaving the homepage carousel.
                     </p>
                 </div>
             </header>
 
-            <main className="mx-auto w-full max-w-[92rem] px-4 py-10 md:px-8">
-                <nav className="flex flex-wrap gap-px border border-white/15 bg-white/15" aria-label="Archive sections">
+            <main className="mx-auto w-full max-w-[92rem] px-5 py-12 md:px-10 md:py-16">
+                <nav className="flex flex-wrap border-y border-cabeus-line" aria-label="Archive sections">
                     {editorialSections.map((item) => (
                         <Link
                             key={item.slug}
                             href={item.slug === "news" ? "/archives" : `/archives?section=${item.slug}`}
                             className={`px-4 py-3 font-mono text-[0.68rem] font-bold uppercase ${
                                 item.slug === section.slug
-                                    ? "bg-potomac-gold text-potomac-primary"
-                                    : "bg-[#0c1218] text-potomac-cream/75 hover:text-potomac-gold"
+                                    ? "bg-cabeus-ink text-cabeus-paper"
+                                    : "bg-transparent text-cabeus-muted hover:text-cabeus-gold"
                             }`}
                         >
                             {item.label}
@@ -160,22 +159,22 @@ export default async function ArchivesPage({
                 </nav>
 
                 {!articles.length ? (
-                    <section className="mt-8 border-y border-white/15 py-12">
-                        <p className="font-mono text-xs uppercase text-potomac-gold">No published records</p>
-                        <h2 className="mt-3 font-serif text-3xl uppercase text-white">Archive awaiting reports</h2>
+                    <section className="mt-8 border-y border-cabeus-line py-12">
+                        <p className="brand-kicker">No published records</p>
+                        <h2 className="mt-3 font-serif text-4xl text-cabeus-ink">Archive awaiting reports</h2>
                     </section>
                 ) : (
-                    <div className="mt-8 divide-y divide-white/15 border-y border-white/15">
+                    <div className="mt-8 divide-y divide-cabeus-line border-y border-cabeus-line">
                         {articles.map((article, index) => (
                             <article
                                 key={article.id}
                                 className="grid gap-5 py-7 md:grid-cols-[5rem_minmax(0,1fr)_minmax(15rem,24rem)] md:items-center"
                             >
                                 <div className="font-mono">
-                                    <span className="block text-3xl text-potomac-gold">
+                                    <span className="block text-3xl text-cabeus-gold">
                                         {String(index + 1).padStart(2, "0")}
                                     </span>
-                                    <time className="mt-2 block text-[0.62rem] uppercase text-potomac-regolith">
+                                    <time className="mt-2 block text-[0.62rem] uppercase text-cabeus-muted">
                                         {new Date(article.publishedAt).toLocaleDateString("en-US", {
                                             month: "short",
                                             day: "2-digit",
@@ -185,18 +184,18 @@ export default async function ArchivesPage({
                                 </div>
                                 <div>
                                     <div className="flex flex-wrap gap-2 font-mono text-[0.6rem] font-bold uppercase">
-                                        <span className="text-potomac-gold">{section.label}</span>
-                                        {article.isFeatured ? <span className="text-emerald-400">Homepage featured</span> : null}
+                                        <span className="text-cabeus-gold">{section.label}</span>
+                                        {article.isFeatured ? <span className="text-cabeus-muted">Homepage featured</span> : null}
                                     </div>
-                                    <h2 className="mt-3 max-w-3xl font-serif text-2xl leading-tight text-white md:text-3xl">
-                                        <Link href={article.href} className="hover:text-potomac-gold">
+                                    <h2 className="mt-3 max-w-3xl font-serif text-3xl font-medium leading-tight text-cabeus-ink md:text-4xl">
+                                        <Link href={article.href} className="hover:text-cabeus-gold">
                                             {article.title}
                                         </Link>
                                     </h2>
-                                    <p className="mt-3 max-w-3xl text-sm leading-6 text-potomac-cream/68">
+                                    <p className="mt-3 max-w-3xl text-sm leading-6 text-cabeus-muted">
                                         {article.summary}
                                     </p>
-                                    <Link href={article.href} className="mt-4 inline-block font-mono text-xs font-bold uppercase text-potomac-gold">
+                                    <Link href={article.href} className="mt-4 inline-block border-b border-cabeus-gold pb-1 font-mono text-xs font-bold uppercase text-cabeus-ink">
                                         Full story &#8594;
                                     </Link>
                                 </div>
@@ -204,10 +203,10 @@ export default async function ArchivesPage({
                                     <img
                                         src={article.imageUrl}
                                         alt={article.imageAlt}
-                                        className="aspect-video w-full border border-white/15 bg-black object-cover object-top"
+                                        className="aspect-video w-full border border-cabeus-line bg-cabeus-smoke object-cover object-top"
                                     />
                                 ) : (
-                                    <div className="aspect-video border border-white/15 bg-black/35" aria-hidden="true" />
+                                    <div className="aspect-video border border-cabeus-line bg-cabeus-smoke" aria-hidden="true" />
                                 )}
                             </article>
                         ))}

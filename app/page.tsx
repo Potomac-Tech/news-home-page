@@ -221,22 +221,20 @@ function SectionHeading({
     action?: { href: string; label: string };
 }) {
     return (
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-5 border-b border-cabeus-line pb-6 md:flex-row md:items-end md:justify-between">
             <div className="max-w-3xl">
-                <p className="font-mono text-[0.68rem] font-bold uppercase text-potomac-gold">
-                    {eyebrow}
-                </p>
-                <h2 className="mt-2 font-serif text-3xl uppercase leading-tight text-white md:text-4xl">
+                <p className="brand-kicker">{eyebrow}</p>
+                <h2 className="mt-3 max-w-[18ch] font-serif text-4xl font-medium leading-[0.98] text-cabeus-ink md:text-6xl">
                     {title}
                 </h2>
-                <p className="mt-4 text-base leading-7 text-potomac-cream/68">
+                <p className="mt-4 max-w-2xl text-base leading-7 text-cabeus-muted">
                     {description}
                 </p>
             </div>
             {action ? (
                 <Link
                     href={action.href}
-                    className="shrink-0 self-start border border-potomac-regolith/40 px-4 py-2 font-mono text-[0.68rem] font-bold uppercase text-potomac-regolith transition hover:border-potomac-gold hover:text-potomac-gold md:self-end"
+                    className="brand-button brand-button-outline inline-flex shrink-0 self-start md:self-end"
                 >
                     {action.label}
                 </Link>
@@ -247,8 +245,8 @@ function SectionHeading({
 
 function StoryMeta({ story }: { story: HomeStory }) {
     return (
-        <div className="flex flex-wrap items-center gap-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-cream/48">
-            <span className="text-potomac-gold">{story.sourceLabel}</span>
+        <div className="flex flex-wrap items-center gap-3 font-mono text-[0.64rem] font-semibold uppercase text-cabeus-muted">
+            <span className="text-cabeus-gold">{story.sourceLabel}</span>
             <time dateTime={story.publishedAt}>{formatDate(story.publishedAt)}</time>
             <span>{story.accessTier}+ full story</span>
         </div>
@@ -257,24 +255,24 @@ function StoryMeta({ story }: { story: HomeStory }) {
 
 function StoryCard({ story }: { story: HomeStory }) {
     return (
-        <article className="flex min-w-0 flex-col border-l border-potomac-regolith/25 px-5 first:border-l-0 first:pl-0">
+        <article className="flex min-w-0 flex-col border-t border-cabeus-line pt-5 md:border-l md:border-t-0 md:px-6 md:pt-0 md:first:border-l-0 md:first:pl-0">
             <StoryMeta story={story} />
-            <h3 className="mt-3 font-serif text-2xl uppercase leading-snug text-white">
+            <h3 className="mt-4 font-serif text-3xl font-medium leading-[1.02] text-cabeus-ink">
                 {story.title}
             </h3>
-            <p className="mt-3 text-sm leading-6 text-potomac-cream/72">
+            <p className="mt-4 text-sm leading-6 text-cabeus-muted">
                 {story.summary}
             </p>
             {story.imageUrl ? (
                 <img
                     src={story.imageUrl}
                     alt={story.imageAlt ?? ""}
-                    className="mt-5 h-44 w-full bg-potomac-primary object-cover"
+                    className="mt-6 aspect-[16/10] w-full bg-cabeus-smoke object-cover"
                 />
             ) : null}
             <Link
                 href={story.href}
-                className="mt-5 inline-flex self-start font-mono text-[0.68rem] font-bold uppercase text-potomac-gold hover:text-potomac-cream"
+                className="mt-6 inline-flex self-start border-b border-cabeus-gold pb-1 font-mono text-[0.64rem] font-bold uppercase text-cabeus-ink hover:text-cabeus-gold"
             >
                 Full story →
             </Link>
@@ -361,7 +359,7 @@ export default async function HomePage() {
     };
 
     return (
-        <div className="bg-grid-pattern">
+        <div className="bg-cabeus-paper text-cabeus-ink">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
@@ -374,153 +372,169 @@ export default async function HomePage() {
                     __html: jsonLdScript(headlineItemListJsonLd),
                 }}
             />
-            <LunarTimeClock initialUtcIso={new Date().toISOString()} />
+            <section className="relative min-h-[38rem] overflow-hidden border-b border-cabeus-line md:min-h-[45rem]">
+                <img
+                    src={potomacBrand.assets.editorialMoonHero}
+                    alt="Detailed Moon emerging from a warm ivory field"
+                    className="absolute inset-0 h-full w-full object-cover object-[62%_center] opacity-45 sm:object-center sm:opacity-100"
+                    fetchPriority="high"
+                />
+                <div className="relative mx-auto flex min-h-[38rem] w-full max-w-[92rem] items-center px-5 py-16 md:min-h-[45rem] md:px-10">
+                    <div className="max-w-[42rem]">
+                        <p className="brand-kicker">Independent intelligence</p>
+                        <h1 className="mt-6 max-w-[11ch] font-serif text-[clamp(4.25rem,8vw,8.75rem)] font-medium leading-[0.79] text-cabeus-ink">
+                            Clarity in the New Space Age.
+                        </h1>
+                        <p className="mt-8 max-w-xl text-base leading-7 text-cabeus-muted md:text-lg md:leading-8">
+                            Trusted intelligence, proprietary data, and strategic context
+                            for the leaders shaping what comes next.
+                        </p>
+                        <div className="mt-9 flex flex-wrap gap-3">
+                            <Link href="/archives" className="brand-button inline-flex">
+                                Start reading
+                            </Link>
+                            <Link href="/terminal" className="brand-button brand-button-outline inline-flex">
+                                Our intelligence
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <StockTicker items={tickerItems} />
+            <LunarTimeClock initialUtcIso={new Date().toISOString()} />
 
-            <section className="border-b border-potomac-regolith/20 bg-potomac-secondary text-potomac-cream">
-                <div className="mx-auto grid w-full max-w-[92rem] lg:grid-cols-[17rem_minmax(0,1fr)_19rem]">
-                    <aside className="order-2 border-potomac-regolith/20 px-5 py-8 lg:order-1 lg:border-r lg:py-10">
-                        <div className="flex items-center justify-between border-b border-potomac-regolith/25 pb-4">
-                            <h2 className="font-serif text-2xl uppercase text-white">Recent stories</h2>
-                            <Link href="/archives" className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Archives</Link>
-                        </div>
+            <section className="border-b border-cabeus-line">
+                <div className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
+                    <div className="flex items-end justify-between border-b border-cabeus-line pb-5">
                         <div>
-                            {latestStories.slice(0, 4).map((story) => (
-                                <article key={`recent-${story.title}`} className="border-b border-potomac-regolith/20 py-5">
-                                    <p className="font-mono text-[0.6rem] font-bold uppercase text-potomac-gold">{story.sourceLabel}</p>
-                                    <Link href={story.href} className="mt-2 block font-serif text-lg uppercase leading-5 text-potomac-cream hover:text-potomac-gold">{story.title}</Link>
-                                    <time dateTime={story.publishedAt} className="mt-3 block font-mono text-[0.6rem] uppercase text-potomac-regolith">{formatDate(story.publishedAt)}</time>
-                                </article>
-                            ))}
+                            <p className="brand-kicker">Latest reporting</p>
+                            <h2 className="mt-3 font-serif text-5xl font-medium leading-none md:text-7xl">
+                                Latest Intelligence
+                            </h2>
                         </div>
-                    </aside>
-
-                    <div className="order-1 bg-potomac-primary lg:order-2">
+                        <Link href="/archives" className="brand-button brand-button-outline hidden sm:inline-flex">
+                            View archive
+                        </Link>
+                    </div>
+                    <div className="mt-4">
                         {carouselSlides.length ? (
                             <HomepageCarousel slides={carouselSlides} />
                         ) : (
-                            <section className="flex min-h-[500px] items-center px-8 py-16">
+                            <section className="flex min-h-[26rem] items-center border-b border-cabeus-line py-16">
                                 <div>
-                                    <p className="font-mono text-xs font-bold uppercase text-potomac-gold">
-                                        Cabeus newsroom
-                                    </p>
-                                    <h1 className="mt-4 font-serif text-4xl uppercase text-white">
+                                    <p className="brand-kicker">Cabeus newsroom</p>
+                                    <h3 className="mt-4 font-serif text-5xl text-cabeus-ink">
                                         News feed temporarily unavailable
-                                    </h1>
-                                    <p className="mt-4 max-w-xl text-potomac-cream/70">
-                                        Approved stories will return when the editorial
-                                        feed is available.
+                                    </h3>
+                                    <p className="mt-4 max-w-xl text-cabeus-muted">
+                                        Approved stories will return when the editorial feed is
+                                        available.
                                     </p>
                                 </div>
                             </section>
                         )}
                     </div>
-
-                    <aside className="order-3 space-y-4 border-potomac-regolith/20 px-5 py-8 lg:border-l lg:py-10">
-                        <section className="border border-potomac-regolith/25 bg-potomac-primary/55 p-5">
-                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Cabeus in your inbox</p>
-                            <h2 className="mt-3 font-serif text-2xl uppercase text-white">The lunar brief</h2>
-                            <p className="mt-3 text-sm leading-5 text-potomac-cream/70">Headlines, program movement, and lunar market intelligence for approved members.</p>
-                            <Link href="/request-access" className="mt-5 inline-flex bg-potomac-gold px-4 py-2 font-mono text-[0.64rem] font-bold uppercase text-potomac-primary">Join Explorer</Link>
-                        </section>
-                        <section className="border border-potomac-gold/55 bg-potomac-primary/70 p-5">
-                            <p className="font-serif text-2xl uppercase text-white">Cabeus Scout</p>
-                            <p className="mt-3 text-sm leading-5 text-potomac-cream/70">Research, proprietary datasets, alerts, exports, and advanced lunar dashboards.</p>
-                            <Link href="/pricing" className="mt-5 inline-flex font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">Get access →</Link>
-                        </section>
-                    </aside>
+                    <div className="mt-8 grid gap-0 md:grid-cols-3">
+                        {latestStories.slice(0, 3).map((story) => (
+                            <StoryCard key={`latest-${story.title}`} story={story} />
+                        ))}
+                    </div>
+                    <Link href="/archives" className="brand-button brand-button-outline mt-8 sm:hidden">
+                        View archive
+                    </Link>
                 </div>
             </section>
 
-            <section aria-label="Lunar economy activity" className="border-b border-potomac-regolith/20 bg-potomac-primary">
-                <div className="mx-auto flex w-full max-w-[92rem] flex-col gap-4 px-4 py-4 md:px-8 lg:flex-row lg:items-center lg:justify-between">
+            <section aria-label="Lunar economy activity" className="border-b border-cabeus-line bg-cabeus-ink text-cabeus-paper">
+                <div className="mx-auto flex w-full max-w-[92rem] flex-col gap-4 px-5 py-5 md:px-10 lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-                        <span className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Mission pulse</span>
-                        <span className="font-serif text-xl uppercase text-white">{launchSummary.reviewedCount} reviewed</span>
-                        <span className="font-mono text-[0.62rem] uppercase text-emerald-200/70">{launchSummary.lunarCount} lunar / cislunar</span>
-                        <span className="font-mono text-[0.58rem] uppercase text-potomac-regolith">
+                        <span className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-gold">Mission pulse</span>
+                        <span className="font-serif text-2xl text-cabeus-paper">{launchSummary.reviewedCount} reviewed</span>
+                        <span className="font-mono text-[0.62rem] uppercase text-cabeus-paper/75">{launchSummary.lunarCount} lunar / cislunar</span>
+                        <span className="font-mono text-[0.58rem] uppercase text-cabeus-paper/45">
                             {launchSummary.freshnessAt
                                 ? `Updated ${new Date(launchSummary.freshnessAt).toLocaleString()}`
                                 : "No reviewed records in the current window"}
                         </span>
                     </div>
                     <div className="flex gap-4">
-                        <Link prefetch={false} href={launchHref} className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">{launchCta}</Link>
-                        <Link prefetch={false} href="/upgrade?tier=scout&source=homepage&content=launch-tools&next=%2Ftracker%2Flaunches" className="font-mono text-[0.62rem] font-bold uppercase text-potomac-cream/60">Values & exports</Link>
+                        <Link prefetch={false} href={launchHref} className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-gold">{launchCta}</Link>
+                        <Link prefetch={false} href="/upgrade?tier=scout&source=homepage&content=launch-tools&next=%2Ftracker%2Flaunches" className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-paper/60">Values & exports</Link>
                     </div>
                 </div>
             </section>
 
-            <section className="border-b border-potomac-regolith/20 bg-potomac-secondary">
-                <div className="mx-auto w-full max-w-[92rem] px-4 py-10 md:px-8">
-                    <div className="flex items-end justify-between border-b border-potomac-regolith/25 pb-4">
-                        <h2 className="font-serif text-3xl uppercase text-white">Top reads</h2>
-                        <Link href="/archives" className="font-mono text-[0.64rem] font-bold uppercase text-potomac-gold">News archives →</Link>
+            <section className="border-b border-cabeus-line">
+                <div className="mx-auto grid w-full max-w-[92rem] gap-12 px-5 py-16 md:px-10 md:py-24 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
+                    <div>
+                        <p className="brand-kicker">Cabeus intelligence</p>
+                        <h2 className="mt-4 max-w-[12ch] font-serif text-5xl font-medium leading-[0.94] md:text-7xl">
+                            Proprietary Data. Independent Analysis. Strategic Advantage.
+                        </h2>
+                        <p className="mt-6 max-w-xl text-base leading-7 text-cabeus-muted">
+                            A disciplined operating picture for the lunar economy, built
+                            from reviewed sources, transparent assumptions, and analyst
+                            judgment.
+                        </p>
+                        <img
+                            src={potomacBrand.assets.cabeusHero}
+                            alt="Lunar industrial infrastructure under a crescent Moon"
+                            className="mt-10 aspect-[16/11] w-full object-cover"
+                        />
                     </div>
-                    <div className="mt-6 grid gap-y-8 md:grid-cols-3">
-                        {latestStories.slice(0, 3).map((story) => (
-                            <StoryCard key={`top-${story.title}`} story={story} />
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            <section className="border-b border-potomac-regolith/20 bg-potomac-primary/78">
-                <div className="mx-auto w-full max-w-[92rem] px-4 py-10 md:px-8">
-                    <div className="flex items-end justify-between border-b border-potomac-regolith/25 pb-4">
-                        <div>
-                            <p className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Market model</p>
-                            <h2 className="mt-2 font-serif text-3xl uppercase text-white">Lunar economy</h2>
-                        </div>
-                    </div>
-                    <div className="mt-6 max-w-3xl">
+                    <div className="border-t border-cabeus-line pt-6">
+                        <p className="brand-kicker">Daily market model</p>
+                        <h3 className="mt-3 font-serif text-5xl font-medium">
+                            The Lunar Economy
+                        </h3>
                         <EconomySummaryWidget summary={economySummary} />
                     </div>
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-[92rem] px-4 py-10 md:px-8">
+            <section className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
                 <SectionHeading
-                    eyebrow="Membership intelligence"
-                    title="Built for your advantage"
-                    description="Choose the visibility level that matches your operating tempo, from daily sector awareness to private briefings and team-level advisory access."
-                    action={{ href: "/pricing", label: "Compare tiers" }}
+                    eyebrow="The Cabeus Council"
+                    title="Intelligence built for your advantage."
+                    description="Choose the visibility and support that matches your operating tempo, from daily sector awareness to private briefings and team-level advisory access."
+                    action={{ href: "/pricing", label: "Explore membership" }}
                 />
-                <div className="mt-6 grid gap-5 lg:grid-cols-3">
+                <div className="mt-10 grid border-y border-cabeus-line lg:grid-cols-3">
                     {membershipTiers.map((tier) => (
                         <article
                             key={tier.tier}
-                            className="border border-potomac-regolith/20 bg-potomac-primary/72 p-5"
+                            className="border-b border-cabeus-line py-8 lg:border-b-0 lg:border-l lg:px-8 lg:first:border-l-0 lg:first:pl-0"
                         >
                             <div className="flex items-baseline justify-between gap-4">
-                                <h3 className="font-serif text-2xl uppercase text-white">
+                                <h3 className="font-serif text-4xl text-cabeus-ink">
                                     {tier.tier}
                                 </h3>
-                                <p className="font-mono text-sm font-bold text-potomac-cream">
+                                <p className="font-mono text-xs font-bold uppercase text-cabeus-muted">
                                     {tier.price}
                                 </p>
                             </div>
-                            <p className="mt-3 text-sm leading-6 text-potomac-cream/65">
+                            <p className="mt-4 text-sm leading-6 text-cabeus-muted">
                                 {tier.detail}
                             </p>
-                            <ul className="mt-5 space-y-2 text-sm leading-5 text-potomac-cream/68">
+                            <ul className="mt-6 space-y-2 text-sm leading-5 text-cabeus-ink/75">
                                 {tier.features.map((feature) => (
                                     <li key={feature} className="flex gap-2">
-                                        <span className="mt-2 h-1 w-1 bg-potomac-gold" />
+                                        <span className="mt-2 h-1 w-1 bg-cabeus-gold" />
                                         <span>{feature}</span>
                                     </li>
                                 ))}
                             </ul>
                             <Link
                                 href={tier.href}
-                                className="mt-6 inline-flex w-full justify-center border border-potomac-gold/55 px-4 py-2 font-mono text-[0.68rem] font-bold uppercase text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
+                                className="brand-button brand-button-outline mt-7 inline-flex"
                             >
                                 {tier.cta}
                             </Link>
                         </article>
                     ))}
                 </div>
-                <div className="mt-8 grid gap-5 md:grid-cols-2">
+                <div className="mt-12 grid gap-5 md:grid-cols-2">
                     {homepageSponsorUnits.map((unit) => (
                         <SponsorUnit key={unit.placementKey} unit={unit} />
                     ))}

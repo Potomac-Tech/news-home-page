@@ -1,0 +1,51 @@
+import type { Metadata } from "next";
+import { ConveningPage } from "../_components/ConveningPage";
+import { potomacBrand } from "../_data/brand";
+
+export const metadata: Metadata = {
+    title: "Space Industrialist Week",
+    description:
+        "A concentrated week for the people building the commercial, civil, and strategic infrastructure of the new space age.",
+    alternates: { canonical: "/space-industrialist-week" },
+};
+
+export default function SpaceIndustrialistWeekPage() {
+    return (
+        <ConveningPage
+            eyebrow="A Cabeus Explorer convening"
+            title="The Week for the People Building the Future in Orbit."
+            introduction="Space Industrialist Week brings together operators, investors, policymakers, and technical leaders for candid conversations about the systems, capital, and partnerships shaping the space and lunar economy."
+            imageUrl={potomacBrand.assets.industrialistWeekHero}
+            imageAlt="Space industry leaders gathered around a luminous lunar display"
+            dateLabel="September 2026"
+            locationLabel="Washington, D.C."
+            primaryCta={{
+                href: "/request-access?source=space-industrialist-week",
+                label: "Request invitation",
+            }}
+            secondaryCta={{ href: "/events", label: "View all convenings" }}
+            sections={[
+                {
+                    number: "01",
+                    title: "Strategy and capital",
+                    description:
+                        "Focused sessions on commercial models, public investment, national strategy, and the decisions that turn ambitious programs into durable markets.",
+                },
+                {
+                    number: "02",
+                    title: "Lunar infrastructure",
+                    description:
+                        "Operator-level discussion of transport, power, communications, navigation, surface mobility, data, and the industrial base needed for permanence.",
+                },
+                {
+                    number: "03",
+                    title: "The inaugural Cabeus Games",
+                    description:
+                        "A mission-oriented competition that tests collaboration, judgment, and performance under the constraints of lunar operations.",
+                },
+            ]}
+            statement="One week. The people who are building what comes next."
+            statementDetail="Programming and participation are curated. Request an invitation to receive confirmed agenda, venue, and registration information as it is released."
+        />
+    );
+}
