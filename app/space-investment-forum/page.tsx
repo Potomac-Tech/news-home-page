@@ -1,47 +1,173 @@
 import type { Metadata } from "next";
-import { ConveningPage } from "../_components/ConveningPage";
+import Link from "next/link";
 
 export const metadata: Metadata = {
     title: "Space Investment Forum",
     description:
-        "A forum on capital, industry, and strategic competition in the space economy.",
+        "A Cabeus Explorer forum on capital, industry, and strategic competition in the space economy.",
     alternates: { canonical: "/space-investment-forum" },
 };
 
+const program = [
+    {
+        number: "01",
+        title: "American strength in space",
+        description:
+            "A featured conversation on capital, industry, and strategic competition across the civil, commercial, and national-security space communities.",
+    },
+    {
+        number: "02",
+        title: "Infrastructure and investment",
+        description:
+            "Discussion spanning Artemis, integrated space defense, lunar and cislunar infrastructure, workforce, and capital allocation.",
+    },
+    {
+        number: "03",
+        title: "Intelligence for decision-makers",
+        description:
+            "A direct examination of how trusted data and independent analysis improve investment, policy, and mission decisions.",
+    },
+] as const;
+
+const partnerWordmarks = [
+    { name: "Meet the Future", src: "/partner-mtf.png", dark: true },
+    { name: "Space Force Association", src: "/partner-sfa.png", dark: true },
+    { name: "Quantum Space", src: "/partner-quantum-space.svg", dark: false },
+    { name: "Potomac Database Systems", src: "/Potomac Logo Transparent.png", dark: false },
+    { name: "PSW Science", src: "/partner-psw-science.png", dark: false },
+] as const;
+
 export default function SpaceInvestmentForumPage() {
     return (
-        <ConveningPage
-            eyebrow="Leadership / capital / innovation / orbit"
-            title="Space Investment Forum."
-            introduction="Cabeus Explorer and its partners convened senior leaders in investment, government, industry, and national security to examine the capital, partnerships, and strategic choices shaping American leadership in space."
-            imageUrl="/potomac-space-investment-forum.jpg"
-            imageAlt="Invitation artwork for the 2026 Space Investment Forum"
-            dateLabel="July 21, 2026"
-            locationLabel="The Cosmos Club / Washington, D.C."
-            primaryCta={{ href: "/archives", label: "Read forum coverage" }}
-            secondaryCta={{ href: "/contact", label: "Contact the team" }}
-            sections={[
-                {
-                    number: "01",
-                    title: "American strength in space",
-                    description:
-                        "A featured conversation on capital, industry, and strategic competition with leaders from the civil, commercial, and national-security communities.",
-                },
-                {
-                    number: "02",
-                    title: "Infrastructure and investment",
-                    description:
-                        "Discussion spanning Artemis, integrated space defense, lunar and cislunar infrastructure, workforce, and capital allocation.",
-                },
-                {
-                    number: "03",
-                    title: "Intelligence for decision-makers",
-                    description:
-                        "A clear view of how trusted data and independent analysis improve investment, policy, and mission decisions.",
-                },
-            ]}
-            statement="A consequential gathering for the people financing and building the space economy."
-            statementDetail="The 2026 forum has concluded. Explore Cabeus Explorer coverage and future convenings for the insights, people, and decisions continuing this conversation."
-        />
+        <div className="bg-cabeus-paper text-cabeus-ink">
+            <section className="border-b border-cabeus-line">
+                <div className="mx-auto grid min-h-[39rem] w-full max-w-[92rem] lg:grid-cols-[1.15fr_0.85fr]">
+                    <div className="flex flex-col justify-center px-5 py-16 md:px-10 md:py-24">
+                        <p className="brand-kicker">Leadership / capital / innovation / orbit</p>
+                        <h1 className="mt-6 max-w-[10ch] text-balance font-serif text-[clamp(4rem,7vw,7.5rem)] font-medium leading-[0.9]">
+                            Space Investment Forum.
+                        </h1>
+                        <p className="mt-7 max-w-2xl text-lg leading-8 text-cabeus-muted">
+                            Cabeus Explorer convened senior leaders in investment,
+                            government, industry, and national security to examine the
+                            capital and partnerships shaping American leadership in
+                            space.
+                        </p>
+                        <div className="mt-8 flex flex-wrap gap-3">
+                            <Link href="/archives?section=space-investment-forum" className="brand-button inline-flex">
+                                Read forum coverage
+                            </Link>
+                            <Link href="/contact" className="brand-button brand-button-outline inline-flex">
+                                Contact the team
+                            </Link>
+                        </div>
+                    </div>
+                    <div className="flex flex-col justify-end bg-cabeus-ink px-5 py-12 text-cabeus-paper md:px-10 md:py-16">
+                        <p className="font-mono text-xs font-bold uppercase text-cabeus-gold">
+                            Keynote conversation
+                        </p>
+                        <p className="mt-5 font-serif text-5xl leading-[0.98]">
+                            American Strength in Space
+                        </p>
+                        <p className="mt-5 text-sm leading-6 text-cabeus-paper/75">
+                            Capital, industry, and strategic competition.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section className="border-b border-cabeus-line bg-cabeus-smoke">
+                <div className="mx-auto grid w-full max-w-[92rem] md:grid-cols-2">
+                    <div className="px-5 py-6 md:px-10">
+                        <p className="brand-kicker">When</p>
+                        <p className="mt-2 font-serif text-3xl">July 21, 2026</p>
+                    </div>
+                    <div className="border-t border-cabeus-line px-5 py-6 md:border-l md:border-t-0 md:px-10">
+                        <p className="brand-kicker">Where</p>
+                        <p className="mt-2 font-serif text-3xl">
+                            The Cosmos Club / Washington, D.C.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section className="border-b border-cabeus-line">
+                <div className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
+                    <p className="brand-kicker">Keynoted by</p>
+                    <div className="mt-6 grid border-y border-cabeus-line md:grid-cols-2">
+                        <article className="py-8 md:pr-10">
+                            <h2 className="font-serif text-5xl leading-none">
+                                Jim Bridenstine
+                            </h2>
+                            <p className="mt-4 font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
+                                Former NASA Administrator / CEO, Quantum Space
+                            </p>
+                        </article>
+                        <article className="border-t border-cabeus-line py-8 md:border-l md:border-t-0 md:pl-10">
+                            <h2 className="font-serif text-5xl leading-none">
+                                Brig. Gen. (Ret.) Damon Feltman
+                            </h2>
+                            <p className="mt-4 font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
+                                CEO, Space Force Association
+                            </p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section className="border-b border-cabeus-line">
+                <div className="mx-auto grid w-full max-w-[92rem] gap-12 px-5 py-16 md:px-10 md:py-24 lg:grid-cols-[0.72fr_1.28fr]">
+                    <div>
+                        <p className="brand-kicker">The program</p>
+                        <h2 className="mt-4 max-w-[10ch] font-serif text-5xl leading-[0.94] md:text-7xl">
+                            A consequential gathering.
+                        </h2>
+                    </div>
+                    <div className="border-t border-cabeus-line">
+                        {program.map((section) => (
+                            <article
+                                key={section.number}
+                                className="grid gap-4 border-b border-cabeus-line py-7 sm:grid-cols-[4rem_1fr]"
+                            >
+                                <p className="font-mono text-xs font-semibold text-cabeus-bronze">
+                                    {section.number}
+                                </p>
+                                <div>
+                                    <h3 className="font-serif text-3xl">{section.title}</h3>
+                                    <p className="mt-3 max-w-2xl text-sm leading-6 text-cabeus-muted">
+                                        {section.description}
+                                    </p>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="border-b border-cabeus-line bg-cabeus-smoke">
+                <div className="mx-auto w-full max-w-[92rem] px-5 py-14 md:px-10 md:py-20">
+                    <p className="brand-kicker">Presented in partnership with</p>
+                    <div
+                        className="mt-7 grid border-y border-cabeus-line sm:grid-cols-2 lg:grid-cols-5"
+                        aria-label="Space Investment Forum sponsor logos"
+                    >
+                        {partnerWordmarks.map((partner, index) => (
+                            <div
+                                key={partner.name}
+                                className={`flex min-h-36 items-center justify-center p-6 ${
+                                    index ? "border-t border-cabeus-line sm:border-l sm:border-t-0" : ""
+                                } ${partner.dark ? "bg-cabeus-ink" : "bg-cabeus-paper"}`}
+                            >
+                                <img
+                                    src={partner.src}
+                                    alt={`${partner.name} logo`}
+                                    className="max-h-20 w-full max-w-[13rem] object-contain"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        </div>
     );
 }

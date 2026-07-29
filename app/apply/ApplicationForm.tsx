@@ -86,29 +86,29 @@ export function ApplicationForm({
     }
 
     return (
-        <form onSubmit={handleSubmit} className="glass-card rounded p-6">
+        <form onSubmit={handleSubmit} className="mt-7 border-t border-cabeus-line pt-7">
             <div className="grid gap-5 md:grid-cols-2">
-                <label className="block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                <label className="block font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
                     Full name
                     <input
                         required
                         name="full_name"
                         type="text"
                         autoComplete="name"
-                        className="mt-2 w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-base font-normal normal-case tracking-normal text-white outline-none transition focus:border-potomac-gold"
+                        className="mt-2 w-full border border-cabeus-line bg-cabeus-smoke px-4 py-3 font-sans text-base font-normal normal-case text-cabeus-ink outline-none transition focus:border-cabeus-bronze"
                     />
                 </label>
-                <label className="block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                <label className="block font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
                     Email
                     <input
                         required
                         name="email"
                         type="email"
                         autoComplete="email"
-                        className="mt-2 w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-base font-normal normal-case tracking-normal text-white outline-none transition focus:border-potomac-gold"
+                        className="mt-2 w-full border border-cabeus-line bg-cabeus-smoke px-4 py-3 font-sans text-base font-normal normal-case text-cabeus-ink outline-none transition focus:border-cabeus-bronze"
                     />
                 </label>
-                <label className="block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                <label className="block font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
                     Password
                     <input
                         required
@@ -116,40 +116,40 @@ export function ApplicationForm({
                         name="password"
                         type="password"
                         autoComplete="new-password"
-                        className="mt-2 w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-base font-normal normal-case tracking-normal text-white outline-none transition focus:border-potomac-gold"
+                        className="mt-2 w-full border border-cabeus-line bg-cabeus-smoke px-4 py-3 font-sans text-base font-normal normal-case text-cabeus-ink outline-none transition focus:border-cabeus-bronze"
                     />
                 </label>
-                <label className="block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                <label className="block font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
                     Organization
                     <input
                         name="company"
                         type="text"
                         autoComplete="organization"
-                        className="mt-2 w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-base font-normal normal-case tracking-normal text-white outline-none transition focus:border-potomac-gold"
+                        className="mt-2 w-full border border-cabeus-line bg-cabeus-smoke px-4 py-3 font-sans text-base font-normal normal-case text-cabeus-ink outline-none transition focus:border-cabeus-bronze"
                     />
                 </label>
-                <label className="block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                <label className="block font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
                     Title
                     <input
                         name="title"
                         type="text"
                         autoComplete="organization-title"
-                        className="mt-2 w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-base font-normal normal-case tracking-normal text-white outline-none transition focus:border-potomac-gold"
+                        className="mt-2 w-full border border-cabeus-line bg-cabeus-smoke px-4 py-3 font-sans text-base font-normal normal-case text-cabeus-ink outline-none transition focus:border-cabeus-bronze"
                     />
                 </label>
             </div>
-            <label className="mt-5 block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+            <label className="mt-5 block font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
                 Intended use
                 <textarea
                     name="intended_use"
                     rows={5}
-                    className="mt-2 w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-base font-normal normal-case tracking-normal text-white outline-none transition focus:border-potomac-gold"
+                    className="mt-2 w-full border border-cabeus-line bg-cabeus-smoke px-4 py-3 font-sans text-base font-normal normal-case text-cabeus-ink outline-none transition focus:border-cabeus-bronze"
                 />
             </label>
             <button
                 disabled={state === "submitting"}
                 type="submit"
-                className="mt-6 w-full rounded bg-potomac-gold px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream disabled:cursor-not-allowed disabled:opacity-60"
+                className="brand-button mt-6 w-full disabled:cursor-not-allowed disabled:opacity-60"
             >
                 {state === "submitting" ? "Submitting" : "Submit application"}
             </button>
@@ -157,8 +157,8 @@ export function ApplicationForm({
                 <p
                     className={`mt-4 text-sm leading-6 ${
                         state === "error"
-                            ? "text-red-300"
-                            : "text-potomac-cream/80"
+                            ? "text-red-700"
+                            : "text-cabeus-muted"
                     }`}
                 >
                     {message}
@@ -168,7 +168,7 @@ export function ApplicationForm({
                 <button
                     type="button"
                     onClick={onSwitchToSignIn}
-                    className="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-potomac-gold transition hover:text-potomac-cream"
+                    className="mt-5 font-mono text-xs font-bold uppercase text-cabeus-bronze transition hover:text-cabeus-ink"
                 >
                     Already have an account? Sign in
                 </button>

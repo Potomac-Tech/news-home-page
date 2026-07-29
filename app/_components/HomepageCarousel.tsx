@@ -69,9 +69,9 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                         <p className="brand-kicker">
                             Latest intelligence / {slide.slideType.replaceAll("_", " ")}
                         </p>
-                        <div className="mt-5 grid gap-7 lg:grid-cols-[minmax(18rem,0.78fr)_minmax(0,1.22fr)] lg:items-start lg:gap-12">
-                            <div className="flex min-h-full flex-col">
-                                <h2 className="max-w-[16ch] font-serif text-[clamp(2.5rem,5vw,5.4rem)] font-medium leading-[0.92] text-cabeus-ink">
+                        <div className="mt-5 grid min-w-0 gap-7 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-12">
+                            <div className="flex min-h-full min-w-0 flex-col">
+                                <h2 className="max-w-full text-balance font-serif text-[clamp(2.4rem,3.7vw,4rem)] font-medium leading-[0.94] text-cabeus-ink">
                                     {slide.title}
                                 </h2>
                                 <div className="brand-rule mt-7 w-28" />
@@ -92,7 +92,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                                 loading={index === 0 ? "eager" : "lazy"}
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 sizes="(min-width: 1024px) 55vw, 100vw"
-                                className={`aspect-[16/10] max-h-[31rem] w-full bg-cabeus-smoke ${
+                                className={`aspect-[16/10] min-w-0 max-h-[31rem] w-full bg-cabeus-smoke ${
                                     slide.visualAssetUrl.includes("space-investment-forum")
                                     || slide.visualAssetUrl.includes("/editorial-media/")
                                         ? "object-contain object-top"

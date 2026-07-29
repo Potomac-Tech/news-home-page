@@ -49,7 +49,7 @@ export function ConveningPage({
                         <div>
                             <p className="brand-kicker">{eyebrow}</p>
                             <h1
-                                className={`mt-7 max-w-[12ch] font-serif text-[clamp(4.25rem,7.5vw,8.5rem)] font-medium leading-[0.8] ${foreground}`}
+                                className={`mt-7 max-w-[12ch] text-balance font-serif text-[clamp(3.7rem,6.5vw,7.25rem)] font-medium leading-[0.9] [overflow-wrap:anywhere] ${foreground}`}
                             >
                                 {title}
                             </h1>

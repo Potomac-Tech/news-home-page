@@ -43,10 +43,7 @@ const companyNavItems = [
     { href: "/legal/terms", label: "Terms" },
 ];
 
-const newsletterChannel = externalChannels.find(
-    (channel) => channel.id === "substack" && channel.href
-);
-const newsletterHref = newsletterChannel?.href ?? "/request-access";
+const newsletterHref = "/newsletter";
 
 async function MemberAwareSearchPalette() {
     let profileGate = null;
@@ -117,14 +114,12 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                                     ))}
                                 </div>
                             </details>
-                            <a
+                            <Link
                                 href={newsletterHref}
-                                target={newsletterChannel ? "_blank" : undefined}
-                                rel={newsletterChannel ? "noopener noreferrer" : undefined}
                                 className="font-sans text-[0.66rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold"
                             >
                                 Newsletter
-                            </a>
+                            </Link>
                         </nav>
                         <div className="flex items-center justify-end gap-2">
                             <Suspense fallback={<SearchCommandPalette entries={publicCommandEntries} />}>
@@ -158,12 +153,12 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                                     {item.label}
                                 </Link>
                             ))}
-                            <a
+                            <Link
                                 href={newsletterHref}
                                 className="px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
                             >
                                 Newsletter
-                            </a>
+                            </Link>
                             <Link
                                 href="/request-access?tab=signin"
                                 className="border-t border-cabeus-line px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
@@ -235,13 +230,13 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                         </div>
                     </nav>
                     <div>
-                        <p className="brand-kicker text-cabeus-ink">The Cabeus Brief</p>
+                        <p className="brand-kicker text-cabeus-ink">Moonberg</p>
                         <p className="mt-5 max-w-xs font-serif text-2xl leading-tight text-cabeus-ink">
-                            Daily intelligence delivered.
+                            Free for approved Explorer members.
                         </p>
-                        <a href={newsletterHref} className="brand-button brand-button-outline mt-6 inline-flex">
-                            Read the newsletter
-                        </a>
+                        <Link href={newsletterHref} className="brand-button brand-button-outline mt-6 inline-flex">
+                            Get Moonberg
+                        </Link>
                         <nav aria-label="External channels" className="mt-6 flex flex-wrap gap-4">
                         {externalChannels.map((channel) => (
                             <a

@@ -1,15 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { ApplicationForm } from "../apply/ApplicationForm";
 import { LoginForm } from "../auth/login/LoginForm";
 import { tierConfig } from "../_data/tiers";
-
-type AccessTab = "signup" | "signin";
-
-function initialTab(value: string | null): AccessTab {
-    return value === "signin" ? "signin" : "signup";
-}
 
 export function RequestAccessClient({
     initialTab: requestedTab,
@@ -18,60 +11,30 @@ export function RequestAccessClient({
     initialTab?: string;
     mode?: string;
 }) {
-    const [tab, setTab] = useState<AccessTab>(() => initialTab(requestedTab ?? null));
+    const isSignIn = requestedTab === "signin";
 
     return (
-        <div className="glass-card rounded p-6">
-            <div
-                role="tablist"
-                aria-label="Member access"
-                className="grid grid-cols-2 gap-2"
-            >
-                <button
-                    type="button"
-                    role="tab"
-                    aria-selected={tab === "signup"}
-                    onClick={() => setTab("signup")}
-                    className={`min-h-11 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition ${
-                        tab === "signup"
-                            ? "bg-potomac-gold text-potomac-primary"
-                            : "border border-potomac-gold/40 text-potomac-gold hover:border-potomac-gold"
-                    }`}
-                >
-                    Sign up
-                </button>
-                <button
-                    type="button"
-                    role="tab"
-                    aria-selected={tab === "signin"}
-                    onClick={() => setTab("signin")}
-                    className={`min-h-11 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition ${
-                        tab === "signin"
-                            ? "bg-potomac-gold text-potomac-primary"
-                            : "border border-potomac-gold/40 text-potomac-gold hover:border-potomac-gold"
-                    }`}
-                >
-                    Sign in
-                </button>
-            </div>
-            {tab === "signup" ? (
-                <div role="tabpanel" className="mt-6">
-                    <div className="border-b border-white/10 pb-5">
-                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
-                            Free membership selected
-                        </p>
-                        <h2 className="mt-2 font-serif text-3xl text-white">
-                            {tierConfig.explorer.publicName}
-                        </h2>
-                        <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
-                            Create a free Explorer account with any email domain.
-                            You will verify your email before the application is reviewed.
-                        </p>
-                    </div>
-                    <ApplicationForm onSwitchToSignIn={() => setTab("signin")} />
+        <div className="border border-cabeus-line bg-cabeus-paper p-5 md:p-8">
+            {!isSignIn ? (
+                <div>
+                    <p className="brand-kicker">Sign up / Free membership selected</p>
+                    <h2 className="mt-3 font-serif text-4xl text-cabeus-ink">
+                        {tierConfig.explorer.publicName}
+                    </h2>
+                    <p className="mt-4 max-w-2xl text-sm leading-6 text-cabeus-muted">
+                        Create a free Explorer account using any email domain and
+                        choose the address where you want to receive member
+                        intelligence. Verify that address before the application is
+                        reviewed.
+                    </p>
+                    <ApplicationForm />
                 </div>
             ) : (
-                <div role="tabpanel" className="mt-6">
+                <div>
+                    <p className="brand-kicker">Sign in</p>
+                    <h2 className="mt-3 font-serif text-4xl text-cabeus-ink">
+                        Welcome back
+                    </h2>
                     <LoginForm
                         initialMode={
                             mode === "reset" || mode === "recovery"

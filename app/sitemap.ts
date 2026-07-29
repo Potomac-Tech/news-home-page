@@ -12,6 +12,7 @@ const publicRoutes = [
     { path: "/archives", changeFrequency: "daily", priority: 0.9 },
     { path: "/space-industrialist-week", changeFrequency: "weekly", priority: 0.85 },
     { path: "/space-investment-forum", changeFrequency: "monthly", priority: 0.8 },
+    { path: "/newsletter", changeFrequency: "weekly", priority: 0.8 },
     { path: "/cabeus-games", changeFrequency: "weekly", priority: 0.85 },
     { path: "/events", changeFrequency: "weekly", priority: 0.8 },
     { path: "/authors", changeFrequency: "weekly", priority: 0.7 },

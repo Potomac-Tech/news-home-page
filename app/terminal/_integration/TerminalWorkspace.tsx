@@ -72,56 +72,54 @@ export function TerminalWorkspace({
     return (
         <div
             id="main-content"
-            className="min-h-screen bg-[#060b13] text-potomac-cream"
+            className="min-h-screen bg-cabeus-paper text-cabeus-ink"
             data-terminal-integration-version={TERMINAL_FRONTEND_VERSION}
         >
-            <section className="border-b border-cyan-300/15 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.12),transparent_38%)]">
-                <div className="mx-auto w-full max-w-7xl px-4 py-12 md:px-8">
-                    <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-                        <div className="max-w-3xl">
-                            <div className="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.2em]">
-                                <span className="text-potomac-gold">Cabeus Terminal</span>
-                                <span
-                                    className="rounded-full border border-emerald-300/30 bg-emerald-300/10 px-3 py-1 text-emerald-200"
-                                    role="status"
-                                >
-                                    Public / unclassified
-                                </span>
-                            </div>
-                            <h1 className="mt-5 font-serif text-4xl leading-tight text-white md:text-6xl">
-                                Bloomberg-style intelligence for the Moon
-                            </h1>
-                            <p className="mt-5 max-w-2xl text-lg leading-8 text-potomac-cream/75">
-                                Evidence-first cislunar and Earth-orbit intelligence for
-                                mission engineering, investment diligence, and space
-                                operations.
-                            </p>
-                        </div>
-                        <div className="flex flex-wrap gap-3">
-                            <Link
-                    href="/terminal/contracts"
-                                className="rounded border border-white/20 px-4 py-3 text-sm font-semibold text-white transition hover:border-cyan-300/60"
+            <section className="border-b border-cabeus-line">
+                <div className="mx-auto grid min-h-[35rem] w-full max-w-[92rem] lg:grid-cols-[1fr_0.92fr]">
+                    <div className="flex flex-col justify-center px-5 py-16 md:px-10 md:py-24">
+                        <div className="flex flex-wrap items-center gap-3">
+                            <span className="brand-kicker text-cabeus-bronze">Cabeus Terminal</span>
+                            <span
+                                className="border border-cabeus-line px-3 py-1 font-mono text-[0.6rem] font-bold uppercase text-cabeus-muted"
+                                role="status"
                             >
+                                Public / unclassified
+                            </span>
+                        </div>
+                        <h1 className="mt-6 max-w-[11ch] text-balance font-serif text-[clamp(4rem,7vw,7rem)] font-medium leading-[0.9]">
+                            Intelligence for decisions that move the industry.
+                        </h1>
+                        <p className="mt-7 max-w-2xl text-lg leading-8 text-cabeus-muted">
+                            Evidence-first cislunar and Earth-orbit intelligence for
+                            mission engineering, investment diligence, and space
+                            operations.
+                        </p>
+                        <div className="mt-8 flex flex-wrap gap-3">
+                            <Link href="/terminal/contracts" className="brand-button inline-flex">
                                 Open Cabeus Terminal
                             </Link>
                             <a
                                 href="/api/member/nexus/handoff"
-                                className="rounded bg-cyan-300 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-cyan-200"
+                                className="brand-button brand-button-outline inline-flex"
                             >
                                 Open Nexus
                             </a>
                         </div>
                     </div>
+                    <img
+                        src="/cabeus-lunar-industrial-hero.png"
+                        alt="Industrial lunar infrastructure beneath a crescent Moon"
+                        className="order-first h-64 w-full object-cover lg:order-none lg:h-full"
+                    />
                 </div>
             </section>
 
-            <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 md:px-8 lg:grid-cols-[18rem_1fr]">
-                <aside className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+            <div className="mx-auto grid w-full max-w-[92rem] px-5 md:px-10 lg:grid-cols-[19rem_minmax(0,1fr)]">
+                <aside className="border-b border-cabeus-line py-8 lg:border-b-0 lg:border-r lg:pr-8">
                     <nav aria-label="Terminal modules">
-                        <p className="px-3 pb-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-cream/50">
-                            Intelligence modules
-                        </p>
-                        <ul className="space-y-2">
+                        <p className="brand-kicker">Intelligence modules</p>
+                        <ul className="mt-5 divide-y divide-cabeus-line border-y border-cabeus-line">
                             {TERMINAL_MODULES.map((item) => {
                                 const active = item.id === module.id;
                                 return (
@@ -129,16 +127,16 @@ export function TerminalWorkspace({
                                         <Link
                                             href={`/terminal/${item.id}`}
                                             aria-current={active ? "page" : undefined}
-                                            className={`block rounded-lg border px-3 py-3 transition ${
+                                            className={`block border-l-2 px-3 py-4 transition ${
                                                 active
-                                                    ? "border-cyan-300/50 bg-cyan-300/10 text-white"
-                                                    : "border-transparent text-potomac-cream/65 hover:border-white/15 hover:text-white"
+                                                    ? "border-cabeus-bronze bg-cabeus-smoke text-cabeus-ink"
+                                                    : "border-transparent text-cabeus-muted hover:border-cabeus-line hover:text-cabeus-ink"
                                             }`}
                                         >
                                             <span className="block text-sm font-bold">
                                                 {item.label}
                                             </span>
-                                            <span className="mt-1 block text-xs leading-5 opacity-75">
+                                            <span className="mt-1 block text-xs leading-5">
                                                 {item.description}
                                             </span>
                                         </Link>
@@ -149,65 +147,58 @@ export function TerminalWorkspace({
                     </nav>
                 </aside>
 
-                <div className="space-y-6">
-                    <section className="rounded-xl border border-white/10 bg-white/[0.035] p-6 md:p-8">
-                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-200">
-                            {module.label}
-                        </p>
-                        <h2 className="mt-3 font-serif text-3xl text-white md:text-4xl">
+                <div className="min-w-0 py-10 lg:pl-10 lg:py-14">
+                    <section className="border-b border-cabeus-line pb-10">
+                        <p className="brand-kicker text-cabeus-bronze">{module.label}</p>
+                        <h2 className="mt-4 max-w-4xl font-serif text-4xl leading-tight md:text-6xl">
                             {module.id === "contracts"
                                 ? "Andromeda program comparison"
                                 : module.description}
                         </h2>
-                        <p className="mt-4 max-w-3xl leading-7 text-potomac-cream/70">
+                        <p className="mt-5 max-w-3xl leading-7 text-cabeus-muted">
                             {module.id === "contracts"
                                 ? "The first terminal validation report compares all candidate companies competing for Space Force Andromeda awards, with sourced evidence, freshness, and uncertainty shown instead of a recommended decision."
                                 : "Review source-linked evidence, compare entities, and save work without asking the terminal to make the final customer decision."}
                         </p>
 
                         {module.id === "contracts" ? (
-                            <div className="mt-6 grid gap-4 sm:grid-cols-3">
+                            <dl className="mt-8 grid border-y border-cabeus-line sm:grid-cols-3">
                                 {[
                                     ["Candidate pool", "14 companies"],
                                     ["Lifecycle coverage", "Forecast to recompete"],
                                     ["Evidence policy", "Source + uncertainty"],
-                                ].map(([label, value]) => (
+                                ].map(([label, value], index) => (
                                     <div
                                         key={label}
-                                        className="rounded-lg border border-white/10 bg-black/20 p-4"
+                                        className={`py-5 sm:px-5 ${index ? "border-t border-cabeus-line sm:border-l sm:border-t-0" : ""}`}
                                     >
-                                        <p className="text-xs uppercase tracking-[0.14em] text-potomac-cream/70">
+                                        <dt className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-muted">
                                             {label}
-                                        </p>
-                                        <p className="mt-2 text-lg font-bold text-white">
-                                            {value}
-                                        </p>
+                                        </dt>
+                                        <dd className="mt-2 text-lg font-bold">{value}</dd>
                                     </div>
                                 ))}
-                            </div>
+                            </dl>
                         ) : null}
                     </section>
 
-                    <section aria-labelledby="terminal-capabilities">
-                        <h2
-                            id="terminal-capabilities"
-                            className="text-sm font-bold uppercase tracking-[0.18em] text-potomac-cream/60"
-                        >
+                    <section aria-labelledby="terminal-capabilities" className="py-10">
+                        <h2 id="terminal-capabilities" className="brand-kicker">
                             Terminal capabilities
                         </h2>
-                        <div className="mt-4 grid gap-4 md:grid-cols-2">
-                            {commonCapabilities.map((capability) => (
+                        <div className="mt-5 grid border-y border-cabeus-line md:grid-cols-2">
+                            {commonCapabilities.map((capability, index) => (
                                 <article
                                     key={capability.title}
-                                    className="rounded-xl border border-white/10 bg-white/[0.025] p-5"
+                                    className={`py-6 md:px-6 ${
+                                        index % 2 ? "border-t border-cabeus-line md:border-l md:border-t-0" : index > 1 ? "border-t border-cabeus-line" : ""
+                                    }`}
                                 >
-                                    <h3 className="font-serif text-xl text-white">
-                                        {capability.title}
-                                    </h3>
-                                    <p className="mt-2 text-sm leading-6 text-potomac-cream/65">
+                                    <h3 className="font-serif text-3xl">{capability.title}</h3>
+                                    <p className="mt-3 text-sm leading-6 text-cabeus-muted">
                                         {capability.description}
                                     </p>
-                                    <p className="mt-4 text-xs font-bold uppercase tracking-[0.15em] text-cyan-200">
+                                    <p className="mt-4 font-mono text-[0.62rem] font-bold uppercase text-cabeus-bronze">
                                         {isFullMvp ? "Available" : "Preview"}
                                     </p>
                                 </article>
@@ -215,23 +206,14 @@ export function TerminalWorkspace({
                         </div>
                     </section>
 
-                    <section className="rounded-xl border border-potomac-gold/30 bg-potomac-gold/[0.06] p-6">
-                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
-                            {access.eyebrow}
-                        </p>
-                        <div className="mt-3 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+                    <section className="border-y border-cabeus-line bg-cabeus-smoke px-5 py-7 md:px-7">
+                        <p className="brand-kicker text-cabeus-bronze">{access.eyebrow}</p>
+                        <div className="mt-3 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
                             <div className="max-w-3xl">
-                                <h2 className="font-serif text-2xl text-white">
-                                    {access.title}
-                                </h2>
-                                <p className="mt-2 leading-7 text-potomac-cream/70">
-                                    {access.body}
-                                </p>
+                                <h2 className="font-serif text-3xl">{access.title}</h2>
+                                <p className="mt-3 leading-7 text-cabeus-muted">{access.body}</p>
                             </div>
-                            <Link
-                                href={viewer.actionHref}
-                                className="shrink-0 rounded bg-potomac-gold px-4 py-3 text-center text-sm font-bold text-slate-950 transition hover:bg-amber-200"
-                            >
+                            <Link href={viewer.actionHref} className="brand-button inline-flex shrink-0">
                                 {access.cta}
                             </Link>
                         </div>

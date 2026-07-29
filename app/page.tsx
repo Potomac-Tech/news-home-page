@@ -7,7 +7,6 @@ import {
 import { allowLocalContentFallbacks } from "./_data/contentFallbacks";
 import { loadPublicTickerItems } from "./_data/marketQuotes";
 import { SponsorUnit } from "./_components/SponsorUnit";
-import { EconomySummaryWidget } from "./_components/EconomySummaryWidget";
 import { HomepageCarousel } from "./_components/HomepageCarousel";
 import { LunarTimeClock } from "./_components/LunarTimeClock";
 import { StockTicker } from "./_components/StockTicker";
@@ -15,7 +14,6 @@ import {
     loadSponsorUnits,
     sponsorPlacementKeys,
 } from "./_data/sponsorAds";
-import { loadPublicEconomySummary } from "./_data/economy";
 import { potomacBrand } from "./_data/brand";
 import {
     absoluteSiteUrl,
@@ -281,14 +279,13 @@ function StoryCard({ story }: { story: HomeStory }) {
 }
 
 export default async function HomePage() {
-    const [stories, sponsorUnits, tickerItems, economySummary] = await Promise.all([
+    const [stories, sponsorUnits, tickerItems] = await Promise.all([
         getHomepageStories(),
         loadSponsorUnits([
             sponsorPlacementKeys.homepageLeadRail,
             sponsorPlacementKeys.marketModuleBand,
         ]),
         loadPublicTickerItems(10),
-        loadPublicEconomySummary(),
     ]);
     const featuredStory = stories[0];
     const latestStories = stories.slice(1);
@@ -382,7 +379,7 @@ export default async function HomePage() {
                 <div className="relative mx-auto flex min-h-[38rem] w-full max-w-[92rem] items-center px-5 py-16 md:min-h-[45rem] md:px-10">
                     <div className="max-w-[42rem]">
                         <p className="brand-kicker">Independent intelligence</p>
-                        <h1 className="mt-6 max-w-[11ch] font-serif text-[clamp(4.25rem,8vw,8.75rem)] font-medium leading-[0.79] text-cabeus-ink">
+                        <h1 className="mt-6 max-w-[11ch] text-balance font-serif text-[clamp(3.75rem,7.25vw,7.75rem)] font-medium leading-[0.9] text-cabeus-ink">
                             Clarity in the New Space Age.
                         </h1>
                         <p className="mt-8 max-w-xl text-base leading-7 text-cabeus-muted md:text-lg md:leading-8">
@@ -461,34 +458,6 @@ export default async function HomePage() {
                     <div className="flex gap-4">
                         <Link prefetch={false} href={launchHref} className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-gold">{launchCta}</Link>
                         <Link prefetch={false} href="/upgrade?tier=scout&source=homepage&content=launch-tools&next=%2Ftracker%2Flaunches" className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-paper/60">Values & exports</Link>
-                    </div>
-                </div>
-            </section>
-
-            <section className="border-b border-cabeus-line">
-                <div className="mx-auto grid w-full max-w-[92rem] gap-12 px-5 py-16 md:px-10 md:py-24 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
-                    <div>
-                        <p className="brand-kicker">Cabeus intelligence</p>
-                        <h2 className="mt-4 max-w-[12ch] font-serif text-5xl font-medium leading-[0.94] md:text-7xl">
-                            Proprietary Data. Independent Analysis. Strategic Advantage.
-                        </h2>
-                        <p className="mt-6 max-w-xl text-base leading-7 text-cabeus-muted">
-                            A disciplined operating picture for the lunar economy, built
-                            from reviewed sources, transparent assumptions, and analyst
-                            judgment.
-                        </p>
-                        <img
-                            src={potomacBrand.assets.cabeusHero}
-                            alt="Lunar industrial infrastructure under a crescent Moon"
-                            className="mt-10 aspect-[16/11] w-full object-cover"
-                        />
-                    </div>
-                    <div className="border-t border-cabeus-line pt-6">
-                        <p className="brand-kicker">Daily market model</p>
-                        <h3 className="mt-3 font-serif text-5xl font-medium">
-                            The Lunar Economy
-                        </h3>
-                        <EconomySummaryWidget summary={economySummary} />
                     </div>
                 </div>
             </section>

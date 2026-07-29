@@ -4,16 +4,14 @@ import { absoluteSiteUrl, jsonLdScript } from "../_data/site";
 import { tierConfig } from "../_data/tiers";
 
 export const metadata: Metadata = {
-    title: "Pricing",
+    title: "The Cabeus Council",
     description:
         "Compare Cabeus Explorer membership tiers for lunar news and intelligence.",
-    alternates: {
-        canonical: "/pricing",
-    },
+    alternates: { canonical: "/pricing" },
     openGraph: {
-        title: "Cabeus Explorer Pricing",
+        title: "The Cabeus Council",
         description:
-            `Explorer is the free default membership, Scout is self-serve at $25,000/user/year, and ${tierConfig.enterprise.publicName} is organization-level contract access.`,
+            `Explorer is free, Scout is $25,000/user/year, and ${tierConfig.enterprise.publicName} is organization-level contract access.`,
         url: absoluteSiteUrl("/pricing"),
         type: "website",
     },
@@ -24,15 +22,15 @@ const tiers = [
         name: "Explorer",
         price: "Free",
         cadence: "default membership",
-        audience: "Individual readers and verified community members",
+        audience: "Verified readers and community members",
         description:
-            "Read full public-story bodies and participate in member community spaces after email verification and profile completion.",
+            "Full reporting, Moonberg with Kevin Cirilli, and community participation after email verification and profile completion.",
         href: "/request-access",
         cta: "Start free",
         features: [
             "Full gated article bodies",
+            "Moonberg delivered to your membership email",
             "Member chat and moderated forums",
-            "Member-gated event details",
             "Explorer dataset and terminal previews",
         ],
         limits: [
@@ -46,18 +44,18 @@ const tiers = [
         cadence: "per user / year",
         audience: "Professional lunar market users",
         description:
-            "Self-serve annual access for deeper dashboards, RFQs, data marketplace workflows, and paid intelligence tools.",
+            "Professional access for deeper dashboards, RFQs, data marketplace workflows, and paid intelligence tools.",
         href: "/member",
         cta: "Upgrade in workspace",
         features: [
-            "Scout economy dashboard and downloads",
+            "Scout dashboards and downloads",
             "Data marketplace access",
             "RFQ posting, browsing, and responses",
-            "Experimental test data uploads and comparisons",
+            "Experimental data uploads and comparisons",
         ],
         limits: [
             "One seat per active user-scoped annual subscription",
-            "Exports, API access, webhooks, watchlists, and alerts are planned paid features",
+            "API, webhook, watchlist, and alert limits apply",
         ],
     },
     {
@@ -66,14 +64,14 @@ const tiers = [
         cadence: "organization discussion",
         audience: "Enterprises, agencies, and institutional teams",
         description:
-            "Manual organization access for enterprise intelligence, analyst support, and service delivery.",
+            "Organization access for executive intelligence, analyst support, mission planning, and service delivery.",
         href: "/command",
         cta: `Request ${tierConfig.enterprise.publicName}`,
         features: [
             "Organization-scoped seats and admins",
             "Enterprise intelligence allocation",
-            "Analyst support, mission briefs, and service tracking",
-            "Higher-limit exports, API, webhook, and alert plans",
+            "Analyst support and mission briefs",
+            "Higher-limit exports, APIs, webhooks, and alerts",
         ],
         limits: [
             "Manual approval and provisioning",
@@ -84,12 +82,13 @@ const tiers = [
 
 const comparisonRows = [
     ["Full article bodies", "Yes", "Yes", "Yes"],
+    ["Moonberg newsletter", "Yes", "Yes", "Yes"],
     ["Member chat and forums", "Yes", "Yes", "Yes"],
-    ["Economy dashboard downloads", "Upgrade", "Yes", "Yes"],
+    ["Dashboard downloads", "Upgrade", "Yes", "Yes"],
     ["Data marketplace", "Upgrade", "Yes", "Yes"],
     ["RFQs", "Upgrade", "Yes", "Yes"],
     ["Enterprise intelligence", "No", "No", "Yes"],
-    ["Exports, API, webhooks", "No", "Planned", "Higher limits planned"],
+    ["Exports, API, webhooks", "No", "Limited", "Higher limits"],
 ] as const;
 
 export default function PricingPage() {
@@ -98,7 +97,7 @@ export default function PricingPage() {
         "@type": "Product",
         name: "Cabeus Explorer News & Intelligence",
         description:
-            `Lunar industry news and member-gated intelligence tiers for Explorer, Scout, and ${tierConfig.enterprise.publicName} users.`,
+            `Lunar industry news and intelligence tiers for Explorer, Scout, and ${tierConfig.enterprise.publicName} users.`,
         url: absoluteSiteUrl("/pricing"),
         offers: tiers.map((tier) => ({
             "@type": "Offer",
@@ -111,188 +110,120 @@ export default function PricingPage() {
     };
 
     return (
-        <div className="bg-grid-pattern">
+        <div className="bg-cabeus-paper text-cabeus-ink">
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: jsonLdScript(productJsonLd),
-                }}
+                dangerouslySetInnerHTML={{ __html: jsonLdScript(productJsonLd) }}
             />
-            <section className="border-b border-white/10">
-                <div className="mx-auto w-full max-w-7xl px-4 py-16 md:px-8">
-                    <div className="max-w-4xl">
-                        <p className="text-xs font-bold uppercase tracking-[0.22em] text-potomac-gold">
-                            Membership tiers
-                        </p>
-                        <h1 className="mt-4 font-serif text-4xl leading-tight text-white md:text-6xl">
-                            Explorer, Scout, and {tierConfig.enterprise.publicName} access
-                        </h1>
-                        <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
-                            Start with free approved Explorer access, upgrade to
-                            Scout for professional intelligence workflows, or
-                            request {tierConfig.enterprise.publicName} for organization-level lunar market
-                            coverage and analyst support.
-                        </p>
-                    </div>
+
+            <section className="border-b border-cabeus-line">
+                <div className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
+                    <p className="brand-kicker">The Cabeus Council</p>
+                    <h1 className="mt-5 max-w-[12ch] text-balance font-serif text-[clamp(4rem,7vw,7.5rem)] font-medium leading-[0.9]">
+                        Intelligence built for your advantage.
+                    </h1>
+                    <p className="mt-7 max-w-3xl text-lg leading-8 text-cabeus-muted">
+                        Begin with free Explorer membership, move to Scout for
+                        professional workflows, or establish organization-level
+                        intelligence through {tierConfig.enterprise.publicName}.
+                    </p>
                 </div>
             </section>
 
-            <section className="mx-auto grid w-full max-w-7xl gap-5 px-4 py-12 md:px-8 lg:grid-cols-3">
-                {tiers.map((tier) => (
-                    <article
-                        key={tier.name}
-                        className="glass-card flex h-full flex-col rounded p-6"
-                    >
-                        <div className="border-b border-white/10 pb-5">
-                            <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+            <section className="border-b border-cabeus-line">
+                <div className="mx-auto grid w-full max-w-[92rem] px-5 md:px-10 lg:grid-cols-3">
+                    {tiers.map((tier, index) => (
+                        <article
+                            key={tier.name}
+                            className={`flex min-w-0 flex-col border-cabeus-line py-10 lg:px-8 ${
+                                index ? "border-t lg:border-l lg:border-t-0" : ""
+                            }`}
+                        >
+                            <p className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
                                 {tier.audience}
                             </p>
-                            <h2 className="mt-3 font-serif text-3xl text-white">
+                            <h2 className="mt-5 font-serif text-5xl leading-none">
                                 {tier.name}
                             </h2>
-                            <p className="mt-4 text-4xl font-bold text-white">
-                                {tier.price}
-                            </p>
-                            <p className="mt-1 text-xs uppercase tracking-[0.14em] text-potomac-cream/45">
+                            <p className="mt-8 font-serif text-4xl">{tier.price}</p>
+                            <p className="mt-2 font-mono text-[0.62rem] font-bold uppercase text-cabeus-muted">
                                 {tier.cadence}
                             </p>
-                            <p className="mt-5 text-sm leading-6 text-potomac-cream/70">
+                            <p className="mt-6 text-sm leading-6 text-cabeus-muted">
                                 {tier.description}
                             </p>
-                        </div>
-                        <div className="flex flex-1 flex-col justify-between">
-                            <div>
-                                <h3 className="mt-5 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
-                                    Included
-                                </h3>
-                                <ul className="mt-3 space-y-2 text-sm leading-6 text-potomac-cream/75">
+
+                            <div className="mt-8 border-t border-cabeus-line pt-6">
+                                <h3 className="brand-kicker text-cabeus-ink">Included</h3>
+                                <ul className="mt-4 space-y-3 text-sm leading-6 text-cabeus-ink/80">
                                     {tier.features.map((feature) => (
-                                        <li key={feature}>- {feature}</li>
+                                        <li key={feature} className="border-l border-cabeus-bronze pl-3">
+                                            {feature}
+                                        </li>
                                     ))}
                                 </ul>
-                                <h3 className="mt-5 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
-                                    Limits
-                                </h3>
-                                <ul className="mt-3 space-y-2 text-sm leading-6 text-potomac-cream/60">
+                                <h3 className="brand-kicker mt-7 text-cabeus-ink">Limits</h3>
+                                <ul className="mt-4 space-y-2 text-sm leading-6 text-cabeus-muted">
                                     {tier.limits.map((limit) => (
-                                        <li key={limit}>- {limit}</li>
+                                        <li key={limit}>{limit}</li>
                                     ))}
                                 </ul>
                             </div>
+
                             <Link
                                 href={tier.href}
-                                className={
-                                    tier.name === "Scout"
-                                        ? "mt-6 rounded bg-potomac-gold px-5 py-3 text-center text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
-                                        : "mt-6 rounded border border-potomac-gold/50 px-5 py-3 text-center text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                                }
+                                className={`brand-button mt-8 inline-flex ${
+                                    tier.name === "Scout" ? "" : "brand-button-outline"
+                                }`}
                             >
                                 {tier.cta}
                             </Link>
-                        </div>
-                    </article>
-                ))}
+                        </article>
+                    ))}
+                </div>
             </section>
 
-            <section className="border-y border-white/10 bg-potomac-primary/70">
-                <div className="mx-auto w-full max-w-7xl px-4 py-12 md:px-8">
-                    <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <section className="border-b border-cabeus-line bg-cabeus-smoke">
+                <div className="mx-auto w-full max-w-[92rem] px-5 py-14 md:px-10 md:py-20">
+                    <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h2 className="font-serif text-3xl leading-tight text-white">
-                                Gate comparison
+                            <p className="brand-kicker">Access comparison</p>
+                            <h2 className="mt-4 font-serif text-5xl leading-none md:text-6xl">
+                                Choose the right operating view.
                             </h2>
-                            <p className="mt-3 max-w-3xl text-sm leading-6 text-potomac-cream/70">
-                                Access is enforced with normalized roles and
-                                entitlements, not user-editable metadata.
-                            </p>
                         </div>
-                        <Link
-                            href="/member"
-                            className="w-fit rounded border border-potomac-gold/50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
+                        <Link href="/member" className="brand-button brand-button-outline inline-flex self-start">
                             Member workspace
                         </Link>
                     </div>
+
                     <div
-                        className="mt-7 overflow-x-auto"
+                        className="mt-9 overflow-x-auto border-y border-cabeus-line"
                         role="region"
                         aria-label="Membership feature comparison"
                         tabIndex={0}
                     >
-                        <table className="min-w-[48rem] w-full border-collapse text-left text-sm">
+                        <table className="w-full min-w-[48rem] border-collapse text-left text-sm">
                             <thead>
-                                <tr className="border-b border-white/10 text-xs uppercase tracking-[0.14em] text-potomac-cream/45">
-                                    <th className="py-3 pr-4">Capability</th>
-                                    <th className="px-4 py-3">Explorer</th>
-                                    <th className="px-4 py-3">Scout</th>
-                                    <th className="px-4 py-3">{tierConfig.enterprise.publicName}</th>
+                                <tr className="border-b border-cabeus-line font-mono text-[0.62rem] uppercase text-cabeus-muted">
+                                    <th className="py-4 pr-4">Capability</th>
+                                    <th className="px-4 py-4">Explorer</th>
+                                    <th className="px-4 py-4">Scout</th>
+                                    <th className="px-4 py-4">{tierConfig.enterprise.publicName}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {comparisonRows.map((row) => (
-                                    <tr
-                                        key={row[0]}
-                                        className="border-b border-white/10 text-potomac-cream/75"
-                                    >
-                                        <th className="py-4 pr-4 font-semibold text-white">
-                                            {row[0]}
-                                        </th>
-                                        <td className="px-4 py-4">{row[1]}</td>
-                                        <td className="px-4 py-4">{row[2]}</td>
-                                        <td className="px-4 py-4">{row[3]}</td>
+                                    <tr key={row[0]} className="border-b border-cabeus-line last:border-b-0">
+                                        <th className="py-4 pr-4 font-semibold">{row[0]}</th>
+                                        <td className="px-4 py-4 text-cabeus-muted">{row[1]}</td>
+                                        <td className="px-4 py-4 text-cabeus-muted">{row[2]}</td>
+                                        <td className="px-4 py-4 text-cabeus-muted">{row[3]}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </section>
-
-            <section className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-12 md:px-8 lg:grid-cols-[0.8fr_1.2fr]">
-                <div>
-                    <h2 className="font-serif text-3xl leading-tight text-white">
-                        Upgrade paths
-                    </h2>
-                    <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                        Public visitors start with Explorer, approved members
-                        start Scout checkout from the workspace, and {tierConfig.enterprise.publicName}
-                        prospects enter a manual contract-discussion workflow.
-                    </p>
-                </div>
-                <div className="grid gap-4 md:grid-cols-3">
-                    <Link
-                        href="/request-access"
-                        className="rounded border border-potomac-gold/35 p-5 transition hover:border-potomac-gold hover:bg-white/5"
-                    >
-                        <span className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
-                            Public to Explorer
-                        </span>
-                        <span className="mt-3 block text-sm leading-6 text-potomac-cream/70">
-                            Submit the free application for manual approval.
-                        </span>
-                    </Link>
-                    <Link
-                        href="/member"
-                        className="rounded border border-potomac-gold/35 p-5 transition hover:border-potomac-gold hover:bg-white/5"
-                    >
-                        <span className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
-                            Explorer to Scout
-                        </span>
-                        <span className="mt-3 block text-sm leading-6 text-potomac-cream/70">
-                            Use the workspace Scout checkout after approval.
-                        </span>
-                    </Link>
-                    <Link
-                        href="/command"
-                        className="rounded border border-potomac-gold/35 p-5 transition hover:border-potomac-gold hover:bg-white/5"
-                    >
-                        <span className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
-                            Team to {tierConfig.enterprise.publicName}
-                        </span>
-                        <span className="mt-3 block text-sm leading-6 text-potomac-cream/70">
-                            Request organization-level access and contract review.
-                        </span>
-                    </Link>
                 </div>
             </section>
         </div>

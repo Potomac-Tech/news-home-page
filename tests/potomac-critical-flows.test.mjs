@@ -1139,8 +1139,9 @@ test("strategic product inquiries persist and audit before quota-aware Resend de
         "/request-access?source=udri-event-house-ad",
     ], "UDRI account handoff");
     assertIncludes(requestAccess, [
-        'type AccessTab = "signup" | "signin"',
-        'value === "signin" ? "signin" : "signup"',
+        'const isSignIn = requestedTab === "signin"',
+        "{!isSignIn ? (",
+        "<ApplicationForm />",
         "Free membership selected",
         "any email domain",
     ], "Explorer signup default");
@@ -1350,7 +1351,8 @@ test("homepage carousel UI rotates accessibly and fails closed without approved 
         "Previous story",
         "Next story",
         'sizes="(min-width: 1024px) 55vw, 100vw"',
-        "lg:grid-cols-[minmax(18rem,0.78fr)_minmax(0,1.22fr)]",
+        "lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]",
+        "text-[clamp(2.4rem,3.7vw,4rem)]",
         'loading={index === 0 ? "eager" : "lazy"}',
         'className={index === activeIndex ? "block" : "hidden"}',
         "border-t border-cabeus-line",

@@ -120,15 +120,15 @@ export function LoginForm({
     }
 
     return (
-        <form onSubmit={handleSubmit} className="glass-card rounded p-6">
+        <form onSubmit={handleSubmit} className="mt-7 border-t border-cabeus-line pt-7">
             <div className="flex flex-wrap gap-2">
                 <button
                     type="button"
                     onClick={() => setMode("magic-link")}
-                    className={`rounded px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition ${
+                    className={`border px-4 py-2 font-mono text-xs font-bold uppercase transition ${
                         mode === "magic-link"
-                            ? "bg-potomac-gold text-potomac-primary"
-                            : "border border-potomac-gold/40 text-potomac-gold hover:border-potomac-gold"
+                            ? "border-cabeus-ink bg-cabeus-ink text-cabeus-paper"
+                            : "border-cabeus-line text-cabeus-ink hover:border-cabeus-bronze"
                     }`}
                 >
                     Magic link
@@ -136,10 +136,10 @@ export function LoginForm({
                 <button
                     type="button"
                     onClick={() => setMode("recovery")}
-                    className={`rounded px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition ${
+                    className={`border px-4 py-2 font-mono text-xs font-bold uppercase transition ${
                         mode === "recovery"
-                            ? "bg-potomac-gold text-potomac-primary"
-                            : "border border-potomac-gold/40 text-potomac-gold hover:border-potomac-gold"
+                            ? "border-cabeus-ink bg-cabeus-ink text-cabeus-paper"
+                            : "border-cabeus-line text-cabeus-ink hover:border-cabeus-bronze"
                     }`}
                 >
                     Reset password
@@ -147,10 +147,10 @@ export function LoginForm({
                 <button
                     type="button"
                     onClick={() => setMode("password")}
-                    className={`rounded px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition ${
+                    className={`border px-4 py-2 font-mono text-xs font-bold uppercase transition ${
                         mode === "password"
-                            ? "bg-potomac-gold text-potomac-primary"
-                            : "border border-potomac-gold/40 text-potomac-gold hover:border-potomac-gold"
+                            ? "border-cabeus-ink bg-cabeus-ink text-cabeus-paper"
+                            : "border-cabeus-line text-cabeus-ink hover:border-cabeus-bronze"
                     }`}
                 >
                     Password
@@ -158,20 +158,20 @@ export function LoginForm({
             </div>
 
             {mode !== "reset" ? (
-                <label className="mt-6 block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                <label className="mt-6 block font-mono text-xs font-bold uppercase text-cabeus-bronze">
                     Email
                     <input
                         required
                         name="email"
                         type="email"
                         autoComplete="email"
-                        className="mt-2 w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-base font-normal normal-case tracking-normal text-white outline-none transition focus:border-potomac-gold"
+                        className="mt-2 w-full border border-cabeus-line bg-cabeus-smoke px-4 py-3 font-sans text-base font-normal normal-case text-cabeus-ink outline-none transition focus:border-cabeus-bronze"
                     />
                 </label>
             ) : null}
 
             {mode === "password" || mode === "reset" ? (
-                <label className="mt-5 block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
+                <label className="mt-5 block font-mono text-xs font-bold uppercase text-cabeus-bronze">
                     {mode === "reset" ? "New password" : "Password"}
                     <input
                         required
@@ -179,7 +179,7 @@ export function LoginForm({
                         name="password"
                         type="password"
                         autoComplete={mode === "reset" ? "new-password" : "current-password"}
-                        className="mt-2 w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-base font-normal normal-case tracking-normal text-white outline-none transition focus:border-potomac-gold"
+                        className="mt-2 w-full border border-cabeus-line bg-cabeus-smoke px-4 py-3 font-sans text-base font-normal normal-case text-cabeus-ink outline-none transition focus:border-cabeus-bronze"
                     />
                 </label>
             ) : null}
@@ -187,7 +187,7 @@ export function LoginForm({
             <button
                 disabled={isSubmitting}
                 type="submit"
-                className="mt-6 w-full rounded bg-potomac-gold px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream disabled:cursor-not-allowed disabled:opacity-60"
+                className="brand-button mt-6 w-full disabled:cursor-not-allowed disabled:opacity-60"
             >
                 {isSubmitting
                     ? "Working"
@@ -199,16 +199,16 @@ export function LoginForm({
             </button>
 
             {status ? (
-                <p className="mt-4 text-sm leading-6 text-potomac-cream/80">
+                <p className="mt-4 text-sm leading-6 text-cabeus-muted">
                     {status}
                 </p>
             ) : null}
             {error ? (
                 <div
                     role="alert"
-                    className="mt-4 border-l-2 border-red-300 bg-red-950/20 px-4 py-3"
+                    className="mt-4 border-l-2 border-red-700 bg-red-50 px-4 py-3"
                 >
-                    <p className="text-sm leading-6 text-red-200">{error}</p>
+                    <p className="text-sm leading-6 text-red-800">{error}</p>
                     {mode === "password" ? (
                         <div className="mt-3 flex flex-wrap gap-4">
                             <button
@@ -217,7 +217,7 @@ export function LoginForm({
                                     setError(null);
                                     setMode("magic-link");
                                 }}
-                                className="text-xs font-bold uppercase tracking-[0.14em] text-potomac-gold transition hover:text-potomac-cream"
+                                className="font-mono text-xs font-bold uppercase text-cabeus-bronze transition hover:text-cabeus-ink"
                             >
                                 Use magic link
                             </button>
@@ -227,7 +227,7 @@ export function LoginForm({
                                     setError(null);
                                     setMode("recovery");
                                 }}
-                                className="text-xs font-bold uppercase tracking-[0.14em] text-potomac-gold transition hover:text-potomac-cream"
+                                className="font-mono text-xs font-bold uppercase text-cabeus-bronze transition hover:text-cabeus-ink"
                             >
                                 Reset password
                             </button>
