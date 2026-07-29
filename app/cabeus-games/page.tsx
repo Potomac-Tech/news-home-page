@@ -18,7 +18,7 @@ export default function CabeusGamesPage() {
             introduction="The Cabeus Games turn the complexity of lunar operations into a demanding team experience built around communication, judgment, technical tradeoffs, and mission execution."
             imageUrl={potomacBrand.assets.gamesHero}
             imageAlt="Participant training in a lunar mission simulation facility"
-            dateLabel="During Space Industrialist Week"
+            dateLabel="Fall 2026. Email info@cabeusexplorer.com to apply to compete."
             locationLabel="Washington, D.C."
             primaryCta={{
                 href: "/request-access?source=cabeus-games",
