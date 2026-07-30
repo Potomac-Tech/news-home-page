@@ -44,6 +44,8 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
     const socialLinks = author.social_links && typeof author.social_links === "object"
         ? Object.entries(author.social_links as Record<string, unknown>).filter((entry): entry is [string, string] => typeof entry[1] === "string")
         : [];
+    const emailLink = socialLinks.find(([, url]) => url.startsWith("mailto:"));
+    const profileLinks = socialLinks.filter(([, url]) => !url.startsWith("mailto:"));
     const avatarUrl = author.avatar_url
         ? author.avatar_url.startsWith("http")
             ? author.avatar_url
@@ -58,8 +60,9 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
         jobTitle: author.title ?? undefined,
         description: author.bio ?? undefined,
         image: avatarUrl ?? undefined,
+        email: emailLink?.[1].replace(/^mailto:/, "") ?? undefined,
         worksFor,
-        sameAs: socialLinks.map(([, url]) => url),
+        sameAs: profileLinks.map(([, url]) => url),
     };
 
     return (
@@ -92,9 +95,20 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
                                 ))}
                             </div>
                         ) : null}
-                        {socialLinks.length ? (
+                        {emailLink ? (
+                            <div className="mt-7 border-t border-cabeus-line pt-5">
+                                <p className="brand-kicker">Contact</p>
+                                <a
+                                    href={emailLink[1]}
+                                    className="mt-3 inline-block border-b border-cabeus-gold pb-1 font-mono text-xs font-bold uppercase text-cabeus-ink hover:text-cabeus-bronze"
+                                >
+                                    {emailLink[1].replace(/^mailto:/, "")}
+                                </a>
+                            </div>
+                        ) : null}
+                        {profileLinks.length ? (
                             <div className="mt-7 flex flex-wrap gap-5 border-t border-cabeus-line pt-5">
-                                {socialLinks.map(([label, url]) => (
+                                {profileLinks.map(([label, url]) => (
                                     <a key={label} href={url} target="_blank" rel="noreferrer" className="border-b border-cabeus-gold pb-1 font-mono text-xs font-bold uppercase text-cabeus-ink hover:text-cabeus-bronze">
                                         {label}
                                     </a>

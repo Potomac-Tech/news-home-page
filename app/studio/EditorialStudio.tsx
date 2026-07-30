@@ -155,7 +155,7 @@ function MediaAssetEditor({
     disabled,
     onSave,
     onRemove,
-    onInsert,
+    onPlace,
     onUseAsThumbnail,
     isThumbnail,
 }: {
@@ -163,7 +163,10 @@ function MediaAssetEditor({
     disabled: boolean;
     onSave: (assetId: string, altText: string, caption: string) => Promise<void>;
     onRemove: (assetId: string) => Promise<void>;
-    onInsert: (asset: StudioArticle["mediaAssets"][number]) => void;
+    onPlace: (
+        asset: StudioArticle["mediaAssets"][number],
+        placement: "start" | "cursor" | "end"
+    ) => void;
     onUseAsThumbnail: (assetId: string) => Promise<void>;
     isThumbnail: boolean;
 }) {
@@ -233,18 +236,39 @@ function MediaAssetEditor({
                     placeholder="Optional caption or credit"
                 />
             </label>
-            <button
-                type="button"
-                disabled={disabled}
-                onClick={() => onInsert({
-                    ...asset,
-                    altText,
-                    caption,
-                })}
-                className="mt-3 w-full bg-potomac-gold px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-potomac-primary disabled:opacity-40"
-            >
-                Insert at cursor
-            </button>
+            <fieldset className="mt-3 border border-potomac-regolith/25 p-2">
+                <legend className="px-1 font-mono text-[0.56rem] font-bold uppercase text-potomac-gold">
+                    Place in story
+                </legend>
+                <div className="grid grid-cols-3 gap-1">
+                    {([
+                        ["start", "Beginning"],
+                        ["cursor", "Cursor"],
+                        ["end", "End"],
+                    ] as const).map(([placement, label]) => (
+                        <button
+                            key={placement}
+                            type="button"
+                            disabled={disabled}
+                            onClick={() => onPlace({
+                                ...asset,
+                                altText,
+                                caption,
+                            }, placement)}
+                            className={`px-2 py-2 font-mono text-[0.52rem] font-bold uppercase disabled:opacity-40 ${
+                                placement === "cursor"
+                                    ? "bg-potomac-gold text-potomac-primary"
+                                    : "border border-potomac-gold/45 text-potomac-gold"
+                            }`}
+                        >
+                            {label}
+                        </button>
+                    ))}
+                </div>
+                <p className="mt-2 text-[0.62rem] leading-4 text-potomac-regolith">
+                    Repositioning moves the existing media. You can also drag it to an exact paragraph.
+                </p>
+            </fieldset>
             {asset.mediaType === "image" ? (
                 <button
                     type="button"
@@ -352,18 +376,63 @@ export function EditorialStudio({
         return `<figure data-media-id="${escapeHtml(asset.id)}" contenteditable="false">${media}${caption}</figure><p><br></p>`;
     }
 
-    function insertMediaAtCursor(asset: StudioArticle["mediaAssets"][number]) {
-        bodyRef.current?.focus();
-        const selection = window.getSelection();
-        const range = savedSelectionRef.current;
-        if (selection && range && bodyRef.current?.contains(range.commonAncestorContainer)) {
-            selection.removeAllRanges();
-            selection.addRange(range);
+    function removeExistingMediaEmbed(assetId: string) {
+        const editor = bodyRef.current;
+        if (!editor) return;
+        const existing = Array.from(
+            editor.querySelectorAll<HTMLElement>("[data-media-id]")
+        ).find((element) => element.dataset.mediaId === assetId);
+        if (!existing) return;
+
+        const spacer = existing.nextElementSibling;
+        existing.remove();
+        if (
+            spacer?.tagName === "P"
+            && !(spacer.textContent ?? "").trim()
+            && !spacer.querySelector("img,video,iframe")
+        ) {
+            spacer.remove();
         }
-        document.execCommand("insertHTML", false, mediaMarkup(asset));
+    }
+
+    function placeMedia(
+        asset: StudioArticle["mediaAssets"][number],
+        placement: "start" | "cursor" | "end"
+    ) {
+        const editor = bodyRef.current;
+        if (!editor) return;
+
+        const range = savedSelectionRef.current?.cloneRange() ?? null;
+        removeExistingMediaEmbed(asset.id);
+        editor.focus();
+
+        if (placement === "start") {
+            editor.insertAdjacentHTML("afterbegin", mediaMarkup(asset));
+        } else if (placement === "end") {
+            editor.insertAdjacentHTML("beforeend", mediaMarkup(asset));
+        } else {
+            const selection = window.getSelection();
+            if (selection && range && editor.contains(range.commonAncestorContainer)) {
+                selection.removeAllRanges();
+                selection.addRange(range);
+                document.execCommand("insertHTML", false, mediaMarkup(asset));
+            } else {
+                editor.insertAdjacentHTML("beforeend", mediaMarkup(asset));
+            }
+        }
+
         syncBodyFromEditor();
         rememberEditorSelection();
-        setSaveStatus("Media inserted in the story. Save the draft to keep its position.");
+        const placementLabel = placement === "start"
+            ? "at the beginning"
+            : placement === "end"
+              ? "at the end"
+              : "at the selected paragraph";
+        setSaveStatus(`Media placed ${placementLabel}. Save the draft to keep its position.`);
+    }
+
+    function insertMediaAtCursor(asset: StudioArticle["mediaAssets"][number]) {
+        placeMedia(asset, "cursor");
     }
 
     function handleEditorDrop(event: DragEvent<HTMLDivElement>) {
@@ -1124,7 +1193,7 @@ export function EditorialStudio({
                                                 disabled={isSaving}
                                                 onSave={saveMediaDetails}
                                                 onRemove={removeMedia}
-                                                onInsert={insertMediaAtCursor}
+                                                onPlace={placeMedia}
                                                 onUseAsThumbnail={useAsThumbnail}
                                                 isThumbnail={asset.publicUrl === draft.heroImageUrl}
                                             />

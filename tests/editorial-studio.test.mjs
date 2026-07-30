@@ -32,6 +32,10 @@ const videoMigration = readFileSync("supabase/migrations/20260728172344_allow_ed
 const youtubeMigration = readFileSync("supabase/migrations/20260729045803_add_youtube_editorial_media.sql", "utf8");
 const youtube = readFileSync("lib/editorial/youtube.ts", "utf8");
 const editorialVideo = readFileSync("app/_components/EditorialVideo.tsx", "utf8");
+const kevinEmailMigration = readFileSync(
+    "supabase/migrations/20260730204321_add_kevin_cirilli_author_email.sql",
+    "utf8"
+);
 
 test("editorial studio uses the existing editor and admin authorization boundary", () => {
     assert.match(studioPage, /requireEditorialStaff\("\/studio"\)/);
@@ -188,6 +192,12 @@ test("editorial media, scalable dashboard, and author pages are wired", () => {
     assert.match(studioUi, /Media description and caption saved\./);
     assert.match(studioUi, /mediaAssets: \[\.\.\.current\.mediaAssets, \.\.\.result\.uploadedMedia\]/);
     assert.match(studioUi, /Remove media/);
+    for (const placement of ["Beginning", "Cursor", "End"]) {
+        assert.match(studioUi, new RegExp(placement));
+    }
+    assert.match(studioUi, /removeExistingMediaEmbed/);
+    assert.match(studioUi, /Repositioning moves the existing media/);
+    assert.match(studioUi, /drag it to an exact paragraph/);
     assert.match(dashboard, /50 per page/);
     assert.match(dashboard, /scheduled_for/);
     assert.match(authorPage, /primary_author_id/);
@@ -196,6 +206,14 @@ test("editorial media, scalable dashboard, and author pages are wired", () => {
     assert.match(authorsPage, /bg-cabeus-paper text-cabeus-ink/);
     assert.doesNotMatch(authorPage, /text-white|text-potomac-cream/);
     assert.doesNotMatch(authorsPage, /text-white|text-potomac-cream/);
+});
+
+test("Kevin Cirilli author profile exposes a valid email contact", () => {
+    assert.match(kevinEmailMigration, /mailto:kevin@cabeusexplorer\.com/);
+    assert.match(kevinEmailMigration, /where lower\(slug\) = 'kevin-cirilli'/);
+    assert.match(authorPage, /email: emailLink/);
+    assert.match(authorPage, /<p className="brand-kicker">Contact<\/p>/);
+    assert.match(authorPage, /sameAs: profileLinks/);
 });
 
 test("article sections and carousel positions are editor controlled", () => {
