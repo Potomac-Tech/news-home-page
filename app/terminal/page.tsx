@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { getTerminalViewerContext } from "../../lib/auth/terminal";
-import { resolveTerminalModule } from "../../lib/terminal/frontend";
 import { TerminalWorkspace } from "./_integration/TerminalWorkspace";
 
 export const metadata: Metadata = {
@@ -12,10 +10,6 @@ export const metadata: Metadata = {
     },
 };
 
-export default async function TerminalPage() {
-    const module = resolveTerminalModule();
-    const viewer = await getTerminalViewerContext("/terminal");
-    if (!module) return null;
-
-    return <TerminalWorkspace module={module} viewer={viewer} />;
+export default function TerminalPage() {
+    return <TerminalWorkspace />;
 }

@@ -1382,9 +1382,12 @@ test("homepage carousel UI rotates accessibly and fails closed without approved 
     assert.doesNotMatch(homepage, /Brand system active/);
 });
 
-test("Cabeus Terminal is mounted as a reviewed Explorer route package", () => {
-    const manifest = JSON.parse(read("config/explorer-terminal-frontend-v1.json"));
-    const frontend = read("lib/terminal/frontend.ts");
+test("Cabeus Terminal preview is archived and removed from live routes", () => {
+    const archivePath = "archive/cabeus-terminal/frontend-v1";
+    const manifest = JSON.parse(read(`${archivePath}/explorer-terminal-frontend-v1.json`));
+    const frontend = read(`${archivePath}/frontend.ts`);
+    const archivedWorkspace = read(`${archivePath}/TerminalWorkspace.tsx`);
+    const archiveReadme = read(`${archivePath}/README.md`);
     const rootPage = read("app/terminal/page.tsx");
     const modulePage = read("app/terminal/[module]/page.tsx");
     const workspace = read("app/terminal/_integration/TerminalWorkspace.tsx");
@@ -1398,31 +1401,39 @@ test("Cabeus Terminal is mounted as a reviewed Explorer route package", () => {
         manifest.modules.map((module) => module.id),
         ["contracts", "diligence", "organizations", "missions", "workforce"]
     );
-    assertIncludes(frontend + rootPage + modulePage + workspace, [
+    assertIncludes(frontend + archivedWorkspace, [
         "TERMINAL_FRONTEND_VERSION",
         "TERMINAL_MODULES",
         "resolveTerminalModule",
-        "getTerminalViewerContext",
-        "TerminalWorkspace",
-        'notFound()',
+        "TerminalViewerContext",
         'aria-label="Terminal modules"',
-        'role="status"',
-        'id="main-content"',
         "Public / unclassified",
         "Andromeda program comparison",
         "14 companies",
         "Open Cabeus Terminal",
         'href="/terminal/contracts"',
-        "Open Nexus",
         "/api/member/nexus/handoff",
-    ], "Explorer Terminal route integration");
-    assert.doesNotMatch(rootPage + modulePage + workspace, /<iframe|standalonePublicFrontend:\s*true/);
+    ], "archived Terminal route integration");
+    assertIncludes(rootPage + modulePage + workspace + archiveReadme, [
+        "TerminalWorkspace",
+        'redirect("/terminal")',
+        'data-terminal-integration-state="archived"',
+        "Integration in progress",
+        'href="/nexus"',
+        "Open Nexus",
+        "future integrated release",
+        "complete the Terminal data and service integration review",
+    ], "live Intelligence route and restoration note");
+    assert.doesNotMatch(
+        rootPage + modulePage + workspace,
+        /Andromeda program comparison|14 companies|Intelligence modules|Terminal capabilities|\/terminal\/contracts/
+    );
 });
 
-test("Cabeus Terminal membership display fails closed and keeps Scout and Meridian identical", () => {
-    const manifest = JSON.parse(read("config/explorer-terminal-frontend-v1.json"));
+test("archived Cabeus Terminal membership behavior remains preserved", () => {
+    const manifest = JSON.parse(read("archive/cabeus-terminal/frontend-v1/explorer-terminal-frontend-v1.json"));
     const access = read("lib/auth/terminal.ts");
-    const workspace = read("app/terminal/_integration/TerminalWorkspace.tsx");
+    const workspace = read("archive/cabeus-terminal/frontend-v1/TerminalWorkspace.tsx");
 
     assert.equal(manifest.membership.explorer, "public_and_explorer");
     assert.equal(manifest.membership.scout, "full_mvp");

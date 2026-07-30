@@ -269,25 +269,21 @@ test("chat, forums, and RFQs expose their access gates without blank screens", {
     }
 });
 
-test("lunar terminal navigation exposes the core intelligence modules", { timeout: 60000 }, async () => {
+test("Intelligence page hides the archived Terminal preview", { timeout: 60000 }, async () => {
     const { page, consoleMessages } = await newPage();
 
     try {
         await page.goto(`${baseUrl}/terminal`, { waitUntil: "domcontentloaded" });
 
         await assertVisibleText(page, "Intelligence for decisions that move the industry");
-        await assertVisibleText(page, "Contracts & funding");
-        await assertVisibleText(page, "Investment due diligence");
-        await assertVisibleText(page, "Organization & market intelligence");
-        await assertVisibleText(page, "Mission intelligence");
-        await assertVisibleText(page, "Workforce development");
+        await assertVisibleText(page, "Integration in progress");
+        await assertVisibleText(page, "Open Nexus");
+        assert.equal(await page.getByText("Andromeda program comparison").count(), 0);
+        assert.equal(await page.getByText("Intelligence modules").count(), 0);
 
-        await page
-            .getByRole("link", { name: /Investment due diligence/i })
-            .first()
-            .click();
-        await page.waitForURL(/\/terminal\/diligence/);
-        await assertVisibleText(page, "Investment due diligence");
+        await page.goto(`${baseUrl}/terminal/diligence`, { waitUntil: "domcontentloaded" });
+        await page.waitForURL(/\/terminal$/);
+        await assertVisibleText(page, "Integration in progress");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
         await closePage(page);
