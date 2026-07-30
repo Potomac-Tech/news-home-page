@@ -50,7 +50,7 @@ export default async function AuthorsPage() {
                         {author.avatar_url ? (
                             <img
                                 src={author.avatar_url}
-                                alt=""
+                                alt={author.display_name}
                                 className="h-28 w-28 border border-potomac-gold/35 object-cover"
                             />
                         ) : null}
