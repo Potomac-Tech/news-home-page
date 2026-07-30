@@ -1,36 +1,74 @@
-# Estimated Coordinated Lunar Time Methodology
+# Cabeus Mean Time Methodology
 
-The homepage `Estimated LTC` display is a research estimate of how a reference clock on the lunar surface advances relative to UTC. It is not an adopted lunar civil timezone and must not be used for navigation, mission operations, or precision time transfer.
+`Cabeus Mean Time` (`CMT`) is a Cabeus Explorer product convention that maps
+the Moon's mean solar day to a familiar 24-hour clock at Cabeus longitude.
+It is intended to convey the approximate mean position of the Sun:
+
+- `00:00` mean midnight
+- `06:00` mean dawn
+- `12:00` mean noon
+- `18:00` mean dusk
+
+CMT is not Coordinated Lunar Time, an adopted civil timezone, or a
+mission-operations standard.
 
 ## Display Convention
 
-- Synchronization epoch: `1977-01-01T00:00:00.000Z`
-- Mean lunar-surface gain: `56.0256 microseconds per Earth day`
-- Display precision: nearest millisecond
-- Calculation:
+- Reference new moon: `2026-07-14T09:43:00.000Z`
+- Mean synodic period: `29.5305888531` Earth days
+- Cabeus reference longitude: `35.5 degrees west`
+- CMT hours per mean lunar solar day: `24`
+- One CMT hour: approximately `29.53059` Earth hours
+- One CMT minute: approximately `29.53059` Earth minutes
+
+Although the lunar day/night cycle is often described as roughly four weeks,
+the authoritative mean synodic period is about 29.53 Earth days. The
+calculation uses that value instead of rounding the cycle to 28 days.
+
+## Calculation
+
+Longitude is east-positive, so Cabeus is `-35.5 degrees`.
 
 ```text
-elapsed_days = (UTC - epoch) / 86,400 seconds
-offset = elapsed_days * 56.0256 microseconds
-estimated_LTC = UTC + offset
+elapsed_cycles = (UTC - reference_new_moon) / mean_synodic_period
+cycle_fraction = elapsed_cycles modulo 1
+prime_meridian_hours = cycle_fraction * 24
+longitude_offset_hours = -35.5 / 15
+CMT = (prime_meridian_hours + longitude_offset_hours) modulo 24
 ```
 
-The 1977 date matches the conventional relativistic reference epoch used in the cited time-transformation work. Setting the displayed UTC/LTC offset to zero at that epoch is a Cabeus Explorer product convention because an internationally adopted LTC realization and zero offset do not yet exist.
+At astronomical new moon, the lunar prime meridian is assigned mean midnight.
+The longitude correction shifts that mean solar clock westward to Cabeus.
 
-## Interpretation
+The next mean dawn or dusk is calculated from the remaining fraction of the
+same 29.5305888531-day cycle. CMT therefore runs about 29.53 times slower than
+an Earth clock.
 
-Coordinated Lunar Time is intended to become a common time reference for lunar and cislunar systems, traceable to UTC. Clocks near the Moon advance slightly faster than comparable clocks on Earth because the Moon has a different gravitational potential and motion. NASA describes the future operational standard as a weighted average of atomic clocks at the Moon.
+## Interpretation Limits
 
-The homepage uses the secular mean rate derived by Turyshev, Williams, Boggs, and Park. Their model gives `56.0256 microseconds/day` and identifies periodic terms with a largest amplitude of about `0.470 microseconds`. The display omits periodic, topographic, and site-dependent corrections because they are much smaller than its one-millisecond display precision.
+CMT is an idealized mean solar clock. It does not calculate actual local
+illumination from a high-precision lunar ephemeris. It omits:
+
+- Lunar libration and variation between individual synodic cycles.
+- Solar declination and the effects of Cabeus's high southern latitude.
+- Local crater walls, slopes, horizon geometry, and eclipses.
+- Permanent shadow inside Cabeus crater.
+
+The display uses `Mean daylight` and `Mean lunar night` deliberately. A
+daylight label does not mean that sunlight reaches a particular point inside
+Cabeus crater. CMT must not be used for landing, power, thermal, navigation,
+or mission-planning decisions.
 
 ## Sources
 
-- NASA, [NASA to Develop Lunar Time Standard for Exploration Initiatives](https://www.nasa.gov/solar-system/moon/nasa-to-develop-lunar-time-standard-for-exploration-initiatives/), September 12, 2024.
-- NIST, [A Relativistic Framework to Establish Coordinate Time on the Moon and Beyond](https://www.nist.gov/publications/relativistic-framework-establish-coordinate-time-moon-and-beyond), February 17, 2024.
-- Turyshev et al., [Relativistic Time Transformations Between the Solar System Barycenter, Earth, and Moon](https://arxiv.org/abs/2406.16147), equation 82 and associated discussion.
-- Bourgoin, Defraigne, and Meynadier, [Lunar reference timescale](https://doi.org/10.1088/1681-7575/ae2c03), *Metrologia* 63 (2026) 015003.
-- White House Office of Science and Technology Policy, [Celestial Time Standardization Policy](https://www.whitehouse.gov/wp-content/uploads/2024/04/Celestial-Time-Standardization-Policy.pdf), April 2, 2024.
+- U.S. Naval Observatory, [Dates of Primary Phases of the Moon](https://aa.usno.navy.mil/calculated/moon/phases?date=2026-05-23&format=p&nump=50&submit=Get+Data), giving the July 14, 2026 new moon at 09:43 Universal Time.
+- U.S. Naval Observatory, *Explanatory Supplement to the Astronomical Almanac*, Chapter 15, equation 15.2, giving a mean synodic period of `29.5305888531` days near the year 2000 and noting that individual cycles can vary by up to seven hours.
+- NASA Technical Reports Server, [Radioisotope Power Systems to Enable Extended Lunar Science and In-Situ Resource Utilization Missions](https://ntrs.nasa.gov/citations/20180004489), describing the lunar solar day as about `29.5 days` or `708 hours`.
+- NASA Technical Reports Server, [Physics-Informed Machine Learning to Identify Features in LCROSS NIR Data](https://ntrs.nasa.gov/citations/20250003292), identifying the LCROSS Cabeus target at approximately `84.9 degrees south, 35.5 degrees west`.
 
 ## Replacement Trigger
 
-Replace this estimate when the BIPM/CGPM, IAU, NASA, or another recognized international standards body publishes an adopted LTC realization with conventional values, a defined zero offset, and a maintained UTC transformation. Preserve the `Estimated` label until that replacement is verified.
+Replace the mean-cycle approximation with a reviewed ephemeris calculation if
+the product later needs actual site illumination, local horizon events, or
+mission-grade solar geometry. Preserve the `Cabeus Mean Time` label only while
+the reference longitude and 24-hour mean-solar convention remain unchanged.
