@@ -63,42 +63,66 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
     };
 
     return (
-        <main className="bg-grid-pattern min-h-screen">
+        <main className="min-h-screen bg-cabeus-paper text-cabeus-ink">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: jsonLdScript(authorJsonLd) }}
             />
-            <header className="border-b border-white/10">
-                <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-12 md:flex-row md:items-center md:px-8">
-                    {avatarUrl ? <img src={avatarUrl} alt={author.display_name} className="h-32 w-32 border border-potomac-gold/40 object-cover" /> : null}
-                    <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">Cabeus Explorer author</p>
-                        <h1 className="mt-3 font-serif text-5xl text-white">{author.display_name}</h1>
-                        <p className="mt-3 text-lg text-potomac-cream/70">{[author.title, author.organization].filter(Boolean).join(" · ")}</p>
+            <header className="border-b border-cabeus-line">
+                <div className="mx-auto grid w-full max-w-[92rem] gap-8 px-5 py-12 md:grid-cols-[15rem_minmax(0,1fr)] md:items-start md:px-10 md:py-20 lg:gap-14">
+                    {avatarUrl ? (
+                        <img
+                            src={avatarUrl}
+                            alt={author.display_name}
+                            className="aspect-square w-full max-w-[15rem] border border-cabeus-line bg-cabeus-smoke object-cover"
+                        />
+                    ) : null}
+                    <div className="max-w-5xl">
+                        <p className="brand-kicker">Cabeus Explorer author</p>
+                        <h1 className="mt-4 font-serif text-6xl font-medium leading-[0.9] text-cabeus-ink md:text-7xl lg:text-8xl">
+                            {author.display_name}
+                        </h1>
+                        <p className="mt-5 font-mono text-xs font-bold uppercase text-cabeus-bronze">
+                            {[author.title, author.organization].filter(Boolean).join(" / ")}
+                        </p>
                         {author.bio ? (
-                            <div className="mt-5 grid max-w-3xl gap-4 text-base leading-7 text-potomac-cream/75">
+                            <div className="mt-7 grid max-w-4xl gap-5 border-t border-cabeus-line pt-7 font-serif text-xl leading-8 text-cabeus-muted md:text-2xl md:leading-9">
                                 {author.bio.split(/\n{2,}/).map((paragraph: string) => (
                                     <p key={paragraph}>{paragraph}</p>
                                 ))}
                             </div>
                         ) : null}
-                        {socialLinks.length ? <div className="mt-4 flex gap-4">{socialLinks.map(([label, url]) => <a key={label} href={url} target="_blank" rel="noreferrer" className="text-xs font-bold uppercase text-potomac-gold">{label}</a>)}</div> : null}
+                        {socialLinks.length ? (
+                            <div className="mt-7 flex flex-wrap gap-5 border-t border-cabeus-line pt-5">
+                                {socialLinks.map(([label, url]) => (
+                                    <a key={label} href={url} target="_blank" rel="noreferrer" className="border-b border-cabeus-gold pb-1 font-mono text-xs font-bold uppercase text-cabeus-ink hover:text-cabeus-bronze">
+                                        {label}
+                                    </a>
+                                ))}
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             </header>
-            <section className="mx-auto max-w-7xl px-4 py-12 md:px-8">
-                <h2 className="font-serif text-3xl text-white">Articles by {author.display_name}</h2>
-                <div className="mt-7 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <section className="mx-auto w-full max-w-[92rem] px-5 py-12 md:px-10 md:py-16">
+                <p className="brand-kicker">Published reporting</p>
+                <h2 className="mt-3 font-serif text-4xl font-medium text-cabeus-ink md:text-5xl">Articles by {author.display_name}</h2>
+                <div className="mt-8 divide-y divide-cabeus-line border-y border-cabeus-line">
                     {articles.map((article) => (
-                        <Link key={article.id} href={`/news/${article.slug}`} className="glass-card rounded p-5">
-                            {article.hero_image_url ? <img src={article.hero_image_url} alt="" className="aspect-video w-full rounded object-cover" /> : null}
-                            <time className="mt-4 block text-xs font-bold uppercase text-potomac-gold">{new Date(article.published_at!).toLocaleDateString()}</time>
-                            <h3 className="mt-3 font-serif text-2xl text-white">{article.title}</h3>
-                            <p className="mt-3 line-clamp-3 text-sm leading-6 text-potomac-cream/70">{article.public_summary}</p>
+                        <Link key={article.id} href={`/news/${article.slug}`} className="group grid gap-5 py-7 md:grid-cols-[minmax(0,1fr)_minmax(15rem,24rem)] md:items-center">
+                            <div>
+                                <time className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
+                                    {new Date(article.published_at!).toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" })}
+                                </time>
+                                <h3 className="mt-3 max-w-3xl font-serif text-3xl font-medium leading-tight text-cabeus-ink transition group-hover:text-cabeus-bronze md:text-4xl">{article.title}</h3>
+                                <p className="mt-3 line-clamp-3 max-w-3xl text-sm leading-6 text-cabeus-muted">{article.public_summary}</p>
+                                <span className="mt-4 inline-block border-b border-cabeus-gold pb-1 font-mono text-xs font-bold uppercase text-cabeus-ink">Full story &#8594;</span>
+                            </div>
+                            {article.hero_image_url ? <img src={article.hero_image_url} alt="" className="aspect-video w-full border border-cabeus-line bg-cabeus-smoke object-cover object-top" /> : null}
                         </Link>
                     ))}
                 </div>
-                {!articles.length ? <p className="mt-7 text-potomac-regolith">No published articles yet.</p> : null}
+                {!articles.length ? <p className="mt-7 border-y border-cabeus-line py-8 text-cabeus-muted">No published articles yet.</p> : null}
             </section>
         </main>
     );

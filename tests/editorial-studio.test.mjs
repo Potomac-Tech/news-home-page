@@ -23,6 +23,7 @@ const newsPage = readFileSync("app/news/page.tsx", "utf8");
 const archivesPage = readFileSync("app/archives/page.tsx", "utf8");
 const carouselLoader = readFileSync("app/_data/homepageCarousel.ts", "utf8");
 const authorPage = readFileSync("app/authors/[slug]/page.tsx", "utf8");
+const authorsPage = readFileSync("app/authors/page.tsx", "utf8");
 const articlePage = readFileSync("app/news/[slug]/page.tsx", "utf8");
 const homepage = readFileSync("app/page.tsx", "utf8");
 const richText = readFileSync("lib/editorial/rich-text.ts", "utf8");
@@ -191,6 +192,10 @@ test("editorial media, scalable dashboard, and author pages are wired", () => {
     assert.match(dashboard, /scheduled_for/);
     assert.match(authorPage, /primary_author_id/);
     assert.match(authorPage, /Articles by/);
+    assert.match(authorPage, /bg-cabeus-paper text-cabeus-ink/);
+    assert.match(authorsPage, /bg-cabeus-paper text-cabeus-ink/);
+    assert.doesNotMatch(authorPage, /text-white|text-potomac-cream/);
+    assert.doesNotMatch(authorsPage, /text-white|text-potomac-cream/);
 });
 
 test("article sections and carousel positions are editor controlled", () => {
