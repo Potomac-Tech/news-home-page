@@ -96,7 +96,7 @@ export function LunarTimeClock({ initialUtcIso }: { initialUtcIso: string }) {
                         </div>
                         <p
                             aria-live="off"
-                            className="mt-1 min-h-5 whitespace-nowrap font-mono text-[0.68rem] font-bold tabular-nums text-cabeus-ink sm:text-xs"
+                            className="mt-1 min-h-5 truncate font-mono text-[0.68rem] font-bold tabular-nums text-cabeus-ink sm:text-xs"
                         >
                             {cmt ? `${cmt.solarPhase} / ${transitionDisplay}` : "Unavailable"}
                         </p>

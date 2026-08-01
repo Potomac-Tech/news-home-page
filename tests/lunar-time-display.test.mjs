@@ -136,5 +136,6 @@ test("clock layout provides stable mobile and desktop constraints", () => {
     assert.ok(componentSource.includes("md:flex-row"));
     assert.ok(componentSource.includes("grid-cols-2"));
     assert.ok(componentSource.includes("whitespace-nowrap"));
+    assert.ok(componentSource.includes("min-h-5 truncate"));
     assert.ok(componentSource.includes("calc(100vw-2rem)"));
 });
