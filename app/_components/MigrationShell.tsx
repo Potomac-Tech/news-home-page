@@ -11,6 +11,7 @@ import {
 import { getProfileGateContext } from "../../lib/auth/profile-completion";
 import { SearchCommandPalette } from "./SearchCommandPalette";
 import { CheckoutAnalytics } from "./CheckoutAnalytics";
+import { ConveningsMenu } from "./ConveningsMenu";
 
 const primaryNavItems: Array<{
     href: string;
@@ -98,22 +99,7 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                                     {item.label}
                                 </Link>
                             ))}
-                            <details className="group relative">
-                                <summary className="cursor-pointer list-none font-sans text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold">
-                                    Convenings
-                                </summary>
-                                <div className="absolute left-1/2 top-full mt-5 w-64 -translate-x-1/2 border border-cabeus-line bg-cabeus-paper p-2 shadow-xl">
-                                    {conveningNavItems.map((item) => (
-                                        <Link
-                                            key={item.href}
-                                            href={item.href}
-                                            className="block border-b border-cabeus-line px-3 py-3 font-sans text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink last:border-b-0 hover:bg-cabeus-smoke"
-                                        >
-                                            {item.label}
-                                        </Link>
-                                    ))}
-                                </div>
-                            </details>
+                            <ConveningsMenu items={conveningNavItems} />
                             <Link
                                 href={newsletterHref}
                                 className="font-sans text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold"

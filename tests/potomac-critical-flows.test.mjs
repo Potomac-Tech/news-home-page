@@ -314,6 +314,7 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
     const nexusPage = read("app/nexus/page.tsx");
     const routeScaffold = read("app/_components/RouteScaffold.tsx");
     const migrationShell = read("app/_components/MigrationShell.tsx");
+    const conveningsMenu = read("app/_components/ConveningsMenu.tsx");
     const nextConfig = read("next.config.mjs");
     const migration = readMigration(
         "20260717104836_sync_cabeus_members_to_nexus_roles.sql"
@@ -354,6 +355,21 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         'label: "Cabeus Games"',
         "Newsletter",
     ], "primary publication navigation");
+    assertIncludes(migrationShell + conveningsMenu, [
+        "<ConveningsMenu items={conveningNavItems} />",
+        "onMouseEnter={() => setOpen(true)}",
+        "onMouseLeave={() => setOpen(false)}",
+        "onMouseDown={(event) => event.preventDefault()}",
+        "group-hover:visible",
+        'event.key === "Escape"',
+        "aria-expanded={open}",
+        'type="button"',
+    ], "hover and keyboard Convenings navigation");
+    assert.doesNotMatch(
+        migrationShell,
+        /<details className="group relative">[\s\S]*?<summary[^>]*>[\s\S]*?Convenings/,
+        "desktop Convenings navigation must not persist through a details toggle"
+    );
     assertIncludes(routeScaffold, [
         'primaryHref.startsWith("/api/")',
         "<a href={primaryHref}",
