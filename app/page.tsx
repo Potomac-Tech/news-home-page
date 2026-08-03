@@ -398,18 +398,7 @@ export default async function HomePage() {
 
             <section className="border-b border-cabeus-line">
                 <div className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
-                    <div className="flex items-end justify-between border-b border-cabeus-line pb-5">
-                        <div>
-                            <p className="brand-kicker">Latest reporting</p>
-                            <h2 className="mt-3 font-serif text-5xl font-medium leading-none md:text-7xl">
-                                Latest Intelligence
-                            </h2>
-                        </div>
-                        <Link href="/archives" className="brand-button brand-button-outline hidden sm:inline-flex">
-                            View archive
-                        </Link>
-                    </div>
-                    <div className="mt-4">
+                    <div>
                         {carouselSlides.length ? (
                             <HomepageCarousel slides={carouselSlides} />
                         ) : (
@@ -432,7 +421,7 @@ export default async function HomePage() {
                             <StoryCard key={`latest-${story.title}`} story={story} />
                         ))}
                     </div>
-                    <Link href="/archives" className="brand-button brand-button-outline mt-8 sm:hidden">
+                    <Link href="/archives" className="brand-button brand-button-outline mt-8 inline-flex">
                         View archive
                     </Link>
                 </div>

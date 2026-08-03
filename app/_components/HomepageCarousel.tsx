@@ -67,7 +67,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                 >
                     <div className="pb-8 pt-6 md:pb-10 md:pt-8">
                         <p className="brand-kicker">
-                            Latest intelligence / {slide.slideType.replaceAll("_", " ")}
+                            Latest intelligence
                         </p>
                         <div className="mt-5 grid min-w-0 gap-7 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-12">
                             <div className="flex min-h-full min-w-0 flex-col">
