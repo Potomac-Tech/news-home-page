@@ -291,13 +291,15 @@ test("Intelligence page hides the archived Terminal preview", { timeout: 60000 }
     }
 });
 
-test("Meridian public and protected flows preserve the approved access path", { timeout: 60000 }, async () => {
+test("Council and protected Meridian flows preserve the approved access path", { timeout: 60000 }, async () => {
     const { page, consoleMessages } = await newPage();
 
     try {
         await page.goto(`${baseUrl}/pricing`, { waitUntil: "domcontentloaded" });
-        await assertVisibleText(page, "Intelligence built for your advantage");
-        await assertVisibleText(page, "Request Meridian");
+        await assertVisibleText(page, "We choose to go to the Moon");
+        await assertVisibleText(page, "Apply");
+        assert.equal(await page.getByText("Access comparison", { exact: true }).count(), 0);
+        assert.equal(await page.getByText("Request Meridian", { exact: true }).count(), 0);
 
         await page.goto(`${baseUrl}/command`, { waitUntil: "domcontentloaded" });
         await page.waitForURL(/\/request-access\?tab=signin&next=%2Fcommand/);

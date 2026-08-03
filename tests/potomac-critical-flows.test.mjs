@@ -1442,8 +1442,8 @@ test("the Council hero invites leaders into the Explorer application flow", () =
     ], "Council hero application call to action");
     assert.doesNotMatch(
         pricing,
-        /Begin with free Explorer membership/,
-        "Council hero must not retain the former tier-selection copy"
+        /Begin with free Explorer membership|Access comparison|comparisonRows|const tiers|"@type": "Product"/,
+        "Council page must not expose membership tiers or their comparison data"
     );
 });
 
