@@ -358,6 +358,16 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         /href=\{newsletterHref\}|>\s*Newsletter\s*</,
         "Newsletter must remain hidden from desktop and mobile navigation"
     );
+    assert.doesNotMatch(
+        migrationShell,
+        /Moonberg|Free for approved Explorer members\.|Join Explorer/,
+        "Moonberg promotion must remain removed from the shared footer"
+    );
+    assertIncludes(migrationShell, [
+        'aria-label="External channels"',
+        '>Follow<',
+        "externalChannels.map",
+    ], "footer external channels");
     assertIncludes(
         read("app/newsletter/page.tsx"),
         ['import { notFound } from "next/navigation"', "notFound();"],

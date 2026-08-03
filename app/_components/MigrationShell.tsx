@@ -199,28 +199,22 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                             ))}
                         </div>
                     </nav>
-                    <div>
-                        <p className="brand-kicker text-cabeus-ink">Moonberg</p>
-                        <p className="mt-5 max-w-xs font-serif text-2xl leading-tight text-cabeus-ink">
-                            Free for approved Explorer members.
-                        </p>
-                        <Link href="/request-access" className="brand-button brand-button-outline mt-6 inline-flex">
-                            Join Explorer
-                        </Link>
-                        <nav aria-label="External channels" className="mt-6 flex flex-wrap gap-4">
-                        {externalChannels.map((channel) => (
-                            <a
-                                key={channel.id}
-                                href={channel.href!}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="font-sans text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-cabeus-muted hover:text-cabeus-ink"
-                            >
-                                {channel.label}
-                            </a>
-                        ))}
-                        </nav>
-                    </div>
+                    <nav aria-label="External channels">
+                        <p className="brand-kicker text-cabeus-ink">Follow</p>
+                        <div className="mt-5 grid gap-3">
+                            {externalChannels.map((channel) => (
+                                <a
+                                    key={channel.id}
+                                    href={channel.href!}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-cabeus-muted transition hover:text-cabeus-ink"
+                                >
+                                    {channel.label}
+                                </a>
+                            ))}
+                        </div>
+                    </nav>
                 </div>
                 <div className="mx-auto flex w-full max-w-[92rem] flex-wrap justify-between gap-3 border-t border-cabeus-line px-4 py-5 text-xs text-cabeus-muted md:px-8">
                     <span>&copy; 2026 Cabeus Explorer</span>
