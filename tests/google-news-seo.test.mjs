@@ -79,6 +79,20 @@ test("publisher transparency pages and disclosures are public and discoverable",
     assert.doesNotMatch(launchVisibility, /"events"|"\/events"/);
 });
 
+test("articles omit publisher promotions, source citation panels, and access-path sidebars", () => {
+    const article = read("app/news/[slug]/page.tsx");
+
+    for (const removedSurface of [
+        "<SponsorUnit",
+        "Source Citations",
+        "Access Path",
+        "articleSponsorUnit",
+        "loadSponsorUnits",
+    ]) {
+        assert.doesNotMatch(article, new RegExp(removedSurface));
+    }
+});
+
 test("homepage Moon hero uses a credited Apollo 11 photograph", () => {
     const homepage = read("app/page.tsx");
     const archives = read("app/archives/page.tsx");

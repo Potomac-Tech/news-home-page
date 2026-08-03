@@ -21,11 +21,6 @@ import {
     type ArticleAccessContext,
     type ArticleAccessTier,
 } from "../../../lib/auth/article-access";
-import { SponsorUnit } from "../../_components/SponsorUnit";
-import {
-    loadSponsorUnits,
-    sponsorPlacementKeys,
-} from "../../_data/sponsorAds";
 import { publicTierName, tierConfig } from "../../_data/tiers";
 import { renderArticleHtml } from "../../../lib/editorial/rich-text";
 
@@ -426,19 +421,13 @@ function GatePanel({
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
     const { slug } = await params;
-    const [loaded, sponsorUnits] = await Promise.all([
-        loadArticle(slug),
-        loadSponsorUnits([sponsorPlacementKeys.articleSidebar]),
-    ]);
+    const loaded = await loadArticle(slug);
 
     if (!loaded) {
         notFound();
     }
 
     const { article, fullBody, access, mediaAssets } = loaded;
-    const articleSponsorUnit = sponsorUnits.get(
-        sponsorPlacementKeys.articleSidebar
-    )!;
     const keyPoints = article.keyPoints.length
         ? article.keyPoints
         : [article.summary, article.teaser].filter(Boolean);
@@ -552,8 +541,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 </div>
             </header>
 
-            <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-12 md:px-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
-                <main>
+            <div className="mx-auto w-full max-w-5xl px-4 py-12 md:px-8">
+                <main className="mx-auto max-w-3xl">
                     {fullBody ? (
                         <section className="member-gated-content">
                             <p className="brand-kicker">
@@ -579,74 +568,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         </>
                     )}
                 </main>
-
-                <aside className="space-y-6">
-                    <SponsorUnit unit={articleSponsorUnit} />
-
-                    <section className="border-y border-cabeus-line py-6">
-                        <h2 className="font-serif text-3xl text-cabeus-ink">
-                            Source Citations
-                        </h2>
-                        <div className="mt-5 space-y-5">
-                            {article.citations.map((citation) => (
-                                <div
-                                    key={`${citation.label}-${citation.title}`}
-                                    className="border-b border-cabeus-line pb-5 last:border-0 last:pb-0"
-                                >
-                                    <p className="brand-kicker">
-                                        {citation.label}
-                                    </p>
-                                    {citation.url ? (
-                                        <a
-                                            href={citation.url}
-                                            target={
-                                                citation.url.startsWith("http")
-                                                    ? "_blank"
-                                                    : undefined
-                                            }
-                                            rel={
-                                                citation.url.startsWith("http")
-                                                    ? "noopener noreferrer"
-                                                    : undefined
-                                            }
-                                            className="mt-2 block font-semibold leading-6 text-cabeus-ink transition hover:text-cabeus-gold"
-                                        >
-                                            {citation.title}
-                                        </a>
-                                    ) : (
-                                        <p className="mt-2 font-semibold leading-6 text-cabeus-ink">
-                                            {citation.title}
-                                        </p>
-                                    )}
-                                    <p className="mt-1 font-mono text-xs uppercase text-cabeus-muted">
-                                        {citation.publisher}
-                                    </p>
-                                    <p className="mt-3 text-sm leading-6 text-cabeus-muted">
-                                        {citation.summary}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-
-                    <section className="border-y border-cabeus-line py-6">
-                        <h2 className="font-serif text-3xl text-cabeus-ink">
-                            Access Path
-                        </h2>
-                        <p className="mt-4 text-sm leading-6 text-cabeus-muted">
-                            Free Explorer access unlocks full public-story bodies
-                            after verification and profile completion. Scout and
-                            {tierConfig.enterprise.publicName} paths unlock deeper intelligence in later
-                            dashboard tasks.
-                        </p>
-                        <Link
-                            href="/request-access"
-                            className="brand-button mt-6 inline-flex"
-                        >
-                            Request access
-                        </Link>
-                    </section>
-                </aside>
             </div>
         </article>
     );

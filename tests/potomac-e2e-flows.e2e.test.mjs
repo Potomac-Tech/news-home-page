@@ -176,7 +176,7 @@ after(async () => {
     }
 });
 
-test("public article teaser shows citations and member-gated full story", { timeout: 60000 }, async () => {
+test("public article teaser omits article promotions and preserves the member gate", { timeout: 60000 }, async () => {
     const { page, consoleMessages } = await newPage();
 
     try {
@@ -187,7 +187,10 @@ test("public article teaser shows citations and member-gated full story", { time
         assert.match(await page.title(), /CLPS 2\.0 points toward/i);
         assert.equal(await page.getByText(/^Public summary$/i).count(), 0);
         assert.equal(await page.getByText(/^Public intro$/i).count(), 0);
-        await assertVisibleText(page, "Source Citations");
+        assert.equal(await page.getByText("Source Citations", { exact: true }).count(), 0);
+        assert.equal(await page.getByText("Access Path", { exact: true }).count(), 0);
+        assert.equal(await page.getByText("Publisher promotion", { exact: true }).count(), 0);
+        assert.equal(await page.getByText("Sponsored content", { exact: true }).count(), 0);
         await assertVisibleText(
             page,
             "Full analysis is reserved for approved members."
