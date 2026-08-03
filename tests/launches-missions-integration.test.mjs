@@ -30,8 +30,9 @@ test("premium tracker hooks require Scout, Command, or staff", () => {
     assert.ok(exportRoute.includes("if (!access.canUsePremiumTools)"));
     assert.ok(exportRoute.includes('"cache-control": "private, no-store"'));
 });
-test("navigation, search, terminal, member dashboard, and metadata use Launches & Missions", () => {
-    for (const source of [nav, terminal, search, member, account, page]) assert.ok(source.includes("Launches & Missions"));
+test("search, terminal, member dashboard, and metadata use Launches & Missions", () => {
+    for (const source of [terminal, search, member, account, page]) assert.ok(source.includes("Launches & Missions"));
+    assert.ok(!nav.includes('aria-label="Platform routes"'));
     assert.ok(search.includes('href: "/tracker/launches"'));
     assert.ok(terminal.includes('href: "/tracker/launches"'));
 });

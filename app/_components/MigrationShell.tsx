@@ -27,14 +27,6 @@ const conveningNavItems = [
     { href: "/space-investment-forum", label: "Space Investment Forum" },
 ];
 
-const footerNavItems = [
-    { href: "/terminal", label: "Intelligence" },
-    { href: "/archives", label: "News archives" },
-    { href: "/tracker/launches", label: "Launches & Missions" },
-    { href: "/calculators", label: "Calculators" },
-    { href: "/datasets", label: "Data" },
-];
-
 const companyNavItems = [
     { href: "/team", label: "About" },
     { href: "/authors", label: "Author biographies" },
@@ -147,7 +139,7 @@ export function MigrationShell({ children }: { children: ReactNode }) {
             </header>
             <main>{children}</main>
             <footer className="border-t border-cabeus-line bg-cabeus-paper">
-                <div className="mx-auto grid w-full max-w-[92rem] gap-10 px-4 py-12 md:px-8 lg:grid-cols-[1.15fr_0.75fr_0.75fr_1fr]">
+                <div className="mx-auto grid w-full max-w-[92rem] gap-10 px-4 py-12 md:px-8 lg:grid-cols-[1.5fr_0.75fr_0.75fr]">
                     <div>
                         <span className="brand-wordmark">
                             <span>Cabeus</span>
@@ -171,20 +163,6 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                             ))}
                         </nav>
                     </div>
-                    <nav aria-label="Platform routes">
-                        <p className="brand-kicker text-cabeus-ink">Platform</p>
-                        <div className="mt-5 grid gap-3">
-                            {footerNavItems.map((route) => (
-                                <Link
-                                    key={route.href}
-                                    href={route.href}
-                                    className="text-sm text-cabeus-muted transition hover:text-cabeus-ink"
-                                >
-                                    {route.label}
-                                </Link>
-                            ))}
-                        </div>
-                    </nav>
                     <nav aria-label="Company routes">
                         <p className="brand-kicker text-cabeus-ink">Company</p>
                         <div className="mt-5 grid gap-3">

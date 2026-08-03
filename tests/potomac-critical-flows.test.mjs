@@ -363,6 +363,11 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         /Moonberg|Free for approved Explorer members\.|Join Explorer/,
         "Moonberg promotion must remain removed from the shared footer"
     );
+    assert.doesNotMatch(
+        migrationShell,
+        /footerNavItems|aria-label="Platform routes"|>Platform</,
+        "Platform column must remain removed from the shared footer"
+    );
     assertIncludes(migrationShell, [
         'aria-label="External channels"',
         '>Follow<',
