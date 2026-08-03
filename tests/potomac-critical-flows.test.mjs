@@ -367,6 +367,7 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         "<ConveningsMenu items={conveningNavItems} />",
         "onMouseEnter={() => setOpen(true)}",
         "onMouseLeave={() => setOpen(false)}",
+        "top-full w-64 -translate-x-1/2 pt-5",
         "onMouseDown={(event) => event.preventDefault()}",
         "group-hover:visible",
         'event.key === "Escape"',
@@ -377,6 +378,11 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         migrationShell,
         /<details className="group relative">[\s\S]*?<summary[^>]*>[\s\S]*?Convenings/,
         "desktop Convenings navigation must not persist through a details toggle"
+    );
+    assert.doesNotMatch(
+        conveningsMenu,
+        /top-full mt-5/,
+        "Convenings dropdown must not have a non-hoverable margin gap"
     );
     assertIncludes(routeScaffold, [
         'primaryHref.startsWith("/api/")',

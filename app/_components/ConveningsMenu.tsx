@@ -44,26 +44,30 @@ export function ConveningsMenu({
                 Convenings
             </button>
             <div
-                id="convenings-menu"
-                role="menu"
-                aria-hidden={!open}
-                className={`absolute left-1/2 top-full mt-5 w-64 -translate-x-1/2 border border-cabeus-line bg-cabeus-paper p-2 shadow-xl transition duration-150 ${
+                className={`absolute left-1/2 top-full w-64 -translate-x-1/2 pt-5 transition duration-150 ${
                     open
                         ? "visible translate-y-0 opacity-100"
                         : "invisible -translate-y-1 pointer-events-none opacity-0 group-hover:visible group-hover:translate-y-0 group-hover:pointer-events-auto group-hover:opacity-100"
                 }`}
             >
-                {items.map((item) => (
-                    <Link
-                        key={item.href}
-                        href={item.href}
-                        role="menuitem"
-                        onClick={() => setOpen(false)}
-                        className="block border-b border-cabeus-line px-3 py-3 font-sans text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink last:border-b-0 hover:bg-cabeus-smoke"
-                    >
-                        {item.label}
-                    </Link>
-                ))}
+                <div
+                    id="convenings-menu"
+                    role="menu"
+                    aria-hidden={!open}
+                    className="border border-cabeus-line bg-cabeus-paper p-2 shadow-xl"
+                >
+                    {items.map((item) => (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            role="menuitem"
+                            onClick={() => setOpen(false)}
+                            className="block border-b border-cabeus-line px-3 py-3 font-sans text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink last:border-b-0 hover:bg-cabeus-smoke"
+                        >
+                            {item.label}
+                        </Link>
+                    ))}
+                </div>
             </div>
         </div>
     );
