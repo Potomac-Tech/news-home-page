@@ -946,7 +946,8 @@ test("upgrade handoff preserves premium context and separates Scout checkout fro
     const checkoutRoute = read("app/api/stripe/scout-checkout/route.ts");
     const checkoutAnalytics = read("app/_components/CheckoutAnalytics.tsx");
     const meridianForm = read("app/command/CommandInterestForm.tsx");
-    const premiumLinks = [read("app/page.tsx"), read("app/companies/page.tsx"), read("app/companies/[slug]/page.tsx"), read("app/news/[slug]/page.tsx")].join("\n");
+    const homepage = read("app/page.tsx");
+    const premiumLinks = [read("app/companies/page.tsx"), read("app/companies/[slug]/page.tsx"), read("app/news/[slug]/page.tsx")].join("\n");
 
     assertIncludes(upgrade + upgradeAnalytics + checkout + checkoutRoute + checkoutAnalytics + meridianForm, [
         "tier?: string",
@@ -975,7 +976,8 @@ test("upgrade handoff preserves premium context and separates Scout checkout fro
         "meridian_email_queued",
         "return_to_content",
     ], "premium upgrade handoff");
-    assertIncludes(premiumLinks, ["source=homepage", "source=companies", "source=company-profile", "source=article", "content=", "object=", "next="], "premium CTA context");
+    assertIncludes(premiumLinks, ["source=companies", "source=company-profile", "source=article", "content=", "object=", "next="], "premium CTA context");
+    assert.doesNotMatch(homepage, /source=homepage&content=membership/, "hidden homepage tier cards must not retain upgrade links");
     assert.doesNotMatch(
         upgrade,
         /mailto:|invoice|payment-provider/i,
@@ -1377,7 +1379,6 @@ test("homepage carousel UI rotates accessibly and fails closed without approved 
         'ctaLabel: "Full story"',
         "<HomepageCarousel slides={carouselSlides} />",
         "News feed temporarily unavailable",
-        'aria-label="Lunar economy activity"',
     ], "homepage carousel integration");
     assert.doesNotMatch(homepage, /Brand system active/);
 });

@@ -6,15 +6,10 @@ import {
 } from "./_data/homepage";
 import { allowLocalContentFallbacks } from "./_data/contentFallbacks";
 import { loadPublicTickerItems } from "./_data/marketQuotes";
-import { SponsorUnit } from "./_components/SponsorUnit";
 import { HomepageCarousel } from "./_components/HomepageCarousel";
 import { ApolloMoonBackdrop } from "./_components/ApolloMoonBackdrop";
 import { LunarTimeClock } from "./_components/LunarTimeClock";
 import { StockTicker } from "./_components/StockTicker";
-import {
-    loadSponsorUnits,
-    sponsorPlacementKeys,
-} from "./_data/sponsorAds";
 import { potomacBrand } from "./_data/brand";
 import {
     absoluteSiteUrl,
@@ -31,7 +26,6 @@ import {
     loadHomepageCarousel,
     type HomepageCarouselSlide,
 } from "./_data/homepageCarousel";
-import { loadHomepageLaunchSummary, type HomepageLaunchSummary } from "./_data/homepageLaunchSummary";
 
 export const dynamic = "force-dynamic";
 
@@ -67,33 +61,6 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "2-digit",
 });
-
-const membershipTiers = [
-    {
-        tier: tierConfig.explorer.publicName,
-        price: tierConfig.explorer.price,
-        detail: "Free default membership for verified readers who complete their profile.",
-        features: ["Public-story full bodies", "Community access", "Tracker previews"],
-        href: "/request-access",
-        cta: "Start free",
-    },
-    {
-        tier: tierConfig.scout.publicName,
-        price: `${tierConfig.scout.price}/user/year`,
-        detail: "Paid professional intelligence for deeper lunar market workflows.",
-        features: ["Everything in Explorer", "Exports and alerts", "Advanced dashboards"],
-        href: "/upgrade?tier=scout&source=homepage&content=membership&object=scout&next=%2Fmember&campaign=homepage-tiers",
-        cta: "Upgrade",
-    },
-    {
-        tier: tierConfig.enterprise.publicName,
-        price: tierConfig.enterprise.price,
-        detail: "Organization-level intelligence through manual review and contract discussion.",
-        features: ["Everything in Scout", "Private briefings", "Team access"],
-        href: "/upgrade?tier=meridian&source=homepage&content=membership&object=meridian&next=%2Fmember&campaign=homepage-tiers",
-        cta: "Discuss access",
-    },
-];
 
 function cleanSnippet(value: string | null | undefined) {
     if (!value) {
@@ -293,33 +260,19 @@ function StoryCard({ story }: { story: HomeStory }) {
 }
 
 export default async function HomePage() {
-    const [stories, sponsorUnits, tickerItems] = await Promise.all([
+    const [stories, tickerItems] = await Promise.all([
         getHomepageStories(),
-        loadSponsorUnits([
-            sponsorPlacementKeys.homepageLeadRail,
-            sponsorPlacementKeys.marketModuleBand,
-        ]),
         loadPublicTickerItems(10),
     ]);
     const featuredStory = stories[0];
     const latestStories = stories.slice(1);
     let carouselSlides: HomepageCarouselSlide[] = [];
-    let launchSummary: HomepageLaunchSummary = { reviewedCount: 0, lunarCount: 0, freshnessAt: null, weekStart: "", timeZone: "UTC" };
-    let launchHref = "/request-access?next=%2Ftracker%2Flaunches";
-    let launchCta = "Request access";
     if (hasPotomacSupabasePublicConfig()) {
         try {
             const supabase = await createClient();
             const gate = await getProfileGateContext({ supabase, nextPath: "/" });
             const carouselViewer = await loadCarouselViewer(supabase, gate.state, gate.userId);
             carouselSlides = await loadHomepageCarousel(supabase, carouselViewer);
-            const timeZone = gate.state === "ready" ? gate.profile.timezone : "UTC";
-            launchSummary = await loadHomepageLaunchSummary(supabase, timeZone);
-            const trackerContext = `week=${encodeURIComponent(launchSummary.weekStart)}&timezone=${encodeURIComponent(timeZone)}`;
-            if (gate.state === "ready") { launchHref = `/tracker/launches?${trackerContext}`; launchCta = "Open tracker"; }
-            else if (gate.state === "email_unverified") { launchHref = `/account/verify?next=${encodeURIComponent(`/tracker/launches?${trackerContext}`)}`; launchCta = "Verify email"; }
-            else if (gate.state === "profile_incomplete") { launchHref = `/account/profile/complete?next=${encodeURIComponent(`/tracker/launches?${trackerContext}`)}`; launchCta = "Complete profile"; }
-            else { launchHref = `/request-access?next=${encodeURIComponent(`/tracker/launches?${trackerContext}`)}`; }
         } catch {
             carouselSlides = [];
         }
@@ -344,10 +297,6 @@ export default async function HomePage() {
             expiresAt: new Date(Date.now() + 14 * 86_400_000).toISOString(),
         }];
     }
-    const homepageSponsorUnits = [
-        sponsorUnits.get(sponsorPlacementKeys.homepageLeadRail)!,
-        sponsorUnits.get(sponsorPlacementKeys.marketModuleBand)!,
-    ];
     const headlineItemListJsonLd = {
         "@context": "https://schema.org",
         "@type": "ItemList",
@@ -383,6 +332,7 @@ export default async function HomePage() {
                     __html: jsonLdScript(headlineItemListJsonLd),
                 }}
             />
+            <StockTicker items={tickerItems} />
             <section className="relative min-h-[38rem] overflow-hidden border-b border-cabeus-line md:min-h-[45rem]">
                 <ApolloMoonBackdrop />
                 <div className="relative mx-auto flex min-h-[38rem] w-full max-w-[92rem] items-center px-5 py-16 md:min-h-[45rem] md:px-10">
@@ -406,7 +356,6 @@ export default async function HomePage() {
                 </div>
             </section>
 
-            <StockTicker items={tickerItems} />
             <LunarTimeClock initialUtcIso={new Date().toISOString()} />
 
             <section className="border-b border-cabeus-line">
@@ -440,25 +389,6 @@ export default async function HomePage() {
                 </div>
             </section>
 
-            <section aria-label="Lunar economy activity" className="border-b border-cabeus-line bg-cabeus-ink text-cabeus-paper">
-                <div className="mx-auto flex w-full max-w-[92rem] flex-col gap-4 px-5 py-5 md:px-10 lg:flex-row lg:items-center lg:justify-between">
-                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-                        <span className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-gold">Mission pulse</span>
-                        <span className="font-serif text-2xl text-cabeus-paper">{launchSummary.reviewedCount} reviewed</span>
-                        <span className="font-mono text-[0.62rem] uppercase text-cabeus-paper/75">{launchSummary.lunarCount} lunar / cislunar</span>
-                        <span className="font-mono text-[0.58rem] uppercase text-cabeus-paper/70">
-                            {launchSummary.freshnessAt
-                                ? `Updated ${new Date(launchSummary.freshnessAt).toLocaleString()}`
-                                : "No reviewed records in the current window"}
-                        </span>
-                    </div>
-                    <div className="flex gap-4">
-                        <Link prefetch={false} href={launchHref} className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-gold">{launchCta}</Link>
-                        <Link prefetch={false} href="/upgrade?tier=scout&source=homepage&content=launch-tools&next=%2Ftracker%2Flaunches" className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-paper/60">Values & exports</Link>
-                    </div>
-                </div>
-            </section>
-
             <section className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
                 <SectionHeading
                     eyebrow="The Cabeus Council"
@@ -466,45 +396,6 @@ export default async function HomePage() {
                     description="Choose the visibility and support that matches your operating tempo, from daily sector awareness to private briefings and team-level advisory access."
                     action={{ href: "/pricing", label: "Explore membership" }}
                 />
-                <div className="mt-10 grid border-y border-cabeus-line lg:grid-cols-3">
-                    {membershipTiers.map((tier) => (
-                        <article
-                            key={tier.tier}
-                            className="border-b border-cabeus-line py-8 lg:border-b-0 lg:border-l lg:px-8 lg:first:border-l-0 lg:first:pl-0"
-                        >
-                            <div className="flex items-baseline justify-between gap-4">
-                                <h3 className="font-serif text-4xl text-cabeus-ink">
-                                    {tier.tier}
-                                </h3>
-                                <p className="font-mono text-xs font-bold uppercase text-cabeus-muted">
-                                    {tier.price}
-                                </p>
-                            </div>
-                            <p className="mt-4 text-sm leading-6 text-cabeus-muted">
-                                {tier.detail}
-                            </p>
-                            <ul className="mt-6 space-y-2 text-sm leading-5 text-cabeus-ink/75">
-                                {tier.features.map((feature) => (
-                                    <li key={feature} className="flex gap-2">
-                                        <span className="mt-2 h-1 w-1 bg-cabeus-gold" />
-                                        <span>{feature}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                            <Link
-                                href={tier.href}
-                                className="brand-button brand-button-outline mt-7 inline-flex"
-                            >
-                                {tier.cta}
-                            </Link>
-                        </article>
-                    ))}
-                </div>
-                <div className="mt-12 grid gap-5 md:grid-cols-2">
-                    {homepageSponsorUnits.map((unit) => (
-                        <SponsorUnit key={unit.placementKey} unit={unit} />
-                    ))}
-                </div>
             </section>
         </div>
     );

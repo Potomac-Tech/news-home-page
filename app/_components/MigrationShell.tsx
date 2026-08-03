@@ -93,13 +93,13 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    className="font-sans text-[0.66rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold"
+                                    className="font-sans text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold"
                                 >
                                     {item.label}
                                 </Link>
                             ))}
                             <details className="group relative">
-                                <summary className="cursor-pointer list-none font-sans text-[0.66rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold">
+                                <summary className="cursor-pointer list-none font-sans text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold">
                                     Convenings
                                 </summary>
                                 <div className="absolute left-1/2 top-full mt-5 w-64 -translate-x-1/2 border border-cabeus-line bg-cabeus-paper p-2 shadow-xl">
@@ -116,7 +116,7 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                             </details>
                             <Link
                                 href={newsletterHref}
-                                className="font-sans text-[0.66rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold"
+                                className="font-sans text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold"
                             >
                                 Newsletter
                             </Link>
@@ -135,7 +135,7 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                                 href="/request-access"
                                 className="brand-button hidden md:inline-flex"
                             >
-                                Join Council
+                                Join Cabeus Council
                             </Link>
                         </div>
                     </div>
@@ -169,7 +169,7 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                                 href="/request-access"
                                 className="px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
                             >
-                                Join Council
+                                Join Cabeus Council
                             </Link>
                         </nav>
                     </details>

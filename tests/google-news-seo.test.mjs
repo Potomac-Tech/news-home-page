@@ -58,6 +58,7 @@ test("publisher transparency pages and disclosures are public and discoverable",
 
     assert.match(shell, /href: "\/authors", label: "Author biographies"/);
     assert.match(shell, /href: "\/contact", label: "Contact & standards"/);
+    assert.match(shell, /Join Cabeus Council/);
     assert.match(authors, /editorial_authors/);
     assert.match(authorProfile, /"@type": "Person"/);
     assert.match(authorProfile, /Articles by \{author\.display_name\}/);
@@ -85,6 +86,8 @@ test("homepage Moon hero uses a credited Apollo 11 photograph", () => {
     assert.match(brand, /editorialMoonHero: "\/apollo-11-full-moon-nasa\.jpg"/);
     assert.match(backdrop, /NASA \/ Apollo 11 \/ AS11-44-6667/);
     assert.match(backdrop, /Full Moon photographed by the Apollo 11 crew/);
+    assert.match(backdrop, /max-w-none/);
+    assert.match(backdrop, /sm:w-\[min\(84rem,88vw\)\]/);
     assert.match(homepage, /<ApolloMoonBackdrop \/>/);
     assert.match(archives, /<ApolloMoonBackdrop \/>/);
     assert.doesNotMatch(homepage, /Detailed Moon emerging from a warm ivory field/);
