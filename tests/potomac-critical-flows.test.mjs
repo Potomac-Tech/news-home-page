@@ -464,6 +464,8 @@ test("Space Industrialist Week uses the Artemis II Earthrise and approved event 
         "Join the Cabeus Council&apos;s effort",
         'imageUrl="/artemis-ii-earthrise-nasa.jpg"',
         "Crescent Earth photographed from Orion during NASA's Artemis II mission",
+        "hideSchedule",
+        "hideProgram",
     ], "Space Industrialist Week hero");
     assert.match(conveningPage, /introduction: ReactNode/);
     assert.doesNotMatch(

@@ -21,6 +21,8 @@ type ConveningPageProps = {
     statement: string;
     statementDetail: string;
     dark?: boolean;
+    hideSchedule?: boolean;
+    hideProgram?: boolean;
 };
 
 export function ConveningPage({
@@ -37,6 +39,8 @@ export function ConveningPage({
     statement,
     statementDetail,
     dark = false,
+    hideSchedule = false,
+    hideProgram = false,
 }: ConveningPageProps) {
     const foreground = dark ? "text-cabeus-paper" : "text-cabeus-ink";
     const muted = dark ? "text-cabeus-paper/65" : "text-cabeus-muted";
@@ -84,51 +88,55 @@ export function ConveningPage({
                 </div>
             </section>
 
-            <section className={`border-b ${rule}`}>
-                <div className={`mx-auto grid w-full max-w-[92rem] divide-y md:grid-cols-2 md:divide-x md:divide-y-0 ${rule}`}>
-                    <div className="px-5 py-6 md:px-10">
-                        <p className="brand-kicker">When</p>
-                        <p className={`mt-2 font-serif text-3xl ${foreground}`}>{dateLabel}</p>
+            {!hideSchedule ? (
+                <section className={`border-b ${rule}`}>
+                    <div className={`mx-auto grid w-full max-w-[92rem] divide-y md:grid-cols-2 md:divide-x md:divide-y-0 ${rule}`}>
+                        <div className="px-5 py-6 md:px-10">
+                            <p className="brand-kicker">When</p>
+                            <p className={`mt-2 font-serif text-3xl ${foreground}`}>{dateLabel}</p>
+                        </div>
+                        <div className="px-5 py-6 md:px-10">
+                            <p className="brand-kicker">Where</p>
+                            <p className={`mt-2 font-serif text-3xl ${foreground}`}>{locationLabel}</p>
+                        </div>
                     </div>
-                    <div className="px-5 py-6 md:px-10">
-                        <p className="brand-kicker">Where</p>
-                        <p className={`mt-2 font-serif text-3xl ${foreground}`}>{locationLabel}</p>
-                    </div>
-                </div>
-            </section>
+                </section>
+            ) : null}
 
-            <section className={`border-b ${rule}`}>
-                <div className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
-                    <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr]">
-                        <div>
-                            <p className="brand-kicker">The program</p>
-                            <h2 className={`mt-4 max-w-[10ch] font-serif text-5xl font-medium leading-[0.92] md:text-7xl ${foreground}`}>
-                                Built for people who move the industry.
-                            </h2>
-                        </div>
-                        <div className={`border-t ${rule}`}>
-                            {sections.map((section) => (
-                                <article
-                                    key={section.number}
-                                    className={`grid gap-4 border-b py-7 sm:grid-cols-[4rem_1fr] ${rule}`}
-                                >
-                                    <p className={`font-mono text-xs font-semibold ${dark ? "text-cabeus-gold" : "text-cabeus-bronze"}`}>
-                                        {section.number}
-                                    </p>
-                                    <div>
-                                        <h3 className={`font-serif text-3xl font-medium ${foreground}`}>
-                                            {section.title}
-                                        </h3>
-                                        <p className={`mt-3 max-w-2xl text-sm leading-6 ${muted}`}>
-                                            {section.description}
+            {!hideProgram ? (
+                <section className={`border-b ${rule}`}>
+                    <div className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
+                        <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr]">
+                            <div>
+                                <p className="brand-kicker">The program</p>
+                                <h2 className={`mt-4 max-w-[10ch] font-serif text-5xl font-medium leading-[0.92] md:text-7xl ${foreground}`}>
+                                    Built for people who move the industry.
+                                </h2>
+                            </div>
+                            <div className={`border-t ${rule}`}>
+                                {sections.map((section) => (
+                                    <article
+                                        key={section.number}
+                                        className={`grid gap-4 border-b py-7 sm:grid-cols-[4rem_1fr] ${rule}`}
+                                    >
+                                        <p className={`font-mono text-xs font-semibold ${dark ? "text-cabeus-gold" : "text-cabeus-bronze"}`}>
+                                            {section.number}
                                         </p>
-                                    </div>
-                                </article>
-                            ))}
+                                        <div>
+                                            <h3 className={`font-serif text-3xl font-medium ${foreground}`}>
+                                                {section.title}
+                                            </h3>
+                                            <p className={`mt-3 max-w-2xl text-sm leading-6 ${muted}`}>
+                                                {section.description}
+                                            </p>
+                                        </div>
+                                    </article>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            ) : null}
 
             <section className={dark ? "bg-cabeus-paper text-cabeus-ink" : "bg-cabeus-ink text-cabeus-paper"}>
                 <div className="mx-auto grid w-full max-w-[92rem] gap-10 px-5 py-16 md:px-10 md:py-24 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">

@@ -54,6 +54,8 @@ export default function SpaceIndustrialistWeekPage() {
             ]}
             statement="One week. The people who are building what comes next."
             statementDetail="Programming and participation are curated. Request an invitation to receive confirmed agenda, venue, and registration information as it is released."
+            hideSchedule
+            hideProgram
         />
     );
 }
