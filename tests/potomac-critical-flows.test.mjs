@@ -457,6 +457,11 @@ test("Space Investment Forum reuses the Bridenstine story image and dark Quantum
         /The program|A consequential gathering/,
         "static program copy must be replaced by tagged forum coverage"
     );
+    assert.match(
+        forumPage,
+        /id="forum-coverage"[\s\S]{0,300}Forum coverage/,
+        "the Forum coverage CTA must land on the tagged article feed"
+    );
 });
 
 test("production tracker ingestion is authenticated, scheduled, cited, and review-gated", () => {

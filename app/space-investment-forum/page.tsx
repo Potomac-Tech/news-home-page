@@ -90,7 +90,7 @@ export default async function SpaceInvestmentForumPage() {
                 </div>
             </section>
 
-            <section id="forum-coverage" className="scroll-mt-24 border-b border-cabeus-line">
+            <section className="border-b border-cabeus-line">
                 <div className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
                     <p className="brand-kicker">Keynoted by</p>
                     <div className="mt-6 grid border-y border-cabeus-line md:grid-cols-2">
@@ -114,7 +114,7 @@ export default async function SpaceInvestmentForumPage() {
                 </div>
             </section>
 
-            <section className="border-b border-cabeus-line">
+            <section id="forum-coverage" className="scroll-mt-24 border-b border-cabeus-line">
                 <div className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
                     <p className="brand-kicker">Forum coverage</p>
                     <h2 className="mt-4 max-w-5xl font-serif text-5xl leading-[0.94] md:text-7xl">
