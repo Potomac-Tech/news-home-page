@@ -275,15 +275,16 @@ test("Intelligence page hides the archived Terminal preview", { timeout: 60000 }
     try {
         await page.goto(`${baseUrl}/terminal`, { waitUntil: "domcontentloaded" });
 
-        await assertVisibleText(page, "Intelligence for decisions that move the industry");
-        await assertVisibleText(page, "Integration in progress");
-        await assertVisibleText(page, "Open Nexus");
+        await assertVisibleText(page, "The Moon is an emerging market.");
+        await assertVisibleText(page, "Coming soon");
+        assert.equal(await page.getByRole("link", { name: "Open Nexus" }).count(), 0);
+        assert.equal(await page.locator('img[src="/cabeus-lunar-industrial-hero.png"]').count(), 0);
         assert.equal(await page.getByText("Andromeda program comparison").count(), 0);
         assert.equal(await page.getByText("Intelligence modules").count(), 0);
 
         await page.goto(`${baseUrl}/terminal/diligence`, { waitUntil: "domcontentloaded" });
         await page.waitForURL(/\/terminal$/);
-        await assertVisibleText(page, "Integration in progress");
+        await assertVisibleText(page, "Coming soon");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
         await closePage(page);

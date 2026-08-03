@@ -1419,12 +1419,11 @@ test("Cabeus Terminal preview is archived and removed from live routes", () => {
         "TerminalWorkspace",
         'redirect("/terminal")',
         'data-terminal-integration-state="archived"',
-        "Integration in progress",
-        'href="/nexus"',
-        "Open Nexus",
-        "future integrated release",
+        "Coming soon",
+        "The Moon is an emerging market.",
         "complete the Terminal data and service integration review",
     ], "live Intelligence route and restoration note");
+    assert.doesNotMatch(workspace, /cabeus-lunar-industrial-hero|href="\/nexus"|Open Nexus/);
     assert.doesNotMatch(
         rootPage + modulePage + workspace,
         /Andromeda program comparison|14 companies|Intelligence modules|Terminal capabilities|\/terminal\/contracts/
