@@ -333,9 +333,9 @@ export default async function HomePage() {
                 }}
             />
             <StockTicker items={tickerItems} />
-            <section className="relative min-h-[38rem] overflow-hidden border-b border-cabeus-line md:min-h-[45rem]">
+            <section className="relative min-h-[34rem] overflow-hidden border-b border-cabeus-line md:min-h-[40rem]">
                 <ApolloMoonBackdrop />
-                <div className="relative mx-auto flex min-h-[38rem] w-full max-w-[92rem] items-center px-5 py-16 md:min-h-[45rem] md:px-10">
+                <div className="relative mx-auto flex min-h-[34rem] w-full max-w-[92rem] items-center px-5 py-12 md:min-h-[40rem] md:px-10">
                     <div className="max-w-[42rem]">
                         <p className="brand-kicker">Cabeus Explorer</p>
                         <h1 className="mt-6 max-w-[11ch] text-balance font-serif text-[clamp(3.75rem,7.25vw,7.75rem)] font-medium leading-[0.9] text-cabeus-ink">
@@ -359,12 +359,12 @@ export default async function HomePage() {
             <LunarTimeClock initialUtcIso={new Date().toISOString()} />
 
             <section className="border-b border-cabeus-line">
-                <div className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
+                <div className="mx-auto w-full max-w-[92rem] px-5 py-10 md:px-10 md:py-14">
                     <div>
                         {carouselSlides.length ? (
                             <HomepageCarousel slides={carouselSlides} />
                         ) : (
-                            <section className="flex min-h-[26rem] items-center border-b border-cabeus-line py-16">
+                            <section className="flex min-h-[20rem] items-center border-b border-cabeus-line py-10">
                                 <div>
                                     <p className="brand-kicker">Cabeus newsroom</p>
                                     <h3 className="mt-4 font-serif text-5xl text-cabeus-ink">
@@ -389,7 +389,7 @@ export default async function HomePage() {
                 </div>
             </section>
 
-            <section className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
+            <section className="mx-auto w-full max-w-[92rem] px-5 py-10 md:px-10 md:py-14">
                 <SectionHeading
                     eyebrow="The Cabeus Council"
                     title="Intelligence built for your advantage."

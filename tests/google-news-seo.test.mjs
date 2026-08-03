@@ -87,8 +87,10 @@ test("homepage Moon hero uses a credited Apollo 11 photograph", () => {
     assert.match(backdrop, /NASA \/ Apollo 11 \/ AS11-44-6667/);
     assert.match(backdrop, /Full Moon photographed by the Apollo 11 crew/);
     assert.match(backdrop, /max-w-none/);
-    assert.match(backdrop, /sm:w-\[min\(84rem,88vw\)\]/);
+    assert.match(backdrop, /sm:w-\[min\(96rem,100vw\)\]/);
     assert.match(homepage, /<ApolloMoonBackdrop \/>/);
+    assert.match(homepage, /md:min-h-\[40rem\]/);
+    assert.doesNotMatch(homepage, /md:py-24/);
     assert.match(archives, /<ApolloMoonBackdrop \/>/);
     assert.doesNotMatch(homepage, /Detailed Moon emerging from a warm ivory field/);
 });

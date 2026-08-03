@@ -7,7 +7,7 @@ export function ApolloMoonBackdrop() {
                 <img
                     src={potomacBrand.assets.editorialMoonHero}
                     alt="Full Moon photographed by the Apollo 11 crew during the trans-Earth journey home"
-                    className="absolute right-0 top-1/2 h-auto w-[44rem] max-w-none translate-x-1/2 -translate-y-1/2 opacity-25 sm:w-[min(84rem,88vw)] sm:opacity-100"
+                    className="absolute right-0 top-1/2 h-auto w-[52rem] max-w-none translate-x-1/2 -translate-y-1/2 opacity-25 sm:w-[min(96rem,100vw)] sm:opacity-100"
                     style={{ clipPath: "circle(34.7% at 51% 45%)" }}
                     fetchPriority="high"
                 />
