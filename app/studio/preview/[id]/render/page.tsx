@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireEditorialStaff } from "../../../../../lib/auth/editorial";
 import { renderArticleHtml } from "../../../../../lib/editorial/rich-text";
-import { EditorialVideo } from "../../../../_components/EditorialVideo";
 
 export default async function PreviewRenderPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -22,10 +21,6 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
     ]);
     const date = article.scheduled_for ?? article.published_at ?? new Date().toISOString();
     const bodyHtml = String(body?.body_markdown ?? "");
-    const inlineMediaIds = new Set(
-        Array.from(bodyHtml.matchAll(/data-media-id="([^"]+)"/g))
-            .map((match) => match[1])
-    );
     const heroAsset = article.hero_image_url
         ? media?.find((asset) => asset.public_url === article.hero_image_url)
         : media?.find((asset) => asset.media_type === "image");
@@ -77,18 +72,6 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
                         }}
                     />
                 </section>
-                {(media ?? []).filter((asset) =>
-                    asset.media_type === "video" && !inlineMediaIds.has(asset.id)
-                ).map((asset) => (
-                    <figure key={asset.id} className="border border-cabeus-line p-3">
-                        <EditorialVideo
-                            publicUrl={asset.public_url}
-                            hostingProvider={asset.hosting_provider as "supabase" | "youtube"}
-                            title={asset.alt_text ?? "Article video"}
-                        />
-                        {asset.caption ? <figcaption className="mt-3 text-sm text-cabeus-muted">{asset.caption}</figcaption> : null}
-                    </figure>
-                ))}
             </div>
         </article>
     );

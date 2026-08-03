@@ -96,8 +96,8 @@ test("studio accepts and renders common article video formats", () => {
     }
     assert.match(nextConfig, /bodySizeLimit: "100mb"/);
     assert.match(studioUi, /aria-label=\{altText \|\| "Article video"\}/);
-    assert.match(previewRender, /<EditorialVideo/);
-    assert.match(articlePage, /<EditorialVideo/);
+    assert.doesNotMatch(previewRender, /!inlineMediaIds\.has/);
+    assert.doesNotMatch(articlePage, /!inlineMediaIds\.has/);
     assert.match(editorialVideo, /aria-label=\{title\}/);
     assert.match(editorialVideo, /playsInline/);
 });
@@ -288,6 +288,14 @@ test("studio preserves headline case and separates story paragraphs", () => {
     assert.doesNotMatch(studioUi, /onInput=\{\(event\) => setBodyHtml/);
     assert.doesNotMatch(studioUi, /Add section|\+ Paragraph|Move section|Remove section/);
     assert.match(studioUi, /application\/x-cabeus-media/);
+    assert.match(studioUi, /event\.dataTransfer\.files/);
+    assert.match(studioUi, /file\.type\.startsWith\("image\/"\)/);
+    assert.match(studioUi, /file\.type\.startsWith\("video\/"\)/);
+    assert.match(studioUi, /placeMediaAssets\(result\.uploadedMedia, "cursor"\)/);
+    assert.match(studioUi, /formData\.set\("body_markdown", bodyHtmlRef\.current\)/);
+    assert.match(studioUi, /saveStory\(new FormData\(form\), true\)/);
+    assert.match(studioUi, /router\.push\(`\/studio\/preview\/\$\{result\.articleId\}`\)/);
+    assert.match(studioUi, /commitBodyFromEditor/);
     assert.match(studioUi, /Use as thumbnail/);
     assert.match(studioUi, /aria-label="Font family"/);
     assert.match(studioUi, /aria-label="Font size"/);

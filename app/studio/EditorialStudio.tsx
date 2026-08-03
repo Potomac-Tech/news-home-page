@@ -329,6 +329,7 @@ export function EditorialStudio({
     const mediaInputRef = useRef<HTMLInputElement>(null);
     const bodyRef = useRef<HTMLDivElement>(null);
     const bodyInputRef = useRef<HTMLInputElement>(null);
+    const formRef = useRef<HTMLFormElement>(null);
     const savedSelectionRef = useRef<Range | null>(null);
     const insertUploadedMediaRef = useRef(false);
     const formId = "editorial-studio-story-form";
@@ -349,6 +350,11 @@ export function EditorialStudio({
         const nextBody = bodyRef.current?.innerHTML ?? "";
         bodyHtmlRef.current = nextBody;
         if (bodyInputRef.current) bodyInputRef.current.value = nextBody;
+    }
+
+    function commitBodyFromEditor() {
+        syncBodyFromEditor();
+        setBodyHtml(bodyHtmlRef.current);
     }
 
     function rememberEditorSelection() {
@@ -395,33 +401,34 @@ export function EditorialStudio({
         }
     }
 
-    function placeMedia(
-        asset: StudioArticle["mediaAssets"][number],
+    function placeMediaAssets(
+        assets: StudioArticle["mediaAssets"],
         placement: "start" | "cursor" | "end"
     ) {
         const editor = bodyRef.current;
-        if (!editor) return;
+        if (!editor || !assets.length) return;
 
         const range = savedSelectionRef.current?.cloneRange() ?? null;
-        removeExistingMediaEmbed(asset.id);
+        assets.forEach((asset) => removeExistingMediaEmbed(asset.id));
+        const markup = assets.map(mediaMarkup).join("");
         editor.focus();
 
         if (placement === "start") {
-            editor.insertAdjacentHTML("afterbegin", mediaMarkup(asset));
+            editor.insertAdjacentHTML("afterbegin", markup);
         } else if (placement === "end") {
-            editor.insertAdjacentHTML("beforeend", mediaMarkup(asset));
+            editor.insertAdjacentHTML("beforeend", markup);
         } else {
             const selection = window.getSelection();
             if (selection && range && editor.contains(range.commonAncestorContainer)) {
                 selection.removeAllRanges();
                 selection.addRange(range);
-                document.execCommand("insertHTML", false, mediaMarkup(asset));
+                document.execCommand("insertHTML", false, markup);
             } else {
-                editor.insertAdjacentHTML("beforeend", mediaMarkup(asset));
+                editor.insertAdjacentHTML("beforeend", markup);
             }
         }
 
-        syncBodyFromEditor();
+        commitBodyFromEditor();
         rememberEditorSelection();
         const placementLabel = placement === "start"
             ? "at the beginning"
@@ -431,22 +438,39 @@ export function EditorialStudio({
         setSaveStatus(`Media placed ${placementLabel}. Save the draft to keep its position.`);
     }
 
+    function placeMedia(
+        asset: StudioArticle["mediaAssets"][number],
+        placement: "start" | "cursor" | "end"
+    ) {
+        placeMediaAssets([asset], placement);
+    }
+
     function insertMediaAtCursor(asset: StudioArticle["mediaAssets"][number]) {
         placeMedia(asset, "cursor");
     }
 
-    function handleEditorDrop(event: DragEvent<HTMLDivElement>) {
+    async function handleEditorDrop(event: DragEvent<HTMLDivElement>) {
         const assetId = event.dataTransfer.getData("application/x-cabeus-media");
-        if (!assetId) return;
-        const asset = draft.mediaAssets.find((item) => item.id === assetId);
-        if (!asset) return;
+        const droppedFiles = Array.from(event.dataTransfer.files).filter(
+            (file) => file.type.startsWith("image/") || file.type.startsWith("video/")
+        );
+        if (!assetId && !droppedFiles.length) return;
         event.preventDefault();
         const caretRange = document.caretRangeFromPoint?.(
             event.clientX,
             event.clientY
         );
-        if (caretRange) savedSelectionRef.current = caretRange;
-        insertMediaAtCursor(asset);
+        if (caretRange && bodyRef.current?.contains(caretRange.commonAncestorContainer)) {
+            savedSelectionRef.current = caretRange.cloneRange();
+        }
+
+        if (droppedFiles.length) {
+            await uploadMediaImmediately(droppedFiles, true);
+            return;
+        }
+
+        const asset = draft.mediaAssets.find((item) => item.id === assetId);
+        if (asset) insertMediaAtCursor(asset);
     }
 
     function handlePlainTextPaste(event: ClipboardEvent<HTMLDivElement>) {
@@ -489,10 +513,12 @@ export function EditorialStudio({
         setSelectedMediaNames([]);
     }
 
-    async function saveStory(formData: FormData) {
+    async function saveStory(formData: FormData, previewAfterSave = false) {
         setIsSaving(true);
         setSaveStatus("Saving...");
         try {
+            syncBodyFromEditor();
+            formData.set("body_markdown", bodyHtmlRef.current);
             const result = await action(formData);
             setSelectedId(result.articleId);
             setDraft((current) => ({
@@ -514,12 +540,22 @@ export function EditorialStudio({
                     ? `Draft saved with ${result.uploadedMedia.length} new media file${result.uploadedMedia.length === 1 ? "" : "s"}.`
                     : "Draft saved."
             );
-            router.refresh();
+            if (previewAfterSave) {
+                router.push(`/studio/preview/${result.articleId}`);
+            } else {
+                router.refresh();
+            }
         } catch (error) {
             setSaveStatus(error instanceof Error ? error.message : "Draft could not be saved.");
         } finally {
             setIsSaving(false);
         }
+    }
+
+    async function saveAndPreview() {
+        const form = formRef.current;
+        if (!form || !form.reportValidity()) return;
+        await saveStory(new FormData(form), true);
     }
 
     async function removeMedia(assetId: string) {
@@ -585,7 +621,10 @@ export function EditorialStudio({
         }
     }
 
-    async function uploadMediaImmediately(files: FileList | null) {
+    async function uploadMediaImmediately(
+        files: FileList | File[] | null,
+        insertAtSelection = insertUploadedMediaRef.current
+    ) {
         const selectedFiles = Array.from(files ?? []);
         setSelectedMediaNames(selectedFiles.map((file) => file.name));
         if (!selectedFiles.length) return;
@@ -613,8 +652,8 @@ export function EditorialStudio({
                     || "",
                 mediaAssets: [...current.mediaAssets, ...result.uploadedMedia],
             }));
-            if (insertUploadedMediaRef.current && result.uploadedMedia[0]) {
-                insertMediaAtCursor(result.uploadedMedia[0]);
+            if (insertAtSelection && result.uploadedMedia.length) {
+                placeMediaAssets(result.uploadedMedia, "cursor");
             } else {
                 setSaveStatus(
                     `${result.uploadedMedia.length} media file${result.uploadedMedia.length === 1 ? "" : "s"} uploaded.`
@@ -854,7 +893,7 @@ export function EditorialStudio({
                     <div className="flex items-center gap-3">
                         <a href="/studio?new=1" className="border border-cabeus-line px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-cabeus-ink hover:border-cabeus-gold">New story</a>
                         {draft.id !== "new" ? (
-                            <a href={`/studio/preview/${draft.id}`} className="border border-cabeus-line px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-cabeus-ink hover:border-cabeus-gold">Preview</a>
+                            <button disabled={isSaving} type="button" onClick={() => void saveAndPreview()} className="border border-cabeus-line px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-cabeus-ink hover:border-cabeus-gold disabled:cursor-wait disabled:opacity-55">Preview</button>
                         ) : null}
                         <button disabled={isSaving} type="submit" form={formId} className="bg-cabeus-ink px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-cabeus-paper disabled:cursor-wait disabled:opacity-55">{draft.id === "new" ? "Save draft" : "Continue"}</button>
                     </div>
@@ -969,7 +1008,7 @@ export function EditorialStudio({
                 </aside>
 
                 <main className="mx-auto min-w-0 max-w-[52rem] px-5 pb-24 pt-14 md:px-10">
-                    <form id={formId} action={saveStory}>
+                    <form ref={formRef} id={formId} action={saveStory}>
                         <input type="hidden" name="studio_context" value="studio" />
                         {draft.id !== "new" ? <input type="hidden" name="article_id" value={draft.id} /> : null}
                         <input
@@ -1234,9 +1273,12 @@ export function EditorialStudio({
                                     onMouseUp={rememberEditorSelection}
                                     onKeyUp={rememberEditorSelection}
                                     onFocus={rememberEditorSelection}
-                                    onDrop={handleEditorDrop}
+                                    onDrop={(event) => void handleEditorDrop(event)}
                                     onDragOver={(event) => {
-                                        if (event.dataTransfer.types.includes("application/x-cabeus-media")) {
+                                        if (
+                                            event.dataTransfer.types.includes("application/x-cabeus-media")
+                                            || event.dataTransfer.types.includes("Files")
+                                        ) {
                                             event.preventDefault();
                                             event.dataTransfer.dropEffect = "copy";
                                         }

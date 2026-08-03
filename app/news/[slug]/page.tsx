@@ -28,7 +28,6 @@ import {
 } from "../../_data/sponsorAds";
 import { publicTierName, tierConfig } from "../../_data/tiers";
 import { renderArticleHtml } from "../../../lib/editorial/rich-text";
-import { EditorialVideo } from "../../_components/EditorialVideo";
 
 export const dynamic = "force-dynamic";
 
@@ -437,10 +436,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     }
 
     const { article, fullBody, access, mediaAssets } = loaded;
-    const inlineMediaIds = new Set(
-        Array.from((fullBody ?? "").matchAll(/data-media-id="([^"]+)"/g))
-            .map((match) => match[1])
-    );
     const articleSponsorUnit = sponsorUnits.get(
         sponsorPlacementKeys.articleSidebar
     )!;
@@ -583,24 +578,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             </div>
                         </>
                     )}
-                    {mediaAssets.some((asset) =>
-                        asset.mediaType === "video" && !inlineMediaIds.has(asset.id)
-                    ) ? (
-                        <section className="mt-10 space-y-5">
-                            {mediaAssets.filter((asset) =>
-                                asset.mediaType === "video" && !inlineMediaIds.has(asset.id)
-                            ).map((asset) => (
-                                <figure key={asset.id} className="border border-cabeus-line p-4">
-                                    <EditorialVideo
-                                        publicUrl={asset.publicUrl}
-                                        hostingProvider={asset.hostingProvider}
-                                        title={asset.altText || "Article video"}
-                                    />
-                                    {asset.caption ? <figcaption className="mt-3 text-sm text-cabeus-muted">{asset.caption}</figcaption> : null}
-                                </figure>
-                            ))}
-                        </section>
-                    ) : null}
                 </main>
 
                 <aside className="space-y-6">
