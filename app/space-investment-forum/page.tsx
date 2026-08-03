@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EditorialArchiveList } from "../_components/EditorialArchiveList";
+import { loadEditorialArchive } from "../_data/editorialArchive";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
     title: "Space Investment Forum",
@@ -7,27 +11,6 @@ export const metadata: Metadata = {
         "A Cabeus Explorer forum on capital, industry, and strategic competition in the space economy.",
     alternates: { canonical: "/space-investment-forum" },
 };
-
-const program = [
-    {
-        number: "01",
-        title: "American strength in space",
-        description:
-            "A featured conversation on capital, industry, and strategic competition across the civil, commercial, and national-security space communities.",
-    },
-    {
-        number: "02",
-        title: "Infrastructure and investment",
-        description:
-            "Discussion spanning Artemis, integrated space defense, lunar and cislunar infrastructure, workforce, and capital allocation.",
-    },
-    {
-        number: "03",
-        title: "Intelligence for decision-makers",
-        description:
-            "A direct examination of how trusted data and independent analysis improve investment, policy, and mission decisions.",
-    },
-] as const;
 
 const partnerWordmarks = [
     { name: "Meet the Future", src: "/partner-mtf.png", dark: true },
@@ -42,7 +25,9 @@ const keynoteImage = {
     alt: "Former NASA administrator Jim Bridenstine keynotes the Cabeus Explorer Space Investment Forum.",
 } as const;
 
-export default function SpaceInvestmentForumPage() {
+export default async function SpaceInvestmentForumPage() {
+    const forumCoverage = await loadEditorialArchive("space-investment-forum");
+
     return (
         <div className="bg-cabeus-paper text-cabeus-ink">
             <section className="border-b border-cabeus-line">
@@ -59,7 +44,7 @@ export default function SpaceInvestmentForumPage() {
                             space.
                         </p>
                         <div className="mt-8 flex flex-wrap gap-3">
-                            <Link href="/archives?section=space-investment-forum" className="brand-button inline-flex">
+                            <Link href="#forum-coverage" className="brand-button inline-flex">
                                 Read forum coverage
                             </Link>
                             <Link href="/contact" className="brand-button brand-button-outline inline-flex">
@@ -105,7 +90,7 @@ export default function SpaceInvestmentForumPage() {
                 </div>
             </section>
 
-            <section className="border-b border-cabeus-line">
+            <section id="forum-coverage" className="scroll-mt-24 border-b border-cabeus-line">
                 <div className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
                     <p className="brand-kicker">Keynoted by</p>
                     <div className="mt-6 grid border-y border-cabeus-line md:grid-cols-2">
@@ -130,31 +115,19 @@ export default function SpaceInvestmentForumPage() {
             </section>
 
             <section className="border-b border-cabeus-line">
-                <div className="mx-auto grid w-full max-w-[92rem] gap-12 px-5 py-16 md:px-10 md:py-24 lg:grid-cols-[0.72fr_1.28fr]">
-                    <div>
-                        <p className="brand-kicker">The program</p>
-                        <h2 className="mt-4 max-w-[10ch] font-serif text-5xl leading-[0.94] md:text-7xl">
-                            A consequential gathering.
-                        </h2>
-                    </div>
-                    <div className="border-t border-cabeus-line">
-                        {program.map((section) => (
-                            <article
-                                key={section.number}
-                                className="grid gap-4 border-b border-cabeus-line py-7 sm:grid-cols-[4rem_1fr]"
-                            >
-                                <p className="font-mono text-xs font-semibold text-cabeus-bronze">
-                                    {section.number}
-                                </p>
-                                <div>
-                                    <h3 className="font-serif text-3xl">{section.title}</h3>
-                                    <p className="mt-3 max-w-2xl text-sm leading-6 text-cabeus-muted">
-                                        {section.description}
-                                    </p>
-                                </div>
-                            </article>
-                        ))}
-                    </div>
+                <div className="mx-auto w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
+                    <p className="brand-kicker">Forum coverage</p>
+                    <h2 className="mt-4 max-w-5xl font-serif text-5xl leading-[0.94] md:text-7xl">
+                        Reporting from the Space Investment Forum.
+                    </h2>
+                    <p className="mt-5 max-w-3xl text-base leading-7 text-cabeus-muted">
+                        Published reporting and analysis from the gathering, ordered by publication date.
+                    </p>
+                    <EditorialArchiveList
+                        articles={forumCoverage}
+                        sectionLabel="Space Investment Forum"
+                        emptyTitle="Coverage awaiting reports"
+                    />
                 </div>
             </section>
 

@@ -446,7 +446,17 @@ test("Space Investment Forum reuses the Bridenstine story image and dark Quantum
         "Former NASA administrator Jim Bridenstine keynotes",
         'className="h-full max-h-[25rem] w-full object-contain object-center"',
         '{ name: "Quantum Space", src: "/partner-quantum-space.svg", dark: true }',
+        'loadEditorialArchive("space-investment-forum")',
+        "EditorialArchiveList",
+        "Forum coverage",
+        'href="#forum-coverage"',
+        'id="forum-coverage"',
     ], "Space Investment Forum keynote and partner presentation");
+    assert.doesNotMatch(
+        forumPage,
+        /The program|A consequential gathering/,
+        "static program copy must be replaced by tagged forum coverage"
+    );
 });
 
 test("production tracker ingestion is authenticated, scheduled, cited, and review-gated", () => {

@@ -21,6 +21,8 @@ const sectionTags = readFileSync("lib/editorial/section-tags.ts", "utf8");
 const sectionMigration = readFileSync("supabase/migrations/20260728135218_editorial_sections_and_carousel_positions.sql", "utf8");
 const newsPage = readFileSync("app/news/page.tsx", "utf8");
 const archivesPage = readFileSync("app/archives/page.tsx", "utf8");
+const editorialArchive = readFileSync("app/_data/editorialArchive.ts", "utf8");
+const editorialArchiveList = readFileSync("app/_components/EditorialArchiveList.tsx", "utf8");
 const carouselLoader = readFileSync("app/_data/homepageCarousel.ts", "utf8");
 const authorPage = readFileSync("app/authors/[slug]/page.tsx", "utf8");
 const authorsPage = readFileSync("app/authors/page.tsx", "utf8");
@@ -162,7 +164,7 @@ test("preview approval gates immediate and scheduled publication", () => {
 test("unnamed editorial-desk stories cannot reach public news surfaces", () => {
     const publicLoaders = [
         readFileSync("app/page.tsx", "utf8"),
-        archivesPage,
+        archivesPage + editorialArchive,
         readFileSync("app/news/[slug]/page.tsx", "utf8"),
         readFileSync("app/sitemap.ts", "utf8"),
         readFileSync("app/news-sitemap.xml/route.ts", "utf8"),
@@ -245,7 +247,9 @@ test("article sections and carousel positions are editor controlled", () => {
     assert.match(actions, /syncArticleSectionTags/);
     assert.match(studioPage, /editorial_article_tags/);
     assert.match(newsPage, /redirect\("\/"\)/);
-    assert.match(archivesPage, /editorial_article_tags/);
+    assert.match(archivesPage, /loadEditorialArchive/);
+    assert.match(editorialArchive, /editorial_article_tags/);
+    assert.match(editorialArchiveList, /articles\.map/);
     assert.match(archivesPage, /section=\$\{item\.slug\}/);
     assert.match(sectionMigration, /carousel_position between 1 and 5/);
     assert.match(sectionMigration, /set_editorial_article_carousel_position/);

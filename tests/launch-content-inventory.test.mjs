@@ -5,13 +5,14 @@ import test from "node:test";
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
 test("production content loaders do not substitute local launch content", async () => {
-    const [fallbackPolicy, homepage, events, datasets, archives, article] =
+    const [fallbackPolicy, homepage, events, datasets, archives, archiveLoader, article] =
         await Promise.all([
             read("app/_data/contentFallbacks.ts"),
             read("app/page.tsx"),
             read("app/events/page.tsx"),
             read("app/_data/datasets.ts"),
             read("app/archives/page.tsx"),
+            read("app/_data/editorialArchive.ts"),
             read("app/news/[slug]/page.tsx"),
         ]);
 
@@ -19,9 +20,10 @@ test("production content loaders do not substitute local launch content", async 
     assert.match(homepage, /allowLocalContentFallbacks\(\) \? fallbackStories : \[\]/);
     assert.match(events, /allowLocalContentFallbacks\(\) \? publicEventTeasers\(\) : \[\]/);
     assert.match(datasets, /allowLocalContentFallbacks\(\)[\s\S]*fallbackDatasetCatalogEntries[\s\S]*: \[\]/);
-    assert.match(archives, /\.eq\("status", "published"\)/);
-    assert.match(archives, /\.not\("primary_author_id", "is", null\)/);
-    assert.doesNotMatch(archives, /allowLocalContentFallbacks/);
+    assert.match(archives, /loadEditorialArchive/);
+    assert.match(archiveLoader, /\.eq\("status", "published"\)/);
+    assert.match(archiveLoader, /\.not\("primary_author_id", "is", null\)/);
+    assert.doesNotMatch(archiveLoader, /allowLocalContentFallbacks/);
     assert.match(article, /allowLocalContentFallbacks\(\)[\s\S]*findFallbackArticle/);
 });
 
