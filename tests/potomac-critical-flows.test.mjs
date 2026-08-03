@@ -352,8 +352,17 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         '{ href: "/pricing", label: "Council" }',
         'label: "Space Investment Forum"',
         'label: "Space Industrialist Week"',
-        "Newsletter",
     ], "primary publication navigation");
+    assert.doesNotMatch(
+        migrationShell,
+        /href=\{newsletterHref\}|>\s*Newsletter\s*</,
+        "Newsletter must remain hidden from desktop and mobile navigation"
+    );
+    assertIncludes(
+        read("app/newsletter/page.tsx"),
+        ['import { notFound } from "next/navigation"', "notFound();"],
+        "hidden Newsletter route"
+    );
     assertIncludes(migrationShell + conveningsMenu, [
         "<ConveningsMenu items={conveningNavItems} />",
         "onMouseEnter={() => setOpen(true)}",

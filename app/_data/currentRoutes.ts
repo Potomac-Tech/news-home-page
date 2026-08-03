@@ -30,11 +30,6 @@ export const currentRoutes = [
         note: "CMS-backed feed route.",
     },
     {
-        href: "/newsletter",
-        source: "app/newsletter/page.tsx",
-        note: "Moonberg with Kevin Cirilli membership benefit and Explorer application route.",
-    },
-    {
         href: "/space-industrialist-week",
         source: "app/space-industrialist-week/page.tsx",
         note: "Branded Space Industrialist Week program and invitation route.",

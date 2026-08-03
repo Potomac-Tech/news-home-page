@@ -42,8 +42,6 @@ const companyNavItems = [
     { href: "/legal/terms", label: "Terms" },
 ];
 
-const newsletterHref = "/newsletter";
-
 async function MemberAwareSearchPalette() {
     let profileGate = null;
     let commandEntries = fallbackCommandEntries.filter(
@@ -98,12 +96,6 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                                 </Link>
                             ))}
                             <ConveningsMenu items={conveningNavItems} />
-                            <Link
-                                href={newsletterHref}
-                                className="font-sans text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold"
-                            >
-                                Newsletter
-                            </Link>
                         </nav>
                         <div className="flex items-center justify-end gap-2">
                             <Suspense fallback={<SearchCommandPalette entries={publicCommandEntries} />}>
@@ -137,12 +129,6 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                                     {item.label}
                                 </Link>
                             ))}
-                            <Link
-                                href={newsletterHref}
-                                className="px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
-                            >
-                                Newsletter
-                            </Link>
                             <Link
                                 href="/request-access?tab=signin"
                                 className="border-t border-cabeus-line px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
@@ -218,8 +204,8 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                         <p className="mt-5 max-w-xs font-serif text-2xl leading-tight text-cabeus-ink">
                             Free for approved Explorer members.
                         </p>
-                        <Link href={newsletterHref} className="brand-button brand-button-outline mt-6 inline-flex">
-                            Get Moonberg
+                        <Link href="/request-access" className="brand-button brand-button-outline mt-6 inline-flex">
+                            Join Explorer
                         </Link>
                         <nav aria-label="External channels" className="mt-6 flex flex-wrap gap-4">
                         {externalChannels.map((channel) => (

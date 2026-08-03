@@ -1,14 +1,9 @@
-import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { ApplicationForm } from "../apply/ApplicationForm";
 
-export const metadata: Metadata = {
-    title: "Moonberg with Kevin Cirilli",
-    description:
-        "Moonberg with Kevin Cirilli is included free with approved Cabeus Explorer membership and delivered to the member signup email.",
-    alternates: { canonical: "/newsletter" },
-};
-
 export default function NewsletterPage() {
+    notFound();
+
     return (
         <div className="bg-cabeus-paper text-cabeus-ink">
             <section className="border-b border-cabeus-line">
