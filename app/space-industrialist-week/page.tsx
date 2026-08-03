@@ -1,22 +1,31 @@
 import type { Metadata } from "next";
 import { ConveningPage } from "../_components/ConveningPage";
-import { potomacBrand } from "../_data/brand";
 
 export const metadata: Metadata = {
     title: "Space Industrialist Week",
     description:
-        "A concentrated week for the people building the commercial, civil, and strategic infrastructure of the new space age.",
+        "One week uniting the space industrialists securing, building, and financing humanity's permanent presence on the Moon.",
     alternates: { canonical: "/space-industrialist-week" },
 };
 
 export default function SpaceIndustrialistWeekPage() {
     return (
         <ConveningPage
-            eyebrow="A Cabeus Explorer convening"
-            title="The Week for the People Building the Future in Orbit."
-            introduction="Space Industrialist Week brings together operators, investors, policymakers, and technical leaders for candid conversations about the systems, capital, and partnerships shaping the space and lunar economy."
-            imageUrl={potomacBrand.assets.industrialistWeekHero}
-            imageAlt="Space industry leaders gathered around a luminous lunar display"
+            eyebrow="Fall 2026 // Washington D.C."
+            title="Space Industrialist Week"
+            introduction={
+                <>
+                    <strong className="font-bold text-cabeus-ink">
+                        One week. One mission.
+                    </strong>
+                    <br />
+                    Join the Cabeus Council&apos;s effort to unite space industrialists
+                    who are securing, building, and financing humanity&apos;s permanent
+                    presence on the Moon.
+                </>
+            }
+            imageUrl="/artemis-ii-earthrise-nasa.jpg"
+            imageAlt="Crescent Earth photographed from Orion during NASA's Artemis II mission"
             dateLabel="September 2026"
             locationLabel="Washington, D.C."
             primaryCta={{

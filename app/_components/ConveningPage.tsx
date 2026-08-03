@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 type ConveningSection = {
     number: string;
@@ -9,7 +10,7 @@ type ConveningSection = {
 type ConveningPageProps = {
     eyebrow: string;
     title: string;
-    introduction: string;
+    introduction: ReactNode;
     imageUrl: string;
     imageAlt: string;
     dateLabel: string;

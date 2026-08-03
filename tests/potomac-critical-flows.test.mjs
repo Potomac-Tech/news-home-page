@@ -447,6 +447,26 @@ test("the All Convenings page remains hidden from public discovery", () => {
     assert.match(terminal, /module\.id !== "events"/, "Terminal must suppress the hidden route");
 });
 
+test("Space Industrialist Week uses the Artemis II Earthrise and approved event copy", () => {
+    const industrialistWeek = read("app/space-industrialist-week/page.tsx");
+    const conveningPage = read("app/_components/ConveningPage.tsx");
+
+    assertIncludes(industrialistWeek, [
+        'eyebrow="Fall 2026 // Washington D.C."',
+        'title="Space Industrialist Week"',
+        "One week. One mission.",
+        "Join the Cabeus Council&apos;s effort",
+        'imageUrl="/artemis-ii-earthrise-nasa.jpg"',
+        "Crescent Earth photographed from Orion during NASA's Artemis II mission",
+    ], "Space Industrialist Week hero");
+    assert.match(conveningPage, /introduction: ReactNode/);
+    assert.doesNotMatch(
+        industrialistWeek,
+        /A Cabeus Explorer convening|The Week for the People Building the Future in Orbit/,
+        "retired Space Industrialist Week copy must not remain"
+    );
+});
+
 test("Space Investment Forum reuses the Bridenstine story image and dark Quantum branding", () => {
     const forumPage = read("app/space-investment-forum/page.tsx");
 
