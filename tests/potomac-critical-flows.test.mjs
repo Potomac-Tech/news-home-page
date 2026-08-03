@@ -415,6 +415,29 @@ test("the dedicated Cabeus Games page remains hidden from public discovery", () 
     );
 });
 
+test("the All Convenings page remains hidden from public discovery", () => {
+    const eventsPage = read("app/events/page.tsx");
+    const migrationShell = read("app/_components/MigrationShell.tsx");
+    const sitemap = read("app/sitemap.ts");
+    const currentRoutes = read("app/_data/currentRoutes.ts");
+    const search = read("app/_data/search.ts");
+    const terminal = read("app/_data/terminal.ts");
+    const industrialistWeek = read("app/space-industrialist-week/page.tsx");
+
+    assertIncludes(eventsPage, [
+        "const allConveningsPageVisible = false",
+        "notFound()",
+        "robots: { index: false, follow: false }",
+    ], "hidden All Convenings route");
+    assert.doesNotMatch(
+        migrationShell + sitemap + currentRoutes + industrialistWeek,
+        /href: "\/events"|path: "\/events"/,
+        "All Convenings must not appear in navigation, sitemap, public routes, or convening CTAs"
+    );
+    assert.match(search, /path === "\/events"/, "search must suppress the hidden route");
+    assert.match(terminal, /module\.id !== "events"/, "Terminal must suppress the hidden route");
+});
+
 test("Space Investment Forum reuses the Bridenstine story image and dark Quantum branding", () => {
     const forumPage = read("app/space-investment-forum/page.tsx");
 

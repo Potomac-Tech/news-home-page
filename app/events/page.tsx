@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import {
     type EventAccessTier,
     type EventCalendarDetails,
@@ -11,7 +12,6 @@ import {
     absoluteSiteUrl,
     jsonLdScript,
     organizationJsonLd,
-    siteConfig,
 } from "../_data/site";
 import { createClient } from "../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
@@ -29,21 +29,11 @@ import {
 
 export const dynamic = "force-dynamic";
 
+const allConveningsPageVisible = false;
+
 export const metadata: Metadata = {
-    title: "Events",
-    description:
-        "Public Cabeus Explorer event calendar with member-only details for lunar conferences, summits, and workshops.",
-    alternates: {
-        canonical: "/events",
-    },
-    openGraph: {
-        title: "Events | Cabeus Explorer",
-        description:
-            "Public Cabeus Explorer event calendar with member-only details for lunar conferences, summits, and workshops.",
-        url: absoluteSiteUrl("/events"),
-        siteName: siteConfig.name,
-        type: "website",
-    },
+    title: "Page not found",
+    robots: { index: false, follow: false },
 };
 
 type EventRow = {
@@ -401,6 +391,10 @@ function MemberDetails({ details }: { details: EventCalendarDetails }) {
 }
 
 export default async function EventsPage() {
+    if (!allConveningsPageVisible) {
+        notFound();
+    }
+
     const [{ events, access }, sponsorUnits] = await Promise.all([
         loadEvents(),
         loadSponsorUnits([sponsorPlacementKeys.eventSidebar]),

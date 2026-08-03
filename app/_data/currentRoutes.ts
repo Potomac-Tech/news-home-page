@@ -30,11 +30,6 @@ export const currentRoutes = [
         note: "CMS-backed feed route.",
     },
     {
-        href: "/events",
-        source: "app/events/page.tsx",
-        note: "Public event calendar with teaser fields and member-gated event details.",
-    },
-    {
         href: "/newsletter",
         source: "app/newsletter/page.tsx",
         note: "Moonberg with Kevin Cirilli membership benefit and Explorer application route.",

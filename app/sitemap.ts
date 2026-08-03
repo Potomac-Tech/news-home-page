@@ -13,7 +13,6 @@ const publicRoutes = [
     { path: "/space-industrialist-week", changeFrequency: "weekly", priority: 0.85 },
     { path: "/space-investment-forum", changeFrequency: "monthly", priority: 0.8 },
     { path: "/newsletter", changeFrequency: "weekly", priority: 0.8 },
-    { path: "/events", changeFrequency: "weekly", priority: 0.8 },
     { path: "/authors", changeFrequency: "weekly", priority: 0.7 },
     { path: "/contact", changeFrequency: "monthly", priority: 0.7 },
     { path: "/launches", changeFrequency: "weekly", priority: 0.75 },

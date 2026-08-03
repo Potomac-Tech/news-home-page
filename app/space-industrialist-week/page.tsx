@@ -23,7 +23,6 @@ export default function SpaceIndustrialistWeekPage() {
                 href: "/request-access?source=space-industrialist-week",
                 label: "Request invitation",
             }}
-            secondaryCta={{ href: "/events", label: "View all convenings" }}
             sections={[
                 {
                     number: "01",

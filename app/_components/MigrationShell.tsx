@@ -25,7 +25,6 @@ const primaryNavItems: Array<{
 const conveningNavItems = [
     { href: "/space-industrialist-week", label: "Space Industrialist Week" },
     { href: "/space-investment-forum", label: "Space Investment Forum" },
-    { href: "/events", label: "All convenings" },
 ];
 
 const footerNavItems = [

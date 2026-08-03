@@ -4,6 +4,10 @@ import { publicTierName, tierConfig } from "./tiers";
 import { isHiddenLaunchPath } from "./launchVisibility";
 import { allowLocalContentFallbacks } from "./contentFallbacks";
 
+function isHiddenPublicPath(path: string) {
+    return isHiddenLaunchPath(path) || path === "/events";
+}
+
 export type SearchTier = "public" | "explorer" | "scout" | "meridian" | "staff";
 
 export type SearchResultKind =
@@ -144,7 +148,7 @@ const allFallbackSearchResults: SearchResult[] = [
             "A new gathering for leading figures across the space and lunar industries, featuring the inaugural Cabeus Games.",
         snippet:
             "Dates, venue, participants, and attendance information will be announced as details are confirmed.",
-        href: "/events",
+        href: "/space-industrialist-week",
         tier: "public",
         confidenceLabel: "medium",
         freshnessAt: "2026-07-19T16:00:00.000Z",
@@ -326,7 +330,7 @@ const allFallbackSearchResults: SearchResult[] = [
 ];
 
 const fallbackSearchResults = allFallbackSearchResults.filter(
-    (result) => !isHiddenLaunchPath(result.href)
+    (result) => !isHiddenPublicPath(result.href)
 );
 
 const allFallbackCommandEntries: CommandPaletteEntry[] = [
@@ -397,7 +401,7 @@ const allFallbackCommandEntries: CommandPaletteEntry[] = [
 ];
 
 export const fallbackCommandEntries = allFallbackCommandEntries.filter(
-    (entry) => !isHiddenLaunchPath(entry.href)
+    (entry) => !isHiddenPublicPath(entry.href)
 );
 
 const tierRank: Record<SearchTier, number> = {
@@ -524,7 +528,7 @@ export async function loadSearchResults({
             source_count: number | null;
             keywords: string[] | null;
             metadata: Record<string, unknown> | null;
-        }>).filter((row) => !isHiddenLaunchPath(row.route_path)).map((row) => ({
+        }>).filter((row) => !isHiddenPublicPath(row.route_path)).map((row) => ({
             id: row.id,
             kind: row.source_kind,
             title: row.title,
@@ -593,7 +597,7 @@ export async function loadCommandPaletteEntries({
             keywords: string[] | null;
             visibility_tier: string | null;
             is_admin_pinned: boolean;
-        }>).filter((row) => !isHiddenLaunchPath(row.route_path)).map((row) => ({
+        }>).filter((row) => !isHiddenPublicPath(row.route_path)).map((row) => ({
             id: row.id,
             label: row.label,
             description: row.description ?? "",

@@ -141,7 +141,7 @@ const allTerminalModules: TerminalModule[] = [
 ];
 
 export const terminalModules = allTerminalModules.filter(
-    (module) => !hiddenLaunchModuleIds.has(module.id)
+    (module) => !hiddenLaunchModuleIds.has(module.id) && module.id !== "events"
 );
 
 export const terminalHeaderItems = terminalModules.filter((module) =>
@@ -153,7 +153,6 @@ export const terminalHeaderItems = terminalModules.filter((module) =>
         "regulatory",
         "companies",
         "datasets",
-        "events",
     ].includes(module.id)
 );
 
