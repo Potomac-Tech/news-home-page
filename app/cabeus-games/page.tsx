@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { ConveningPage } from "../_components/ConveningPage";
 import { potomacBrand } from "../_data/brand";
 
+const cabeusGamesPageVisible = false;
+
 export const metadata: Metadata = {
-    title: "Cabeus Games",
-    description:
-        "Mission-oriented challenges for the teams and leaders preparing to operate beyond Earth.",
-    alternates: { canonical: "/cabeus-games" },
+    title: "Page not found",
+    robots: { index: false, follow: false },
 };
 
 export default function CabeusGamesPage() {
+    if (!cabeusGamesPageVisible) {
+        notFound();
+    }
+
     return (
         <ConveningPage
             dark

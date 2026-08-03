@@ -352,7 +352,6 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         '{ href: "/pricing", label: "Council" }',
         'label: "Space Investment Forum"',
         'label: "Space Industrialist Week"',
-        'label: "Cabeus Games"',
         "Newsletter",
     ], "primary publication navigation");
     assertIncludes(migrationShell + conveningsMenu, [
@@ -395,6 +394,24 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         handoffRoute,
         /searchParams\.set\([^\n]*(?:token|secret)|NEXT_PUBLIC_SUPABASE.*SECRET/i,
         "Nexus handoff must not append reusable credentials to its destination"
+    );
+});
+
+test("the dedicated Cabeus Games page remains hidden from public discovery", () => {
+    const gamesPage = read("app/cabeus-games/page.tsx");
+    const migrationShell = read("app/_components/MigrationShell.tsx");
+    const sitemap = read("app/sitemap.ts");
+    const currentRoutes = read("app/_data/currentRoutes.ts");
+
+    assertIncludes(gamesPage, [
+        "const cabeusGamesPageVisible = false",
+        "notFound()",
+        "robots: { index: false, follow: false }",
+    ], "hidden Cabeus Games route");
+    assert.doesNotMatch(
+        migrationShell + sitemap + currentRoutes,
+        /href: "\/cabeus-games"|path: "\/cabeus-games"/,
+        "Cabeus Games must not appear in navigation, sitemap, or current public routes"
     );
 });
 

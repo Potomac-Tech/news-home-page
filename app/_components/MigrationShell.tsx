@@ -25,7 +25,6 @@ const primaryNavItems: Array<{
 const conveningNavItems = [
     { href: "/space-industrialist-week", label: "Space Industrialist Week" },
     { href: "/space-investment-forum", label: "Space Investment Forum" },
-    { href: "/cabeus-games", label: "Cabeus Games" },
     { href: "/events", label: "All convenings" },
 ];
 

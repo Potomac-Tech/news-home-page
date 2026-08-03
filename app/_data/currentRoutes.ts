@@ -50,11 +50,6 @@ export const currentRoutes = [
         note: "Space Investment Forum recap and coverage route.",
     },
     {
-        href: "/cabeus-games",
-        source: "app/cabeus-games/page.tsx",
-        note: "Branded Cabeus Games mission-training and registration-interest route.",
-    },
-    {
         href: "/datasets",
         source: "app/datasets/page.tsx",
         note: "Public dataset catalog with NASA/science archives, Cabeus Explorer proprietary entries, source metadata, availability, tier, sample, and demo indicators.",
