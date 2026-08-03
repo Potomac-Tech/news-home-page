@@ -64,6 +64,9 @@ test("publisher transparency pages and disclosures are public and discoverable",
     assert.match(authorProfile, /Articles by \{author\.display_name\}/);
     assert.match(contact, /siteConfig\.publisherEmail/);
     assert.match(contact, /siteConfig\.publisherLocation/);
+    assert.match(contact, /bg-cabeus-paper text-cabeus-ink/);
+    assert.match(contact, /Contact the team\./);
+    assert.doesNotMatch(contact, /bg-grid-pattern|bg-potomac-primary|text-potomac-cream/);
     assert.match(site, /publisherEmail: "info@potomacdb\.com"/);
     assert.match(site, /publisherLocation: "Washington, DC, United States"/);
     assert.match(contact, /Original reporting/);
