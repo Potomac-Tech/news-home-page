@@ -1430,6 +1430,23 @@ test("Cabeus Terminal preview is archived and removed from live routes", () => {
     );
 });
 
+test("the Council hero invites leaders into the Explorer application flow", () => {
+    const pricing = read("app/pricing/page.tsx");
+
+    assertIncludes(pricing, [
+        "We choose to go to the Moon.",
+        "The Cabeus Council unites the leaders securing, building,",
+        "and financing the lunar economy (and beyond).",
+        'href="/request-access"',
+        ">\n                        Apply\n                    </Link>",
+    ], "Council hero application call to action");
+    assert.doesNotMatch(
+        pricing,
+        /Begin with free Explorer membership/,
+        "Council hero must not retain the former tier-selection copy"
+    );
+});
+
 test("archived Cabeus Terminal membership behavior remains preserved", () => {
     const manifest = JSON.parse(read("archive/cabeus-terminal/frontend-v1/explorer-terminal-frontend-v1.json"));
     const access = read("lib/auth/terminal.ts");
