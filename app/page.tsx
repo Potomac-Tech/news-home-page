@@ -8,6 +8,7 @@ import { allowLocalContentFallbacks } from "./_data/contentFallbacks";
 import { loadPublicTickerItems } from "./_data/marketQuotes";
 import { SponsorUnit } from "./_components/SponsorUnit";
 import { HomepageCarousel } from "./_components/HomepageCarousel";
+import { ApolloMoonBackdrop } from "./_components/ApolloMoonBackdrop";
 import { LunarTimeClock } from "./_components/LunarTimeClock";
 import { StockTicker } from "./_components/StockTicker";
 import {
@@ -370,12 +371,7 @@ export default async function HomePage() {
                 }}
             />
             <section className="relative min-h-[38rem] overflow-hidden border-b border-cabeus-line md:min-h-[45rem]">
-                <img
-                    src={potomacBrand.assets.editorialMoonHero}
-                    alt="Detailed Moon emerging from a warm ivory field"
-                    className="absolute inset-0 h-full w-full object-cover object-[62%_center] opacity-45 sm:object-center sm:opacity-100"
-                    fetchPriority="high"
-                />
+                <ApolloMoonBackdrop />
                 <div className="relative mx-auto flex min-h-[38rem] w-full max-w-[92rem] items-center px-5 py-16 md:min-h-[45rem] md:px-10">
                     <div className="max-w-[42rem]">
                         <p className="brand-kicker">Independent intelligence</p>

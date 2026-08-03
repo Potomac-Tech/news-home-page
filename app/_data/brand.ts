@@ -20,7 +20,7 @@ export const potomacBrand = {
         nexusScreenshot: "/Nexus Screenshot.png",
         sourceRendering: "/Source Rendering.png",
         cabeusHero: "/cabeus-lunar-industrial-hero.png",
-        editorialMoonHero: "/cabeus-moon-editorial-hero.png",
+        editorialMoonHero: "/apollo-11-full-moon-nasa.jpg",
         industrialistWeekHero: "/space-industrialist-week-hero.png",
         gamesHero: "/cabeus-games-hero.png",
         pressRelease: "/potomac-lunar-economy-press-release-05182026.pdf",

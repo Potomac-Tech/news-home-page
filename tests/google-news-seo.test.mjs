@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 const root = new URL("..", import.meta.url);
@@ -73,4 +73,19 @@ test("publisher transparency pages and disclosures are public and discoverable",
     assert.match(sitemap, /path: "\/authors"/);
     assert.match(sitemap, /path: "\/contact"/);
     assert.doesNotMatch(launchVisibility, /"events"|"\/events"/);
+});
+
+test("homepage Moon hero uses a credited Apollo 11 photograph", () => {
+    const homepage = read("app/page.tsx");
+    const archives = read("app/archives/page.tsx");
+    const backdrop = read("app/_components/ApolloMoonBackdrop.tsx");
+    const brand = read("app/_data/brand.ts");
+
+    assert.ok(existsSync(new URL("public/apollo-11-full-moon-nasa.jpg", root)));
+    assert.match(brand, /editorialMoonHero: "\/apollo-11-full-moon-nasa\.jpg"/);
+    assert.match(backdrop, /NASA \/ Apollo 11 · AS11-44-6667/);
+    assert.match(backdrop, /Full Moon photographed by the Apollo 11 crew/);
+    assert.match(homepage, /<ApolloMoonBackdrop \/>/);
+    assert.match(archives, /<ApolloMoonBackdrop \/>/);
+    assert.doesNotMatch(homepage, /Detailed Moon emerging from a warm ivory field/);
 });

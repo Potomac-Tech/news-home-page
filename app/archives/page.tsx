@@ -3,7 +3,7 @@ import Link from "next/link";
 import { createClient } from "../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
 import { absoluteSiteUrl, jsonLdScript, siteConfig } from "../_data/site";
-import { potomacBrand } from "../_data/brand";
+import { ApolloMoonBackdrop } from "../_components/ApolloMoonBackdrop";
 import {
     editorialSections,
     type EditorialSectionSlug,
@@ -122,11 +122,7 @@ export default async function ArchivesPage({
                 dangerouslySetInnerHTML={{ __html: jsonLdScript(itemList) }}
             />
             <header className="relative min-h-[28rem] overflow-hidden border-b border-cabeus-line">
-                <img
-                    src={potomacBrand.assets.editorialMoonHero}
-                    alt=""
-                    className="absolute inset-0 h-full w-full object-cover object-center"
-                />
+                <ApolloMoonBackdrop />
                 <div className="relative mx-auto flex min-h-[28rem] w-full max-w-[92rem] flex-col justify-end px-5 pb-12 pt-16 md:px-10">
                     <p className="brand-kicker">
                         Lunar intelligence record / {articles.length} published
