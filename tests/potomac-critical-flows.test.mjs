@@ -677,8 +677,9 @@ test("request access keeps Explorer signup, recovery, and return context in one 
         [
             "Sign up",
             "Sign in",
-            "Free membership selected",
             "Explorer",
+            "Become a Cabeus Explorer.",
+            "No paywall. No pop-ups. No agenda.",
             "signUp",
             "submit_membership_application",
             "emailRedirectTo",
@@ -691,6 +692,11 @@ test("request access keeps Explorer signup, recovery, and return context in one 
             "upgrade?tier=",
         ],
         "request access gateway"
+    );
+    assert.doesNotMatch(
+        requestAccessPage + requestAccessClient,
+        /Sign up \/ Free membership selected|Create a free Explorer account using any email domain|Start with free Explorer access/,
+        "request access must not retain the removed membership explainer"
     );
     assertIncludes(
         legacyApply + legacyLogin,
@@ -1171,8 +1177,6 @@ test("strategic product inquiries persist and audit before quota-aware Resend de
         'const isSignIn = requestedTab === "signin"',
         "{!isSignIn ? (",
         "<ApplicationForm />",
-        "Free membership selected",
-        "any email domain",
     ], "Explorer signup default");
     assert.doesNotMatch(action + form, /mailto:|NEXT_PUBLIC_RESEND|RESEND_API_KEY/);
 });

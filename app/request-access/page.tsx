@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { tierConfig } from "../_data/tiers";
 import { RequestAccessClient } from "./RequestAccessClient";
 
 export const metadata: Metadata = {
@@ -29,12 +28,12 @@ export default async function RequestAccessPage({
                     <h1 className="mt-5 max-w-[11ch] text-balance font-serif text-5xl leading-[0.95] text-cabeus-ink md:text-7xl">
                         {isSignIn
                             ? "Sign in to Cabeus Explorer."
-                            : `Start with free ${tierConfig.explorer.publicName} access.`}
+                            : "Become a Cabeus Explorer."}
                     </h1>
                     <p className="mt-6 max-w-xl text-base leading-7 text-cabeus-muted md:text-lg md:leading-8">
                         {isSignIn
                             ? "Use a secure email link or your password to return to the member workspace."
-                            : "Explorer is the free membership for approved readers. Submit one short application, verify your email, and receive Moonberg with Kevin Cirilli at that same address."}
+                            : "Sign up for free Cabeus Explorer content. No paywall. No pop-ups. No agenda. Just verify your email."}
                     </p>
                 </div>
                 <RequestAccessClient initialTab={params.tab} mode={params.mode} />
