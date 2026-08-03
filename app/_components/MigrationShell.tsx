@@ -121,7 +121,7 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                                 href="/request-access"
                                 className="brand-button hidden md:inline-flex"
                             >
-                                Join Cabeus Council
+                                Sign Up
                             </Link>
                         </div>
                     </div>
@@ -155,7 +155,7 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                                 href="/request-access"
                                 className="px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
                             >
-                                Join Cabeus Council
+                                Sign Up
                             </Link>
                         </nav>
                     </details>

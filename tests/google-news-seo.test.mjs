@@ -58,7 +58,7 @@ test("publisher transparency pages and disclosures are public and discoverable",
 
     assert.match(shell, /href: "\/authors", label: "Author biographies"/);
     assert.match(shell, /href: "\/contact", label: "Contact & standards"/);
-    assert.match(shell, /Join Cabeus Council/);
+    assert.match(shell, /href="\/request-access"[\s\S]*?Sign Up/);
     assert.match(authors, /editorial_authors/);
     assert.match(authorProfile, /"@type": "Person"/);
     assert.match(authorProfile, /Articles by \{author\.display_name\}/);
