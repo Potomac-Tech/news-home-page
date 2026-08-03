@@ -511,6 +511,27 @@ test("About page uses the Cabeus editorial brand system instead of migration sca
     );
 });
 
+test("Terms and trust pages use the current Cabeus editorial brand shell", () => {
+    const legalShell = read("app/legal/_components/LegalPageShell.tsx");
+    const termsPage = read("app/legal/terms/page.tsx");
+
+    assertIncludes(legalShell + termsPage, [
+        "min-h-screen bg-cabeus-paper text-cabeus-ink",
+        "brand-kicker",
+        "border-cabeus-line",
+        "bg-cabeus-smoke",
+        "text-cabeus-bronze",
+        'aria-label="Trust pages"',
+        'title="Terms"',
+        "Membership And Access",
+    ], "Cabeus legal page shell");
+    assert.doesNotMatch(
+        legalShell,
+        /bg-grid-pattern|glass-card|text-potomac-|rounded border/,
+        "Legal pages must not use the retired Potomac glass-card theme"
+    );
+});
+
 test("Space Investment Forum reuses the Bridenstine story image and dark Quantum branding", () => {
     const forumPage = read("app/space-investment-forum/page.tsx");
 
