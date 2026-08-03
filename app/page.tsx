@@ -374,7 +374,7 @@ export default async function HomePage() {
                 <ApolloMoonBackdrop />
                 <div className="relative mx-auto flex min-h-[38rem] w-full max-w-[92rem] items-center px-5 py-16 md:min-h-[45rem] md:px-10">
                     <div className="max-w-[42rem]">
-                        <p className="brand-kicker">Independent intelligence</p>
+                        <p className="brand-kicker">Cabeus Explorer</p>
                         <h1 className="mt-6 max-w-[11ch] text-balance font-serif text-[clamp(3.75rem,7.25vw,7.75rem)] font-medium leading-[0.9] text-cabeus-ink">
                             Clarity in the New Space Age.
                         </h1>

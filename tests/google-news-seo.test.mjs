@@ -83,7 +83,7 @@ test("homepage Moon hero uses a credited Apollo 11 photograph", () => {
 
     assert.ok(existsSync(new URL("public/apollo-11-full-moon-nasa.jpg", root)));
     assert.match(brand, /editorialMoonHero: "\/apollo-11-full-moon-nasa\.jpg"/);
-    assert.match(backdrop, /NASA \/ Apollo 11 · AS11-44-6667/);
+    assert.match(backdrop, /NASA \/ Apollo 11 \/ AS11-44-6667/);
     assert.match(backdrop, /Full Moon photographed by the Apollo 11 crew/);
     assert.match(homepage, /<ApolloMoonBackdrop \/>/);
     assert.match(archives, /<ApolloMoonBackdrop \/>/);
