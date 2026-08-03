@@ -25,6 +25,8 @@ const keynoteImage = {
     alt: "Former NASA administrator Jim Bridenstine keynotes the Cabeus Explorer Space Investment Forum.",
 } as const;
 
+const keynoteStoryHref = "/news/former-nasa-chief-space-could-transform-us-economic-power";
+
 export default async function SpaceInvestmentForumPage() {
     const forumCoverage = await loadEditorialArchive("space-investment-forum");
 
@@ -52,7 +54,11 @@ export default async function SpaceInvestmentForumPage() {
                             </Link>
                         </div>
                     </div>
-                    <div className="flex min-h-[39rem] flex-col bg-cabeus-ink text-cabeus-paper">
+                    <Link
+                        href={keynoteStoryHref}
+                        aria-label="Read the Jim Bridenstine keynote story"
+                        className="group flex min-h-[39rem] flex-col bg-cabeus-ink text-cabeus-paper"
+                    >
                         <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden px-5 pt-8 md:px-10 md:pt-12">
                             <img
                                 src={keynoteImage.src}
@@ -64,14 +70,14 @@ export default async function SpaceInvestmentForumPage() {
                             <p className="font-mono text-xs font-bold uppercase text-cabeus-gold">
                                 Keynote conversation
                             </p>
-                            <p className="mt-5 font-serif text-5xl leading-[0.98]">
+                            <p className="mt-5 font-serif text-5xl leading-[0.98] transition-colors group-hover:text-cabeus-gold">
                                 American Strength in Space
                             </p>
                             <p className="mt-5 text-sm leading-6 text-cabeus-paper/75">
                                 Capital, industry, and strategic competition.
                             </p>
                         </div>
-                    </div>
+                    </Link>
                 </div>
             </section>
 

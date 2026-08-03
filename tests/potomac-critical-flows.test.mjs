@@ -451,6 +451,8 @@ test("Space Investment Forum reuses the Bridenstine story image and dark Quantum
         "Forum coverage",
         'href="#forum-coverage"',
         'id="forum-coverage"',
+        'const keynoteStoryHref = "/news/former-nasa-chief-space-could-transform-us-economic-power"',
+        'aria-label="Read the Jim Bridenstine keynote story"',
     ], "Space Investment Forum keynote and partner presentation");
     assert.doesNotMatch(
         forumPage,
