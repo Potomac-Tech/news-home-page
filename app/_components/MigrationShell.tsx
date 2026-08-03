@@ -18,7 +18,6 @@ const primaryNavItems: Array<{
     label: string;
 }> = [
     { href: "/", label: "Home Base" },
-    { href: "/terminal", label: "Intelligence" },
     { href: "/pricing", label: "Council" },
 ];
 

@@ -13,14 +13,6 @@ export const metadata: Metadata = {
 const platformAreas = [
     {
         number: "01",
-        title: "Intelligence",
-        description:
-            "Trusted reporting, proprietary data, and strategic context for decisions that move the lunar industry.",
-        href: "/terminal",
-        label: "Explore intelligence",
-    },
-    {
-        number: "02",
         title: "Council",
         description:
             "A community for the leaders securing, building, and financing the lunar economy and what comes beyond it.",
@@ -28,7 +20,7 @@ const platformAreas = [
         label: "Meet the Council",
     },
     {
-        number: "03",
+        number: "02",
         title: "Convenings",
         description:
             "Focused gatherings that bring space industrialists together around capital, policy, infrastructure, and execution.",
@@ -96,7 +88,7 @@ export default function TeamPage() {
                         <h2 className="mt-5 max-w-[12ch] font-serif text-5xl font-medium leading-[0.94] md:text-7xl">
                             Intelligence, community, and convening power.
                         </h2>
-                        <div className="mt-12 grid border-y border-cabeus-line md:grid-cols-3">
+                        <div className="mt-12 grid border-y border-cabeus-line md:grid-cols-2">
                             {platformAreas.map((area) => (
                                 <article
                                     key={area.number}

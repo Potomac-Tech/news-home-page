@@ -348,11 +348,18 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
     ], "Nexus member navigation");
     assertIncludes(migrationShell, [
         '{ href: "/", label: "Home Base" }',
-        '{ href: "/terminal", label: "Intelligence" }',
         '{ href: "/pricing", label: "Council" }',
         'label: "Space Investment Forum"',
         'label: "Space Industrialist Week"',
     ], "primary publication navigation");
+    assert.doesNotMatch(
+        migrationShell,
+        /href: "\/terminal"|label: "Intelligence"/,
+        "Intelligence must remain hidden from desktop and mobile navigation"
+    );
+    const hiddenRouteSearchData = read("app/_data/search.ts");
+    assert.match(hiddenRouteSearchData, /path === "\/terminal"/);
+    assert.match(hiddenRouteSearchData, /path\.startsWith\("\/terminal\/"\)/);
     assert.doesNotMatch(
         migrationShell,
         /href=\{newsletterHref\}|>\s*Newsletter\s*</,
@@ -1587,13 +1594,13 @@ test("Cabeus Terminal preview is archived and removed from live routes", () => {
         "/api/member/nexus/handoff",
     ], "archived Terminal route integration");
     assertIncludes(rootPage + modulePage + workspace + archiveReadme, [
-        "TerminalWorkspace",
-        'redirect("/terminal")',
+        "notFound()",
         'data-terminal-integration-state="archived"',
         "Coming soon",
         "The Moon is an emerging market.",
         "complete the Terminal data and service integration review",
-    ], "live Intelligence route and restoration note");
+    ], "hidden Intelligence route and restoration note");
+    assert.doesNotMatch(rootPage + modulePage, /TerminalWorkspace|redirect\("\/terminal"\)/);
     assert.doesNotMatch(workspace, /cabeus-lunar-industrial-hero|href="\/nexus"|Open Nexus/);
     assert.doesNotMatch(
         rootPage + modulePage + workspace,

@@ -269,22 +269,18 @@ test("chat, forums, and RFQs expose their access gates without blank screens", {
     }
 });
 
-test("Intelligence page hides the archived Terminal preview", { timeout: 60000 }, async () => {
+test("Intelligence page and module routes remain hidden", { timeout: 60000 }, async () => {
     const { page, consoleMessages } = await newPage();
 
     try {
         await page.goto(`${baseUrl}/terminal`, { waitUntil: "domcontentloaded" });
 
-        await assertVisibleText(page, "The Moon is an emerging market.");
-        await assertVisibleText(page, "Coming soon");
-        assert.equal(await page.getByRole("link", { name: "Open Nexus" }).count(), 0);
-        assert.equal(await page.locator('img[src="/cabeus-lunar-industrial-hero.png"]').count(), 0);
-        assert.equal(await page.getByText("Andromeda program comparison").count(), 0);
-        assert.equal(await page.getByText("Intelligence modules").count(), 0);
+        assert.equal(page.url(), `${baseUrl}/terminal`);
+        await assertVisibleText(page, "Page not found");
 
         await page.goto(`${baseUrl}/terminal/diligence`, { waitUntil: "domcontentloaded" });
-        await page.waitForURL(/\/terminal$/);
-        await assertVisibleText(page, "Coming soon");
+        assert.equal(page.url(), `${baseUrl}/terminal/diligence`);
+        await assertVisibleText(page, "Page not found");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
         await closePage(page);

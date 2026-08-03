@@ -12,6 +12,7 @@ export default function robots(): MetadataRoute.Robots {
                 "/auth/",
                 "/member",
                 "/organization",
+                "/terminal",
             ],
         },
         sitemap: [

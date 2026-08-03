@@ -5,7 +5,10 @@ import { isHiddenLaunchPath } from "./launchVisibility";
 import { allowLocalContentFallbacks } from "./contentFallbacks";
 
 function isHiddenPublicPath(path: string) {
-    return isHiddenLaunchPath(path) || path === "/events";
+    return isHiddenLaunchPath(path)
+        || path === "/events"
+        || path === "/terminal"
+        || path.startsWith("/terminal/");
 }
 
 export type SearchTier = "public" | "explorer" | "scout" | "meridian" | "staff";
@@ -69,23 +72,6 @@ export const searchScopes = [
 ] as const;
 
 const allFallbackSearchResults: SearchResult[] = [
-    {
-        id: "terminal",
-        kind: "dashboard_module",
-        title: "Lunar Intelligence Terminal",
-        eyebrow: "Dashboard module",
-        summary:
-            "Command-center overview for lunar news, missions, companies, procurements, regulatory watch, datasets, calculators, and alerts.",
-        snippet: "Jump to the main lunar industry terminal.",
-        href: "/terminal",
-        tier: "public",
-        confidenceLabel: "high",
-        freshnessAt: "2026-07-02T00:02:32.000Z",
-        isPinned: true,
-        sourceCount: 0,
-        keywords: ["terminal", "dashboard", "lunar intelligence"],
-        isFallback: true,
-    },
     {
         id: "space-investment-forum-article",
         kind: "article",

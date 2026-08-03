@@ -348,9 +348,6 @@ export default async function HomePage() {
                             <Link href="/archives" className="brand-button inline-flex">
                                 Start reading
                             </Link>
-                            <Link href="/terminal" className="brand-button brand-button-outline inline-flex">
-                                Our intelligence
-                            </Link>
                         </div>
                     </div>
                 </div>
