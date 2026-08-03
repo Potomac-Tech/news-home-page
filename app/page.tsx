@@ -379,8 +379,7 @@ export default async function HomePage() {
                             Clarity in the New Space Age.
                         </h1>
                         <p className="mt-8 max-w-xl text-base leading-7 text-cabeus-muted md:text-lg md:leading-8">
-                            Trusted intelligence, proprietary data, and strategic context
-                            for the leaders shaping what comes next.
+                            Cabeus Explorer is the leading platform providing trusted intelligence and proprietary data for space industrialists securing, financing and building the lunar economy (and beyond).
                         </p>
                         <div className="mt-9 flex flex-wrap gap-3">
                             <Link href="/archives" className="brand-button inline-flex">
