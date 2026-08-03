@@ -209,6 +209,20 @@ test("editorial media, scalable dashboard, and author pages are wired", () => {
     assert.doesNotMatch(authorsPage, /text-white|text-potomac-cream/);
 });
 
+test("story entry points and author bylines link to their destinations", () => {
+    assert.match(homepage, /\.select\("id,display_name,slug"\)/);
+    assert.match(homepage, /href=\{`\/authors\/\$\{story\.authorSlug\}`\}/);
+    assert.match(homepage, /href=\{story\.href\}[\s\S]*group-hover:underline/);
+    assert.match(homepage, /aria-label=\{`Read \$\{story\.title\}`\}/);
+    assert.doesNotMatch(homepage, /Full story →/);
+    assert.match(articlePage, /href=\{`\/authors\/\$\{article\.authorSlug\}`\}/);
+    assert.match(previewRender, /href=\{`\/authors\/\$\{author\.slug\}`\}/);
+    for (const placement of ["homepage_carousel_headline", "homepage_carousel_subhead", "homepage_carousel_image"]) {
+        assert.match(readFileSync("app/_components/HomepageCarousel.tsx", "utf8"), new RegExp(placement));
+    }
+    assert.doesNotMatch(readFileSync("app/_components/HomepageCarousel.tsx", "utf8"), /slide\.ctaLabel/);
+});
+
 test("Kevin Cirilli author profile exposes a valid email contact", () => {
     assert.match(kevinEmailMigration, /mailto:kevin@cabeusexplorer\.com/);
     assert.match(kevinEmailMigration, /where lower\(slug\) = 'kevin-cirilli'/);

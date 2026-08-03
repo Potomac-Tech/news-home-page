@@ -40,7 +40,14 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
                         <h1 className="mt-5 font-serif text-4xl font-medium leading-tight text-cabeus-ink md:text-6xl">{article.title}</h1>
                         <p className="mt-5 text-lg leading-8 text-cabeus-muted">{article.dek ?? article.public_summary}</p>
                         <div className="mt-5 flex flex-wrap gap-3 font-mono text-xs font-bold uppercase text-cabeus-muted">
-                            {author ? <Link href={`/authors/${author.slug}`}>By {author.display_name}</Link> : <span>Byline not set</span>}
+                            {author ? (
+                                <Link
+                                    href={`/authors/${author.slug}`}
+                                    className="text-cabeus-bronze underline decoration-cabeus-gold/60 underline-offset-4 hover:text-cabeus-ink"
+                                >
+                                    By {author.display_name}
+                                </Link>
+                            ) : <span>Byline not set</span>}
                             <time>{new Date(date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</time>
                         </div>
                     </div>

@@ -519,7 +519,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         </p>
                         <div className="mt-6 flex flex-wrap gap-3 font-mono text-xs font-bold uppercase text-cabeus-muted">
                             {article.authorSlug ? (
-                                <Link href={`/authors/${article.authorSlug}`}>By {article.authorName}</Link>
+                                <Link
+                                    href={`/authors/${article.authorSlug}`}
+                                    className="text-cabeus-bronze underline decoration-cabeus-gold/60 underline-offset-4 hover:text-cabeus-ink"
+                                >
+                                    By {article.authorName}
+                                </Link>
                             ) : (
                                 <span>By {article.authorName ?? "Cabeus Explorer"}</span>
                             )}

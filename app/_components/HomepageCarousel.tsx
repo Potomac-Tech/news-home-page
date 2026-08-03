@@ -71,34 +71,45 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                         </p>
                         <div className="mt-5 grid min-w-0 gap-7 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-12">
                             <div className="flex min-h-full min-w-0 flex-col">
-                                <h2 className="max-w-full text-balance font-serif text-[clamp(2.4rem,3.7vw,4rem)] font-medium leading-[0.94] text-cabeus-ink">
-                                    {slide.title}
-                                </h2>
-                                <div className="brand-rule mt-7 w-28" />
-                                <p className="mt-6 max-w-xl text-base leading-7 text-cabeus-muted md:text-lg md:leading-8">
-                                    {slide.summary}
-                                </p>
                                 <Link
                                     href={slide.ctaRoute}
-                                    onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel", slideId: slide.id } })}
-                                    className="brand-button mt-7 inline-flex self-start"
+                                    onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel_headline", slideId: slide.id } })}
+                                    className="group max-w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabeus-gold"
                                 >
-                                    {slide.ctaLabel}
+                                    <h2 className="text-balance font-serif text-[clamp(2.4rem,3.7vw,4rem)] font-medium leading-[0.94] text-cabeus-ink group-hover:underline">
+                                        {slide.title}
+                                    </h2>
+                                </Link>
+                                <div className="brand-rule mt-7 w-28" />
+                                <Link
+                                    href={slide.ctaRoute}
+                                    aria-label={`Read ${slide.title}`}
+                                    onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel_subhead", slideId: slide.id } })}
+                                    className="mt-6 max-w-xl text-base leading-7 text-cabeus-muted hover:text-cabeus-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabeus-gold md:text-lg md:leading-8"
+                                >
+                                    {slide.summary}
                                 </Link>
                             </div>
-                            <img
-                                src={slide.visualAssetUrl}
-                                alt={slide.visualAssetAlt}
-                                loading={index === 0 ? "eager" : "lazy"}
-                                fetchPriority={index === 0 ? "high" : "auto"}
-                                sizes="(min-width: 1024px) 55vw, 100vw"
-                                className={`aspect-[16/10] min-w-0 max-h-[31rem] w-full bg-cabeus-smoke ${
-                                    slide.visualAssetUrl.includes("space-investment-forum")
-                                    || slide.visualAssetUrl.includes("/editorial-media/")
-                                        ? "object-contain object-top"
-                                        : "object-cover"
-                                }`}
-                            />
+                            <Link
+                                href={slide.ctaRoute}
+                                aria-label={`Read ${slide.title}`}
+                                onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel_image", slideId: slide.id } })}
+                                className="block min-w-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabeus-gold"
+                            >
+                                <img
+                                    src={slide.visualAssetUrl}
+                                    alt={slide.visualAssetAlt}
+                                    loading={index === 0 ? "eager" : "lazy"}
+                                    fetchPriority={index === 0 ? "high" : "auto"}
+                                    sizes="(min-width: 1024px) 55vw, 100vw"
+                                    className={`aspect-[16/10] min-w-0 max-h-[31rem] w-full bg-cabeus-smoke ${
+                                        slide.visualAssetUrl.includes("space-investment-forum")
+                                        || slide.visualAssetUrl.includes("/editorial-media/")
+                                            ? "object-contain object-top"
+                                            : "object-cover"
+                                    }`}
+                                />
+                            </Link>
                         </div>
                     </div>
                 </article>

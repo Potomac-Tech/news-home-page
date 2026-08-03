@@ -161,14 +161,14 @@ async function getHomepageStories(): Promise<HomeStory[]> {
                 .order("sort_order"),
             supabase
                 .from("editorial_authors")
-                .select("id,display_name")
+                .select("id,display_name,slug")
                 .in(
                     "id",
                     articleRows.map((article) => article.primary_author_id)
                 ),
         ]);
         const authorById = new Map(
-            (authors ?? []).map((author) => [author.id, author.display_name])
+            (authors ?? []).map((author) => [author.id, author])
         );
         const firstImageByArticle = new Map<string, { url: string; alt: string }>();
         for (const asset of media ?? []) {
@@ -181,6 +181,7 @@ async function getHomepageStories(): Promise<HomeStory[]> {
         }
 
         return articleRows.map((article) => {
+            const author = authorById.get(article.primary_author_id);
             const summary =
                 cleanSnippet(article.public_summary) ||
                 cleanSnippet(article.dek) ||
@@ -197,8 +198,8 @@ async function getHomepageStories(): Promise<HomeStory[]> {
                 href: articleHref(article.slug),
                 publishedAt: article.published_at ?? new Date().toISOString(),
                 accessTier: normalizeAccessTier(article.access_tier_required),
-                sourceLabel:
-                    authorById.get(article.primary_author_id) ?? "Cabeus Explorer",
+                sourceLabel: author?.display_name ?? "Cabeus Explorer",
+                authorSlug: author?.slug,
                 imageUrl: article.hero_image_url ?? firstImageByArticle.get(article.id)?.url,
                 imageAlt: article.hero_image_alt ?? firstImageByArticle.get(article.id)?.alt,
             };
@@ -245,7 +246,16 @@ function SectionHeading({
 function StoryMeta({ story }: { story: HomeStory }) {
     return (
         <div className="flex flex-wrap items-center gap-3 font-mono text-[0.64rem] font-semibold uppercase text-cabeus-muted">
-            <span className="text-cabeus-bronze">{story.sourceLabel}</span>
+            {story.authorSlug ? (
+                <Link
+                    href={`/authors/${story.authorSlug}`}
+                    className="text-cabeus-bronze underline decoration-cabeus-gold/60 underline-offset-4 hover:text-cabeus-ink"
+                >
+                    {story.sourceLabel}
+                </Link>
+            ) : (
+                <span className="text-cabeus-bronze">{story.sourceLabel}</span>
+            )}
             <time dateTime={story.publishedAt}>{formatDate(story.publishedAt)}</time>
             <span>{story.accessTier}+ full story</span>
         </div>
@@ -256,12 +266,21 @@ function StoryCard({ story }: { story: HomeStory }) {
     return (
         <article className="flex min-w-0 flex-col border-t border-cabeus-line pt-5 md:border-l md:border-t-0 md:px-6 md:pt-0 md:first:border-l-0 md:first:pl-0">
             <StoryMeta story={story} />
-            <h3 className="mt-4 font-serif text-3xl font-medium leading-[1.02] text-cabeus-ink">
-                {story.title}
-            </h3>
-            <p className="mt-4 text-sm leading-6 text-cabeus-muted">
+            <Link
+                href={story.href}
+                className="group mt-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabeus-gold"
+            >
+                <h3 className="font-serif text-3xl font-medium leading-[1.02] text-cabeus-ink group-hover:underline">
+                    {story.title}
+                </h3>
+            </Link>
+            <Link
+                href={story.href}
+                aria-label={`Read ${story.title}`}
+                className="mt-4 text-sm leading-6 text-cabeus-muted hover:text-cabeus-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabeus-gold"
+            >
                 {story.summary}
-            </p>
+            </Link>
             {story.imageUrl ? (
                 <img
                     src={story.imageUrl}
@@ -269,12 +288,6 @@ function StoryCard({ story }: { story: HomeStory }) {
                     className="mt-6 aspect-[16/10] w-full bg-cabeus-smoke object-cover"
                 />
             ) : null}
-            <Link
-                href={story.href}
-                className="mt-6 inline-flex self-start border-b border-cabeus-gold pb-1 font-mono text-[0.64rem] font-bold uppercase text-cabeus-ink hover:text-cabeus-gold"
-            >
-                Full story →
-            </Link>
         </article>
     );
 }

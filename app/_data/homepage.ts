@@ -8,6 +8,7 @@ export type HomeStory = {
     publishedAt: string;
     accessTier: "Explorer" | "Scout" | (typeof tierConfig.enterprise)["publicName"];
     sourceLabel: string;
+    authorSlug?: string;
     imageUrl?: string;
     imageAlt?: string;
 };
