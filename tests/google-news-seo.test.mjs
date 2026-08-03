@@ -93,19 +93,24 @@ test("articles omit publisher promotions, source citation panels, and access-pat
     }
 });
 
-test("homepage Moon hero uses a credited Apollo 11 photograph", () => {
+test("homepage hero uses a credited high-resolution Artemis II Earthrise photograph", () => {
     const homepage = read("app/page.tsx");
+    const earthriseBackdrop = read("app/_components/ArtemisEarthriseBackdrop.tsx");
     const archives = read("app/archives/page.tsx");
     const backdrop = read("app/_components/ApolloMoonBackdrop.tsx");
     const brand = read("app/_data/brand.ts");
 
     assert.ok(existsSync(new URL("public/apollo-11-full-moon-nasa.jpg", root)));
+    assert.ok(existsSync(new URL("public/artemis-ii-earthrise-nasa.jpg", root)));
     assert.match(brand, /editorialMoonHero: "\/apollo-11-full-moon-nasa\.jpg"/);
+    assert.match(earthriseBackdrop, /artemis-ii-earthrise-nasa\.jpg/);
+    assert.match(earthriseBackdrop, /NASA \/ Artemis II \/ ART002-E-009280B/);
+    assert.match(homepage, /<ArtemisEarthriseBackdrop \/>/);
+    assert.match(homepage, /bg-black/);
     assert.match(backdrop, /NASA \/ Apollo 11 \/ AS11-44-6667/);
     assert.match(backdrop, /Full Moon photographed by the Apollo 11 crew/);
     assert.match(backdrop, /max-w-none/);
     assert.match(backdrop, /sm:w-\[min\(96rem,100vw\)\]/);
-    assert.match(homepage, /<ApolloMoonBackdrop \/>/);
     assert.match(homepage, /md:min-h-\[40rem\]/);
     assert.doesNotMatch(homepage, /md:py-24/);
     assert.match(archives, /<ApolloMoonBackdrop \/>/);

@@ -13,7 +13,7 @@ test("homepage requests and renders the market-cap-ranked top ten ticker", () =>
 
     assert.match(homepage, /loadPublicTickerItems\(10\)/);
     assert.match(homepage, /<StockTicker items=\{tickerItems\}/);
-    assert.ok(homepage.indexOf("<StockTicker items={tickerItems}") < homepage.indexOf("<ApolloMoonBackdrop />"));
+    assert.ok(homepage.indexOf("<StockTicker items={tickerItems}") < homepage.indexOf("<ArtemisEarthriseBackdrop />"));
     assert.match(loader, /ranking_metric.*market_cap_usd/s);
     assert.match(loader, /order\("rank_number", \{ ascending: true \}\)/);
     assert.match(loader, /quotesByCompany/);
