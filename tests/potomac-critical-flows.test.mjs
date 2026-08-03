@@ -446,7 +446,7 @@ test("the All Convenings page remains hidden from public discovery", () => {
     ], "hidden All Convenings route");
     assert.doesNotMatch(
         migrationShell + sitemap + currentRoutes + industrialistWeek,
-        /href: "\/events"|path: "\/events"/,
+        /href: "\/events"|path: "\/events"|View all convenings/i,
         "All Convenings must not appear in navigation, sitemap, public routes, or convening CTAs"
     );
     assert.match(search, /path === "\/events"/, "search must suppress the hidden route");
