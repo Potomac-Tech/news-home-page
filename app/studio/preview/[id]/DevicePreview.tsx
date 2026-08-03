@@ -24,21 +24,21 @@ export function DevicePreview({ articleId }: { articleId: string }) {
                         onClick={() => setDevice(key as keyof typeof devices)}
                         className={`border px-5 py-3 font-mono text-xs font-bold uppercase ${
                             device === key
-                                ? "border-potomac-gold bg-potomac-gold text-potomac-primary"
-                                : "border-potomac-regolith/35 text-potomac-cream"
+                                ? "border-cabeus-ink bg-cabeus-ink text-cabeus-paper"
+                                : "border-cabeus-line bg-white/40 text-cabeus-ink hover:border-cabeus-gold"
                         }`}
                     >
                         {item.label} · {item.width}px
                     </button>
                 ))}
             </div>
-            <div className="mt-5 overflow-auto border border-potomac-regolith/30 bg-black/40 p-4">
+            <div className="mt-5 overflow-auto border border-cabeus-line bg-cabeus-smoke p-4">
                 <iframe
                     key={device}
                     title={`${selected.label} article preview`}
                     src={`/studio/preview/${articleId}/render`}
                     style={{ width: selected.width, height: selected.height }}
-                    className="mx-auto block max-w-none border border-potomac-regolith/40 bg-potomac-primary"
+                    className="mx-auto block max-w-none border border-cabeus-line bg-cabeus-paper shadow-[0_18px_60px_rgba(21,21,19,0.12)]"
                 />
             </div>
         </section>

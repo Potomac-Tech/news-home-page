@@ -32,14 +32,14 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
     const hero = article.hero_image_url ?? heroAsset?.public_url;
 
     return (
-        <article className="min-h-screen bg-potomac-primary text-potomac-cream">
-            <header className="border-b border-white/10">
+        <article className="min-h-screen bg-cabeus-paper text-cabeus-ink">
+            <header className="border-b border-cabeus-line">
                 <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-10 md:px-8 lg:grid-cols-[1.08fr_0.92fr]">
                     <div>
-                        <span className="text-xs font-bold uppercase text-potomac-gold">Cabeus Explorer preview</span>
-                        <h1 className="mt-5 font-serif text-4xl leading-tight text-white md:text-6xl">{article.title}</h1>
-                        <p className="mt-5 text-lg leading-8 text-potomac-cream/80">{article.dek ?? article.public_summary}</p>
-                        <div className="mt-5 flex flex-wrap gap-3 text-xs font-bold uppercase text-potomac-cream/50">
+                        <span className="brand-kicker">Cabeus Explorer preview</span>
+                        <h1 className="mt-5 font-serif text-4xl font-medium leading-tight text-cabeus-ink md:text-6xl">{article.title}</h1>
+                        <p className="mt-5 text-lg leading-8 text-cabeus-muted">{article.dek ?? article.public_summary}</p>
+                        <div className="mt-5 flex flex-wrap gap-3 font-mono text-xs font-bold uppercase text-cabeus-muted">
                             {author ? <Link href={`/authors/${author.slug}`}>By {author.display_name}</Link> : <span>Byline not set</span>}
                             <time>{new Date(date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</time>
                         </div>
@@ -49,10 +49,10 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
                             <img
                                 src={hero}
                                 alt={article.hero_image_alt ?? heroAsset?.alt_text ?? "Story image"}
-                                className="max-h-[34rem] w-full border border-white/10 bg-black object-contain object-top"
+                                className="max-h-[34rem] w-full border border-cabeus-line bg-cabeus-smoke object-contain object-top"
                             />
                             {heroAsset?.caption ? (
-                                <figcaption className="mt-3 text-sm leading-6 text-potomac-cream/60">
+                                <figcaption className="mt-3 text-sm leading-6 text-cabeus-muted">
                                     {heroAsset.caption}
                                 </figcaption>
                             ) : null}
@@ -62,9 +62,9 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
             </header>
             <div className="mx-auto w-full max-w-3xl px-4 py-12 md:px-8">
                 <section>
-                    <p className="text-xs font-bold uppercase text-potomac-gold">Member full story</p>
+                    <p className="brand-kicker">Member full story</p>
                     <div
-                        className="article-rich-text mt-6 text-lg leading-8 text-potomac-cream/85"
+                        className="article-rich-text mt-6 text-lg leading-8 text-cabeus-ink/85"
                         dangerouslySetInnerHTML={{
                             __html: renderArticleHtml(bodyHtml),
                         }}
@@ -73,13 +73,13 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
                 {(media ?? []).filter((asset) =>
                     asset.media_type === "video" && !inlineMediaIds.has(asset.id)
                 ).map((asset) => (
-                    <figure key={asset.id} className="border border-white/10 p-3">
+                    <figure key={asset.id} className="border border-cabeus-line p-3">
                         <EditorialVideo
                             publicUrl={asset.public_url}
                             hostingProvider={asset.hosting_provider as "supabase" | "youtube"}
                             title={asset.alt_text ?? "Article video"}
                         />
-                        {asset.caption ? <figcaption className="mt-3 text-sm text-potomac-regolith">{asset.caption}</figcaption> : null}
+                        {asset.caption ? <figcaption className="mt-3 text-sm text-cabeus-muted">{asset.caption}</figcaption> : null}
                     </figure>
                 ))}
             </div>

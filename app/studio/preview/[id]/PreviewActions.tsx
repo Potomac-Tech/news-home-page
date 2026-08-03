@@ -44,18 +44,18 @@ export function PreviewActions({
     };
 
     return (
-        <aside className="border border-potomac-regolith/30 bg-potomac-primary/60 p-5">
-            <p className="font-mono text-xs font-bold uppercase text-potomac-gold">
+        <aside className="border border-cabeus-line bg-white/45 p-5">
+            <p className="brand-kicker">
                 Publication gate
             </p>
-            <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
+            <p className="mt-3 text-sm leading-6 text-cabeus-muted">
                 Review each device size, then approve this exact saved revision. Editing the story after approval requires another preview.
             </p>
             <button
                 type="button"
                 disabled={working}
                 onClick={() => void run(approveArticlePreview, baseData(), "Current revision approved.")}
-                className="mt-5 w-full bg-potomac-gold px-4 py-3 font-mono text-xs font-bold uppercase text-potomac-primary disabled:opacity-50"
+                className="brand-button mt-5 w-full disabled:opacity-50"
             >
                 {approved ? "Reapprove current preview" : "Approve current preview"}
             </button>
@@ -63,18 +63,18 @@ export function PreviewActions({
                 type="button"
                 disabled={working || !approved}
                 onClick={() => void run(publishArticle, baseData(), "Article published.")}
-                className="mt-3 w-full border border-potomac-gold px-4 py-3 font-mono text-xs font-bold uppercase text-potomac-gold disabled:cursor-not-allowed disabled:opacity-35"
+                className="brand-button brand-button-outline mt-3 w-full disabled:cursor-not-allowed disabled:opacity-35"
             >
                 Publish now
             </button>
-            <div className="mt-5 border-t border-potomac-regolith/25 pt-5">
-                <label className="font-mono text-xs font-bold uppercase text-potomac-gold">
+            <div className="mt-5 border-t border-cabeus-line pt-5">
+                <label className="font-mono text-xs font-bold uppercase text-cabeus-bronze">
                     Schedule publishing
                     <input
                         type="datetime-local"
                         value={schedule}
                         onChange={(event) => setSchedule(event.target.value)}
-                        className="mt-2 w-full border border-potomac-regolith/30 bg-potomac-primary px-3 py-3 text-potomac-cream"
+                        className="mt-2 w-full border border-cabeus-line bg-white px-3 py-3 text-cabeus-ink outline-none focus:border-cabeus-gold"
                     />
                 </label>
                 <button
@@ -85,12 +85,12 @@ export function PreviewActions({
                         data.set("scheduled_for", new Date(schedule).toISOString());
                         void run(scheduleArticle, data, "Article scheduled.");
                     }}
-                    className="mt-3 w-full border border-potomac-regolith/40 px-4 py-3 font-mono text-xs font-bold uppercase text-potomac-cream disabled:cursor-not-allowed disabled:opacity-35"
+                    className="mt-3 w-full border border-cabeus-line px-4 py-3 font-mono text-xs font-bold uppercase text-cabeus-ink transition hover:border-cabeus-gold disabled:cursor-not-allowed disabled:opacity-35"
                 >
                     Confirm schedule
                 </button>
             </div>
-            {status ? <p role="status" className="mt-4 text-sm text-potomac-gold">{status}</p> : null}
+            {status ? <p role="status" className="mt-4 text-sm text-cabeus-bronze">{status}</p> : null}
         </aside>
     );
 }

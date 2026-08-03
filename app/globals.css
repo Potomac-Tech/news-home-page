@@ -159,18 +159,18 @@ body {
     }
 }
 .studio-rich-editor:empty::before {
-    color: rgb(139 137 128 / 0.55);
+    color: rgb(104 100 94 / 0.55);
     content: attr(data-placeholder);
     pointer-events: none;
 }
 
 .studio-rich-editor {
-    caret-color: white;
-    color: white;
+    caret-color: #151513;
+    color: #151513;
 }
 
 .studio-rich-editor :where(p, div, span, strong, em, u, s, li) {
-    color: white !important;
+    color: #151513 !important;
 }
 
 .studio-rich-editor p {
@@ -179,7 +179,7 @@ body {
 
 .studio-rich-editor h2,
 .studio-rich-editor h3 {
-    color: white;
+    color: #151513;
     font-family: var(--font-cormorant), Georgia, serif;
     font-weight: 600;
     margin: 2rem 0 0.75rem;
@@ -194,8 +194,8 @@ body {
 }
 
 .studio-rich-editor blockquote {
-    border-left: 3px solid #e9a93f;
-    color: rgb(239 236 224 / 0.8);
+    border-left: 3px solid #af9254;
+    color: #68645e;
     margin: 1.5rem 0;
     padding-left: 1.25rem;
 }
@@ -215,13 +215,13 @@ body {
 }
 
 .studio-rich-editor a {
-    color: #e9a93f;
+    color: #725a26;
     text-decoration: underline;
 }
 
 .studio-rich-editor figure,
 .article-rich-text figure {
-    border: 1px solid rgb(139 137 128 / 0.35);
+    border: 1px solid #d8d2c8;
     margin: 2rem 0;
     padding: 0.65rem;
 }
@@ -236,7 +236,7 @@ body {
 .article-rich-text figure img,
 .article-rich-text figure video,
 .article-rich-text figure iframe {
-    background: #080a0c;
+    background: #e9e5de;
     display: block;
     height: auto;
     max-height: 46rem;
@@ -253,7 +253,7 @@ body {
 }
 
 .studio-rich-editor figcaption {
-    color: rgb(239 236 224 / 0.62) !important;
+    color: #68645e !important;
     font-size: 0.82rem;
     line-height: 1.5;
     margin-top: 0.65rem;

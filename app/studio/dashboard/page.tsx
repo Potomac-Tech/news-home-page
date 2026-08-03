@@ -84,57 +84,57 @@ export default async function ArticleDashboard({
     const totalPages = Math.max(1, Math.ceil((articlesResult.count ?? 0) / pageSize));
 
     return (
-        <main className="min-h-screen bg-potomac-primary px-4 py-8 text-potomac-cream md:px-8">
+        <main className="min-h-screen bg-cabeus-paper px-4 py-10 text-cabeus-ink md:px-8 md:py-14">
             <div className="mx-auto max-w-[92rem]">
-                <header className="flex flex-wrap items-end justify-between gap-5 border-b border-potomac-regolith/25 pb-6">
+                <header className="flex flex-wrap items-end justify-between gap-5 border-b border-cabeus-line pb-8">
                     <div>
-                        <p className="font-mono text-xs font-bold uppercase text-potomac-gold">Cabeus newsroom</p>
-                        <h1 className="mt-2 font-serif text-4xl uppercase text-white">Article dashboard</h1>
-                        <p className="mt-2 text-sm text-potomac-regolith">{articlesResult.count ?? 0} matching articles · 50 per page</p>
-                        <p className="mt-3 max-w-3xl text-sm leading-6 text-potomac-cream/70">
+                        <p className="brand-kicker">Cabeus Explorer editorial studio</p>
+                        <h1 className="mt-3 font-serif text-5xl font-medium leading-none text-cabeus-ink md:text-6xl">Article dashboard</h1>
+                        <p className="mt-3 font-mono text-xs uppercase text-cabeus-bronze">{articlesResult.count ?? 0} matching articles · 50 per page</p>
+                        <p className="mt-4 max-w-3xl text-sm leading-6 text-cabeus-muted">
                             Published stories remain in the public Archives after their
                             carousel position is set to N/A. Archived status withdraws
                             a story from the public site.
                         </p>
                     </div>
-                    <Link href="/studio?new=1" className="bg-potomac-gold px-5 py-3 font-mono text-xs font-bold uppercase text-potomac-primary">New story</Link>
+                    <Link href="/studio?new=1" className="brand-button inline-flex">New story</Link>
                 </header>
 
                 <section className="mt-6 grid gap-3 sm:grid-cols-3">
                     {["draft", "scheduled", "published"].map((status) => (
-                        <Link key={status} href={`/studio/dashboard?status=${status}`} className="border border-potomac-regolith/25 p-5">
-                            <span className="font-mono text-xs font-bold uppercase text-potomac-gold">{status}</span>
-                            <strong className="mt-2 block font-serif text-4xl text-white">{counts.get(status) ?? 0}</strong>
+                        <Link key={status} href={`/studio/dashboard?status=${status}`} className="border border-cabeus-line bg-white/35 p-5 transition hover:border-cabeus-gold">
+                            <span className="font-mono text-xs font-bold uppercase text-cabeus-bronze">{status}</span>
+                            <strong className="mt-2 block font-serif text-4xl font-medium text-cabeus-ink">{counts.get(status) ?? 0}</strong>
                         </Link>
                     ))}
                 </section>
 
                 <form className="mt-6 flex flex-wrap gap-3">
-                    <input name="q" defaultValue={query} type="search" placeholder="Search headline or URL" className="min-w-64 flex-1 border border-potomac-regolith/30 bg-potomac-primary px-4 py-3 text-white" />
-                    <select name="status" defaultValue={activeStatus} className="border border-potomac-regolith/30 bg-potomac-primary px-4 py-3 text-white">
+                    <input name="q" defaultValue={query} type="search" placeholder="Search headline or URL" className="min-w-64 flex-1 border border-cabeus-line bg-white px-4 py-3 text-cabeus-ink outline-none placeholder:text-cabeus-muted/60 focus:border-cabeus-gold" />
+                    <select name="status" defaultValue={activeStatus} className="border border-cabeus-line bg-white px-4 py-3 text-cabeus-ink outline-none focus:border-cabeus-gold">
                         {statuses.map((status) => <option key={status} value={status}>{statusLabels[status]}</option>)}
                     </select>
-                    <button className="border border-potomac-gold px-5 py-3 font-mono text-xs font-bold uppercase text-potomac-gold">Filter</button>
+                    <button className="brand-button brand-button-outline">Filter</button>
                 </form>
 
-                <div className="mt-6 overflow-x-auto border border-potomac-regolith/25">
+                <div className="mt-6 overflow-x-auto border border-cabeus-line bg-white/25">
                     <table className="w-full min-w-[76rem] border-collapse text-left">
-                        <thead className="bg-black/30 font-mono text-[0.68rem] uppercase text-potomac-gold">
+                        <thead className="bg-cabeus-smoke font-mono text-[0.68rem] uppercase text-cabeus-bronze">
                             <tr><th className="p-4">Headline</th><th className="p-4">Author</th><th className="p-4">Sections</th><th className="p-4">Status</th><th className="p-4">Publishing date</th><th className="p-4">Carousel</th><th className="p-4">Updated</th><th className="p-4">Actions</th></tr>
                         </thead>
                         <tbody>
                             {rows.map((article) => {
                                 const publishDate = article.scheduled_for ?? article.published_at;
                                 return (
-                                    <tr key={article.id} className="border-t border-potomac-regolith/20">
-                                        <td className="p-4"><strong className="block text-white">{article.title}</strong><span className="mt-1 block font-mono text-xs text-potomac-regolith">/news/{article.slug}</span></td>
+                                    <tr key={article.id} className="border-t border-cabeus-line transition hover:bg-white/50">
+                                        <td className="p-4"><strong className="block font-serif text-xl font-medium leading-tight text-cabeus-ink">{article.title}</strong><span className="mt-1 block font-mono text-xs text-cabeus-muted">/news/{article.slug}</span></td>
                                         <td className="p-4 text-sm">{article.primary_author_id ? authorById.get(article.primary_author_id) ?? "Unknown" : "Byline not set"}</td>
                                         <td className="p-4 text-sm">
                                             {(sectionsByArticle.get(article.id) ?? ["news"])
                                                 .map((slug) => sectionLabelBySlug.get(slug) ?? slug)
                                                 .join(", ")}
                                         </td>
-                                        <td className="p-4 font-mono text-xs uppercase text-potomac-gold">
+                                        <td className="p-4 font-mono text-xs uppercase text-cabeus-bronze">
                                             {article.status === "archived" ? "withdrawn" : article.status.replace("_", " ")}
                                         </td>
                                         <td className="p-4 text-sm">{publishDate ? new Date(publishDate).toLocaleString() : "Not set"}</td>
@@ -147,7 +147,7 @@ export default async function ArticleDashboard({
                                             />
                                         </td>
                                         <td className="p-4 text-sm">{new Date(article.updated_at).toLocaleString()}</td>
-                                        <td className="p-4"><div className="flex gap-3"><Link href={`/studio?article=${article.id}`} className="font-mono text-xs font-bold uppercase text-potomac-cream">Edit</Link><Link href={`/studio/preview/${article.id}`} className="font-mono text-xs font-bold uppercase text-potomac-gold">Preview</Link></div></td>
+                                        <td className="p-4"><div className="flex gap-3"><Link href={`/studio?article=${article.id}`} className="border-b border-cabeus-gold font-mono text-xs font-bold uppercase text-cabeus-ink">Edit</Link><Link href={`/studio/preview/${article.id}`} className="border-b border-cabeus-gold font-mono text-xs font-bold uppercase text-cabeus-bronze">Preview</Link></div></td>
                                     </tr>
                                 );
                             })}

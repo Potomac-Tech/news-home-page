@@ -28,6 +28,7 @@ const articlePage = readFileSync("app/news/[slug]/page.tsx", "utf8");
 const homepage = readFileSync("app/page.tsx", "utf8");
 const richText = readFileSync("lib/editorial/rich-text.ts", "utf8");
 const nextConfig = readFileSync("next.config.mjs", "utf8");
+const globalStyles = readFileSync("app/globals.css", "utf8");
 const videoMigration = readFileSync("supabase/migrations/20260728172344_allow_editorial_quicktime_video.sql", "utf8");
 const youtubeMigration = readFileSync("supabase/migrations/20260729045803_add_youtube_editorial_media.sql", "utf8");
 const youtube = readFileSync("lib/editorial/youtube.ts", "utf8");
@@ -260,8 +261,8 @@ test("studio preserves headline case and separates story paragraphs", () => {
     assert.match(articlePage, /split\(\/\\n\\s\*\\n\/\)/);
     assert.match(studioUi, /aria-label="Story body"/);
     assert.match(studioUi, /contentEditable/);
-    assert.match(studioUi, /studio-rich-editor[^"]*text-white/);
-    assert.match(readFileSync("app/globals.css", "utf8"), /\.studio-rich-editor[\s\S]*caret-color: white;[\s\S]*color: white;/);
+    assert.match(studioUi, /studio-rich-editor[^"]*text-cabeus-ink/);
+    assert.match(globalStyles, /\.studio-rich-editor[\s\S]*caret-color: #151513;[\s\S]*color: #151513;/);
     assert.match(studioUi, /runEditorCommand\("bold"\)/);
     assert.match(studioUi, /runEditorCommand\("underline"\)/);
     assert.match(studioUi, /setBodyHtml/);
@@ -275,6 +276,27 @@ test("studio preserves headline case and separates story paragraphs", () => {
     assert.match(studioUi, /Unsaved draft/);
     assert.match(studioUi, /aria-label="Text style"/);
     assert.match(devicePreview, /Computer/);
+});
+
+test("editorial CMS follows the Cabeus visual system", () => {
+    const surfaces = [
+        studioUi,
+        dashboard,
+        previewPage,
+        previewRender,
+        previewActions,
+        devicePreview,
+        carouselControl,
+    ];
+
+    for (const surface of surfaces) {
+        assert.match(surface, /cabeus-/);
+        assert.doesNotMatch(surface, /bg-potomac-primary|text-potomac-cream|text-potomac-gold|text-potomac-regolith/);
+    }
+
+    assert.match(studioUi, /bg-cabeus-paper[^"]*text-cabeus-ink/);
+    assert.match(dashboard, /bg-cabeus-paper[^"]*text-cabeus-ink/);
+    assert.match(previewRender, /bg-cabeus-paper[^"]*text-cabeus-ink/);
 });
 
 test("new stories, safe rich text, and standard article rendering are enforced", () => {

@@ -64,9 +64,9 @@ export type StudioArticle = {
 };
 
 const inputClass =
-    "mt-2 w-full border border-potomac-regolith/30 bg-potomac-primary px-4 py-3 text-base text-white outline-none transition placeholder:text-potomac-regolith/55 focus:border-potomac-gold";
+    "mt-2 w-full border border-cabeus-line bg-white px-4 py-3 text-base text-cabeus-ink outline-none transition placeholder:text-cabeus-muted/55 focus:border-cabeus-gold";
 const labelClass =
-    "block font-mono text-[0.64rem] font-bold uppercase text-potomac-gold";
+    "block font-mono text-[0.64rem] font-bold uppercase text-cabeus-bronze";
 
 function slugify(value: string) {
     return value
@@ -180,7 +180,7 @@ function MediaAssetEditor({
                 event.dataTransfer.effectAllowed = "copy";
                 event.dataTransfer.setData("application/x-cabeus-media", asset.id);
             }}
-            className="border border-potomac-regolith/25 p-2"
+            className="border border-cabeus-line bg-white/35 p-2"
         >
             {asset.hostingProvider === "youtube" ? (
                 <iframe
@@ -213,7 +213,7 @@ function MediaAssetEditor({
                     href={asset.sourceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2 inline-block font-mono text-[0.58rem] font-bold uppercase text-potomac-gold underline"
+                    className="mt-2 inline-block font-mono text-[0.58rem] font-bold uppercase text-cabeus-bronze underline"
                 >
                     Open on YouTube
                 </a>
@@ -236,8 +236,8 @@ function MediaAssetEditor({
                     placeholder="Optional caption or credit"
                 />
             </label>
-            <fieldset className="mt-3 border border-potomac-regolith/25 p-2">
-                <legend className="px-1 font-mono text-[0.56rem] font-bold uppercase text-potomac-gold">
+            <fieldset className="mt-3 border border-cabeus-line p-2">
+                <legend className="px-1 font-mono text-[0.56rem] font-bold uppercase text-cabeus-bronze">
                     Place in story
                 </legend>
                 <div className="grid grid-cols-3 gap-1">
@@ -257,15 +257,15 @@ function MediaAssetEditor({
                             }, placement)}
                             className={`px-2 py-2 font-mono text-[0.52rem] font-bold uppercase disabled:opacity-40 ${
                                 placement === "cursor"
-                                    ? "bg-potomac-gold text-potomac-primary"
-                                    : "border border-potomac-gold/45 text-potomac-gold"
+                                    ? "bg-cabeus-ink text-cabeus-paper"
+                                    : "border border-cabeus-line text-cabeus-ink hover:border-cabeus-gold"
                             }`}
                         >
                             {label}
                         </button>
                     ))}
                 </div>
-                <p className="mt-2 text-[0.62rem] leading-4 text-potomac-regolith">
+                <p className="mt-2 text-[0.62rem] leading-4 text-cabeus-muted">
                     Repositioning moves the existing media. You can also drag it to an exact paragraph.
                 </p>
             </fieldset>
@@ -274,7 +274,7 @@ function MediaAssetEditor({
                     type="button"
                     disabled={disabled || isThumbnail}
                     onClick={() => void onUseAsThumbnail(asset.id)}
-                    className="mt-2 w-full border border-potomac-gold/55 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-potomac-gold disabled:opacity-55"
+                    className="mt-2 w-full border border-cabeus-gold px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-cabeus-bronze disabled:opacity-55"
                 >
                     {isThumbnail ? "Main-page thumbnail" : "Use as thumbnail"}
                 </button>
@@ -283,7 +283,7 @@ function MediaAssetEditor({
                 type="button"
                 disabled={disabled}
                 onClick={() => void onSave(asset.id, altText, caption)}
-                className="mt-3 w-full border border-potomac-gold/55 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-potomac-gold hover:border-potomac-gold disabled:opacity-40"
+                className="mt-3 w-full border border-cabeus-ink px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-cabeus-ink hover:bg-cabeus-ink hover:text-cabeus-paper disabled:opacity-40"
             >
                 Save media details
             </button>
@@ -291,7 +291,7 @@ function MediaAssetEditor({
                 type="button"
                 disabled={disabled}
                 onClick={() => void onRemove(asset.id)}
-                className="mt-2 w-full border border-red-300/45 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-red-200 hover:border-red-200 disabled:opacity-40"
+                className="mt-2 w-full border border-red-800/35 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-red-800 hover:border-red-800 disabled:opacity-40"
             >
                 Remove media
             </button>
@@ -840,27 +840,27 @@ export function EditorialStudio({
     }
 
     return (
-        <div className="min-h-screen bg-[#080a0c] text-potomac-cream">
-            <header className="sticky top-0 z-40 border-b border-white/10 bg-[#080a0c]/95 backdrop-blur">
+        <div className="min-h-screen bg-cabeus-paper text-cabeus-ink">
+            <header className="sticky top-0 z-40 border-b border-cabeus-line bg-cabeus-paper/95 backdrop-blur">
                 <div className="flex min-h-16 w-full flex-wrap items-center justify-between gap-3 px-3 md:px-6">
                     <div className="flex items-center gap-3">
-                        <a href="/studio/dashboard" aria-label="Back to article dashboard" title="Article dashboard" className="grid h-10 w-10 place-items-center text-xl text-potomac-regolith hover:text-white">←</a>
-                        <span className="h-5 w-px bg-white/15" />
-                        <p role="status" className="font-mono text-[0.62rem] uppercase text-potomac-regolith">
-                            <span className={`mr-2 inline-block h-2 w-2 rounded-full ${isSaving ? "bg-potomac-gold" : "bg-emerald-400"}`} />
+                        <a href="/studio/dashboard" aria-label="Back to article dashboard" title="Article dashboard" className="grid h-10 w-10 place-items-center border border-cabeus-line text-xl text-cabeus-ink hover:border-cabeus-gold">←</a>
+                        <span className="h-5 w-px bg-cabeus-line" />
+                        <p role="status" className="font-mono text-[0.62rem] uppercase text-cabeus-muted">
+                            <span className={`mr-2 inline-block h-2 w-2 rounded-full ${isSaving ? "bg-cabeus-gold" : "bg-cabeus-bronze"}`} />
                             {saveStatus || (draft.id === "new" ? "Unsaved draft" : "Saved")}
                         </p>
                     </div>
                     <div className="flex items-center gap-3">
-                        <a href="/studio?new=1" className="border border-white/15 px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-white hover:border-potomac-gold">New story</a>
+                        <a href="/studio?new=1" className="border border-cabeus-line px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-cabeus-ink hover:border-cabeus-gold">New story</a>
                         {draft.id !== "new" ? (
-                            <a href={`/studio/preview/${draft.id}`} className="border border-white/15 px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-white hover:border-potomac-gold">Preview</a>
+                            <a href={`/studio/preview/${draft.id}`} className="border border-cabeus-line px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-cabeus-ink hover:border-cabeus-gold">Preview</a>
                         ) : null}
-                        <button disabled={isSaving} type="submit" form={formId} className="bg-potomac-gold px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-potomac-primary disabled:cursor-wait disabled:opacity-55">{draft.id === "new" ? "Save draft" : "Continue"}</button>
+                        <button disabled={isSaving} type="submit" form={formId} className="bg-cabeus-ink px-4 py-2.5 font-mono text-[0.64rem] font-bold uppercase text-cabeus-paper disabled:cursor-wait disabled:opacity-55">{draft.id === "new" ? "Save draft" : "Continue"}</button>
                     </div>
                 </div>
-                <div className="overflow-x-auto border-t border-white/10">
-                    <div className="mx-auto flex min-w-max items-center justify-center gap-1 px-4 py-2">
+                <div className="overflow-x-auto border-t border-cabeus-line bg-cabeus-smoke/70">
+                    <div className="mx-auto flex min-w-max items-center justify-center gap-1 px-4 py-2 text-cabeus-ink">
                         <select
                             aria-label="Text style"
                             defaultValue=""
@@ -870,13 +870,13 @@ export function EditorialStudio({
                                 }
                                 event.target.value = "";
                             }}
-                            className="h-9 border-0 bg-transparent px-2 text-sm text-potomac-cream outline-none"
+                            className="h-9 border-0 bg-transparent px-2 text-sm text-cabeus-ink outline-none"
                         >
-                            <option value="" className="bg-potomac-primary">Style</option>
-                            <option value="p" className="bg-potomac-primary">Body</option>
-                            <option value="h2" className="bg-potomac-primary">Heading 2</option>
-                            <option value="h3" className="bg-potomac-primary">Heading 3</option>
-                            <option value="blockquote" className="bg-potomac-primary">Quote</option>
+                            <option value="" className="bg-cabeus-paper">Style</option>
+                            <option value="p" className="bg-cabeus-paper">Body</option>
+                            <option value="h2" className="bg-cabeus-paper">Heading 2</option>
+                            <option value="h3" className="bg-cabeus-paper">Heading 3</option>
+                            <option value="blockquote" className="bg-cabeus-paper">Quote</option>
                         </select>
                         <select
                             aria-label="Font family"
@@ -885,12 +885,12 @@ export function EditorialStudio({
                                 if (event.target.value) runEditorCommand("fontName", event.target.value);
                                 event.target.value = "";
                             }}
-                            className="h-9 border-0 bg-transparent px-2 text-sm text-potomac-cream outline-none"
+                            className="h-9 border-0 bg-transparent px-2 text-sm text-cabeus-ink outline-none"
                         >
-                            <option value="" className="bg-potomac-primary">Font</option>
-                            <option value="Arial" className="bg-potomac-primary">Sans</option>
-                            <option value="Georgia" className="bg-potomac-primary">Serif</option>
-                            <option value="Courier New" className="bg-potomac-primary">Mono</option>
+                            <option value="" className="bg-cabeus-paper">Font</option>
+                            <option value="Arial" className="bg-cabeus-paper">Sans</option>
+                            <option value="Georgia" className="bg-cabeus-paper">Serif</option>
+                            <option value="Courier New" className="bg-cabeus-paper">Mono</option>
                         </select>
                         <select
                             aria-label="Font size"
@@ -899,20 +899,20 @@ export function EditorialStudio({
                                 if (event.target.value) runEditorCommand("fontSize", event.target.value);
                                 event.target.value = "";
                             }}
-                            className="h-9 border-0 bg-transparent px-2 text-sm text-potomac-cream outline-none"
+                            className="h-9 border-0 bg-transparent px-2 text-sm text-cabeus-ink outline-none"
                         >
-                            <option value="" className="bg-potomac-primary">Size</option>
-                            <option value="2" className="bg-potomac-primary">Small</option>
-                            <option value="3" className="bg-potomac-primary">Body</option>
-                            <option value="4" className="bg-potomac-primary">Large</option>
-                            <option value="5" className="bg-potomac-primary">Display</option>
+                            <option value="" className="bg-cabeus-paper">Size</option>
+                            <option value="2" className="bg-cabeus-paper">Small</option>
+                            <option value="3" className="bg-cabeus-paper">Body</option>
+                            <option value="4" className="bg-cabeus-paper">Large</option>
+                            <option value="5" className="bg-cabeus-paper">Display</option>
                         </select>
                         <button
                             type="button"
                             title="Clear formatting"
                             aria-label="Clear formatting"
                             onClick={() => runEditorCommand("removeFormat")}
-                            className="h-9 px-2 font-mono text-xs font-bold hover:bg-white/5"
+                            className="h-9 px-2 font-mono text-xs font-bold text-cabeus-ink hover:bg-cabeus-line/60"
                         >
                             Tx
                         </button>
@@ -925,44 +925,44 @@ export function EditorialStudio({
                                 insertUploadedMediaRef.current = true;
                                 mediaInputRef.current?.click();
                             }}
-                            className="h-9 px-2 font-mono text-xs font-bold hover:bg-white/5"
+                            className="h-9 px-2 font-mono text-xs font-bold text-cabeus-ink hover:bg-cabeus-line/60"
                         >
                             Media
                         </button>
-                        <span className="mx-2 h-5 w-px bg-white/15" />
-                        <button type="button" title="Bold" aria-label="Bold" onClick={() => runEditorCommand("bold")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">B</button>
-                        <button type="button" title="Italic" aria-label="Italic" onClick={() => runEditorCommand("italic")} className="h-9 w-9 font-serif text-lg italic hover:bg-white/5">I</button>
-                        <button type="button" title="Underline" aria-label="Underline" onClick={() => runEditorCommand("underline")} className="h-9 w-9 text-lg underline hover:bg-white/5">U</button>
-                        <button type="button" title="Heading" aria-label="Heading" onClick={() => runEditorCommand("formatBlock", "h2")} className="h-9 w-9 text-lg font-bold hover:bg-white/5">T</button>
-                        <button type="button" title="Insert link" aria-label="Insert link" onClick={addLink} className="h-9 w-9 text-lg hover:bg-white/5">↗</button>
-                        <span className="mx-2 h-5 w-px bg-white/15" />
-                        <button type="button" title="Upload image or video" aria-label="Upload image or video" onClick={() => mediaInputRef.current?.click()} className="h-9 w-9 text-lg hover:bg-white/5">▧</button>
-                        <button type="button" title="Import Word document" aria-label="Import Word document" onClick={() => fileInputRef.current?.click()} className="h-9 px-3 font-mono text-xs font-bold hover:bg-white/5">DOC</button>
-                        <span className="mx-2 h-5 w-px bg-white/15" />
-                        <button type="button" title="Bulleted list" aria-label="Bulleted list" onClick={() => runEditorCommand("insertUnorderedList")} className="h-9 w-9 text-lg hover:bg-white/5">•</button>
-                        <button type="button" title="Quote" aria-label="Quote" onClick={() => runEditorCommand("formatBlock", "blockquote")} className="h-9 w-9 text-lg hover:bg-white/5">”</button>
+                        <span className="mx-2 h-5 w-px bg-cabeus-line" />
+                        <button type="button" title="Bold" aria-label="Bold" onClick={() => runEditorCommand("bold")} className="h-9 w-9 text-lg font-bold text-cabeus-ink hover:bg-cabeus-line/60">B</button>
+                        <button type="button" title="Italic" aria-label="Italic" onClick={() => runEditorCommand("italic")} className="h-9 w-9 font-serif text-lg italic text-cabeus-ink hover:bg-cabeus-line/60">I</button>
+                        <button type="button" title="Underline" aria-label="Underline" onClick={() => runEditorCommand("underline")} className="h-9 w-9 text-lg text-cabeus-ink underline hover:bg-cabeus-line/60">U</button>
+                        <button type="button" title="Heading" aria-label="Heading" onClick={() => runEditorCommand("formatBlock", "h2")} className="h-9 w-9 text-lg font-bold text-cabeus-ink hover:bg-cabeus-line/60">T</button>
+                        <button type="button" title="Insert link" aria-label="Insert link" onClick={addLink} className="h-9 w-9 text-lg text-cabeus-ink hover:bg-cabeus-line/60">↗</button>
+                        <span className="mx-2 h-5 w-px bg-cabeus-line" />
+                        <button type="button" title="Upload image or video" aria-label="Upload image or video" onClick={() => mediaInputRef.current?.click()} className="h-9 w-9 text-lg text-cabeus-ink hover:bg-cabeus-line/60">▧</button>
+                        <button type="button" title="Import Word document" aria-label="Import Word document" onClick={() => fileInputRef.current?.click()} className="h-9 px-3 font-mono text-xs font-bold text-cabeus-ink hover:bg-cabeus-line/60">DOC</button>
+                        <span className="mx-2 h-5 w-px bg-cabeus-line" />
+                        <button type="button" title="Bulleted list" aria-label="Bulleted list" onClick={() => runEditorCommand("insertUnorderedList")} className="h-9 w-9 text-lg text-cabeus-ink hover:bg-cabeus-line/60">•</button>
+                        <button type="button" title="Quote" aria-label="Quote" onClick={() => runEditorCommand("formatBlock", "blockquote")} className="h-9 w-9 text-lg text-cabeus-ink hover:bg-cabeus-line/60">”</button>
                     </div>
                 </div>
             </header>
 
             <div className="mx-auto w-full">
                 <aside className="hidden">
-                    <button onClick={startNewStory} className="w-full bg-potomac-gold px-4 py-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-primary">New story</button>
+                    <button onClick={startNewStory} className="w-full bg-cabeus-ink px-4 py-3 font-mono text-[0.68rem] font-bold uppercase text-cabeus-paper">New story</button>
                     <label className={`${labelClass} mt-5`}>
                         Find a story
                         <input value={query} onChange={(event) => setQuery(event.target.value)} className={inputClass} type="search" placeholder="Headline or status" />
                     </label>
-                    <div className="mt-5 max-h-[34rem] space-y-px overflow-y-auto border-y border-potomac-regolith/20">
+                    <div className="mt-5 max-h-[34rem] space-y-px overflow-y-auto border-y border-cabeus-line">
                         {filteredArticles.map((article) => (
                             <button
                                 key={article.id}
                                 onClick={() => chooseArticle(article)}
-                                className={`w-full border-b border-potomac-regolith/15 px-3 py-4 text-left transition ${selectedId === article.id ? "bg-potomac-gold/12" : "hover:bg-white/5"}`}
+                                className={`w-full border-b border-cabeus-line px-3 py-4 text-left transition ${selectedId === article.id ? "bg-cabeus-smoke" : "hover:bg-white/50"}`}
                             >
-                                <span className="block font-mono text-[0.58rem] font-bold uppercase text-potomac-gold">{article.status} · {article.accessTier}</span>
-                                <span className="mt-2 block font-serif text-base leading-5 text-white">{article.title}</span>
-                                <span className="mt-2 block text-xs text-potomac-cream/65">{article.authorName ? `By ${article.authorName}` : "Byline not set"}</span>
-                                <span className="mt-2 block font-mono text-[0.56rem] uppercase text-potomac-regolith">{formatUpdatedDate(article.updatedAt)}</span>
+                                <span className="block font-mono text-[0.58rem] font-bold uppercase text-cabeus-bronze">{article.status} · {article.accessTier}</span>
+                                <span className="mt-2 block font-serif text-base leading-5 text-cabeus-ink">{article.title}</span>
+                                <span className="mt-2 block text-xs text-cabeus-muted">{article.authorName ? `By ${article.authorName}` : "Byline not set"}</span>
+                                <span className="mt-2 block font-mono text-[0.56rem] uppercase text-cabeus-muted">{formatUpdatedDate(article.updatedAt)}</span>
                             </button>
                         ))}
                     </div>
@@ -980,14 +980,14 @@ export function EditorialStudio({
                         />
                         <input type="hidden" name="body_excerpt" value={draft.bodyExcerpt || draft.publicTeaser} />
 
-                        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-potomac-regolith/25 pb-4">
+                        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-cabeus-line pb-4">
                             <div>
-                                <p className="font-mono text-[0.6rem] font-bold uppercase text-potomac-gold">{draft.id === "new" ? "New assignment" : draft.status}</p>
-                                <p className="mt-1 text-sm text-potomac-regolith">{draft.id === "new" ? "Unsaved story" : `/news/${draft.slug}`}</p>
+                                <p className="font-mono text-[0.6rem] font-bold uppercase text-cabeus-bronze">{draft.id === "new" ? "New assignment" : draft.status}</p>
+                                <p className="mt-1 text-sm text-cabeus-muted">{draft.id === "new" ? "Unsaved story" : `/news/${draft.slug}`}</p>
                             </div>
-                            <label className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">
+                            <label className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-bronze">
                                 Reader access
-                                <select name="access_tier_required" value={draft.accessTier} onChange={(event) => updateDraft("accessTier", event.target.value)} className="ml-3 border border-potomac-regolith/30 bg-potomac-primary px-3 py-2 text-potomac-cream">
+                                <select name="access_tier_required" value={draft.accessTier} onChange={(event) => updateDraft("accessTier", event.target.value)} className="ml-3 border border-cabeus-line bg-white px-3 py-2 text-cabeus-ink">
                                     <option value="explorer">Explorer</option>
                                     <option value="scout">Scout</option>
                                     <option value="meridian">Meridian</option>
@@ -995,15 +995,15 @@ export function EditorialStudio({
                             </label>
                         </div>
 
-                        <fieldset className="mt-5 border-b border-potomac-regolith/25 pb-5">
-                            <legend className="font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">
+                        <fieldset className="mt-5 border-b border-cabeus-line pb-5">
+                            <legend className="font-mono text-[0.62rem] font-bold uppercase text-cabeus-bronze">
                                 Article sections
                             </legend>
                             <div className="mt-3 flex flex-wrap gap-x-5 gap-y-3">
                                 {editorialSections.map((section) => (
                                     <label
                                         key={section.slug}
-                                        className="flex items-center gap-2 text-sm text-white"
+                                        className="flex items-center gap-2 text-sm text-cabeus-ink"
                                     >
                                         <input
                                             type="checkbox"
@@ -1012,7 +1012,7 @@ export function EditorialStudio({
                                             checked={draft.sectionTags.includes(section.slug)}
                                             onChange={() => toggleSectionTag(section.slug)}
                                             disabled={isSaving}
-                                            className="h-4 w-4 accent-potomac-gold"
+                                            className="h-4 w-4 accent-cabeus-bronze"
                                         />
                                         {section.label}
                                     </label>
@@ -1036,7 +1036,7 @@ export function EditorialStudio({
                                             slug: current.id === "new" ? slugify(title) : current.slug,
                                         }));
                                     }}
-                                    className="mt-6 w-full resize-none overflow-hidden border-0 bg-transparent font-serif text-5xl leading-[1.08] text-white outline-none [field-sizing:content] placeholder:text-white/25 md:text-6xl"
+                                    className="mt-6 w-full resize-none overflow-hidden border-0 bg-transparent font-serif text-5xl font-medium leading-[1.02] text-cabeus-ink outline-none [field-sizing:content] placeholder:text-cabeus-muted/35 md:text-6xl"
                                     placeholder="Title"
                                 />
                             </label>
@@ -1048,7 +1048,7 @@ export function EditorialStudio({
                                     name="author_name"
                                     value={draft.authorName}
                                     onChange={(event) => updateDraft("authorName", event.target.value)}
-                                    className="min-w-48 border border-white/15 bg-white/5 px-4 py-2 text-sm text-white outline-none focus:border-potomac-gold"
+                                    className="min-w-48 border border-cabeus-line bg-white px-4 py-2 text-sm text-cabeus-ink outline-none focus:border-cabeus-gold"
                                     placeholder="Author name"
                                     autoComplete="name"
                                 />
@@ -1056,10 +1056,10 @@ export function EditorialStudio({
 
                             <label className="order-2 block">
                                 <span className="sr-only">Standfirst</span>
-                                <textarea required name="public_summary" rows={1} value={draft.publicSummary} onChange={(event) => updateDraft("publicSummary", event.target.value)} className="mt-4 w-full resize-none overflow-hidden border-0 bg-transparent text-xl leading-8 text-potomac-cream/75 outline-none [field-sizing:content] placeholder:text-potomac-regolith/50" placeholder="Add a subtitle..." />
+                                <textarea required name="public_summary" rows={1} value={draft.publicSummary} onChange={(event) => updateDraft("publicSummary", event.target.value)} className="mt-4 w-full resize-none overflow-hidden border-0 bg-transparent text-xl leading-8 text-cabeus-muted outline-none [field-sizing:content] placeholder:text-cabeus-muted/50" placeholder="Add a subtitle..." />
                             </label>
 
-                            <section className="order-6 mt-10 border-y border-white/10 py-6">
+                            <section className="order-6 mt-10 border-y border-cabeus-line py-6">
                                 <div
                                     onDragOver={(event) => event.preventDefault()}
                                     onDrop={(event) => {
@@ -1067,7 +1067,7 @@ export function EditorialStudio({
                                         const file = event.dataTransfer.files[0];
                                         if (file) void importWordDocument(file);
                                     }}
-                                    className="border border-dashed border-potomac-gold/55 bg-potomac-primary/45 p-6 text-center transition hover:border-potomac-gold"
+                                    className="border border-dashed border-cabeus-gold bg-white/40 p-6 text-center transition hover:bg-cabeus-smoke/70"
                                 >
                                     <input
                                         ref={fileInputRef}
@@ -1082,21 +1082,21 @@ export function EditorialStudio({
                                         }}
                                     />
                                     <label htmlFor="studio-word-document" className="cursor-pointer">
-                                        <span className="block font-serif text-xl uppercase text-white">Drop Word story here</span>
-                                        <span className="mt-2 block text-sm text-potomac-regolith">or select a .docx file · 10 MB maximum</span>
+                                        <span className="block font-serif text-xl text-cabeus-ink">Drop Word story here</span>
+                                        <span className="mt-2 block text-sm text-cabeus-muted">or select a .docx file · 10 MB maximum</span>
                                     </label>
-                                    {importStatus ? <p role="status" className="mt-3 text-sm text-potomac-gold">{importStatus}</p> : null}
+                                    {importStatus ? <p role="status" className="mt-3 text-sm text-cabeus-bronze">{importStatus}</p> : null}
                                 </div>
                                 {draft.sourceDocuments.length ? (
                                     <div className="mt-3 flex flex-wrap gap-2">
                                         {draft.sourceDocuments.map((document) => (
-                                            <span key={document.id} className="border border-potomac-regolith/25 px-3 py-2 text-xs text-potomac-cream/70">{document.fileName} · {formatFileSize(document.sizeBytes)}</span>
+                                            <span key={document.id} className="border border-cabeus-line px-3 py-2 text-xs text-cabeus-muted">{document.fileName} · {formatFileSize(document.sizeBytes)}</span>
                                         ))}
                                     </div>
                                 ) : null}
                             </section>
 
-                            <section className="order-7 border-b border-white/10 py-6">
+                            <section className="order-7 border-b border-cabeus-line py-6">
                                 <div className="grid gap-5 md:grid-cols-2">
                                     <label className={`${labelClass} md:col-span-2`}>
                                         Story images and video
@@ -1109,19 +1109,19 @@ export function EditorialStudio({
                                             className={inputClass}
                                             onChange={(event) => void uploadMediaImmediately(event.target.files)}
                                         />
-                                        <span className="mt-2 block text-[0.58rem] text-potomac-regolith">JPG, PNG, WebP, GIF, MP4, WebM, MOV, or M4V. 50 MB maximum per file.</span>
-                                        <span className="mt-1 block text-[0.58rem] text-potomac-regolith">After upload, drag media into the story, use Insert at cursor, and choose one image as the main-page thumbnail.</span>
+                                        <span className="mt-2 block text-[0.58rem] text-cabeus-muted">JPG, PNG, WebP, GIF, MP4, WebM, MOV, or M4V. 50 MB maximum per file.</span>
+                                        <span className="mt-1 block text-[0.58rem] text-cabeus-muted">After upload, drag media into the story, use Insert at cursor, and choose one image as the main-page thumbnail.</span>
                                         {selectedMediaNames.length ? (
-                                            <span className="mt-2 block normal-case text-white">
+                                            <span className="mt-2 block normal-case text-cabeus-ink">
                                                 Ready to upload: {selectedMediaNames.join(", ")}
                                             </span>
                                         ) : null}
                                     </label>
-                                    <div className="border border-potomac-regolith/25 p-4 md:col-span-2">
+                                    <div className="border border-cabeus-line bg-white/35 p-4 md:col-span-2">
                                         <div className="flex flex-wrap items-start justify-between gap-3">
                                             <div>
                                                 <p className={labelClass}>YouTube Unlisted video</p>
-                                                <p className="mt-2 max-w-2xl text-xs leading-5 text-potomac-regolith">
+                                                <p className="mt-2 max-w-2xl text-xs leading-5 text-cabeus-muted">
                                                     Upload the video to the Cabeus channel with visibility set to Unlisted, then paste its YouTube watch or share URL. Anyone with access to the published article can play the video.
                                                 </p>
                                             </div>
@@ -1130,7 +1130,7 @@ export function EditorialStudio({
                                                     href={CABEUS_YOUTUBE_CHANNEL_URL}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="border border-potomac-regolith/40 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-white"
+                                                    className="border border-cabeus-line px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-cabeus-ink hover:bg-cabeus-smoke"
                                                 >
                                                     Cabeus channel
                                                 </a>
@@ -1138,7 +1138,7 @@ export function EditorialStudio({
                                                     href={YOUTUBE_UPLOAD_URL}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="border border-potomac-gold/55 px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-potomac-gold"
+                                                    className="border border-cabeus-gold px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-cabeus-bronze hover:bg-cabeus-smoke"
                                                 >
                                                     Upload on YouTube
                                                 </a>
@@ -1157,7 +1157,7 @@ export function EditorialStudio({
                                                 type="button"
                                                 disabled={isSaving || !youtubeUrl.trim()}
                                                 onClick={() => void attachYouTubeVideo()}
-                                                className="bg-potomac-gold px-5 py-3 font-mono text-[0.62rem] font-bold uppercase text-potomac-primary disabled:opacity-40"
+                                                className="bg-cabeus-ink px-5 py-3 font-mono text-[0.62rem] font-bold uppercase text-cabeus-paper disabled:opacity-40"
                                             >
                                                 Attach video
                                             </button>
@@ -1211,7 +1211,7 @@ export function EditorialStudio({
                                     onChange={(event) => updateDraft("publishAt", event.target.value)}
                                     className={inputClass}
                                 />
-                                <span className="mt-2 block text-[0.58rem] text-potomac-regolith">Scheduling is confirmed from the device preview after this draft is saved.</span>
+                                <span className="mt-2 block text-[0.58rem] text-cabeus-muted">Scheduling is confirmed from the device preview after this draft is saved.</span>
                             </label>
 
                             <section className="order-4 mt-8">
@@ -1243,21 +1243,21 @@ export function EditorialStudio({
                                     }}
                                     onPaste={handlePlainTextPaste}
                                     dangerouslySetInnerHTML={{ __html: bodyHtml }}
-                                    className="studio-rich-editor min-h-[32rem] w-full border-0 bg-transparent py-3 text-lg leading-8 text-white outline-none"
+                                    className="studio-rich-editor min-h-[32rem] w-full border-0 bg-transparent py-3 text-lg leading-8 text-cabeus-ink outline-none"
                                 />
                             </section>
 
-                            <section className="order-5 mt-12 border-y border-white/10 py-6">
+                            <section className="order-5 mt-12 border-y border-cabeus-line py-6">
                                 <div className="flex flex-wrap items-center justify-between gap-4">
-                                    <h2 className="font-serif text-2xl uppercase text-white">Public teaser</h2>
-                                    <button type="button" onClick={draftTeaser} className="border border-potomac-gold/55 px-4 py-2 font-mono text-[0.62rem] font-bold uppercase text-potomac-gold">Draft from opening</button>
+                                    <h2 className="font-serif text-2xl text-cabeus-ink">Public teaser</h2>
+                                    <button type="button" onClick={draftTeaser} className="border border-cabeus-gold px-4 py-2 font-mono text-[0.62rem] font-bold uppercase text-cabeus-bronze hover:bg-cabeus-smoke">Draft from opening</button>
                                 </div>
                                 <textarea required name="public_teaser_markdown" rows={5} value={draft.publicTeaser} onChange={(event) => updateDraft("publicTeaser", event.target.value)} className={inputClass} placeholder="Give non-members enough context to understand the news and why it matters" />
-                                <p className="mt-2 text-right font-mono text-[0.58rem] uppercase text-potomac-regolith">{draft.publicTeaser.length} characters</p>
+                                <p className="mt-2 text-right font-mono text-[0.58rem] uppercase text-cabeus-muted">{draft.publicTeaser.length} characters</p>
                             </section>
 
-                            <details className="order-9 mt-6 border-b border-white/10 pb-6">
-                                <summary className="cursor-pointer font-mono text-[0.66rem] font-bold uppercase text-potomac-gold">Search, answer engines, and URL</summary>
+                            <details className="order-9 mt-6 border-b border-cabeus-line pb-6">
+                                <summary className="cursor-pointer font-mono text-[0.66rem] font-bold uppercase text-cabeus-bronze">Search, answer engines, and URL</summary>
                                 <div className="mt-5 grid gap-5 md:grid-cols-2">
                                     <label className={labelClass}>Story URL<input required name="slug" value={draft.slug} onChange={(event) => updateDraft("slug", slugify(event.target.value))} className={inputClass} /></label>
                                     <label className={labelClass}>Search headline<input name="seo_title" value={draft.seoTitle} onChange={(event) => updateDraft("seoTitle", event.target.value)} className={inputClass} /></label>

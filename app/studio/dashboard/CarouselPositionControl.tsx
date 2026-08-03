@@ -74,7 +74,7 @@ export function CarouselPositionControl({
                     }}
                     disabled={isPending}
                     aria-label={`Carousel position for ${articleTitle}`}
-                    className="border border-potomac-regolith/30 bg-potomac-primary px-2 py-2 text-sm text-white disabled:opacity-55"
+                    className="border border-cabeus-line bg-white px-2 py-2 text-sm text-cabeus-ink outline-none focus:border-cabeus-gold disabled:opacity-55"
                 >
                     <option value="">N/A</option>
                     {[1, 2, 3, 4, 5].map((position) => (
@@ -85,24 +85,24 @@ export function CarouselPositionControl({
                     type="button"
                     onClick={savePosition}
                     disabled={isPending || selectedPosition === savedPosition}
-                    className="border border-potomac-gold px-3 py-2 font-mono text-[0.6rem] font-bold uppercase text-potomac-gold disabled:cursor-not-allowed disabled:opacity-45"
+                    className="border border-cabeus-ink px-3 py-2 font-mono text-[0.6rem] font-bold uppercase text-cabeus-ink transition hover:bg-cabeus-ink hover:text-cabeus-paper disabled:cursor-not-allowed disabled:opacity-45"
                 >
                     {isPending ? "Saving" : "Save"}
                 </button>
                 <span
                     role="status"
-                    className={`max-w-36 text-xs ${message === "Saved" ? "text-emerald-400" : "text-potomac-regolith"}`}
+                    className={`max-w-36 text-xs ${message === "Saved" ? "text-cabeus-bronze" : "text-cabeus-muted"}`}
                 >
                     {message}
                 </span>
             </div>
             {articleStatus !== "published" && selectedPosition ? (
-                <p className="mt-2 max-w-52 text-xs leading-4 text-potomac-gold">
+                <p className="mt-2 max-w-52 text-xs leading-4 text-cabeus-bronze">
                     Appears after this article is published.
                 </p>
             ) : null}
             {articleStatus === "published" ? (
-                <p className="mt-2 max-w-52 text-xs leading-4 text-potomac-regolith">
+                <p className="mt-2 max-w-52 text-xs leading-4 text-cabeus-muted">
                     {selectedPosition
                         ? "Featured on the homepage and retained in Archives."
                         : "Published in Archives; not featured on the homepage."}

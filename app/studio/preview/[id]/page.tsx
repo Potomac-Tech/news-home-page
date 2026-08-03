@@ -26,17 +26,17 @@ export default async function PreviewPage({ params }: { params: Promise<{ id: st
     const approved = approval?.article_updated_at === article.updated_at;
 
     return (
-        <main className="min-h-screen bg-potomac-primary px-4 py-8 text-potomac-cream md:px-8">
+        <main className="min-h-screen bg-cabeus-paper px-4 py-10 text-cabeus-ink md:px-8 md:py-14">
             <div className="mx-auto max-w-[96rem]">
-                <div className="flex flex-wrap items-end justify-between gap-4 border-b border-potomac-regolith/25 pb-5">
+                <div className="flex flex-wrap items-end justify-between gap-4 border-b border-cabeus-line pb-7">
                     <div>
-                        <Link href="/studio" className="font-mono text-xs font-bold uppercase text-potomac-gold">Back to editor</Link>
-                        <h1 className="mt-3 font-serif text-3xl text-white">{article.title}</h1>
-                        <p className="mt-2 font-mono text-xs uppercase text-potomac-regolith">
+                        <Link href="/studio" className="font-mono text-xs font-bold uppercase text-cabeus-bronze">Back to editor</Link>
+                        <h1 className="mt-3 max-w-5xl font-serif text-4xl font-medium leading-tight text-cabeus-ink">{article.title}</h1>
+                        <p className="mt-2 font-mono text-xs uppercase text-cabeus-muted">
                             {article.status} · {approved ? "current revision approved" : "approval required"}
                         </p>
                     </div>
-                    <Link href="/studio/dashboard" className="border border-potomac-regolith/35 px-4 py-3 font-mono text-xs font-bold uppercase text-potomac-cream">Article dashboard</Link>
+                    <Link href="/studio/dashboard" className="brand-button brand-button-outline inline-flex">Article dashboard</Link>
                 </div>
                 <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem]">
                     <DevicePreview articleId={id} />
