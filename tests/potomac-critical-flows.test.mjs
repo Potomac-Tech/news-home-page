@@ -490,6 +490,27 @@ test("Space Industrialist Week uses the Artemis II Earthrise and approved event 
     );
 });
 
+test("About page uses the Cabeus editorial brand system instead of migration scaffolding", () => {
+    const aboutPage = read("app/team/page.tsx");
+
+    assertIncludes(aboutPage, [
+        'title: "About Cabeus Explorer"',
+        "About Cabeus Explorer",
+        "Clarity for the lunar economy.",
+        "apollo-11-full-moon-nasa.jpg",
+        "Built for space industrialists.",
+        "Intelligence, community, and convening power.",
+        'href="/authors"',
+        'href="/contact"',
+        "bg-cabeus-ink text-cabeus-paper",
+    ], "Cabeus About page");
+    assert.doesNotMatch(
+        aboutPage,
+        /RouteScaffold|Route preserved|ported from the current React page/,
+        "About page must not expose migration placeholder content"
+    );
+});
+
 test("Space Investment Forum reuses the Bridenstine story image and dark Quantum branding", () => {
     const forumPage = read("app/space-investment-forum/page.tsx");
 
