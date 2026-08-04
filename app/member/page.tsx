@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getProfileGateContext } from "../../lib/auth/profile-completion";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
 import { createClient } from "../../lib/supabase/server";
+import { AccountProfileForm } from "./AccountProfileForm";
 
 export const dynamic = "force-dynamic";
 
@@ -134,11 +135,9 @@ export default async function MemberPage() {
     const organizations = (organizationData ?? []) as Organization[];
     const organizationById = new Map(organizations.map((organization) => [organization.id, organization]));
 
+    const accountEmail = claims.email ?? profile?.email ?? "";
+    const editableProfile = profileGate.profile;
     const accountRows = [
-        { label: "Email", value: profile?.email ?? claims.email ?? "Not available" },
-        { label: "Name", value: profile?.full_name ?? "Not provided" },
-        { label: "Title", value: profile?.title ?? "Not provided" },
-        { label: "Company", value: profile?.company ?? "Not provided" },
         { label: "Membership", value: membershipLabel(profile, roles) },
         { label: "Account status", value: titleCase(profile?.status ?? "active") },
     ];
@@ -160,20 +159,33 @@ export default async function MemberPage() {
                 <div className="grid gap-12 py-10 lg:grid-cols-[minmax(0,1fr)_22rem]">
                     <div>
                         <p className="brand-kicker">Member information</p>
-                        <dl className="mt-5 border-t border-cabeus-line">
-                            {accountRows.map((row) => (
-                                <div key={row.label} className="grid gap-2 border-b border-cabeus-line py-5 sm:grid-cols-[11rem_1fr]">
-                                    <dt className="font-sans text-xs font-semibold uppercase tracking-[0.12em] text-cabeus-muted">
-                                        {row.label}
-                                    </dt>
-                                    <dd className="text-base text-cabeus-ink">{row.value}</dd>
-                                </div>
-                            ))}
-                        </dl>
+                        <h2 className="mt-3 font-serif text-4xl font-medium">Edit account information</h2>
+                        <p className="mt-3 max-w-2xl text-sm leading-6 text-cabeus-muted">
+                            Keep the contact and professional details associated with your account current.
+                        </p>
+                        <div className="mt-6">
+                            <AccountProfileForm
+                                email={accountEmail}
+                                fullName={editableProfile?.full_name || profile?.full_name || ""}
+                                title={editableProfile?.role_title || profile?.title || ""}
+                                company={editableProfile?.affiliation || profile?.company || ""}
+                            />
+                        </div>
                     </div>
 
                     <aside className="border-l border-cabeus-line pl-6">
-                        <p className="brand-kicker">Account actions</p>
+                        <p className="brand-kicker">Membership</p>
+                        <dl className="mt-5 border-t border-cabeus-line">
+                            {accountRows.map((row) => (
+                                <div key={row.label} className="border-b border-cabeus-line py-4">
+                                    <dt className="font-sans text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-cabeus-muted">
+                                        {row.label}
+                                    </dt>
+                                    <dd className="mt-1 text-base text-cabeus-ink">{row.value}</dd>
+                                </div>
+                            ))}
+                        </dl>
+                        <p className="brand-kicker mt-8">Account actions</p>
                         <div className="mt-5 grid gap-3">
                             <Link
                                 href="/request-access?tab=signin&mode=recovery"

@@ -816,6 +816,10 @@ test("workspace remains pinned to the canonical Potomac Supabase project", () =>
 
 test("member workspace degrades safely when Supabase public configuration is absent", () => {
     const memberPage = read("app/member/page.tsx");
+    const accountForm = read("app/member/AccountProfileForm.tsx");
+    const accountSyncMigration = readMigration(
+        "20260804183423_sync_editable_account_profile.sql"
+    );
 
     assertIncludes(memberPage, [
         "hasPotomacSupabasePublicConfig",
@@ -828,7 +832,30 @@ test("member workspace degrades safely when Supabase public configuration is abs
         'from("member_role_assignments")',
         "Reset password",
         "Organization information",
+        "AccountProfileForm",
     ], "member workspace configuration gate");
+    assertIncludes(accountForm, [
+        'from("member_profile_completions")',
+        "full_name: nextFullName",
+        "affiliation: nextCompany",
+        "role_title: nextTitle",
+        "auth.updateUser",
+        "emailRedirectTo",
+        "Save changes",
+    ], "member-owned account profile editing");
+    assert.doesNotMatch(
+        accountForm,
+        /base_tier|member_role_assignments|organization_members|status\s*:/,
+        "members must not edit authorization or approval fields"
+    );
+    assertIncludes(accountSyncMigration, [
+        "private.sync_editable_member_profile",
+        "after insert or update of full_name, affiliation, role_title",
+        "private.sync_member_profile_email_from_auth",
+        "after update of email",
+        "new.email_confirmed_at is not null",
+        "revoke all",
+    ], "restricted account profile synchronization");
 });
 
 test("shared navigation changes authentication actions for signed-in members", () => {
