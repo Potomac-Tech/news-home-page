@@ -334,8 +334,8 @@ export default async function HomePage() {
             />
             <StockTicker items={tickerItems} />
             <section className="relative min-h-[34rem] overflow-hidden border-b border-cabeus-line bg-cabeus-paper md:min-h-[40rem]">
-                <div className="mx-auto grid min-h-[34rem] w-full max-w-[92rem] items-center gap-10 px-5 py-12 md:min-h-[40rem] md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:px-10">
-                    <div className="max-w-[40rem] bg-cabeus-paper">
+                <div className="mx-auto grid min-h-[39rem] w-full max-w-[92rem] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+                    <div className="flex max-w-[44rem] flex-col justify-center bg-cabeus-paper px-5 py-16 md:px-10 md:py-20">
                         <p className="brand-kicker">Cabeus Explorer</p>
                         <h1 className="mt-6 max-w-[11ch] text-balance font-serif text-[clamp(3.75rem,6vw,6.75rem)] font-medium leading-[0.9] text-cabeus-ink">
                             Clarity in the New Space Age.
