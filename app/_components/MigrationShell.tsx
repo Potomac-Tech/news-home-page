@@ -82,7 +82,7 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    className="font-sans text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold"
+                                    className="inline-flex h-10 items-center font-sans text-[0.72rem] font-semibold uppercase leading-none tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold"
                                 >
                                     {item.label}
                                 </Link>

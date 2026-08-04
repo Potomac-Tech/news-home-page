@@ -397,6 +397,8 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         "aria-expanded={open}",
         'type="button"',
         "Events",
+        "inline-flex h-10 items-center",
+        "leading-none",
     ], "hover and keyboard Events navigation");
     assert.doesNotMatch(
         migrationShell,
