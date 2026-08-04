@@ -26,6 +26,8 @@ export default function SpaceIndustrialistWeekPage() {
             }
             imageUrl="/space-industrialist-week-lunar-construction.png"
             imageAlt="Astronauts and autonomous construction equipment building infrastructure on the lunar surface"
+            imageCredit="Image reference: NASA Commercial Space"
+            imageSourceUrl="https://www.nasa.gov/humans-in-space/commercial-space/"
             dateLabel="September 2026"
             locationLabel="Washington, D.C."
             primaryCta={{

@@ -486,10 +486,14 @@ test("Space Industrialist Week uses the approved lunar construction image and ev
         "Join the Cabeus Council&apos;s effort",
         'imageUrl="/space-industrialist-week-lunar-construction.png"',
         "Astronauts and autonomous construction equipment building infrastructure on the lunar surface",
+        'imageCredit="Image reference: NASA Commercial Space"',
+        'imageSourceUrl="https://www.nasa.gov/humans-in-space/commercial-space/"',
         "hideSchedule",
         "hideProgram",
     ], "Space Industrialist Week hero");
     assert.match(conveningPage, /introduction: ReactNode/);
+    assert.match(conveningPage, /<figcaption/);
+    assert.match(conveningPage, /target="_blank"/);
     assert.doesNotMatch(
         industrialistWeek,
         /A Cabeus Explorer convening|The Week for the People Building the Future in Orbit/,

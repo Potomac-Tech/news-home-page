@@ -13,6 +13,8 @@ type ConveningPageProps = {
     introduction: ReactNode;
     imageUrl: string;
     imageAlt: string;
+    imageCredit?: string;
+    imageSourceUrl?: string;
     dateLabel: string;
     locationLabel: string;
     primaryCta: { href: string; label: string };
@@ -31,6 +33,8 @@ export function ConveningPage({
     introduction,
     imageUrl,
     imageAlt,
+    imageCredit,
+    imageSourceUrl,
     dateLabel,
     locationLabel,
     primaryCta,
@@ -79,12 +83,26 @@ export function ConveningPage({
                             ) : null}
                         </div>
                     </div>
-                    <img
-                        src={imageUrl}
-                        alt={imageAlt}
-                        className="order-first h-56 w-full object-cover sm:h-72 lg:order-none lg:h-full lg:min-h-[30rem]"
-                        fetchPriority="high"
-                    />
+                    <figure className="relative order-first h-56 w-full sm:h-72 lg:order-none lg:h-full lg:min-h-[30rem]">
+                        <img
+                            src={imageUrl}
+                            alt={imageAlt}
+                            className="h-full w-full object-cover"
+                            fetchPriority="high"
+                        />
+                        {imageCredit && imageSourceUrl ? (
+                            <figcaption className="absolute bottom-3 right-3 bg-cabeus-ink/85 px-3 py-2 font-mono text-[0.55rem] uppercase text-cabeus-paper">
+                                <a
+                                    href={imageSourceUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="underline decoration-cabeus-gold underline-offset-4 hover:text-cabeus-gold"
+                                >
+                                    {imageCredit}
+                                </a>
+                            </figcaption>
+                        ) : null}
+                    </figure>
                 </div>
             </section>
 
