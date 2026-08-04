@@ -43,6 +43,10 @@ const jacobAuthorMigration = readFileSync(
     "supabase/migrations/20260804160652_add_jacob_matthews_author_profile.sql",
     "utf8"
 );
+const jacobPortraitMigration = readFileSync(
+    "supabase/migrations/20260804162618_add_jacob_matthews_author_portrait.sql",
+    "utf8"
+);
 
 test("editorial studio uses the existing editor and admin authorization boundary", () => {
     assert.match(studioPage, /requireEditorialStaff\("\/studio"\)/);
@@ -244,6 +248,8 @@ test("Jacob Matthews has an active linked author profile", () => {
     assert.match(jacobAuthorMigration, /Potomac Database Systems/);
     assert.match(jacobAuthorMigration, /mailto:jake@potomacdb\.com/);
     assert.match(jacobAuthorMigration, /is_active = true/);
+    assert.match(jacobPortraitMigration, /avatar_url = '\/jacob-matthews-author\.jpg'/);
+    assert.match(jacobPortraitMigration, /where lower\(slug\) = 'jacob-matthews'/);
 });
 
 test("article sections and carousel positions are editor controlled", () => {
