@@ -115,7 +115,7 @@ test("homepage hero uses a transparent photoreal Moon rendering grounded in Apol
     assert.match(backdrop, /max-w-none/);
     assert.match(backdrop, /sm:w-\[min\(96rem,100vw\)\]/);
     assert.match(homepage, /md:min-h-\[40rem\]/);
-    assert.match(homepage, /max-w-\[14ch\]/);
+    assert.match(homepage, /max-w-\[16ch\]/);
     assert.match(homepage, /max-w-3xl/);
     assert.doesNotMatch(homepage, /md:py-24/);
     assert.match(archives, /<ApolloMoonBackdrop \/>/);

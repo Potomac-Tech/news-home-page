@@ -338,7 +338,7 @@ export default async function HomePage() {
                 <div className="relative mx-auto flex min-h-[34rem] w-full max-w-[92rem] items-center px-5 py-12 md:min-h-[40rem] md:px-10">
                     <div className="max-w-[62rem]">
                         <p className="brand-kicker">Cabeus Explorer</p>
-                        <h1 className="mt-6 max-w-[14ch] text-balance font-serif text-[clamp(3.75rem,7.25vw,7.75rem)] font-medium leading-[0.9] text-cabeus-ink">
+                        <h1 className="mt-6 max-w-[16ch] text-balance font-serif text-[clamp(3.75rem,7.25vw,7.75rem)] font-medium leading-[0.9] text-cabeus-ink">
                             Clarity in the New Space Age.
                         </h1>
                         <p className="mt-8 max-w-3xl text-base leading-7 text-cabeus-muted md:text-lg md:leading-8">
