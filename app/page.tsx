@@ -334,11 +334,10 @@ export default async function HomePage() {
             />
             <StockTicker items={tickerItems} />
             <section className="relative min-h-[34rem] overflow-hidden border-b border-white/20 bg-black md:min-h-[40rem]">
-                <ArtemisEarthriseBackdrop />
-                <div className="relative mx-auto flex min-h-[34rem] w-full max-w-[92rem] items-center px-5 py-12 md:min-h-[40rem] md:px-10">
-                    <div className="max-w-[42rem]">
+                <div className="mx-auto grid min-h-[34rem] w-full max-w-[92rem] items-center gap-10 px-5 py-12 md:min-h-[40rem] md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:px-10">
+                    <div className="max-w-[40rem] bg-black">
                         <p className="brand-kicker">Cabeus Explorer</p>
-                        <h1 className="mt-6 max-w-[11ch] text-balance font-serif text-[clamp(3.75rem,7.25vw,7.75rem)] font-medium leading-[0.9] text-white">
+                        <h1 className="mt-6 max-w-[11ch] text-balance font-serif text-[clamp(3.75rem,6vw,6.75rem)] font-medium leading-[0.9] text-white">
                             Clarity in the New Space Age.
                         </h1>
                         <p className="mt-8 max-w-xl text-base leading-7 text-white/75 md:text-lg md:leading-8">
@@ -350,6 +349,7 @@ export default async function HomePage() {
                             </Link>
                         </div>
                     </div>
+                    <ArtemisEarthriseBackdrop />
                 </div>
             </section>
 

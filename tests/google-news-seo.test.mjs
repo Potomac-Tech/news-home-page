@@ -101,11 +101,13 @@ test("homepage hero uses a credited high-resolution Artemis II Earthrise photogr
     const brand = read("app/_data/brand.ts");
 
     assert.ok(existsSync(new URL("public/apollo-11-full-moon-nasa.jpg", root)));
-    assert.ok(existsSync(new URL("public/artemis-ii-earthrise-nasa.jpg", root)));
+    assert.ok(existsSync(new URL("public/artemis-ii-earthrise-moon-earth-nasa.jpg", root)));
     assert.match(brand, /editorialMoonHero: "\/apollo-11-full-moon-nasa\.jpg"/);
-    assert.match(earthriseBackdrop, /artemis-ii-earthrise-nasa\.jpg/);
-    assert.match(earthriseBackdrop, /NASA \/ Artemis II \/ ART002-E-009280B/);
+    assert.match(earthriseBackdrop, /artemis-ii-earthrise-moon-earth-nasa\.jpg/);
+    assert.match(earthriseBackdrop, /NASA \/ Artemis II \/ ART002-E-021278/);
+    assert.match(earthriseBackdrop, /object-contain/);
     assert.match(homepage, /<ArtemisEarthriseBackdrop \/>/);
+    assert.match(homepage, /md:grid-cols-/);
     assert.match(homepage, /bg-black/);
     assert.match(backdrop, /NASA \/ Apollo 11 \/ AS11-44-6667/);
     assert.match(backdrop, /Full Moon photographed by the Apollo 11 crew/);
