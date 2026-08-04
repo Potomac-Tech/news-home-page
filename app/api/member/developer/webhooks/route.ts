@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getDeveloperPlatformAccessContext } from "../../../../../lib/auth/developer-platform";
 import { createClient } from "../../../../../lib/supabase/server";
 import { createServiceClient } from "../../../../../lib/supabase/service";
+import { parseSafeWebhookDestination } from "../../../../../lib/developer/webhook-destination";
 
 export const dynamic = "force-dynamic";
 const eventKinds = new Set(["alert.created", "saved_search.match", "watchlist.changed", "dataset.updated", "export.completed", "command_brief.published"]);
@@ -13,9 +14,17 @@ export async function POST(request: Request) {
     if (!access.canUseWebhooks || !access.userId) return NextResponse.json({ error: "Cabeus Council access is required." }, { status: 403 });
     const input = await request.json().catch(() => ({})) as Record<string, unknown>;
     const name = String(input.name ?? "Primary webhook").trim().slice(0, 100);
-    const endpoint = String(input.endpoint_url ?? "").trim();
+    let endpoint: string;
+    try {
+        endpoint = parseSafeWebhookDestination(String(input.endpoint_url ?? "").trim());
+    } catch (error) {
+        return NextResponse.json(
+            { error: error instanceof Error ? error.message : "Provide a public HTTPS endpoint." },
+            { status: 400 }
+        );
+    }
     const events = Array.isArray(input.events) ? [...new Set(input.events.map(String))] : [];
-    if (!name || !endpoint.startsWith("https://") || events.length === 0 || events.some((event) => !eventKinds.has(event))) return NextResponse.json({ error: "Provide a name, HTTPS endpoint, and supported event list." }, { status: 400 });
+    if (!name || events.length === 0 || events.some((event) => !eventKinds.has(event))) return NextResponse.json({ error: "Provide a name, public HTTPS endpoint, and supported event list." }, { status: 400 });
     const admin = createServiceClient();
     const { data: limit } = await admin.from("developer_tier_limits").select("max_webhook_subscriptions").eq("tier", access.tier).single();
     const { count } = await admin.from("developer_webhook_subscriptions").select("id", { count: "exact", head: true }).eq("owner_user_id", access.userId).eq("status", "active");

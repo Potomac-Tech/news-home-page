@@ -5,6 +5,7 @@ import { getOperationalEmailRecipient, getOperationalEmailSender, sendOperationa
 import { hasValidResendFreePlanConfig, resendFreePlanConfigurationError } from "../../lib/email/resend-quota";
 import { getProfileGateContext, safeReturnPath } from "../../lib/auth/profile-completion";
 import { createClient } from "../../lib/supabase/server";
+import { createServiceClient } from "../../lib/supabase/service";
 
 type MeridianQuotaClaim = {
     allowed: boolean;
@@ -78,10 +79,12 @@ export async function submitMeridianInterest(formData: FormData) {
 
     const sender = getOperationalEmailSender();
     const recipient = getOperationalEmailRecipient("meridian_interest");
-    const { data: deliveryEventId, error: eventError } = await supabase.rpc(
-        "create_meridian_delivery_event",
+    const deliveryAdmin = createServiceClient();
+    const { data: deliveryEventId, error: eventError } = await deliveryAdmin.rpc(
+        "create_meridian_delivery_event_server",
         {
             p_interest_id: interestId,
+            p_requester_user_id: gate.userId,
             p_sender: sender,
             p_recipient: recipient,
             p_reply_to: contactEmail,
@@ -93,8 +96,9 @@ export async function submitMeridianInterest(formData: FormData) {
     }
 
     if (!hasValidResendFreePlanConfig()) {
-        await supabase.rpc("complete_meridian_delivery", {
+        await deliveryAdmin.rpc("complete_meridian_delivery_server", {
             p_event_id: deliveryEventId,
+            p_requester_user_id: gate.userId,
             p_delivery_status: "configuration_missing",
             p_provider_message_id: null,
             p_failure_reason: resendFreePlanConfigurationError(),
@@ -104,14 +108,15 @@ export async function submitMeridianInterest(formData: FormData) {
         redirect("/command?status=configuration-needed");
     }
 
-    const { data: quotaData, error: quotaError } = await supabase.rpc(
-        "claim_meridian_delivery_quota",
-        { p_event_id: deliveryEventId }
+    const { data: quotaData, error: quotaError } = await deliveryAdmin.rpc(
+        "claim_meridian_delivery_quota_server",
+        { p_event_id: deliveryEventId, p_requester_user_id: gate.userId }
     );
     const quotaClaim = (quotaData as MeridianQuotaClaim[] | null)?.[0];
     if (quotaError || !quotaClaim?.allowed) {
-        await supabase.rpc("complete_meridian_delivery", {
+        await deliveryAdmin.rpc("complete_meridian_delivery_server", {
             p_event_id: deliveryEventId,
+            p_requester_user_id: gate.userId,
             p_delivery_status: "held",
             p_provider_message_id: null,
             p_failure_reason: quotaClaim?.hold_reason ?? "Resend quota check is unavailable.",
@@ -139,8 +144,9 @@ export async function submitMeridianInterest(formData: FormData) {
         ].join("\n"),
     });
 
-    await supabase.rpc("complete_meridian_delivery", {
+    await deliveryAdmin.rpc("complete_meridian_delivery_server", {
         p_event_id: deliveryEventId,
+        p_requester_user_id: gate.userId,
         p_delivery_status: delivery.deliveryStatus,
         p_provider_message_id: delivery.providerMessageId,
         p_failure_reason: delivery.failureReason,

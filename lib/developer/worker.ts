@@ -4,6 +4,7 @@ import { createHmac } from "node:crypto";
 import { createServiceClient } from "../supabase/service";
 import { flattenSourceRows, loadDeveloperSource, type DeveloperSource } from "./data-sources";
 import { toCsv, toPdf } from "./formats";
+import { parseSafeWebhookDestination } from "./webhook-destination";
 
 type ExportJob = {
     id: string;
@@ -99,9 +100,14 @@ async function processWebhooks() {
         let status = 0;
         let message: string | null = null;
         try {
-            const response = await fetch(delivery.endpoint_url, { method: "POST", headers: { "Content-Type": "application/json", "User-Agent": "Cabeus-Explorer-Webhooks/1.0", "X-Cabeus-Event": delivery.event_kind, "X-Cabeus-Delivery": delivery.delivery_id, "X-Cabeus-Timestamp": timestamp, "X-Cabeus-Signature": `v1=${signature}` }, body, signal: AbortSignal.timeout(10000) });
+            const endpoint = parseSafeWebhookDestination(delivery.endpoint_url);
+            const response = await fetch(endpoint, { method: "POST", redirect: "manual", headers: { "Content-Type": "application/json", "User-Agent": "Cabeus-Explorer-Webhooks/1.0", "X-Cabeus-Event": delivery.event_kind, "X-Cabeus-Delivery": delivery.delivery_id, "X-Cabeus-Timestamp": timestamp, "X-Cabeus-Signature": `v1=${signature}` }, body, signal: AbortSignal.timeout(10000) });
             status = response.status;
-            if (!response.ok) message = `Endpoint returned HTTP ${response.status}.`;
+            if (response.status >= 300 && response.status < 400) {
+                message = "Webhook endpoint redirects are not allowed.";
+            } else if (!response.ok) {
+                message = `Endpoint returned HTTP ${response.status}.`;
+            }
         } catch (caught) {
             message = caught instanceof Error ? caught.message : "Webhook request failed.";
         }

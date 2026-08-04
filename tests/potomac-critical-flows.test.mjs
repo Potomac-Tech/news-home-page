@@ -1157,9 +1157,10 @@ test("Cabeus Council inquiry requires a completed member and retains the contrac
         "source_cta",
         "return_url",
         "communication_preference",
-        "create_meridian_delivery_event",
-        "claim_meridian_delivery_quota",
-        "complete_meridian_delivery",
+        "create_meridian_delivery_event_server",
+        "claim_meridian_delivery_quota_server",
+        "complete_meridian_delivery_server",
+        "createServiceClient",
         "getProfileGateContext",
         "contract_discussion_contact_approved",
     ], "Cabeus Council inquiry workflow");
@@ -1655,6 +1656,28 @@ test("Cabeus Terminal preview is archived and removed from live routes", () => {
     assert.doesNotMatch(
         rootPage + modulePage + workspace,
         /Andromeda program comparison|14 companies|Intelligence modules|Terminal capabilities|\/terminal\/contracts/
+    );
+});
+
+test("Cabeus Council email quota and delivery state are service-only", () => {
+    const hardening = readMigration("20260804212406_harden_launch_security_controls.sql");
+    const action = read("app/command/actions.ts");
+
+    assertIncludes(hardening + action, [
+        "revoke all on function public.create_meridian_delivery_event",
+        "revoke all on function public.claim_meridian_delivery_quota",
+        "revoke all on function public.complete_meridian_delivery",
+        "create_meridian_delivery_event_server",
+        "claim_meridian_delivery_quota_server",
+        "complete_meridian_delivery_server",
+        "to service_role",
+        "p_requester_user_id",
+        "createServiceClient",
+    ], "server-only Cabeus Council delivery operations");
+
+    assert.doesNotMatch(
+        hardening,
+        /grant execute on function public\.(?:create|claim|complete)_meridian[^;]+to authenticated/i
     );
 });
 

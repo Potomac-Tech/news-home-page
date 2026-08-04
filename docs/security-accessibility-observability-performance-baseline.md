@@ -14,7 +14,7 @@ surfaces.
 - `Permissions-Policy`
 - `Cross-Origin-Opener-Policy`
 - `X-DNS-Prefetch-Control`
-- `Content-Security-Policy-Report-Only`
+- Enforced `Content-Security-Policy` with scripts restricted to the application and Stripe
 
 The CSP is report-only because the current Next runtime and Stripe/Supabase
 integration still need compatibility review before enforcing a blocking policy.

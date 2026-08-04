@@ -229,6 +229,19 @@ test("editorial media, scalable dashboard, and author pages are wired", () => {
     assert.doesNotMatch(authorsPage, /text-white|text-potomac-cream/);
 });
 
+test("draft editorial media stays private and published media uses the application route", () => {
+    const hardening = readFileSync("supabase/migrations/20260804212406_harden_launch_security_controls.sql", "utf8");
+    const mediaStorage = readFileSync("lib/editorial/media-assets.ts", "utf8");
+    const mediaRoute = readFileSync("app/api/editorial-media/[id]/route.ts", "utf8");
+
+    assert.match(hardening, /update storage\.buckets[\s\S]*set public = false[\s\S]*editorial-media/);
+    assert.match(hardening, /editorial_media_storage_select/);
+    assert.match(hardening, /article\.status = 'published'/);
+    assert.match(mediaStorage, /`\/api\/editorial-media\/\$\{assetId\}`/);
+    assert.match(mediaRoute, /from\("editorial_media_assets"\)/);
+    assert.match(mediaRoute, /\.download\(asset\.storage_object_path\)/);
+});
+
 test("story entry points and author bylines link to their destinations", () => {
     assert.match(homepage, /\.select\("id,display_name,slug"\)/);
     assert.match(homepage, /href=\{`\/authors\/\$\{story\.authorSlug\}`\}/);

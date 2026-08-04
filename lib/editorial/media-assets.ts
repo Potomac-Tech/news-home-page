@@ -68,7 +68,9 @@ export async function storeMediaAssets({
             throw new Error(`${file.name} must be between 1 byte and 50 MB.`);
         }
 
-        const objectPath = `${userId}/${articleId}/${crypto.randomUUID()}-${safeFileName(file.name)}`;
+        const assetId = crypto.randomUUID();
+        const objectPath = `${userId}/${articleId}/${assetId}-${safeFileName(file.name)}`;
+        const applicationUrl = `/api/editorial-media/${assetId}`;
         const bytes = new Uint8Array(await file.arrayBuffer());
         const { error: uploadError } = await supabase.storage
             .from(bucket)
@@ -79,14 +81,14 @@ export async function storeMediaAssets({
             });
         if (uploadError) throw new Error(uploadError.message);
 
-        const publicUrl = supabase.storage.from(bucket).getPublicUrl(objectPath).data.publicUrl;
         const { data: record, error: recordError } = await supabase
             .from("editorial_media_assets")
             .insert({
+                id: assetId,
                 article_id: articleId,
                 storage_bucket: bucket,
                 storage_object_path: objectPath,
-                public_url: publicUrl,
+                public_url: applicationUrl,
                 original_file_name: file.name,
                 media_type: file.type.startsWith("video/") ? "video" : "image",
                 hosting_provider: "supabase",
@@ -110,7 +112,7 @@ export async function storeMediaAssets({
             publicUrl: record.public_url,
             mediaType: record.media_type as "image" | "video",
             hostingProvider: "supabase",
-            sourceUrl: record.source_url ?? record.public_url,
+            sourceUrl: record.source_url ?? applicationUrl,
             altText: record.alt_text ?? "",
             caption: record.caption ?? "",
         });

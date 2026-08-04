@@ -38,7 +38,7 @@ const nextConfig = {
                 value: "on",
             },
             {
-                key: "Content-Security-Policy-Report-Only",
+                key: "Content-Security-Policy",
                 value: [
                     "default-src 'self'",
                     "base-uri 'self'",
@@ -49,7 +49,7 @@ const nextConfig = {
                     "frame-src 'self' https://www.youtube-nocookie.com",
                     "font-src 'self' data: https://fonts.gstatic.com",
                     "connect-src 'self' https://*.supabase.co https://api.stripe.com",
-                    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",
+                    "script-src 'self' 'unsafe-inline' https://js.stripe.com",
                     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
                     "form-action 'self'",
                 ].join("; "),
