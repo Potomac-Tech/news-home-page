@@ -106,6 +106,7 @@ test("homepage hero uses a transparent photoreal Moon rendering grounded in Apol
     assert.match(moonBackdrop, /cabeus-realistic-moon\.png/);
     assert.match(moonBackdrop, /Apollo 11 geography reference \/ Cabeus rendering/);
     assert.match(moonBackdrop, /translate-x-\[48%\]/);
+    assert.match(moonBackdrop, /sm:opacity-\[0\.88\]/);
     assert.match(homepage, /<RealisticMoonBackdrop \/>/);
     assert.match(homepage, /bg-cabeus-paper/);
     assert.match(homepage, /text-cabeus-ink/);
