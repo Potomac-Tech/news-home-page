@@ -23,6 +23,7 @@ import {
 } from "../../../lib/auth/article-access";
 import { publicTierName, tierConfig } from "../../_data/tiers";
 import { renderArticleHtml } from "../../../lib/editorial/rich-text";
+import { findDuplicateHeroImageUrls } from "../../../lib/editorial/media-fingerprint";
 
 export const dynamic = "force-dynamic";
 
@@ -76,6 +77,7 @@ type LoadedArticle = {
         altText: string;
         caption: string | null;
     }>;
+    duplicateHeroImageUrls: string[];
 };
 
 const displayDateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -260,6 +262,7 @@ async function loadArticle(slug: string): Promise<LoadedArticle | null> {
                 loginHref: `/auth/login?next=${encodeURIComponent(`/news/${slug}`)}`,
             },
             mediaAssets: [],
+            duplicateHeroImageUrls: [],
         };
     }
 
@@ -309,12 +312,17 @@ async function loadArticle(slug: string): Promise<LoadedArticle | null> {
             heroImageAlt: leadImage.altText || "Article photograph",
         };
     }
+    const duplicateHeroImageUrls = await findDuplicateHeroImageUrls(
+        article.heroImageUrl,
+        mediaAssets
+    );
 
     return {
         article,
         fullBody,
         access,
         mediaAssets,
+        duplicateHeroImageUrls,
     };
 }
 
@@ -427,7 +435,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         notFound();
     }
 
-    const { article, fullBody, access, mediaAssets } = loaded;
+    const { article, fullBody, access, mediaAssets, duplicateHeroImageUrls } = loaded;
     const keyPoints = article.keyPoints.length
         ? article.keyPoints
         : [article.summary, article.teaser].filter(Boolean);
@@ -552,7 +560,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                                 className="article-rich-text mt-6 text-lg leading-8 text-cabeus-ink/85"
                                 dangerouslySetInnerHTML={{
                                     __html: renderArticleHtml(fullBody, {
-                                        excludeImageSrc: article.heroImageUrl,
+                                        excludeImageSrcs: duplicateHeroImageUrls,
                                     }),
                                 }}
                             />

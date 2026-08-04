@@ -99,7 +99,7 @@ export function articlePlainText(value: string) {
 }
 
 type RenderArticleHtmlOptions = {
-    excludeImageSrc?: string | null;
+    excludeImageSrcs?: Array<string | null | undefined>;
 };
 
 function normalizeMediaSource(value: string) {
@@ -154,11 +154,13 @@ function findContainingFigure(image: ReturnType<typeof DomUtils.findAll>[number]
     return null;
 }
 
-function removeDuplicateImage(html: string, excludedImageSrc: string) {
+function removeDuplicateImages(html: string, excludedImageSrcs: string[]) {
     const document = parseDocument(html);
     const duplicateImages = DomUtils.findAll(
         (element) => element.name === "img"
-            && mediaSourcesMatch(element.attribs.src ?? "", excludedImageSrc),
+            && excludedImageSrcs.some((excludedImageSrc) =>
+                mediaSourcesMatch(element.attribs.src ?? "", excludedImageSrc)
+            ),
         document
     );
     const removalTargets = new Set(
@@ -187,8 +189,11 @@ export function renderArticleHtml(
             })}</p>`)
             .join("");
 
-    if (options.excludeImageSrc) {
-        return removeDuplicateImage(rendered, options.excludeImageSrc);
+    const excludedImageSrcs = options.excludeImageSrcs?.filter(
+        (value): value is string => Boolean(value)
+    ) ?? [];
+    if (excludedImageSrcs.length) {
+        return removeDuplicateImages(rendered, excludedImageSrcs);
     }
 
     return rendered;

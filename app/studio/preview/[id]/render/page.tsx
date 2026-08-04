@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireEditorialStaff } from "../../../../../lib/auth/editorial";
 import { renderArticleHtml } from "../../../../../lib/editorial/rich-text";
+import { findDuplicateHeroImageUrls } from "../../../../../lib/editorial/media-fingerprint";
 
 export default async function PreviewRenderPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -25,6 +26,13 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
         ? media?.find((asset) => asset.public_url === article.hero_image_url)
         : media?.find((asset) => asset.media_type === "image");
     const hero = article.hero_image_url ?? heroAsset?.public_url;
+    const duplicateHeroImageUrls = await findDuplicateHeroImageUrls(
+        hero ?? "",
+        (media ?? []).map((asset) => ({
+            publicUrl: asset.public_url,
+            mediaType: asset.media_type as "image" | "video",
+        }))
+    );
 
     return (
         <article className="min-h-screen bg-cabeus-paper text-cabeus-ink">
@@ -69,7 +77,7 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
                         className="article-rich-text mt-6 text-lg leading-8 text-cabeus-ink/85"
                         dangerouslySetInnerHTML={{
                             __html: renderArticleHtml(bodyHtml, {
-                                excludeImageSrc: hero,
+                                excludeImageSrcs: duplicateHeroImageUrls,
                             }),
                         }}
                     />
