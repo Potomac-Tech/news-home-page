@@ -22,8 +22,8 @@ const accountLinks = [
     },
     {
         href: "/member",
-        label: "Member workspace",
-        detail: "Open approved member modules and Scout checkout.",
+        label: "Account",
+        detail: "Review your profile, organization, and membership.",
     },
     {
         href: "/organization",

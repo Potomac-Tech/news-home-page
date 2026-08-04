@@ -308,3 +308,49 @@ body {
     color: #8b713c;
     text-decoration: underline;
 }
+
+/* Keep older operational routes inside the current Cabeus editorial system. */
+.brand-shell main > .bg-grid-pattern {
+    background-color: #f4f1ea;
+    background-image: none;
+    color: #151513;
+}
+
+.brand-shell main > .bg-grid-pattern .glass-card {
+    background: transparent;
+    border: 1px solid #d8d2c8;
+    box-shadow: none;
+}
+
+.brand-shell main > .bg-grid-pattern [class~="text-white"] {
+    color: #151513;
+}
+
+.brand-shell main > .bg-grid-pattern [class*="text-potomac-cream"] {
+    color: #68645e;
+}
+
+.brand-shell main > .bg-grid-pattern [class~="text-potomac-gold"] {
+    color: #725a26;
+}
+
+.brand-shell main > .bg-grid-pattern [class*="border-white/"],
+.brand-shell main > .bg-grid-pattern [class*="border-potomac-gold/"] {
+    border-color: #d8d2c8;
+}
+
+.brand-shell main > .bg-grid-pattern [class~="bg-potomac-primary"],
+.brand-shell main > .bg-grid-pattern [class*="bg-potomac-primary/"] {
+    background-color: #f4f1ea;
+}
+
+.brand-shell main > .bg-grid-pattern [class~="bg-potomac-secondary"],
+.brand-shell main > .bg-grid-pattern [class*="bg-potomac-secondary/"] {
+    background-color: #e9e5de;
+}
+
+.brand-shell main > .bg-grid-pattern .bg-potomac-gold.text-potomac-primary {
+    background-color: #151513;
+    border-color: #151513;
+    color: #f4f1ea;
+}

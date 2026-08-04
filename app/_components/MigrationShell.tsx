@@ -10,6 +10,7 @@ import {
     loadCommandPaletteEntries,
 } from "../_data/search";
 import { getProfileGateContext } from "../../lib/auth/profile-completion";
+import { createClient } from "../../lib/supabase/server";
 import { SearchCommandPalette } from "./SearchCommandPalette";
 import { CheckoutAnalytics } from "./CheckoutAnalytics";
 import { ConveningsMenu } from "./ConveningsMenu";
@@ -57,6 +58,73 @@ async function MemberAwareSearchPalette() {
     return <SearchCommandPalette entries={commandEntries} />;
 }
 
+async function MemberAwareAccountActions({ mobile = false }: { mobile?: boolean }) {
+    let signedIn = false;
+
+    try {
+        const supabase = await createClient();
+        const claims = (await supabase.auth.getClaims()).data?.claims;
+        signedIn = Boolean(claims?.sub);
+    } catch {
+        signedIn = false;
+    }
+
+    if (mobile) {
+        return signedIn ? (
+            <>
+                <Link
+                    href="/auth/logout"
+                    prefetch={false}
+                    className="border-t border-cabeus-line px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
+                >
+                    Sign out
+                </Link>
+                <Link
+                    href="/member"
+                    className="px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
+                >
+                    Account
+                </Link>
+            </>
+        ) : (
+            <>
+                <Link
+                    href="/request-access?tab=signin"
+                    className="border-t border-cabeus-line px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
+                >
+                    Sign in
+                </Link>
+                <Link
+                    href="/request-access"
+                    className="px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
+                >
+                    Sign Up
+                </Link>
+            </>
+        );
+    }
+
+    return signedIn ? (
+        <>
+            <Link href="/auth/logout" prefetch={false} className="brand-button brand-button-outline hidden sm:inline-flex">
+                Sign out
+            </Link>
+            <Link href="/member" className="brand-button hidden md:inline-flex">
+                Account
+            </Link>
+        </>
+    ) : (
+        <>
+            <Link href="/request-access?tab=signin" className="brand-button brand-button-outline hidden sm:inline-flex">
+                Sign in
+            </Link>
+            <Link href="/request-access" className="brand-button hidden md:inline-flex">
+                Sign Up
+            </Link>
+        </>
+    );
+}
+
 const publicCommandEntries = fallbackCommandEntries.filter(
     (entry) => entry.tier === "public"
 );
@@ -98,18 +166,9 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                             <Suspense fallback={<SearchCommandPalette entries={publicCommandEntries} />}>
                                 <MemberAwareSearchPalette />
                             </Suspense>
-                            <Link
-                                href="/request-access?tab=signin"
-                                className="brand-button brand-button-outline hidden sm:inline-flex"
-                            >
-                                Sign in
-                            </Link>
-                            <Link
-                                href="/request-access"
-                                className="brand-button hidden md:inline-flex"
-                            >
-                                Sign Up
-                            </Link>
+                            <Suspense fallback={null}>
+                                <MemberAwareAccountActions />
+                            </Suspense>
                         </div>
                     </div>
                     <details className="border-t border-cabeus-line lg:hidden">
@@ -138,18 +197,9 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                                     {item.label}
                                 </Link>
                             ))}
-                            <Link
-                                href="/request-access?tab=signin"
-                                className="border-t border-cabeus-line px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
-                            >
-                                Sign in
-                            </Link>
-                            <Link
-                                href="/request-access"
-                                className="px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
-                            >
-                                Sign Up
-                            </Link>
+                            <Suspense fallback={null}>
+                                <MemberAwareAccountActions mobile />
+                            </Suspense>
                         </nav>
                     </details>
                 </div>

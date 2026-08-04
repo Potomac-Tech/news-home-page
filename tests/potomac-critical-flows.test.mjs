@@ -344,7 +344,6 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
     assertIncludes(memberPage + nexusPage, [
         "/api/member/nexus/handoff",
         "Open Nexus",
-        "Nexus role",
     ], "Nexus member navigation");
     assertIncludes(migrationShell, [
         '{ href: "/", label: "Home Base" }',
@@ -824,7 +823,24 @@ test("member workspace degrades safely when Supabase public configuration is abs
         "Member sign-in is being configured",
         "if (!hasPotomacSupabasePublicConfig())",
         "return <ConfigGate />",
+        'select("email,full_name,company,title,status,base_tier")',
+        'from("organization_members")',
+        'from("member_role_assignments")',
+        "Reset password",
+        "Organization information",
     ], "member workspace configuration gate");
+});
+
+test("shared navigation changes authentication actions for signed-in members", () => {
+    const migrationShell = read("app/_components/MigrationShell.tsx");
+
+    assertIncludes(migrationShell, [
+        "MemberAwareAccountActions",
+        "getClaims",
+        "Sign out",
+        'href="/member"',
+        "Account",
+    ], "member-aware navigation actions");
 });
 
 test("request access keeps Explorer signup, recovery, and return context in one gateway", () => {

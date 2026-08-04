@@ -1,36 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { createClient } from "../../lib/supabase/server";
-import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
 import { getProfileGateContext } from "../../lib/auth/profile-completion";
-import { TerminalDashboardShell } from "../_components/TerminalDashboardShell";
-import { ScoutCheckoutButton } from "./ScoutCheckoutButton";
-import { loadPublicTickerItems } from "../_data/marketQuotes";
-import {
-    formatJobAlertDate,
-    formatJobAlertFreshness,
-    loadMemberJobAlerts,
-    type JobAlert,
-} from "../_data/jobAlerts";
-import {
-    formatSpaceWeatherDateTime,
-    formatSpaceWeatherFreshness,
-    loadMemberSpaceWeatherSnapshots,
-    summarizeSpaceWeatherMetrics,
-    type SpaceWeatherSnapshot,
-} from "../_data/spaceWeather";
-import { tierConfig } from "../_data/tiers";
-import {
-    NEXUS_AUTH_URL,
-    loadNexusAccessStatus,
-    type NexusAccessStatus,
-} from "../../lib/auth/nexus";
+import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+import { createClient } from "../../lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-    title: "Member Workspace",
+    title: "Account",
+    robots: { index: false, follow: false },
 };
 
 type AuthClaims = {
@@ -38,236 +17,67 @@ type AuthClaims = {
     email?: string;
 };
 
-function NexusAccessCard({ status }: { status: NexusAccessStatus }) {
-    return (
-        <section className="glass-card rounded p-6">
-            <div className="border-b border-white/10 pb-4">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
-                    Nexus access
-                </p>
-                <h2 className="mt-2 font-serif text-2xl text-white">
-                    {status.label}
-                </h2>
-            </div>
-            <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                {status.detail}
-            </p>
-            <dl className="mt-5 space-y-3 text-sm text-potomac-cream/65">
-                <div className="flex justify-between gap-4 border-t border-white/10 pt-3">
-                    <dt>Membership</dt>
-                    <dd className="text-white">{status.membershipLabel}</dd>
-                </div>
-                <div className="flex justify-between gap-4 border-t border-white/10 pt-3">
-                    <dt>Nexus role</dt>
-                    <dd className="text-white">{status.nexusRoleLabel}</dd>
-                </div>
-                <div className="flex justify-between gap-4 border-t border-white/10 pt-3">
-                    <dt>Entitlement</dt>
-                    <dd className="text-white">{status.entitlementLabel}</dd>
-                </div>
-                <div className="border-t border-white/10 pt-3">
-                    <dt>Destination</dt>
-                    <dd className="mt-1 break-all text-white">
-                        {NEXUS_AUTH_URL}
-                    </dd>
-                </div>
-            </dl>
-            <div className="mt-5 flex flex-wrap gap-3">
-                {status.canOpenNexus ? (
-                    <a
-                        href="/api/member/nexus/handoff"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded bg-potomac-gold px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
-                    >
-                        Open Nexus
-                    </a>
-                ) : (
-                    <Link
-                        href="/command"
-                        className="rounded bg-potomac-gold px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
-                    >
-                        {tierConfig.enterprise.publicName} access
-                    </Link>
-                )}
-                <Link
-                    href="/nexus"
-                    className="rounded border border-potomac-gold/50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                >
-                    Nexus overview
-                </Link>
-            </div>
-        </section>
-    );
+type MemberProfile = {
+    email: string;
+    full_name: string | null;
+    company: string | null;
+    title: string | null;
+    status: string;
+    base_tier: string;
+};
+
+type RoleAssignment = {
+    role_id: string;
+    organization_id: string | null;
+};
+
+type OrganizationMembership = {
+    organization_id: string;
+    role: string;
+    status: string;
+};
+
+type Organization = {
+    id: string;
+    name: string;
+    status: string;
+};
+
+const membershipPriority = ["meridian", "scout", "explorer"];
+
+function titleCase(value: string) {
+    return value
+        .replaceAll("_", " ")
+        .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
-function JobAlertsCard({ alerts }: { alerts: JobAlert[] }) {
-    return (
-        <section className="glass-card h-fit rounded p-6">
-            <div className="border-b border-white/10 pb-4">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
-                    Job alerts
-                </p>
-                <h2 className="mt-2 font-serif text-2xl text-white">
-                    NASA & Space Hiring
-                </h2>
-            </div>
-            <div className="mt-5 space-y-4">
-                {alerts.map((alert) => (
-                    <article
-                        key={alert.alertKey}
-                        className="border-b border-white/10 pb-4 last:border-0 last:pb-0"
-                    >
-                        <div className="flex items-start justify-between gap-4">
-                            <div>
-                                <p className="text-sm font-bold text-white">
-                                    {alert.employerName}
-                                </p>
-                                <h3 className="mt-1 text-sm leading-5 text-potomac-cream/80">
-                                    {alert.roleTitle}
-                                </h3>
-                            </div>
-                            <span className="shrink-0 rounded border border-potomac-gold/35 px-2 py-1 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-potomac-gold">
-                                {formatJobAlertFreshness(alert.freshnessStatus)}
-                            </span>
-                        </div>
-                        <dl className="mt-3 space-y-2 text-xs text-potomac-cream/55">
-                            <div>
-                                <dt className="sr-only">Location</dt>
-                                <dd>{alert.locationName}</dd>
-                            </div>
-                            <div className="flex justify-between gap-4">
-                                <dt>Posting date</dt>
-                                <dd className="text-potomac-cream/75">
-                                    {formatJobAlertDate(alert.postingDate)}
-                                </dd>
-                            </div>
-                        </dl>
-                        {alert.freshnessNote ? (
-                            <p className="mt-3 text-xs leading-5 text-potomac-cream/50">
-                                {alert.freshnessNote}
-                            </p>
-                        ) : null}
-                        <a
-                            href={alert.sourceUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-3 inline-flex text-xs font-bold uppercase tracking-[0.14em] text-potomac-gold transition hover:text-potomac-cream"
-                        >
-                            {alert.sourceName}
-                        </a>
-                    </article>
-                ))}
-            </div>
-        </section>
+function membershipLabel(profile: MemberProfile | null, roles: RoleAssignment[]) {
+    const role = membershipPriority.find((candidate) =>
+        roles.some((assignment) => assignment.role_id === candidate)
     );
-}
-
-function SpaceWeatherCard({
-    snapshots,
-}: {
-    snapshots: SpaceWeatherSnapshot[];
-}) {
-    return (
-        <section className="glass-card h-fit rounded p-6">
-            <div className="border-b border-white/10 pb-4">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
-                    Space weather
-                </p>
-                <h2 className="mt-2 font-serif text-2xl text-white">
-                    Source Conditions
-                </h2>
-            </div>
-            <div className="mt-5 space-y-4">
-                {snapshots.map((snapshot) => (
-                    <article
-                        key={snapshot.sourceKey}
-                        className="border-b border-white/10 pb-4 last:border-0 last:pb-0"
-                    >
-                        <div className="flex items-start justify-between gap-4">
-                            <div>
-                                <p className="text-sm font-bold text-white">
-                                    {snapshot.sourceProduct}
-                                </p>
-                                <p className="mt-1 text-xs text-potomac-cream/55">
-                                    {snapshot.sourceAgency}
-                                </p>
-                            </div>
-                            <span className="shrink-0 rounded border border-potomac-gold/35 px-2 py-1 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-potomac-gold">
-                                {formatSpaceWeatherFreshness(
-                                    snapshot.freshnessStatus
-                                )}
-                            </span>
-                        </div>
-                        <p className="mt-3 text-xs leading-5 text-potomac-cream/65">
-                            {snapshot.statusSummary}
-                        </p>
-                        <dl className="mt-3 space-y-2 text-xs text-potomac-cream/55">
-                            <div className="flex justify-between gap-4">
-                                <dt>Updated</dt>
-                                <dd className="text-right text-potomac-cream/75">
-                                    {formatSpaceWeatherDateTime(
-                                        snapshot.sourceUpdatedAt
-                                    )}
-                                </dd>
-                            </div>
-                            {summarizeSpaceWeatherMetrics(
-                                snapshot.keyMetrics
-                            ).map((metric) => (
-                                <div
-                                    key={`${snapshot.sourceKey}-${metric.key}`}
-                                    className="flex justify-between gap-4"
-                                >
-                                    <dt className="capitalize">{metric.key}</dt>
-                                    <dd className="text-right text-potomac-cream/75">
-                                        {metric.value}
-                                    </dd>
-                                </div>
-                            ))}
-                        </dl>
-                        <a
-                            href={snapshot.sourceUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-3 inline-flex text-xs font-bold uppercase tracking-[0.14em] text-potomac-gold transition hover:text-potomac-cream"
-                        >
-                            {snapshot.sourceName}
-                        </a>
-                    </article>
-                ))}
-            </div>
-        </section>
-    );
+    const tier = role ?? profile?.base_tier ?? "explorer";
+    return tier === "member" ? "Explorer" : titleCase(tier);
 }
 
 function ConfigGate() {
     return (
-        <section className="bg-grid-pattern">
-            <div className="mx-auto min-h-[calc(100vh-9rem)] w-full max-w-7xl px-4 py-20 md:px-8">
-                <div className="glass-card max-w-3xl rounded p-6">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
-                        Member workspace
-                    </p>
-                    <h1 className="mt-4 font-serif text-4xl leading-tight text-white">
-                        Member sign-in is being configured
+        <section className="bg-cabeus-paper text-cabeus-ink">
+            <div className="mx-auto min-h-[calc(100vh-9rem)] w-full max-w-[92rem] px-5 py-16 md:px-10 md:py-24">
+                <div className="max-w-3xl border-y border-cabeus-line py-10">
+                    <p className="brand-kicker">Account</p>
+                    <h1 className="mt-4 font-serif text-5xl font-medium leading-[0.95] md:text-7xl">
+                        Member sign-in is being configured.
                     </h1>
-                    <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
-                        The member workspace will open after its secure sign-in
-                        service is connected. Public intelligence and membership
-                        information remain available while that setup is completed.
+                    <p className="mt-6 max-w-2xl text-base leading-7 text-cabeus-muted">
+                        Account access will open after the secure sign-in service is
+                        connected. Public reporting remains available in the meantime.
                     </p>
-                    <div className="mt-6 flex flex-wrap gap-3">
-                        <Link
-                            href="/request-access"
-                            className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
-                        >
-                            Request Explorer access
+                    <div className="mt-7 flex flex-wrap gap-3">
+                        <Link href="/request-access" className="brand-button inline-flex">
+                            Sign Up
                         </Link>
-                        <Link
-                            href="/pricing"
-                            className="rounded border border-potomac-gold/50 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Compare tiers
+                        <Link href="/archives" className="brand-button brand-button-outline inline-flex">
+                            Read the news
                         </Link>
                     </div>
                 </div>
@@ -277,170 +87,141 @@ function ConfigGate() {
 }
 
 export default async function MemberPage() {
-    if (!hasPotomacSupabasePublicConfig()) {
-        return <ConfigGate />;
-    }
+    if (!hasPotomacSupabasePublicConfig()) return <ConfigGate />;
 
     const supabase = await createClient();
     const profileGate = await getProfileGateContext({ supabase, nextPath: "/member" });
-    if (profileGate.state === "signed_out") redirect(profileGate.loginHref);
-    if (profileGate.state === "email_unverified") redirect(profileGate.loginHref);
-    if (profileGate.state === "profile_incomplete" && profileGate.profileHref) redirect(profileGate.profileHref);
+    if (profileGate.state === "signed_out" || profileGate.state === "email_unverified") {
+        redirect(profileGate.loginHref);
+    }
+    if (profileGate.state === "profile_incomplete" && profileGate.profileHref) {
+        redirect(profileGate.profileHref);
+    }
+
     const claims = (await supabase.auth.getClaims()).data?.claims as AuthClaims | undefined;
     if (!claims?.sub) redirect("/request-access?tab=signin&next=%2Fmember");
 
-    const [tickerItems, nexusStatus, jobAlerts, spaceWeatherSnapshots] =
+    const [{ data: profileData }, { data: roleData }, { data: membershipData }] =
         await Promise.all([
-            loadPublicTickerItems(6),
-            loadNexusAccessStatus(supabase, claims.sub),
-            loadMemberJobAlerts({ supabase, limit: 4 }),
-            loadMemberSpaceWeatherSnapshots({ supabase, limit: 3 }),
+            supabase
+                .from("member_profiles")
+                .select("email,full_name,company,title,status,base_tier")
+                .eq("user_id", claims.sub)
+                .maybeSingle(),
+            supabase
+                .from("member_role_assignments")
+                .select("role_id,organization_id")
+                .eq("user_id", claims.sub),
+            supabase
+                .from("organization_members")
+                .select("organization_id,role,status")
+                .eq("user_id", claims.sub),
         ]);
 
+    const profile = profileData as MemberProfile | null;
+    const roles = (roleData ?? []) as RoleAssignment[];
+    const memberships = (membershipData ?? []) as OrganizationMembership[];
+    const organizationIds = [...new Set([
+        ...memberships.map((membership) => membership.organization_id),
+        ...roles.flatMap((role) => role.organization_id ? [role.organization_id] : []),
+    ])];
+    const { data: organizationData } = organizationIds.length
+        ? await supabase
+              .from("organizations")
+              .select("id,name,status")
+              .in("id", organizationIds)
+        : { data: [] };
+    const organizations = (organizationData ?? []) as Organization[];
+    const organizationById = new Map(organizations.map((organization) => [organization.id, organization]));
+
+    const accountRows = [
+        { label: "Email", value: profile?.email ?? claims.email ?? "Not available" },
+        { label: "Name", value: profile?.full_name ?? "Not provided" },
+        { label: "Title", value: profile?.title ?? "Not provided" },
+        { label: "Company", value: profile?.company ?? "Not provided" },
+        { label: "Membership", value: membershipLabel(profile, roles) },
+        { label: "Account status", value: titleCase(profile?.status ?? "active") },
+    ];
+
     return (
-        <section className="bg-grid-pattern">
-            <div className="mx-auto grid min-h-[calc(100vh-9rem)] w-full max-w-7xl gap-8 px-4 py-20 md:px-8 lg:grid-cols-[minmax(0,1fr)_24rem]">
-                <div className="max-w-3xl">
-                    <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-potomac-gold">
-                        Protected route
-                    </p>
-                    <h1 className="font-serif text-4xl leading-tight text-white md:text-6xl">
-                        Member Workspace
+        <section className="bg-cabeus-paper text-cabeus-ink">
+            <div className="mx-auto w-full max-w-[92rem] px-5 py-12 md:px-10 md:py-16">
+                <header className="border-b border-cabeus-line pb-10">
+                    <p className="brand-kicker">Cabeus Explorer / Account</p>
+                    <h1 className="mt-4 max-w-4xl font-serif text-5xl font-medium leading-[0.9] md:text-7xl">
+                        Your account.
                     </h1>
-                    <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
-                        You are signed in as{" "}
-                        <span className="text-potomac-gold">
-                            {claims.email ?? claims.sub}
-                        </span>
-                        . Membership status, entitlements, and paid
-                        intelligence modules appear here as access is approved.
+                    <p className="mt-6 max-w-2xl text-base leading-7 text-cabeus-muted">
+                        Review the identity, organization, and membership information
+                        connected to your Cabeus Explorer access.
                     </p>
-                    <div className="mt-10 flex flex-wrap gap-4">
-                        <Link
-                            href="/news"
-                            className="rounded bg-potomac-gold px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
-                        >
-                            News
-                        </Link>
-                        <Link
-                            href="/member/summits"
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Summit tracker
-                        </Link>
-                        <Link
-                            href="/member/economy"
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Economy dashboard
-                        </Link>
-                        <Link
-                            href="/tracker/launches"
-                            prefetch={false}
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Launches & Missions
-                        </Link>
-                        <Link
-                            href="/pricing"
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Compare tiers
-                        </Link>
-                        <Link
-                            href="/member/chat"
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Member chat
-                        </Link>
-                        <Link
-                            href="/member/forums"
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Member forums
-                        </Link>
-                        <Link
-                            href="/member/rfqs"
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            RFQs
-                        </Link>
-                        <Link
-                            href="/member/saved-work"
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Saved work
-                        </Link>
-                        <Link
-                            href="/member/test-data"
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Test data uploads
-                        </Link>
-                        <Link
-                            href="/auth/logout"
-                            prefetch={false}
-                            className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Sign out
-                        </Link>
-                    </div>
-                    <ScoutCheckoutButton />
-                </div>
-                <aside className="space-y-6">
-                    <NexusAccessCard status={nexusStatus} />
-                    <JobAlertsCard alerts={jobAlerts} />
-                    <SpaceWeatherCard snapshots={spaceWeatherSnapshots} />
-                    {tickerItems.length ? <section className="glass-card h-fit rounded p-6">
-                        <div className="border-b border-white/10 pb-4">
-                            <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
-                                Delayed quotes
-                            </p>
-                            <h2 className="mt-2 font-serif text-2xl text-white">
-                                Company Ticker
-                            </h2>
-                        </div>
-                        <div className="mt-5 space-y-4">
-                            {tickerItems.map((item) => (
-                                <div
-                                    key={`${item.symbol}-${item.label}`}
-                                    className="border-b border-white/10 pb-4 last:border-0 last:pb-0"
-                                >
-                                    <div className="flex items-start justify-between gap-4">
-                                        <div>
-                                            <p className="font-mono text-sm font-bold text-potomac-gold">
-                                                {item.symbol}
-                                            </p>
-                                            <p className="mt-1 text-sm text-potomac-cream/70">
-                                                {item.label}
-                                            </p>
-                                        </div>
-                                        <p
-                                            className={
-                                                item.trend === "down"
-                                                    ? "text-right text-sm font-bold text-red-200"
-                                                    : item.trend === "up"
-                                                      ? "text-right text-sm font-bold text-potomac-gold"
-                                                      : "text-right text-sm font-bold text-white"
-                                            }
-                                        >
-                                            {item.value}
-                                        </p>
-                                    </div>
-                                    <p className="mt-2 text-xs text-potomac-cream/45">
-                                        {item.detail}
-                                    </p>
+                </header>
+
+                <div className="grid gap-12 py-10 lg:grid-cols-[minmax(0,1fr)_22rem]">
+                    <div>
+                        <p className="brand-kicker">Member information</p>
+                        <dl className="mt-5 border-t border-cabeus-line">
+                            {accountRows.map((row) => (
+                                <div key={row.label} className="grid gap-2 border-b border-cabeus-line py-5 sm:grid-cols-[11rem_1fr]">
+                                    <dt className="font-sans text-xs font-semibold uppercase tracking-[0.12em] text-cabeus-muted">
+                                        {row.label}
+                                    </dt>
+                                    <dd className="text-base text-cabeus-ink">{row.value}</dd>
                                 </div>
                             ))}
+                        </dl>
+                    </div>
+
+                    <aside className="border-l border-cabeus-line pl-6">
+                        <p className="brand-kicker">Account actions</p>
+                        <div className="mt-5 grid gap-3">
+                            <Link
+                                href="/request-access?tab=signin&mode=recovery"
+                                className="brand-button brand-button-outline inline-flex"
+                            >
+                                Reset password
+                            </Link>
+                            <Link href="/auth/logout" prefetch={false} className="brand-button inline-flex">
+                                Sign out
+                            </Link>
                         </div>
-                    </section> : null}
-                </aside>
+                    </aside>
+                </div>
+
+                <section className="border-t border-cabeus-line py-10">
+                    <p className="brand-kicker">Organization</p>
+                    <h2 className="mt-3 font-serif text-4xl font-medium">Organization information</h2>
+                    {organizationIds.length ? (
+                        <div className="mt-7 grid border-l border-t border-cabeus-line md:grid-cols-2">
+                            {organizationIds.map((organizationId) => {
+                                const organization = organizationById.get(organizationId);
+                                const membership = memberships.find((item) => item.organization_id === organizationId);
+                                return (
+                                    <article key={organizationId} className="border-b border-r border-cabeus-line p-6">
+                                        <h3 className="font-serif text-3xl font-medium">
+                                            {organization?.name ?? profile?.company ?? "Organization"}
+                                        </h3>
+                                        <dl className="mt-5 space-y-3 text-sm">
+                                            <div className="flex justify-between gap-4 border-t border-cabeus-line pt-3">
+                                                <dt className="text-cabeus-muted">Organization role</dt>
+                                                <dd>{titleCase(membership?.role ?? "member")}</dd>
+                                            </div>
+                                            <div className="flex justify-between gap-4 border-t border-cabeus-line pt-3">
+                                                <dt className="text-cabeus-muted">Membership status</dt>
+                                                <dd>{titleCase(membership?.status ?? organization?.status ?? "active")}</dd>
+                                            </div>
+                                        </dl>
+                                    </article>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <p className="mt-5 max-w-2xl text-base leading-7 text-cabeus-muted">
+                            No organization is currently associated with this account.
+                        </p>
+                    )}
+                </section>
             </div>
-            <TerminalDashboardShell
-                title="Member terminal map"
-                description="Navigate the lunar intelligence workspace by mission, market, news, dataset, community, alert, and account area."
-                showMemberActions
-            />
         </section>
     );
 }

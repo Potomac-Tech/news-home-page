@@ -29,8 +29,8 @@ test("estimate fields are absent from public metadata, search, sitemap, and pref
         assert.ok(!source.includes("analyst_estimate"));
         assert.ok(!source.includes("estimate_methodology"));
     }
-    assert.ok(member.includes('href="/tracker/launches"'));
-    assert.ok(member.includes("prefetch={false}"));
+    assert.ok(member.includes('robots: { index: false, follow: false }'));
+    assert.ok(!member.includes("analyst_estimate"));
     assert.ok(page.includes('export const dynamic = "force-dynamic"'));
     assert.ok(!page.match(/generateMetadata|application\/ld\+json/));
 });
