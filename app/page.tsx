@@ -333,14 +333,14 @@ export default async function HomePage() {
                 }}
             />
             <StockTicker items={tickerItems} />
-            <section className="relative min-h-[34rem] overflow-hidden border-b border-white/20 bg-black md:min-h-[40rem]">
+            <section className="relative min-h-[34rem] overflow-hidden border-b border-cabeus-line bg-cabeus-paper md:min-h-[40rem]">
                 <div className="mx-auto grid min-h-[34rem] w-full max-w-[92rem] items-center gap-10 px-5 py-12 md:min-h-[40rem] md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:px-10">
-                    <div className="max-w-[40rem] bg-black">
+                    <div className="max-w-[40rem] bg-cabeus-paper">
                         <p className="brand-kicker">Cabeus Explorer</p>
-                        <h1 className="mt-6 max-w-[11ch] text-balance font-serif text-[clamp(3.75rem,6vw,6.75rem)] font-medium leading-[0.9] text-white">
+                        <h1 className="mt-6 max-w-[11ch] text-balance font-serif text-[clamp(3.75rem,6vw,6.75rem)] font-medium leading-[0.9] text-cabeus-ink">
                             Clarity in the New Space Age.
                         </h1>
-                        <p className="mt-8 max-w-xl text-base leading-7 text-white/75 md:text-lg md:leading-8">
+                        <p className="mt-8 max-w-xl text-base leading-7 text-cabeus-muted md:text-lg md:leading-8">
                             Cabeus Explorer is the leading platform providing trusted intelligence and proprietary data for space industrialists securing, financing and building the lunar economy (and beyond).
                         </p>
                         <div className="mt-9 flex flex-wrap gap-3">

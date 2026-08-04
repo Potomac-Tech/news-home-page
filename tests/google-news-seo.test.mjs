@@ -108,7 +108,8 @@ test("homepage hero uses a credited high-resolution Artemis II Earthrise photogr
     assert.match(earthriseBackdrop, /object-contain/);
     assert.match(homepage, /<ArtemisEarthriseBackdrop \/>/);
     assert.match(homepage, /md:grid-cols-/);
-    assert.match(homepage, /bg-black/);
+    assert.match(homepage, /bg-cabeus-paper/);
+    assert.match(homepage, /text-cabeus-ink/);
     assert.match(backdrop, /NASA \/ Apollo 11 \/ AS11-44-6667/);
     assert.match(backdrop, /Full Moon photographed by the Apollo 11 crew/);
     assert.match(backdrop, /max-w-none/);
