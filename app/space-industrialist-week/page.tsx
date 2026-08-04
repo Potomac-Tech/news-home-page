@@ -24,8 +24,8 @@ export default function SpaceIndustrialistWeekPage() {
                     presence on the Moon.
                 </>
             }
-            imageUrl="/artemis-ii-earthrise-nasa.jpg"
-            imageAlt="Crescent Earth photographed from Orion during NASA's Artemis II mission"
+            imageUrl="/space-industrialist-week-lunar-construction.png"
+            imageAlt="Astronauts and autonomous construction equipment building infrastructure on the lunar surface"
             dateLabel="September 2026"
             locationLabel="Washington, D.C."
             primaryCta={{

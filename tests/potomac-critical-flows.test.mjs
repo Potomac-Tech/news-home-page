@@ -475,7 +475,7 @@ test("the All Convenings page remains hidden from public discovery", () => {
     assert.match(terminal, /module\.id !== "events"/, "Terminal must suppress the hidden route");
 });
 
-test("Space Industrialist Week uses the Artemis II Earthrise and approved event copy", () => {
+test("Space Industrialist Week uses the approved lunar construction image and event copy", () => {
     const industrialistWeek = read("app/space-industrialist-week/page.tsx");
     const conveningPage = read("app/_components/ConveningPage.tsx");
 
@@ -484,8 +484,8 @@ test("Space Industrialist Week uses the Artemis II Earthrise and approved event 
         'title="Space Industrialist Week"',
         "One week. One mission.",
         "Join the Cabeus Council&apos;s effort",
-        'imageUrl="/artemis-ii-earthrise-nasa.jpg"',
-        "Crescent Earth photographed from Orion during NASA's Artemis II mission",
+        'imageUrl="/space-industrialist-week-lunar-construction.png"',
+        "Astronauts and autonomous construction equipment building infrastructure on the lunar surface",
         "hideSchedule",
         "hideProgram",
     ], "Space Industrialist Week hero");
