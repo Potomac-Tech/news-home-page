@@ -1,4 +1,5 @@
 import sanitizeHtml from "sanitize-html";
+import { DomUtils, parseDocument } from "htmlparser2";
 import { isYouTubeEmbedUrl } from "./youtube";
 
 const allowedTags = [
@@ -97,18 +98,98 @@ export function articlePlainText(value: string) {
         .trim();
 }
 
-export function renderArticleHtml(value: string) {
-    if (isRichArticleHtml(value)) {
-        return sanitizeArticleHtml(value);
+type RenderArticleHtmlOptions = {
+    excludeImageSrc?: string | null;
+};
+
+function normalizeMediaSource(value: string) {
+    const trimmed = value.trim();
+    if (!trimmed) return null;
+
+    try {
+        const isAbsolute = /^[a-z][a-z\d+.-]*:/i.test(trimmed);
+        const parsed = new URL(trimmed, "https://relative.cabeus.invalid");
+        let pathname = parsed.pathname;
+
+        try {
+            pathname = decodeURIComponent(pathname);
+        } catch {
+            // Preserve the parsed path if it contains malformed escape sequences.
+        }
+
+        return {
+            host: isAbsolute ? parsed.host.toLowerCase() : null,
+            pathname: pathname.replace(/\/{2,}/g, "/").replace(/\/$/, ""),
+        };
+    } catch {
+        return {
+            host: null,
+            pathname: trimmed,
+        };
+    }
+}
+
+function mediaSourcesMatch(candidate: string, excluded: string) {
+    const normalizedCandidate = normalizeMediaSource(candidate);
+    const normalizedExcluded = normalizeMediaSource(excluded);
+
+    if (!normalizedCandidate || !normalizedExcluded) return false;
+    if (normalizedCandidate.pathname !== normalizedExcluded.pathname) return false;
+
+    return !normalizedCandidate.host
+        || !normalizedExcluded.host
+        || normalizedCandidate.host === normalizedExcluded.host;
+}
+
+function findContainingFigure(image: ReturnType<typeof DomUtils.findAll>[number]) {
+    let parent = DomUtils.getParent(image);
+
+    while (parent) {
+        if (DomUtils.isTag(parent) && parent.name === "figure") {
+            return parent;
+        }
+        parent = DomUtils.getParent(parent);
     }
 
-    return value
-        .split(/\n\s*\n/)
-        .map((paragraph) => paragraph.trim())
-        .filter(Boolean)
-        .map((paragraph) => `<p>${sanitizeHtml(paragraph, {
-            allowedTags: [],
-            allowedAttributes: {},
-        })}</p>`)
-        .join("");
+    return null;
+}
+
+function removeDuplicateImage(html: string, excludedImageSrc: string) {
+    const document = parseDocument(html);
+    const duplicateImages = DomUtils.findAll(
+        (element) => element.name === "img"
+            && mediaSourcesMatch(element.attribs.src ?? "", excludedImageSrc),
+        document
+    );
+    const removalTargets = new Set(
+        duplicateImages.map(
+            (image) => findContainingFigure(image) ?? image
+        )
+    );
+
+    removalTargets.forEach((target) => DomUtils.removeElement(target));
+    return DomUtils.getOuterHTML(document);
+}
+
+export function renderArticleHtml(
+    value: string,
+    options: RenderArticleHtmlOptions = {}
+) {
+    const rendered = isRichArticleHtml(value)
+        ? sanitizeArticleHtml(value)
+        : value
+            .split(/\n\s*\n/)
+            .map((paragraph) => paragraph.trim())
+            .filter(Boolean)
+            .map((paragraph) => `<p>${sanitizeHtml(paragraph, {
+                allowedTags: [],
+                allowedAttributes: {},
+            })}</p>`)
+            .join("");
+
+    if (options.excludeImageSrc) {
+        return removeDuplicateImage(rendered, options.excludeImageSrc);
+    }
+
+    return rendered;
 }

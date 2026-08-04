@@ -313,6 +313,11 @@ test("studio preserves headline case and separates story paragraphs", () => {
     assert.doesNotMatch(studioUi, /uppercase[^>]*>\{draft\.title/);
     assert.doesNotMatch(previewPage, /text-3xl uppercase text-white/);
     assert.match(previewRender, /renderArticleHtml/);
+    assert.match(previewRender, /excludeImageSrc: hero/);
+    assert.match(articlePage, /excludeImageSrc: article\.heroImageUrl/);
+    assert.match(richText, /parseDocument/);
+    assert.match(richText, /DomUtils\.getParent/);
+    assert.match(richText, /removeDuplicateImage/);
     assert.match(previewRender, /heroAsset\?\.caption/);
     assert.match(previewRender, /<figcaption/);
     assert.match(articlePage, /split\(\/\\n\\s\*\\n\/\)/);

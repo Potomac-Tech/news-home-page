@@ -551,7 +551,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                             <div
                                 className="article-rich-text mt-6 text-lg leading-8 text-cabeus-ink/85"
                                 dangerouslySetInnerHTML={{
-                                    __html: renderArticleHtml(fullBody),
+                                    __html: renderArticleHtml(fullBody, {
+                                        excludeImageSrc: article.heroImageUrl,
+                                    }),
                                 }}
                             />
                         </section>

@@ -68,7 +68,9 @@ export default async function PreviewRenderPage({ params }: { params: Promise<{ 
                     <div
                         className="article-rich-text mt-6 text-lg leading-8 text-cabeus-ink/85"
                         dangerouslySetInnerHTML={{
-                            __html: renderArticleHtml(bodyHtml),
+                            __html: renderArticleHtml(bodyHtml, {
+                                excludeImageSrc: hero,
+                            }),
                         }}
                     />
                 </section>
