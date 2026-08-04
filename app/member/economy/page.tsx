@@ -115,7 +115,7 @@ function ConfigGate() {
                         Detailed lunar economy records are paid-member data and
                         are not rendered from local fallback data. Configure the
                         Cabeus Explorer Supabase public environment variables and sign
-                        in with Scout or Command access to view the dashboard.
+                        in with Scout or Cabeus Council access to view the dashboard.
                     </p>
                     <Link
                         href="/apply"
@@ -138,11 +138,11 @@ function LockedGate() {
                         Scout economy dashboard
                     </p>
                     <h1 className="mt-4 font-serif text-4xl leading-tight text-white">
-                        Scout or Command access is required.
+                        Scout or Cabeus Council access is required.
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Detailed scenario tables, assumptions, and source
-                        downloads are reserved for paid Scout members, Command
+                        downloads are reserved for paid Scout members, Cabeus Council
                         organization users, and authorized staff.
                     </p>
                     <div className="mt-6 flex flex-wrap gap-3">
@@ -156,7 +156,7 @@ function LockedGate() {
                             href="/command"
                             className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                         >
-                            Command access
+                            Cabeus Council access
                         </Link>
                     </div>
                 </div>
@@ -570,7 +570,7 @@ export default async function MemberEconomyPage() {
                 <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
                     <div>
                         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-potomac-gold">
-                            Scout and Command intelligence
+                            Scout and Cabeus Council intelligence
                         </p>
                         <h1 className="font-serif text-4xl leading-tight text-white md:text-6xl">
                             Lunar Economy Dashboard

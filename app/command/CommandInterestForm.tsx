@@ -125,7 +125,7 @@ export function CommandInterestForm({
                     defaultChecked={communicationPreference === "contract_discussion_contact_approved"}
                     className="mt-1 h-4 w-4 accent-potomac-gold"
                 />
-                <span>I agree that Cabeus Explorer may contact me about this Meridian contract discussion.</span>
+                <span>I agree that Cabeus Explorer may contact me about this Cabeus Council contract discussion.</span>
             </label>
             <label className="mt-5 block text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
                 Mission need

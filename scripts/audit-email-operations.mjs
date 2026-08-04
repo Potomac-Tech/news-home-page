@@ -36,9 +36,9 @@ const allRuntime = Object.entries(files)
     .join("\n");
 const command = `${files["app/command/actions.ts"]}\n${files["app/command/CommandInterestForm.tsx"]}`;
 
-requirePattern(files["app/_data/tiers.ts"], /enterprisePublicName[^=]*=\s*"Meridian"/, "app/_data/tiers.ts", "Public enterprise label is not Meridian.");
-forbidPattern(command, /mailto:|stripe|checkout|invoice|payment-provider/i, "app/command", "Meridian exposes a public payment or mailto workflow.");
-requirePattern(files["app/command/actions.ts"], /replyTo:\s*contactEmail/, "app/command/actions.ts", "Meridian does not use the validated business email as Reply-To.");
+requirePattern(files["app/_data/tiers.ts"], /enterprisePublicName[^=]*=\s*"Cabeus Council"/, "app/_data/tiers.ts", "Public enterprise label is not Cabeus Council.");
+forbidPattern(command, /mailto:|stripe|checkout|invoice|payment-provider/i, "app/command", "Cabeus Council exposes a public payment or mailto workflow.");
+requirePattern(files["app/command/actions.ts"], /replyTo:\s*contactEmail/, "app/command/actions.ts", "Cabeus Council does not use the validated business email as Reply-To.");
 requirePattern(files["app/command/actions.ts"], /create_meridian_delivery_event[\s\S]*claim_meridian_delivery_quota[\s\S]*sendOperationalEmail[\s\S]*complete_meridian_delivery/, "app/command/actions.ts", "Lead, quota, send, and audit operations are out of order or missing.");
 requirePattern(files["lib/email/resend.ts"], /RESEND_API_KEY/, "lib/email/resend.ts", "Server-only Resend key is missing.");
 requirePattern(files["lib/email/resend.ts"], /info@potomacdb\.com/, "lib/email/resend.ts", "Approved sender fallback is missing.");

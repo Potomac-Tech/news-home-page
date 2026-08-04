@@ -30,8 +30,8 @@ The schema follows the existing normalized member role model:
 
 - `public` rows are readable publicly after publication.
 - `member` rows are readable by approved Explorer members and higher.
-- `scout` rows are readable by Scout, Command, and staff roles.
-- `command` rows are readable by Command and staff roles.
+- `scout` rows are readable by Scout, Cabeus Council, and staff roles.
+- `command` rows are readable by Cabeus Council and staff roles.
 - Editors, analysts, and admins can manage records.
 
 Every table in the public schema has Row Level Security enabled. The migration
@@ -62,4 +62,4 @@ grant, RLS, and policy structures.
 
 Live migration application and RLS behavior still need a reachable local or
 remote Supabase database with the canonical `xlpkdoeldtlhearqajat` project
-credentials and seeded Scout/Command/staff test users.
+credentials and seeded Scout/Cabeus Council/staff test users.

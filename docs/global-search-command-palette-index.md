@@ -34,9 +34,9 @@ RLS uses normalized role assignments through
 `app_private.can_read_intelligence_search()`:
 
 - `public`: visible to anonymous and authenticated users.
-- `explorer`: visible to Explorer/member, Scout, Command, and staff roles.
-- `scout`: visible to Scout, Command, and staff roles.
-- `command`: visible to Command and staff roles.
+- `explorer`: visible to Explorer/member, Scout, Cabeus Council, and staff roles.
+- `scout`: visible to Scout, Cabeus Council, and staff roles.
+- `command`: visible to Cabeus Council and staff roles.
 - `staff`: visible to editor, analyst, and admin roles.
 
 Staff can manage search records, citations, command entries, synonyms, pinned

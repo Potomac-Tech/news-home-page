@@ -25,7 +25,7 @@ Private helper functions in `app_private` enforce approved-member access without
 using user-editable metadata:
 
 - `app_private.can_use_member_chat(...)` checks active normalized Explorer,
-  Scout, or Command role assignments.
+  Scout, or Cabeus Council role assignments.
 - `app_private.is_chat_participant(...)` checks active conversation
   participation.
 - `app_private.has_chat_block_between(...)` prevents new participant inserts
@@ -53,6 +53,6 @@ The model supports:
 ## Verification Limit
 
 Live RLS tests require the migration applied to the Potomac Supabase project and
-seeded Explorer, Scout, Command, analyst, and admin users. Without those, local
+seeded Explorer, Scout, Cabeus Council, analyst, and admin users. Without those, local
 verification is limited to build, static search, migration inspection, and local
 Supabase CLI connectivity checks.

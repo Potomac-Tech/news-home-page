@@ -156,7 +156,7 @@ function AccessTierSelect({
         >
             <option value="explorer">Explorer</option>
             <option value="scout">Scout</option>
-            <option value="meridian">Meridian</option>
+            <option value="meridian">Cabeus Council</option>
         </select>
     );
 }

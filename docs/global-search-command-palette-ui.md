@@ -22,7 +22,7 @@ The search page supports:
 - Result snippets, source counts, confidence labels, freshness labels, pinned
   labels, result-kind labels, and tier labels.
 - Empty states with a clear reset path.
-- Entitlement-aware prompts for Explorer, Scout, and Command records where
+- Entitlement-aware prompts for Explorer, Scout, and Cabeus Council records where
   public users can see that a result exists but cannot read the full result.
 
 ## Data Flow

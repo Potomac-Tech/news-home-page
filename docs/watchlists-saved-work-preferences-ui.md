@@ -1,6 +1,6 @@
 # Watchlists, Saved Work, And Preferences UI
 
-Task 066 adds the Scout and Command saved-work workspace at
+Task 066 adds the Scout and Cabeus Council saved-work workspace at
 `/member/saved-work`.
 
 ## Scope
@@ -20,7 +20,7 @@ personalization tables:
 ## Access Model
 
 `lib/auth/saved-work.ts` protects the route and server actions with
-normalized roles. Scout, Command, editor, analyst, and admin roles can use the
+normalized roles. Scout, Cabeus Council, editor, analyst, and admin roles can use the
 workspace. Explorer users see an upgrade gate instead of write controls.
 
 The UI reads and writes through the Potomac Supabase public client, so Supabase

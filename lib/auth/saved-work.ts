@@ -84,7 +84,7 @@ export async function requireSavedWorkAccess(nextPath = "/member/saved-work") {
     const access = await getSavedWorkAccessContext({ supabase, nextPath });
 
     if (access.state !== "authorized" || !access.userId) {
-        throw new Error("Scout or Command saved-work access is required.");
+        throw new Error("Scout or Cabeus Council saved-work access is required.");
     }
 
     return {

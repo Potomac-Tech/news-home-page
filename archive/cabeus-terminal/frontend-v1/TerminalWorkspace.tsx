@@ -29,7 +29,7 @@ function accessMessage(viewer: TerminalViewerContext) {
     if (viewer.capabilityMode === "full_mvp") {
         return {
             eyebrow: "Full MVP workspace",
-            title: "Scout and Meridian capabilities are active",
+            title: "Scout and Cabeus Council capabilities are active",
             body: "Private workspaces, saved models, annotations, watchlists, and member evidence are available under the same MVP capability set.",
             cta: "Open account",
         };
@@ -39,7 +39,7 @@ function accessMessage(viewer: TerminalViewerContext) {
         return {
             eyebrow: "Explorer preview",
             title: "Public intelligence is active",
-            body: "Scout and Meridian workspace features remain summarized as teasers until the membership is upgraded.",
+            body: "Scout and Cabeus Council workspace features remain summarized as teasers until the membership is upgraded.",
             cta: "Upgrade membership",
         };
     }

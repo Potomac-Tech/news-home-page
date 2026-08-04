@@ -95,7 +95,7 @@ function LockedPanel({ tier, slug }: { tier: LunarCompanyTier; slug: string }) {
                 Company intelligence is gated.
             </h2>
             <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
-                Scout and Meridian users can unlock contract, financial,
+                Scout and Cabeus Council users can unlock contract, financial,
                 relationship, and comparison details where the underlying
                 source rights and RLS policies allow access.
             </p>
@@ -110,7 +110,7 @@ function LockedPanel({ tier, slug }: { tier: LunarCompanyTier; slug: string }) {
                     href={`/upgrade?tier=meridian&source=company-profile&content=company&object=${encodeURIComponent(slug)}&next=${encodeURIComponent(`/companies/${slug}`)}`}
                     className="rounded border border-potomac-gold/50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                 >
-                    Meridian access
+                    Cabeus Council access
                 </Link>
             </div>
         </section>

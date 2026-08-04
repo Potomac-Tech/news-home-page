@@ -1,6 +1,6 @@
 # RFQ Schema
 
-Task 050 adds the database model and access rules for Scout and Command RFQ
+Task 050 adds the database model and access rules for Scout and Cabeus Council RFQ
 workflows.
 
 ## Scope
@@ -22,12 +22,12 @@ moderation action enum types.
 
 ## Access Model
 
-RFQs are limited to Scout, Command, and authorized staff accounts through
+RFQs are limited to Scout, Cabeus Council, and authorized staff accounts through
 normalized role assignments. The helper functions live in `app_private` and do
 not depend on user-editable metadata:
 
-- `app_private.can_use_rfqs(...)` grants Scout/Command RFQ access.
-- `app_private.can_use_command_rfqs(...)` gates Command-only RFQs.
+- `app_private.can_use_rfqs(...)` grants Scout/Cabeus Council RFQ access.
+- `app_private.can_use_command_rfqs(...)` gates Cabeus Council-only RFQs.
 - `app_private.can_moderate_rfqs(...)` grants moderation to moderator,
   analyst, and admin roles.
 - `app_private.can_manage_rfq_post(...)` checks creator, organization admin,
@@ -56,6 +56,6 @@ The model supports:
 ## Verification Limit
 
 Live RLS tests require the migration applied to the Potomac Supabase project and
-seeded Scout, Command, organization admin, moderator, analyst, and admin users.
+seeded Scout, Cabeus Council, organization admin, moderator, analyst, and admin users.
 Without those, local verification is limited to build, static search, migration
 inspection, and local Supabase CLI connectivity checks.

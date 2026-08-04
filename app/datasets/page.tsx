@@ -92,7 +92,7 @@ function kindLabel(value: string) {
 
 function releaseStateLabel(value: string) {
     if (value === "command_exclusive") {
-        return "Command-exclusive";
+        return "Cabeus Council-exclusive";
     }
 
     if (value === "scout_delayed") {

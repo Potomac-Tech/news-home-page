@@ -1,6 +1,6 @@
-# Command Interest Workflow
+# Cabeus Council Interest Workflow
 
-Task 013 adds a manual Command sales/admin workflow.
+Task 013 adds a manual Cabeus Council sales/admin workflow.
 
 ## Public Route
 
@@ -8,7 +8,7 @@ Task 013 adds a manual Command sales/admin workflow.
 /command
 ```
 
-The form stores Command interest requests in `command_interest_requests` with `status = 'new'`.
+The form stores Cabeus Council interest requests in `command_interest_requests` with `status = 'new'`.
 
 Captured fields:
 
@@ -27,10 +27,10 @@ Captured fields:
 
 Admins can:
 
-- Review Command interest requests.
+- Review Cabeus Council interest requests.
 - Update sales status.
 - Record sales/admin notes.
-- Manually grant organization-level Command access after offline approval.
+- Manually grant organization-level Cabeus Council access after offline approval.
 
 Manual grant creates:
 

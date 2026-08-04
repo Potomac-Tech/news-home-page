@@ -83,7 +83,7 @@ export async function requireRfqAccess(nextPath = "/member/rfqs") {
     const access = await getRfqAccessContext({ supabase, nextPath });
 
     if (access.state !== "authorized" || !access.userId) {
-        throw new Error("Scout or Command RFQ access is required.");
+        throw new Error("Scout or Cabeus Council RFQ access is required.");
     }
 
     return {

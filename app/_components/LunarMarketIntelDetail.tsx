@@ -24,7 +24,7 @@ function tierLabel(value: string) {
     }
 
     if (value === "command") {
-        return "Command";
+        return "Cabeus Council";
     }
 
     return "Public";
@@ -68,7 +68,7 @@ function LockedPanel({ record }: { record: LunarMarketRecord }) {
                 Analyst notes are gated.
             </h2>
             <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
-                Scout and Command members can read the full lunar relevance,
+                Scout and Cabeus Council members can read the full lunar relevance,
                 risk, eligibility, source, and watchlist-ready details for this
                 record after sign-in.
             </p>
@@ -83,7 +83,7 @@ function LockedPanel({ record }: { record: LunarMarketRecord }) {
                     href="/command"
                     className="rounded border border-potomac-gold/50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                 >
-                    Command access
+                    Cabeus Council access
                 </Link>
             </div>
         </section>

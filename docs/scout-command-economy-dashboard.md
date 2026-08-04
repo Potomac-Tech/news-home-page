@@ -1,4 +1,4 @@
-# Scout/Command Economy Dashboard
+# Scout/Cabeus Council Economy Dashboard
 
 Task 033 adds the paid member dashboard for detailed lunar economy intelligence.
 It is scoped to the canonical Potomac Supabase project ref
@@ -6,7 +6,7 @@ It is scoped to the canonical Potomac Supabase project ref
 
 ## Route
 
-- `/member/economy`: protected Next.js route for Scout users, Command users,
+- `/member/economy`: protected Next.js route for Scout users, Cabeus Council users,
   and authorized staff.
 - `/member/economy/downloads/scenarios`: CSV download for published scenarios.
 - `/member/economy/downloads/assumptions`: CSV download for model assumptions.
@@ -36,6 +36,6 @@ normalized `member_role_assignments`, not user-editable metadata.
 ## Verification Notes
 
 Live dashboard reads require Potomac Supabase public credentials, applied
-migrations, and a signed-in Scout or Command test user. Without those, local
+migrations, and a signed-in Scout or Cabeus Council test user. Without those, local
 verification can still confirm compilation, route registration, the no-config
 gate, and CSV route protection.

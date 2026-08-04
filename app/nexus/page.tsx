@@ -14,7 +14,7 @@ export default function NexusPage() {
     return (
         <RouteScaffold
             title="Cabeus Explorer Nexus"
-            description="Approved Explorer, Scout, and Meridian members can open Nexus with their existing Cabeus Explorer identity."
+            description="Approved Explorer, Scout, and Cabeus Council members can open Nexus with their existing Cabeus Explorer identity."
             status="Member tool"
             primaryHref="/api/member/nexus/handoff"
             primaryLabel="Open Nexus"

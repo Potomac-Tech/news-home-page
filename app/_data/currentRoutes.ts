@@ -47,7 +47,7 @@ export const currentRoutes = [
     {
         href: "/tracker/launches",
         source: "app/tracker/launches/page.tsx",
-        note: "Verified-profile Launches & Missions weekly tracker with Scout/Meridian tools and RLS-gated values.",
+        note: "Verified-profile Launches & Missions weekly tracker with Scout/Cabeus Council tools and RLS-gated values.",
     },
     {
         href: "/tracker/contracts",

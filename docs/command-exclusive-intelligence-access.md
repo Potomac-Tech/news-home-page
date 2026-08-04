@@ -1,12 +1,12 @@
-# Command Exclusive Intelligence Access
+# Cabeus Council Exclusive Intelligence Access
 
-Task 044 adds the data model for Command-only real-time and near-real-time
+Task 044 adds the data model for Cabeus Council-only real-time and near-real-time
 intelligence allocation.
 
 ## Allocation Model
 
-`command_intelligence_allocations` binds a Command-exclusive dataset to one
-allocated Command user during an active exclusivity window.
+`command_intelligence_allocations` binds a Cabeus Council-exclusive dataset to one
+allocated Cabeus Council user during an active exclusivity window.
 
 The record captures:
 
@@ -21,7 +21,7 @@ The record captures:
 - staff notes and audit authorship fields
 
 The active allocation index allows only one planned or active allocation per
-dataset, which represents the requirement that one Command user can receive the
+dataset, which represents the requirement that one Cabeus Council user can receive the
 new intelligence exclusively.
 
 ## Exclusivity Rules
@@ -41,7 +41,7 @@ Staff can only create or update allocations when:
 
 Allocation rows are readable by:
 
-- the allocated Command user
+- the allocated Cabeus Council user
 - organization admins for the linked organization
 - analysts and admins
 
@@ -56,4 +56,4 @@ does not use user-editable metadata.
 Live verification requires the Potomac Supabase project
 `xlpkdoeldtlhearqajat`, applied dataset catalog/release migrations, an applied
 `20260630031059_command_exclusive_intelligence_access.sql` migration, a
-Command-exclusive dataset, and a seeded Command user.
+Cabeus Council-exclusive dataset, and a seeded Cabeus Council user.

@@ -46,7 +46,7 @@ export async function GET(
     }
 
     if (!access.canReadEconomyDashboard) {
-        return new NextResponse("Scout or Command access is required.", {
+        return new NextResponse("Scout or Cabeus Council access is required.", {
             status: 403,
         });
     }

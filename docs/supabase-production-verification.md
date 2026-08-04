@@ -43,7 +43,7 @@ This is a structural policy check, not a substitute for authenticated browser an
 
 ## Authenticated role journeys
 
-Six dedicated QA identities now cover Explorer, Scout, Command/organization admin, editor, analyst, and admin. Each identity was created through Supabase Auth with a unique random credential, auto-confirmed in the canonical dashboard, assigned an approved profile and completed profile record, and given only the normalized roles and entitlements required for its persona. The Command identity belongs to a non-billable QA organization with an active organization-level Command entitlement. The Scout and Command entitlements expire after 30 days so stale test access does not remain open indefinitely.
+Six dedicated QA identities now cover Explorer, Scout, Cabeus Council/organization admin, editor, analyst, and admin. Each identity was created through Supabase Auth with a unique random credential, auto-confirmed in the canonical dashboard, assigned an approved profile and completed profile record, and given only the normalized roles and entitlements required for its persona. The Cabeus Council identity belongs to a non-billable QA organization with an active organization-level Cabeus Council entitlement. The Scout and Cabeus Council entitlements expire after 30 days so stale test access does not remain open indefinitely.
 
 Credentials were held only for the active QA session, then the sessions were revoked and the in-memory values were cleared. They are not stored in the repository, migration history, task documentation, user metadata, or any `NEXT_PUBLIC_*` value. The unsafe deterministic local seed remains removed and must not be reapplied.
 

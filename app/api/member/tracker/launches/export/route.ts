@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const access = await getWeeklyTrackerAccess({ supabase });
     if (access.state !== "authorized") return NextResponse.json({ error: "Verified profile required." }, { status: 401 });
-    if (!access.canUsePremiumTools) return NextResponse.json({ error: "Scout or Meridian access required." }, { status: 403 });
+    if (!access.canUsePremiumTools) return NextResponse.json({ error: "Scout or Cabeus Council access required." }, { status: 403 });
     const { data: profile } = await supabase.from("member_profile_completions").select("timezone").eq("user_id", access.userId!).maybeSingle();
     const weekStart = localMonday(new Date(), profile?.timezone || "UTC");
     const lunarOnly = new URL(request.url).searchParams.get("filter") === "lunar";

@@ -55,14 +55,14 @@ Modules should provide typed rows, column definitions, row IDs, optional source 
     entitlement={{
         canExportCsv: access.canExport,
         canExportPdf: access.canExport,
-        lockedReason: "Exports require Scout or Command access.",
+        lockedReason: "Exports require Scout or Cabeus Council access.",
     }}
 />
 ```
 
 ## Entitlement Rule
 
-Scout and Command modules can pass `canExportCsv` and `canExportPdf` from the feature access guard. Public or Explorer-only modules should pass `false` with a clear locked reason unless the product decision explicitly allows public exports.
+Scout and Cabeus Council modules can pass `canExportCsv` and `canExportPdf` from the feature access guard. Public or Explorer-only modules should pass `false` with a clear locked reason unless the product decision explicitly allows public exports.
 
 ## Implementation Notes
 

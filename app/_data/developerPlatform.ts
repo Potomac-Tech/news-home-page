@@ -150,9 +150,9 @@ export const fallbackEndpoints: DeveloperEndpoint[] = [
     {
         id: "command_briefs",
         endpointKey: "command_briefs",
-        title: "Command Briefs",
+        title: "Cabeus Council Briefs",
         description:
-            "Organization-level briefings, allocation-aware Command intelligence, and delivery metadata.",
+            "Organization-level briefings, allocation-aware Cabeus Council intelligence, and delivery metadata.",
         method: "GET",
         routeTemplate: "/api/v1/command/briefs",
         minimumTier: "command",
@@ -199,7 +199,7 @@ const fallbackUsageLogs: DeveloperUsageLog[] = [
 const fallbackWebhooks: DeveloperWebhookSubscription[] = [
     {
         id: "fallback-webhook",
-        subscriptionName: "Command alert relay",
+        subscriptionName: "Cabeus Council alert relay",
         endpointUrl: "https://example.com/potomac/webhooks",
         eventKinds: ["alert.created", "export.completed"],
         status: "active",

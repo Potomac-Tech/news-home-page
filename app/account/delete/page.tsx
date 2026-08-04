@@ -39,7 +39,7 @@ export default function AccountDeletionPage() {
                         </h2>
                         <ul className="mt-5 grid gap-3 text-sm leading-6 text-potomac-cream/70">
                             <li>Use the email address associated with your account.</li>
-                            <li>Include your organization name if you use Command access.</li>
+                            <li>Include your organization name if you use Cabeus Council access.</li>
                             <li>State whether Scout billing should be cancelled.</li>
                             <li>Ask for export review before deletion if needed.</li>
                             <li>Do not include passwords, API secrets, or private keys.</li>

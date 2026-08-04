@@ -438,7 +438,7 @@ const allFallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         is_demo_available: true,
         demo_url: "https://potomacdb.com/member/economy",
         sample_note:
-            "Scout and Command users can review the connected methodology dashboard after sign-in.",
+            "Scout and Cabeus Council users can review the connected methodology dashboard after sign-in.",
         coverage_start_at: null,
         coverage_end_at: null,
         geography_scope: "Lunar economy benchmarks",
@@ -465,7 +465,7 @@ const allFallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         scout_release_at: "2027-06-29T13:00:00.000Z",
         public_release_at: null,
         release_state_note:
-            "Command-exclusive benchmark pack for the first year after cataloged collection; Scout access begins after the exclusivity window.",
+            "Cabeus Council-exclusive benchmark pack for the first year after cataloged collection; Scout access begins after the exclusivity window.",
         unavailable_reason: null,
         isFallback: true,
         sources: [
@@ -499,10 +499,10 @@ const allFallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         dataset_kind: "potomac_proprietary",
         provider_name: "Potomac Database Systems",
         owner_name: "Potomac Database Systems",
-        collection_name: "Command intelligence",
+        collection_name: "Cabeus Council intelligence",
         availability_state: "restricted",
         availability_note:
-            "Unavailable until collection rights, review workflow, and Command allocation are approved.",
+            "Unavailable until collection rights, review workflow, and Cabeus Council allocation are approved.",
         access_tier_required: "meridian",
         is_sample_available: false,
         sample_url: null,

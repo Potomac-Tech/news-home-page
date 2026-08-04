@@ -47,7 +47,7 @@ test("launch inventory records approval and withholds unapproved modules", async
     assert.match(inventory, /production shows an explicit unavailable or empty state/);
 });
 
-test("search uses Meridian visibility and fails closed in production", async () => {
+test("search uses Cabeus Council visibility and fails closed in production", async () => {
     const [search, palette, migration, releaseAudit] = await Promise.all([
         read("app/_data/search.ts"),
         read("app/_components/SearchCommandPalette.tsx"),

@@ -5,7 +5,7 @@
 - Supabase Cron invokes `private.invoke_member_alert_evaluator()` every 15 minutes.
 - The function reads the production endpoint and bearer token from Supabase Vault, then uses `pg_net` to call `/api/internal/alerts/evaluate`.
 - The API requires `ALERT_EVALUATOR_SECRET` and a server-only `SUPABASE_SECRET_KEY`. Neither value may use a `NEXT_PUBLIC_` prefix.
-- The evaluator covers watched companies, lunar missions, procurements, regulatory records, datasets, events, marketplace requests and offers, and user- or organization-scoped Command intelligence allocations.
+- The evaluator covers watched companies, lunar missions, procurements, regulatory records, datasets, events, marketplace requests and offers, and user- or organization-scoped Cabeus Council intelligence allocations.
 
 ## Delivery Behavior
 

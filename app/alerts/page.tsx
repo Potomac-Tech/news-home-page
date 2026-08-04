@@ -64,7 +64,7 @@ function statusLabel(value: string) {
 }
 
 function tierLabel(tier: AlertTier) {
-    if (tier === "command") return "Command";
+    if (tier === "command") return "Cabeus Council";
     if (tier === "scout") return "Scout";
     if (tier === "staff") return "Staff";
     return "Explorer";
@@ -112,7 +112,7 @@ function PublicPreview() {
                         Sign in to see unread alert badges, watched-object
                         changes, stale source warnings, email delivery status,
                         and tier-aware notification limits. Explorer accounts
-                        can read feed notices; Scout and Command can manage
+                        can read feed notices; Scout and Cabeus Council can manage
                         active alert rules.
                     </p>
                     <div className="mt-6 flex flex-wrap gap-3">
@@ -192,7 +192,7 @@ function TierLimitsPanel({
                         <p className="mt-2 text-[0.65rem] uppercase tracking-[0.12em] text-potomac-cream/45">
                             {limit.supportsWebhooks ? "Webhook hooks" : "No webhooks"} |{" "}
                             {limit.supportsCommandIntelligence
-                                ? "Command intelligence"
+                                ? "Cabeus Council intelligence"
                                 : "Standard intelligence"}
                         </p>
                     </article>
@@ -210,8 +210,8 @@ function AlertRuleForm({ canManage }: { canManage: boolean }) {
                 </h2>
                 <p className="mt-3 text-sm leading-6 text-potomac-cream/65">
                     Explorer accounts can read alert feed notices. Scout and
-                    Command accounts can create watched-object, saved-search,
-                    stale-data, and Command intelligence alert rules.
+                    Cabeus Council accounts can create watched-object, saved-search,
+                    stale-data, and Cabeus Council intelligence alert rules.
                 </p>
                 <Link
                     href="/pricing"
@@ -251,7 +251,7 @@ function AlertRuleForm({ canManage }: { canManage: boolean }) {
                             Platform event
                         </option>
                         <option value="command_intelligence" className="bg-potomac-primary text-white">
-                            Command intelligence
+                            Cabeus Council intelligence
                         </option>
                     </select>
                 </Field>
@@ -590,7 +590,7 @@ export default async function AlertsPage() {
                             {tierLabel(access.tier)}
                         </h2>
                         <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
-                            Explorer can read feed notices. Scout and Command
+                            Explorer can read feed notices. Scout and Cabeus Council
                             can manage rules, email hooks, stale-data alerts,
                             and higher delivery limits.
                         </p>

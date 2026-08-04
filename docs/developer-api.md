@@ -1,10 +1,10 @@
 # Cabeus Explorer Developer API
 
-The paid developer API is available to Scout and Command members at `/api/v1`. API keys are issued from an authenticated member session with `POST /api/member/developer/keys`; the returned secret is shown once and only its SHA-256 hash is retained.
+The paid developer API is available to Scout and Cabeus Council members at `/api/v1`. API keys are issued from an authenticated member session with `POST /api/member/developer/keys`; the returned secret is shown once and only its SHA-256 hash is retained.
 
 ## Authentication and limits
 
-Send a key as `Authorization: Bearer cbe_...` or `X-API-Key: cbe_...`. Every response includes `X-Request-ID`; successful API responses also include `X-RateLimit-Limit` and `X-RateLimit-Remaining`. Scout keys receive 10,000 monthly units, while Command keys receive 250,000 unless an administrator has assigned an override. Endpoint scope restrictions and membership tier checks are evaluated before data is returned.
+Send a key as `Authorization: Bearer cbe_...` or `X-API-Key: cbe_...`. Every response includes `X-Request-ID`; successful API responses also include `X-RateLimit-Limit` and `X-RateLimit-Remaining`. Scout keys receive 10,000 monthly units, while Cabeus Council keys receive 250,000 unless an administrator has assigned an override. Endpoint scope restrictions and membership tier checks are evaluated before data is returned.
 
 Errors use this contract:
 
@@ -22,7 +22,7 @@ Authentication failures return `401`, scope and tier failures return `403`, miss
 | `GET` | `/api/v1/lunar-missions` | Scout | 2 | Published lunar missions and status metadata. |
 | `GET` | `/api/v1/procurement-regulatory` | Scout | 2 | Published lunar procurements and regulatory records. |
 | `GET` | `/api/v1/companies` | Scout | 3 | Published lunar company profiles. |
-| `GET` | `/api/v1/command/briefs` | Command | 5 | Command brief alert-feed records belonging to the key owner and organization. |
+| `GET` | `/api/v1/command/briefs` | Cabeus Council | 5 | Cabeus Council brief alert-feed records belonging to the key owner and organization. |
 | `POST` | `/api/v1/exports` | Scout | 5 | Queue a CSV, PDF, or JSON export. |
 | `GET` | `/api/v1/exports/{id}` | Scout | 5 | Read export status and file metadata. |
 | `GET` | `/api/v1/exports/{id}/download` | Scout | 5 | Redirect to a five-minute private Storage download URL. |
@@ -38,11 +38,11 @@ curl -X POST https://cabeus-explorer.jake-249.workers.dev/api/v1/exports \
   -d '{"name":"Current lunar missions","source":"lunar_missions","format":"csv"}'
 ```
 
-Allowed sources are `lunar_articles`, `lunar_missions`, `procurement_regulatory`, `company_profiles`, and, for Command keys, `command_briefs`. A scheduled server worker processes queued jobs. Files remain private, expire after seven days, and are only exposed through short-lived signed links.
+Allowed sources are `lunar_articles`, `lunar_missions`, `procurement_regulatory`, `company_profiles`, and, for Cabeus Council keys, `command_briefs`. A scheduled server worker processes queued jobs. Files remain private, expire after seven days, and are only exposed through short-lived signed links.
 
 ## Webhooks
 
-Command members create a subscription from an authenticated session with `POST /api/member/developer/webhooks`:
+Cabeus Council members create a subscription from an authenticated session with `POST /api/member/developer/webhooks`:
 
 ```json
 {

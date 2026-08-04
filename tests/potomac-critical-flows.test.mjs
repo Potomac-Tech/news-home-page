@@ -247,7 +247,7 @@ test("app role rename retires legacy role IDs", () => {
     );
 });
 
-test("membership tiers use Explorer, Scout, and Meridian enum values", () => {
+test("membership tiers use Explorer, Scout, and Cabeus Council enum values", () => {
     const migration = readMigration("20260723230219_rename_membership_tier_values.sql");
     const membershipTierWriters = [
         read("app/admin/applications/actions.ts"),
@@ -272,7 +272,7 @@ test("membership tiers use Explorer, Scout, and Meridian enum values", () => {
         'tier: "meridian"',
         '["explorer", "scout", "meridian"]',
         '<option value="explorer">Explorer</option>',
-        '<option value="meridian">Meridian</option>',
+        '<option value="meridian">Cabeus Council</option>',
     ], "membership tier writers");
     assert.doesNotMatch(
         membershipTierWriters,
@@ -681,7 +681,7 @@ test("member chat, forums, and RFQs enforce member access and moderation contrac
         "scout",
         "meridian",
         "canModerateRfqs",
-        "Scout or Command RFQ access is required.",
+        "Scout or Cabeus Council RFQ access is required.",
     ], "RFQ auth");
     assertIncludes(chatMigration + forumMigration + rfqMigration, [
         "enable row level security",
@@ -1134,7 +1134,7 @@ test("Resend Free quota governor reserves capacity before sending and exposes an
     );
 });
 
-test("Meridian inquiry requires a completed member and retains the contract-only path", () => {
+test("Cabeus Council inquiry requires a completed member and retains the contract-only path", () => {
     const workflow = readMigration("20260710185238_meridian_authenticated_inquiry_workflow.sql");
     const override = readMigration("20260710185543_meridian_domain_rule_admin_override.sql");
     const page = read("app/command/page.tsx");
@@ -1162,15 +1162,15 @@ test("Meridian inquiry requires a completed member and retains the contract-only
         "complete_meridian_delivery",
         "getProfileGateContext",
         "contract_discussion_contact_approved",
-    ], "Meridian inquiry workflow");
+    ], "Cabeus Council inquiry workflow");
     assert.doesNotMatch(
         meridianSurfaces,
         /mailto:|checkout|invoice|payment-provider/i,
-        "Meridian public surfaces must not expose payment or mailto workflows"
+        "Cabeus Council public surfaces must not expose payment or mailto workflows"
     );
 });
 
-test("upgrade handoff preserves premium context and separates Scout checkout from Meridian", () => {
+test("upgrade handoff preserves premium context and separates Scout checkout from Cabeus Council", () => {
     const upgrade = read("app/upgrade/page.tsx");
     const upgradeAnalytics = read("app/upgrade/UpgradeAnalytics.tsx");
     const checkout = read("app/member/ScoutCheckoutButton.tsx");
@@ -1212,11 +1212,11 @@ test("upgrade handoff preserves premium context and separates Scout checkout fro
     assert.doesNotMatch(
         upgrade,
         /mailto:|invoice|payment-provider/i,
-        "Meridian handoff must not expose mailto or payment-provider placeholders"
+        "Cabeus Council handoff must not expose mailto or payment-provider placeholders"
     );
 });
 
-test("the enterprise display label is configurable without changing internal Command access", () => {
+test("Cabeus Council is the sole enterprise display label without changing internal command access", () => {
     const tierConfig = read("app/_data/tiers.ts");
     const publicTierSurfaces = [
         read("app/page.tsx"),
@@ -1234,9 +1234,8 @@ test("the enterprise display label is configurable without changing internal Com
     ].join("\n");
 
     assertIncludes(tierConfig, [
-        'enterprisePublicNames = ["Meridian", "Command"]',
-        'enterprisePublicName: EnterprisePublicName = "Meridian"',
-        'internalName: "Command"',
+        'enterprisePublicNames = ["Cabeus Council"]',
+        'enterprisePublicName: EnterprisePublicName = "Cabeus Council"',
         "publicTierName",
         'tier === "meridian"',
     ], "enterprise tier configuration");
@@ -1252,7 +1251,7 @@ test("the enterprise display label is configurable without changing internal Com
     assert.doesNotMatch(
         publicTierSurfaces,
         /return "Meridian"|>Meridian|Meridian access|Meridian users|Meridian paths|Command access|Command detail|Command users|Command attendees/,
-        "public tier surfaces must use the configured enterprise display name"
+        "public tier surfaces must not expose retired enterprise membership names"
     );
 });
 
@@ -1695,7 +1694,7 @@ test("archived Cabeus Terminal membership behavior remains preserved", () => {
         '"public_and_explorer"',
         '"full_mvp"',
         'membership === "explorer" ? "/pricing" : "/account"',
-        "Scout and Meridian capabilities are active",
+        "Scout and Cabeus Council capabilities are active",
         "Upgrade membership",
     ], "Terminal membership boundary");
     assert.doesNotMatch(

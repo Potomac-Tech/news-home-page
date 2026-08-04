@@ -154,7 +154,7 @@ function LockedGate() {
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Internal summit plans and past-event summaries are
-                        reserved for approved Explorer, Scout, and Command
+                        reserved for approved Explorer, Scout, and Cabeus Council
                         members.
                     </p>
                     <Link

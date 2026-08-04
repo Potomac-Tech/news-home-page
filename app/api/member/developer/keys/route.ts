@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
     const supabase = await createClient();
     const access = await getDeveloperPlatformAccessContext({ supabase, nextPath: "/member/developer" });
-    if (!access.canUseDeveloperPlatform || !access.userId) return NextResponse.json({ error: "Scout or Command access is required." }, { status: 403 });
+    if (!access.canUseDeveloperPlatform || !access.userId) return NextResponse.json({ error: "Scout or Cabeus Council access is required." }, { status: 403 });
     const input = await request.json().catch(() => ({})) as Record<string, unknown>;
     const name = String(input.name ?? "Primary API key").trim().slice(0, 100);
     if (!name) return NextResponse.json({ error: "A key name is required." }, { status: 400 });

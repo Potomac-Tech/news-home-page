@@ -79,7 +79,7 @@ async function checkSourceContracts() {
         "supabase/migrations/20260714202917_production_content_import_workflow.sql",
     ].map(async (path) => [path, await source(path)])));
 
-    requirePattern(files["app/_data/tiers.ts"], /enterprisePublicName[^=]*=\s*"Meridian"/, "app/_data/tiers.ts", "Public enterprise label must remain Meridian.");
+    requirePattern(files["app/_data/tiers.ts"], /enterprisePublicName[^=]*=\s*"Cabeus Council"/, "app/_data/tiers.ts", "Public enterprise label must remain Cabeus Council.");
     requirePattern(files["app/_data/tiers.ts"], /price:\s*"\$25,000"/, "app/_data/tiers.ts", "Scout price must remain $25,000.");
     requirePattern(files["app/_data/channels.ts"], /https:\/\/www\.linkedin\.com\/company\/cabeus-explorer/, "app/_data/channels.ts", "LinkedIn must use the approved Cabeus Explorer URL.");
     requirePattern(files["app/_data/channels.ts"], /NEXT_PUBLIC_SUBSTACK_URL[\s\S]*substack\.com/, "app/_data/channels.ts", "Substack must use an allow-listed HTTPS URL.");
@@ -108,11 +108,11 @@ async function checkSourceContracts() {
     requirePattern(files["lib/email/resend.ts"], /RESEND_API_KEY/, "lib/email/resend.ts", "Server-side Resend adapter is missing.");
     requirePattern(files["lib/email/resend.ts"], /info@potomacdb\.com/, "lib/email/resend.ts", "Approved Resend sender/destination is missing.");
     requirePattern(files["lib/email/resend-quota.ts"], /RESEND_PLAN[\s\S]*"free"/, "lib/email/resend-quota.ts", "Resend Free-plan enforcement is missing.");
-    requirePattern(files["app/command/actions.ts"], /hasValidResendFreePlanConfig/, "app/command/actions.ts", "Meridian inquiry must preflight Resend Free quota.");
-    requirePattern(files["supabase/migrations/20260710185238_meridian_authenticated_inquiry_workflow.sql"], /meridian_email_domain_rules[\s\S]*decision in \('deny', 'allow'\)/, "supabase/migrations/20260710185238_meridian_authenticated_inquiry_workflow.sql", "Meridian inquiry must retain the business-email denylist.");
-    requirePattern(files["supabase/migrations/20260710185238_meridian_authenticated_inquiry_workflow.sql"], /if v_rule = 'deny'[\s\S]*business or organization email is required/, "supabase/migrations/20260710185238_meridian_authenticated_inquiry_workflow.sql", "Meridian inquiry RPC must reject denied personal domains.");
-    requirePattern(files["app/command/actions.ts"], /replyTo:/, "app/command/actions.ts", "Meridian inquiry must set a safe Reply-To.");
-    forbidPattern(`${files["app/command/actions.ts"]}\n${files["app/command/CommandInterestForm.tsx"]}`, /mailto:|stripe|checkout|invoice|payment-provider/i, "app/command", "Meridian inquiry exposes a forbidden payment or mailto workflow.");
+    requirePattern(files["app/command/actions.ts"], /hasValidResendFreePlanConfig/, "app/command/actions.ts", "Cabeus Council inquiry must preflight Resend Free quota.");
+    requirePattern(files["supabase/migrations/20260710185238_meridian_authenticated_inquiry_workflow.sql"], /meridian_email_domain_rules[\s\S]*decision in \('deny', 'allow'\)/, "supabase/migrations/20260710185238_meridian_authenticated_inquiry_workflow.sql", "Cabeus Council inquiry must retain the business-email denylist.");
+    requirePattern(files["supabase/migrations/20260710185238_meridian_authenticated_inquiry_workflow.sql"], /if v_rule = 'deny'[\s\S]*business or organization email is required/, "supabase/migrations/20260710185238_meridian_authenticated_inquiry_workflow.sql", "Cabeus Council inquiry RPC must reject denied personal domains.");
+    requirePattern(files["app/command/actions.ts"], /replyTo:/, "app/command/actions.ts", "Cabeus Council inquiry must set a safe Reply-To.");
+    forbidPattern(`${files["app/command/actions.ts"]}\n${files["app/command/CommandInterestForm.tsx"]}`, /mailto:|stripe|checkout|invoice|payment-provider/i, "app/command", "Cabeus Council inquiry exposes a forbidden payment or mailto workflow.");
     forbidPattern(`${files["lib/email/resend.ts"]}\n${files["lib/email/resend-quota.ts"]}`, paidResendPattern, "lib/email", "Paid Resend feature language found in the runtime email implementation.");
     requirePattern(files["lib/content/production-import.ts"], /placeholder_copy_prohibited[\s\S]*reviewed_asset_reference_required/, "lib/content/production-import.ts", "Production imports must reject placeholder copy and missing reviewed assets.");
     requirePattern(files["app/admin/content/actions.ts"], /license_status === "approved"[\s\S]*analyst_review_state === "approved"[\s\S]*publication_status === "published"/, "app/admin/content/actions.ts", "Production imports must require approved source-registry records.");
@@ -165,8 +165,8 @@ async function checkRenderedRoutes() {
             if (dimensions.scrollWidth > dimensions.clientWidth + 1) pageIssues.push(`Horizontal overflow ${dimensions.scrollWidth}px > ${dimensions.clientWidth}px.`);
             const seriousViolations = accessibility.violations.filter((violation) => ["critical", "serious"].includes(violation.impact ?? ""));
             if (seriousViolations.length) pageIssues.push(`Accessibility: ${seriousViolations.map((violation) => `${violation.id} (${violation.nodes.length}) targets ${violation.nodes.slice(0, 4).map((node) => node.target.join(" ")).join("; ")}`).join(", ")}.`);
-            if (spec.kind.includes("enterprise") && anchors.some((anchor) => /^mailto:/i.test(anchor.href))) pageIssues.push("Meridian route exposes a mailto workflow.");
-            if (spec.kind.includes("enterprise") && /\bMeridian\s+(?:checkout|invoice|payment)|(?:checkout|invoice|payment)\s+for\s+Meridian\b/i.test(bodyText)) pageIssues.push("Meridian route exposes a self-serve payment workflow.");
+            if (spec.kind.includes("enterprise") && anchors.some((anchor) => /^mailto:/i.test(anchor.href))) pageIssues.push("Cabeus Council route exposes a mailto workflow.");
+            if (spec.kind.includes("enterprise") && /\bCabeus Council\s+(?:checkout|invoice|payment)|(?:checkout|invoice|payment)\s+for\s+Cabeus Council\b/i.test(bodyText)) pageIssues.push("Cabeus Council route exposes a self-serve payment workflow.");
             if (spec.kind === "hidden" && finalUrl.pathname !== "/terminal") pageIssues.push(`Hidden route ended at ${finalUrl.pathname} instead of /terminal.`);
             if (spec.kind.includes("gated") && !["/request-access", "/account/profile/complete"].includes(finalUrl.pathname)) pageIssues.push(`Anonymous gated route ended at ${finalUrl.pathname}.`);
             const expectedPath = spec.expectedPath ?? requested.pathname;

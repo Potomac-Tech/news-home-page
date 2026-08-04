@@ -27,9 +27,9 @@ Published public rows require `published_at`, `public_summary`, and `public_teas
 
 Full gated bodies are stored separately and protected by RLS. The article row declares `access_tier_required` using the existing `membership_tier` enum:
 
-- `member`: Member, Scout, and Command users may read the full body.
-- `scout`: Scout and Command users may read the full body.
-- `command`: Command users may read the full body.
+- `member`: Member, Scout, and Cabeus Council users may read the full body.
+- `scout`: Scout and Cabeus Council users may read the full body.
+- `command`: Cabeus Council users may read the full body.
 
 Editors, analysts, and admins can inspect editorial content according to their staff role.
 

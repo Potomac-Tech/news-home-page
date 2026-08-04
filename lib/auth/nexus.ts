@@ -108,7 +108,7 @@ export async function loadNexusAccessStatus(
         const isStoredAdmin = storedRole === "admin";
         const canOpenNexus = expectedRole !== null || isStaff || isStoredAdmin;
         const membershipLabel = roleIds.includes("meridian")
-            ? "Meridian"
+            ? "Cabeus Council"
             : roleIds.includes("scout")
               ? "Scout"
               : roleIds.includes("explorer")

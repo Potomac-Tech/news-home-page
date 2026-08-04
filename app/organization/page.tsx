@@ -148,7 +148,7 @@ export default async function OrganizationPage() {
                         Organization Portal
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
-                        Review seats, members, Command entitlements, and billing
+                        Review seats, members, Cabeus Council entitlements, and billing
                         contacts for the organizations you administer.
                     </p>
                 </div>

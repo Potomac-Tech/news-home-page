@@ -143,7 +143,7 @@ export default async function ContractAwardsPage() {
                 {!access.canUsePremiumTools && !publicState ? (
                     <div className="mb-6 flex flex-col justify-between gap-3 border-y border-white/10 py-4 sm:flex-row sm:items-center">
                         <p className="text-sm text-potomac-cream/70">
-                            Explorer includes reviewed award briefs. Values, methodology, and premium detail require Scout or Meridian.
+                            Explorer includes reviewed award briefs. Values, methodology, and premium detail require Scout or Cabeus Council.
                         </p>
                         <Link
                             href="/upgrade?tier=scout&source=contract-awards&content=premium-details&next=%2Ftracker%2Fcontracts"

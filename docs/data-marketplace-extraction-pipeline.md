@@ -4,7 +4,7 @@ Task 035 adds a local placeholder pipeline for turning source-backed extraction
 notes into data-market request and offer records. It is scoped to the canonical
 Potomac Supabase project ref `xlpkdoeldtlhearqajat`.
 
-## Command
+## Cabeus Council
 
 ```bash
 npm run extract:data-marketplace -- --input scripts/data-marketplace-sample-input.json

@@ -32,7 +32,7 @@ Never use Supabase project `nwoluvjdojzayozyzlob` for this release.
 - [x] Source-registry entries have approved license status, citations, freshness timestamps, confidence, and analyst review state.
 - [x] UDRI house-ad, Pathfinder, and Source assets are approved, unexpired, and available from the expected Supabase Storage paths.
 - [x] Public branding says `Cabeus Explorer`; internal Potomac branding appears only in approved company or backend contexts.
-- [x] Public tiers are Explorer, Scout, and Meridian; Scout remains `$25,000/user/year` and Meridian has no public price.
+- [x] Public tiers are Explorer, Scout, and Cabeus Council; Scout remains `$25,000/user/year` and Cabeus Council has no public price.
 - [x] LinkedIn points to `https://www.linkedin.com/company/cabeus-explorer`.
 - [x] Substack and podcast modules appear only when their approved HTTPS destination environment variables are configured.
 - [x] X/Twitter and all unapproved social placeholders are absent.
@@ -40,16 +40,16 @@ Never use Supabase project `nwoluvjdojzayozyzlob` for this release.
 ## Authentication And Membership Gate
 
 - [x] `/request-access` opens on Sign Up by default and offers Sign In without changing routes.
-- [x] Explorer accepts any verified email domain and does not apply the Meridian business-email denylist.
+- [x] Explorer accepts any verified email domain and does not apply the Cabeus Council business-email denylist.
 - [x] Verification callbacks use `/auth/callback`, retain the requested safe next path, and persist the session across protected navigation.
 - [x] Unverified accounts route to verification and cannot read member content.
 - [x] Verified accounts with incomplete profiles route to `/account/profile/complete`.
-- [x] Profile-complete Explorer, Scout, and Command users receive only their normalized role and entitlement access.
+- [x] Profile-complete Explorer, Scout, and Cabeus Council users receive only their normalized role and entitlement access.
 - [x] Logout navigation does not prefetch the session-revoking route.
 - [x] `/upgrade` preserves source, content, campaign, object, tier, and return context.
 - [x] Scout checkout uses the configured Stripe price for `$25,000/user/year` and activates entitlements only after a verified webhook.
-- [x] Meridian uses the authenticated server-side inquiry path and the configurable personal-domain denylist.
-- [x] Meridian creates a lead and audit record but never grants Command roles or entitlements automatically.
+- [x] Cabeus Council uses the authenticated server-side inquiry path and the configurable personal-domain denylist.
+- [x] Cabeus Council creates a lead and audit record but never grants Cabeus Council roles or entitlements automatically.
 - [x] Member, tracker, community, upload, saved-work, alert, paid API, export, and admin routes enforce email verification, profile completion, RLS, and applicable role/entitlement gates.
 
 ## Resend Free Gate
@@ -70,10 +70,10 @@ Never use Supabase project `nwoluvjdojzayozyzlob` for this release.
 ## Trust And Operations Gate
 
 - [x] Terms, Privacy, Cookies, Accessibility, Data Safety, and account-deletion routes return successful responses.
-- [x] Analytics events cover carousel, access, upgrade, Meridian inquiry, tracker, and approved CTA journeys without storing raw email or prohibited sensitive data.
+- [x] Analytics events cover carousel, access, upgrade, Cabeus Council inquiry, tracker, and approved CTA journeys without storing raw email or prohibited sensitive data.
 - [x] Cloudflare observability uses the approved 1% baseline sampling guard, reduces sampling as daily events approach 190,000, and pauses logs at 199,000 until reset.
 - [x] Content expiration maintenance and source-freshness checks are active.
-- [x] No `mailto:` workflow, Meridian Stripe/checkout/invoice/public-payment path, payment-provider placeholder, sample URL, or unfinished token is visible.
+- [x] No `mailto:` workflow, Cabeus Council Stripe/checkout/invoice/public-payment path, payment-provider placeholder, sample URL, or unfinished token is visible.
 - [x] The rollback commit and previous Cloudflare version are recorded above and remain available.
 
 ## Required Verification
@@ -105,15 +105,15 @@ npm run test:production-crawl
 - [x] Desktop and mobile screenshots of the homepage, access flow, Launches & Missions, and Contract Awards were visually reviewed.
 - [x] The production crawl reports no console errors, JavaScript exceptions, CSP violations, or HTTP 4xx/5xx failures.
 - [x] Structured data, canonical URLs, sitemap, robots, citations, source links, and CTA destinations were checked.
-- [x] Signed-out, unverified, profile-incomplete, Explorer, Scout, Command/org-admin, editor, analyst, and admin journeys were exercised or covered by current automated evidence.
-- [x] One authorized Meridian production inquiry confirmed sender, recipient, Reply-To, provider ID, lead/audit records, delivered status, and no automatic entitlement.
+- [x] Signed-out, unverified, profile-incomplete, Explorer, Scout, Cabeus Council/org-admin, editor, analyst, and admin journeys were exercised or covered by current automated evidence.
+- [x] One authorized Cabeus Council production inquiry confirmed sender, recipient, Reply-To, provider ID, lead/audit records, delivered status, and no automatic entitlement.
 
 ## Post-Deploy Smoke Test
 
 - [x] Record the new Cloudflare version and deployment time in the release record.
 - [x] Open `/`, `/news`, `/request-access`, `/upgrade`, `/tracker/launches`, `/tracker/contracts`, `/pricing`, and `/account/profile/complete` at mobile and desktop sizes.
 - [x] Confirm the homepage carousel rotates every eight seconds, pauses on interaction, and honors reduced motion.
-- [x] Confirm the free access, Scout upgrade, and Meridian inquiry paths reach their approved destinations.
+- [x] Confirm the free access, Scout upgrade, and Cabeus Council inquiry paths reach their approved destinations.
 - [x] Confirm no member session is revoked by page prefetch or ordinary protected navigation.
 - [x] Review Cloudflare and Supabase Auth logs for new production errors without exceeding the observability budget.
 - [x] Confirm the Resend usage ledger, queue, and latest operational delivery agree with provider status.
@@ -147,11 +147,11 @@ Technical release approval: Jacob Matthews  Date: 2026-07-29
 - Local checks: lint passed; 155/155 unit and integration tests passed; 21/21 email-operation tests passed; production build passed; 6/6 E2E browser journeys passed after replacing launch-withheld test fixtures.
 - Production checks: 24-route release audit reported zero issues; 16 mobile/desktop quality checks reported zero accessibility, overflow, layout-shift, or performance-budget failures; the crawl visited 52 internal destinations with zero console, network, CSP, runtime, or routing issues.
 - Visual review: eight full-page screenshots covered the homepage, access flow, Launches & Missions gate, and Contract Awards gate at `390x844` and `1440x900`.
-- Resend: the authenticated dashboard showed one verified `potomacdb.com` domain, the Free plan, pay-as-you-go disabled, delivered magic-link/reset messages, and delivered Meridian message `69855c71-0ac0-4594-8eb6-a329ad260943`. Supabase recorded the same provider ID, `info@potomacdb.com` sender/recipient, `jake@potomacdb.com` Reply-To, and no automatic entitlement.
+- Resend: the authenticated dashboard showed one verified `potomacdb.com` domain, the Free plan, pay-as-you-go disabled, delivered magic-link/reset messages, and delivered Cabeus Council message `69855c71-0ac0-4594-8eb6-a329ad260943`. Supabase recorded the same provider ID, `info@potomacdb.com` sender/recipient, `jake@potomacdb.com` Reply-To, and no automatic entitlement.
 - Supabase Cron: NOAA and USAspending are current and successful. Launch ingestion run `6019cac4-2046-4a47-ae25-882b704484ab` completed from a six-hour-bounded source snapshot after Launch Library 2 throttled shared egress. It preserved the source retrieval time `2026-07-24T07:43:32Z`, evaluated 13 records, found zero lunar-relevant launches, and published the reviewed `No launches this week` state.
 - Operational remediation was deployed to Cloudflare at approximately `2026-07-24T07:54Z` as version `e3cea93a-6465-4a61-8f79-79afa3b6282f`; this is not a release GO decision.
 - Current tracker verification: launch run `8bc7b0ec-3133-45e4-b7eb-64d8b0a3f7e8` fetched directly from Launch Library 2 at `2026-07-24T10:17:15Z` and completed with 13 fetched and zero relevant records. Alpha Vantage runs `39a8cbf2-6655-494a-baaa-58e1ad7f5203` and `3eea879e-1f11-4463-8b5d-c2f9e3bacbd0` each updated all five requested symbols with no failures, using 10 of the guarded 20 daily calls.
-- Role evidence: Task 108 records six purpose-built canonical Auth identities, 102 authenticated RLS reads, and 25 allowed/denied writes covering Explorer, Scout, Command/organization admin, editor, analyst, and admin. Current tests cover signed-out, unverified, and profile-incomplete routing.
+- Role evidence: Task 108 records six purpose-built canonical Auth identities, 102 authenticated RLS reads, and 25 allowed/denied writes covering Explorer, Scout, Cabeus Council/organization admin, editor, analyst, and admin. Current tests cover signed-out, unverified, and profile-incomplete routing.
 - GitHub PR #4 quality gate passed for commit `86bfec0`. The post-refresh 24-route release audit and 52-destination crawl reported zero issues at `2026-07-24T10:47Z`.
 - Contract Awards review: migration `review_july_contract_awards` published two official NASA lunar awards with cited values and archived six NIH workforce false positives. Commit `7e22687` prevents future Gateway-only matches without NASA or explicit space context. Cloudflare version `fcf715c0-a54a-454b-adae-7c55ac047c70` is live; the post-deploy 24-route release audit and 52-destination crawl reported zero issues at `2026-07-24T13:29Z`.
 

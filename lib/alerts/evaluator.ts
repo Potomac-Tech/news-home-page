@@ -285,10 +285,10 @@ async function loadCommandSignals(supabase: SupabaseClient, rule: AlertRule) {
         kind: "dataset",
         id: String(row.dataset_id),
         slug: null,
-        title: "Command intelligence allocation updated",
+        title: "Cabeus Council intelligence allocation updated",
         summary: `${String(row.access_mode).replaceAll("_", " ")} access is ${String(row.status)}.`,
         route: "/datasets",
-        source: "Command intelligence",
+        source: "Cabeus Council intelligence",
         freshnessAt: String(row.updated_at),
         updatedAt: String(row.updated_at),
     }));

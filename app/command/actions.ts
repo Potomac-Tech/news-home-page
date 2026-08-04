@@ -123,7 +123,7 @@ export async function submitMeridianInterest(formData: FormData) {
 
     const delivery = await sendOperationalEmail({
         formType: "meridian_interest",
-        subject: `Meridian contract discussion: ${organizationName}`,
+        subject: `Cabeus Council contract discussion: ${organizationName}`,
         replyTo: contactEmail,
         text: [
             `Contact: ${contactName}`,

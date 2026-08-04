@@ -10,7 +10,7 @@ const eventKinds = new Set(["alert.created", "saved_search.match", "watchlist.ch
 export async function POST(request: Request) {
     const supabase = await createClient();
     const access = await getDeveloperPlatformAccessContext({ supabase, nextPath: "/member/developer" });
-    if (!access.canUseWebhooks || !access.userId) return NextResponse.json({ error: "Command access is required." }, { status: 403 });
+    if (!access.canUseWebhooks || !access.userId) return NextResponse.json({ error: "Cabeus Council access is required." }, { status: 403 });
     const input = await request.json().catch(() => ({})) as Record<string, unknown>;
     const name = String(input.name ?? "Primary webhook").trim().slice(0, 100);
     const endpoint = String(input.endpoint_url ?? "").trim();

@@ -8,7 +8,7 @@ import { loadLunarMarketIntel } from "../_data/lunarMarketIntel";
 export const metadata: Metadata = {
     title: "Lunar Regulatory Intelligence",
     description:
-        "Scout and Command lunar regulatory intelligence route for filings, comment periods, policy milestones, and compliance notes.",
+        "Scout and Cabeus Council lunar regulatory intelligence route for filings, comment periods, policy milestones, and compliance notes.",
     alternates: {
         canonical: "/regulatory",
     },

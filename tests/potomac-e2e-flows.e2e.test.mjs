@@ -290,7 +290,7 @@ test("Intelligence page and module routes remain hidden", { timeout: 60000 }, as
     }
 });
 
-test("Council and protected Meridian flows preserve the approved access path", { timeout: 60000 }, async () => {
+test("Council and protected Cabeus Council flows preserve the approved access path", { timeout: 60000 }, async () => {
     const { page, consoleMessages } = await newPage();
 
     try {
@@ -298,7 +298,7 @@ test("Council and protected Meridian flows preserve the approved access path", {
         await assertVisibleText(page, "We choose to go to the Moon");
         await assertVisibleText(page, "Apply");
         assert.equal(await page.getByText("Access comparison", { exact: true }).count(), 0);
-        assert.equal(await page.getByText("Request Meridian", { exact: true }).count(), 0);
+        assert.equal(await page.getByText("Request Cabeus Council", { exact: true }).count(), 0);
 
         await page.goto(`${baseUrl}/command`, { waitUntil: "domcontentloaded" });
         await page.waitForURL(/\/request-access\?tab=signin&next=%2Fcommand/);

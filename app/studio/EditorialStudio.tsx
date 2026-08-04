@@ -1029,7 +1029,7 @@ export function EditorialStudio({
                                 <select name="access_tier_required" value={draft.accessTier} onChange={(event) => updateDraft("accessTier", event.target.value)} className="ml-3 border border-cabeus-line bg-white px-3 py-2 text-cabeus-ink">
                                     <option value="explorer">Explorer</option>
                                     <option value="scout">Scout</option>
-                                    <option value="meridian">Meridian</option>
+                                    <option value="meridian">Cabeus Council</option>
                                 </select>
                             </label>
                         </div>

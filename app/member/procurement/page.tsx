@@ -111,7 +111,7 @@ export default async function MemberProcurementPage() {
                 <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
                     <div>
                         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-potomac-gold">
-                            Scout and Command workspace
+                            Scout and Cabeus Council workspace
                         </p>
                         <h1 className="font-serif text-4xl leading-tight text-white md:text-6xl">
                             Procurement and Regulatory Hub
@@ -145,8 +145,8 @@ export default async function MemberProcurementPage() {
                         </h2>
                         <p className="mt-3 text-sm leading-6 text-potomac-cream/65">
                             {canReadPaid
-                                ? "Your role can read Scout/Command-visible records allowed by RLS."
-                                : "Explorer members can preview the hubs. Scout or Command access unlocks the working queues."}
+                                ? "Your role can read Scout/Cabeus Council-visible records allowed by RLS."
+                                : "Explorer members can preview the hubs. Scout or Cabeus Council access unlocks the working queues."}
                         </p>
                         {!canReadPaid ? (
                             <Link

@@ -27,5 +27,5 @@ Every save creates a CMS version. The original Word file is retained in the priv
 - **Standfirst:** Concise explanation of the event and its significance.
 - **Public teaser:** Search-visible context available before the membership gate.
 - **Story body:** Full member content, represented as reorderable sections.
-- **Reader access:** Explorer, Scout, or Meridian entitlement requirement.
+- **Reader access:** Explorer, Scout, or Cabeus Council entitlement requirement.
 - **Search fields:** Optional search title, description, direct-answer summary, and slug.

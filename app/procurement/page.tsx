@@ -8,7 +8,7 @@ import { loadLunarMarketIntel } from "../_data/lunarMarketIntel";
 export const metadata: Metadata = {
     title: "Lunar Procurement",
     description:
-        "Scout and Command lunar procurement intelligence route for solicitations, awards, due dates, and opportunity signals.",
+        "Scout and Cabeus Council lunar procurement intelligence route for solicitations, awards, due dates, and opportunity signals.",
     alternates: {
         canonical: "/procurement",
     },

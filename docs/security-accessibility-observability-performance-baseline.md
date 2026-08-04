@@ -30,7 +30,7 @@ integration still need compatibility review before enforcing a blocking policy.
 - export jobs per user per day
 
 Production enforcement should happen at the edge, API route, or database level
-depending on the workflow. Public application and Command interest forms should
+depending on the workflow. Public application and Cabeus Council interest forms should
 be IP and email limited. Authenticated writes should be user and organization
 limited. Developer API calls should use API-key quotas and usage logs from Task
 070.

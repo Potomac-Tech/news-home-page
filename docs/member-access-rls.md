@@ -27,7 +27,7 @@ These functions are `security definer` functions but are not created in the expo
 | Pending applicants | Can read their own authenticated application records. |
 | Members | Can read their own profile, role assignments, and user-scoped entitlements. |
 | Scout users | Read access is represented through active user-scoped Scout entitlements and Scout role assignments. |
-| Command users | Can read organization-scoped records through active organization membership. |
+| Cabeus Council users | Can read organization-scoped records through active organization membership. |
 | Organization admins | Can read/manage organization membership within their organization and read organization entitlements/audit events. |
 | Editors | Can read member/application context needed for editorial workflows. |
 | Analysts | Can read member, organization, entitlement, and audit context needed for intelligence workflows. |

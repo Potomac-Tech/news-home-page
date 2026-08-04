@@ -78,7 +78,7 @@ export async function POST(request: Request) {
 
     if (!access.canUploadTestData || !access.userId) {
         return jsonError(
-            "Scout or Command access is required for comparisons.",
+            "Scout or Cabeus Council access is required for comparisons.",
             403
         );
     }

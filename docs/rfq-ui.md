@@ -1,6 +1,6 @@
 # RFQ UI
 
-Task 051 adds the protected `/member/rfqs` workspace for Scout and Command RFQ
+Task 051 adds the protected `/member/rfqs` workspace for Scout and Cabeus Council RFQ
 workflows.
 
 ## Scope
@@ -20,7 +20,7 @@ The route includes:
 
 ## Access Model
 
-`lib/auth/rfq.ts` gates the route to active Scout, Command, moderator,
+`lib/auth/rfq.ts` gates the route to active Scout, Cabeus Council, moderator,
 analyst, or admin role assignments. Signed-out users are redirected to login,
 Explorer-only users see a paid-access gate, and all RFQ rows remain constrained
 by the Task 050 Supabase RLS policies.
@@ -30,4 +30,4 @@ by the Task 050 Supabase RLS policies.
 The no-config gate can be checked locally without credentials. Live RFQ posting,
 browsing, responding, reporting, organization attribution, and moderation checks
 require the RFQ migration applied to the Potomac Supabase project plus seeded
-Scout, Command, organization admin, moderator, analyst, and admin users.
+Scout, Cabeus Council, organization admin, moderator, analyst, and admin users.

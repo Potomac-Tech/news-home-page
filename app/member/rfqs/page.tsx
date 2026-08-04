@@ -124,7 +124,7 @@ function ConfigGate() {
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         RFQs are paid-member workflows and require Cabeus Explorer
                         Supabase public configuration plus a signed-in Scout or
-                        Command member.
+                        Cabeus Council member.
                     </p>
                     <Link
                         href="/apply"
@@ -147,11 +147,11 @@ function LockedGate() {
                         RFQ workspace
                     </p>
                     <h1 className="mt-4 font-serif text-4xl leading-tight text-white">
-                        Scout or Command access is required.
+                        Scout or Cabeus Council access is required.
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         RFQ posting, browsing, and responses are reserved for
-                        paid Scout and Command members.
+                        paid Scout and Cabeus Council members.
                     </p>
                     <div className="mt-6 flex flex-wrap gap-3">
                         <Link
@@ -164,7 +164,7 @@ function LockedGate() {
                             href="/command"
                             className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                         >
-                            Command access
+                            Cabeus Council access
                         </Link>
                     </div>
                 </div>
@@ -333,8 +333,8 @@ function PostRfqForm({ organizations }: { organizations: Organization[] }) {
                             required
                             className="mt-2 w-full rounded border border-white/10 bg-potomac-primary px-3 py-3 text-sm text-white"
                         >
-                            <option value="scout_command">Scout and Command</option>
-                            <option value="command_only">Command only</option>
+                            <option value="scout_command">Scout and Cabeus Council</option>
+                            <option value="command_only">Cabeus Council only</option>
                             <option value="invited_organizations">
                                 Invited organizations
                             </option>

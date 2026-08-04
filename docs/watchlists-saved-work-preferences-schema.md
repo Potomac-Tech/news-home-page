@@ -1,6 +1,6 @@
 # Watchlists, Saved Work, And Preferences Schema
 
-Task 065 adds the database foundation for Scout and Command personalization.
+Task 065 adds the database foundation for Scout and Cabeus Council personalization.
 
 ## Scope
 
@@ -25,7 +25,7 @@ adds:
 
 ## Access Model
 
-Saved-work writes are limited to Scout, Command, and staff roles through
+Saved-work writes are limited to Scout, Cabeus Council, and staff roles through
 `app_private.can_use_saved_work()`.
 
 Rows are owner-scoped by `owner_user_id` and may optionally be
@@ -49,7 +49,7 @@ organization-scoped preferences.
 
 ## Task 066 UI Contract
 
-The UI should let Scout and Command members:
+The UI should let Scout and Cabeus Council members:
 
 - Add/remove watched companies, missions, procurements, regulatory records,
   events, datasets, and marketplace records.

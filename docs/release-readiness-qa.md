@@ -8,9 +8,9 @@ application, runs the audit, and uploads `.tmp/release-readiness-audit.json`.
 
 - Public fallback copy cannot contain placeholder language, example URLs,
   legacy tier prices, or obsolete Professional/Enterprise labels.
-- Public enterprise surfaces use Meridian, keep Scout at `$25,000`, and do not
+- Public enterprise surfaces use Cabeus Council, keep Scout at `$25,000`, and do not
   expose Stripe, checkout, invoices, public payment, or `mailto:` workflows.
-- Meridian intake retains the business-email denylist, server-side Resend
+- Cabeus Council intake retains the business-email denylist, server-side Resend
   adapter, `info@potomacdb.com` routing, safe Reply-To, and Free-plan preflight.
 - LinkedIn uses the approved Cabeus Explorer company URL. Configured Substack
   and podcast URLs must pass the existing HTTPS host allowlists. X/Twitter and
@@ -36,7 +36,7 @@ application, runs the audit, and uploads `.tmp/release-readiness-audit.json`.
    protected field. Hiding an already-delivered value with CSS is not a fix.
 5. For broken links, replace the destination with its canonical HTTPS or valid
    internal route and verify the destination before republishing.
-6. For Meridian or Resend failures, restore the server-side contract-discussion
+6. For Cabeus Council or Resend failures, restore the server-side contract-discussion
    workflow and Free-plan controls. Do not substitute client email or checkout.
 7. Rerun `npm run test:content-expiration`, `npm run test:release`, and the normal
    lint/test/build suite. Record any external-source outage as a blocked task;

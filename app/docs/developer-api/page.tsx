@@ -10,7 +10,7 @@ const endpoints = [
     ["GET", "/api/v1/lunar-missions", "Scout", "Lunar mission and status records"],
     ["GET", "/api/v1/procurement-regulatory", "Scout", "Procurement and regulatory intelligence"],
     ["GET", "/api/v1/companies", "Scout", "Lunar company profiles"],
-    ["GET", "/api/v1/command/briefs", "Command", "Organization-scoped Command briefs"],
+    ["GET", "/api/v1/command/briefs", "Cabeus Council", "Organization-scoped Cabeus Council briefs"],
     ["POST", "/api/v1/exports", "Scout", "CSV, PDF, and JSON export jobs"],
 ];
 
@@ -21,7 +21,7 @@ export default function DeveloperApiReferencePage() {
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">Developer reference</p>
                 <h1 className="mt-3 font-serif text-4xl text-white md:text-5xl">Cabeus Explorer API v1</h1>
                 <p className="mt-5 max-w-3xl text-base leading-7 text-potomac-cream/70">
-                    Scout and Command members can access versioned lunar intelligence endpoints, private exports, and signed event delivery. Use a developer key as a Bearer token or in the X-API-Key header.
+                    Scout and Cabeus Council members can access versioned lunar intelligence endpoints, private exports, and signed event delivery. Use a developer key as a Bearer token or in the X-API-Key header.
                 </p>
 
                 <section className="mt-10 border-y border-white/10 py-8">
@@ -48,7 +48,7 @@ export default function DeveloperApiReferencePage() {
                     <div>
                         <h2 className="font-serif text-2xl text-white">Webhooks</h2>
                         <p className="mt-3 text-sm leading-6 text-potomac-cream/65">
-                            Command webhook payloads are signed with HMAC-SHA256. Verify X-Cabeus-Signature against the timestamp and raw body. Failed deliveries retry with bounded exponential backoff.
+                            Cabeus Council webhook payloads are signed with HMAC-SHA256. Verify X-Cabeus-Signature against the timestamp and raw body. Failed deliveries retry with bounded exponential backoff.
                         </p>
                     </div>
                 </section>

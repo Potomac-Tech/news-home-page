@@ -1,9 +1,9 @@
-export const enterprisePublicNames = ["Meridian", "Command"] as const;
+export const enterprisePublicNames = ["Cabeus Council"] as const;
 export type EnterprisePublicName = (typeof enterprisePublicNames)[number];
 
-// This is the only public enterprise-label switch. Internal access controls
-// remain pinned to the `command` role and entitlement identifiers.
-export const enterprisePublicName: EnterprisePublicName = "Meridian";
+// This is the only public enterprise-label switch. Normalized access controls
+// use `meridian`; the retired `command` value remains read-compatible.
+export const enterprisePublicName: EnterprisePublicName = "Cabeus Council";
 
 export const tierConfig = {
     explorer: {
@@ -19,7 +19,6 @@ export const tierConfig = {
     },
     enterprise: {
         publicName: enterprisePublicName,
-        internalName: "Command",
         price: "Contract discussion",
         description:
             "Organization-level lunar intelligence handled through manual review and contract discussion.",
