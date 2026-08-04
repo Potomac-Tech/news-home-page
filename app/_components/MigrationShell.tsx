@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Suspense, type ReactNode } from "react";
 import { potomacBrand } from "../_data/brand";
 import { externalChannels } from "../_data/channels";
@@ -69,10 +70,14 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                 <div className="mx-auto w-full max-w-[92rem] px-4 md:px-8">
                     <div className="flex min-h-[5.75rem] items-center justify-between gap-6">
                         <Link href="/" aria-label="Cabeus Explorer home">
-                            <span className="brand-wordmark text-[0.68rem] sm:text-[0.78rem]">
-                                <span>Cabeus</span>
-                                <span>Explorer</span>
-                            </span>
+                            <Image
+                                src="/cabeus-explorer-pointed-wordmark.png"
+                                alt=""
+                                width={1990}
+                                height={740}
+                                priority
+                                className="h-auto w-[7.5rem] sm:w-[9.5rem]"
+                            />
                         </Link>
                         <nav
                             aria-label="Primary navigation"
@@ -153,10 +158,13 @@ export function MigrationShell({ children }: { children: ReactNode }) {
             <footer className="border-t border-cabeus-line bg-cabeus-paper">
                 <div className="mx-auto grid w-full max-w-[92rem] gap-10 px-4 py-12 md:px-8 lg:grid-cols-[1.5fr_0.75fr_0.75fr]">
                     <div>
-                        <span className="brand-wordmark">
-                            <span>Cabeus</span>
-                            <span>Explorer</span>
-                        </span>
+                        <Image
+                            src="/cabeus-explorer-pointed-wordmark.png"
+                            alt="Cabeus Explorer"
+                            width={1990}
+                            height={740}
+                            className="h-auto w-[11rem]"
+                        />
                         <p className="mt-6 max-w-xs font-serif text-2xl leading-tight text-cabeus-ink">
                             Intelligence for the space industrialist.
                         </p>
