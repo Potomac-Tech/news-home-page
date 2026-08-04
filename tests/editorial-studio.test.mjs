@@ -47,6 +47,14 @@ const jacobPortraitMigration = readFileSync(
     "supabase/migrations/20260804162618_add_jacob_matthews_author_portrait.sql",
     "utf8"
 );
+const jacobBioMigration = readFileSync(
+    "supabase/migrations/20260804163416_update_jacob_matthews_author_bio.sql",
+    "utf8"
+);
+const kevinBioCleanupMigration = readFileSync(
+    "supabase/migrations/20260804163536_remove_kevin_cirilli_newsletter_bio_reference.sql",
+    "utf8"
+);
 
 test("editorial studio uses the existing editor and admin authorization boundary", () => {
     assert.match(studioPage, /requireEditorialStaff\("\/studio"\)/);
@@ -240,6 +248,8 @@ test("Kevin Cirilli author profile exposes a valid email contact", () => {
     assert.match(authorPage, /email: emailLink/);
     assert.match(authorPage, /<p className="brand-kicker">Contact<\/p>/);
     assert.match(authorPage, /sameAs: profileLinks/);
+    assert.match(kevinBioCleanupMigration, /replace\(/);
+    assert.match(kevinBioCleanupMigration, /where lower\(slug\) = 'kevin-cirilli'/);
 });
 
 test("Jacob Matthews has an active linked author profile", () => {
@@ -250,6 +260,11 @@ test("Jacob Matthews has an active linked author profile", () => {
     assert.match(jacobAuthorMigration, /is_active = true/);
     assert.match(jacobPortraitMigration, /avatar_url = '\/jacob-matthews-author\.jpg'/);
     assert.match(jacobPortraitMigration, /where lower\(slug\) = 'jacob-matthews'/);
+    assert.match(jacobBioMigration, /founder and CEO of Potomac/);
+    assert.match(jacobBioMigration, /co-founded Zeno Power/);
+    assert.match(jacobBioMigration, /U\.S\. Army Cavalry officer/);
+    assert.match(jacobBioMigration, /Vanderbilt University/);
+    assert.match(jacobBioMigration, /United States Military Academy at West Point/);
 });
 
 test("article sections and carousel positions are editor controlled", () => {
