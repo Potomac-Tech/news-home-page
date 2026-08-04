@@ -93,23 +93,20 @@ test("articles omit publisher promotions, source citation panels, and access-pat
     }
 });
 
-test("homepage hero uses a credited high-resolution Artemis II Earthrise photograph", () => {
+test("homepage hero uses a transparent photoreal Moon rendering grounded in Apollo geography", () => {
     const homepage = read("app/page.tsx");
-    const earthriseBackdrop = read("app/_components/ArtemisEarthriseBackdrop.tsx");
+    const moonBackdrop = read("app/_components/RealisticMoonBackdrop.tsx");
     const archives = read("app/archives/page.tsx");
     const backdrop = read("app/_components/ApolloMoonBackdrop.tsx");
     const brand = read("app/_data/brand.ts");
 
     assert.ok(existsSync(new URL("public/apollo-11-full-moon-nasa.jpg", root)));
-    assert.ok(existsSync(new URL("public/artemis-ii-earthrise-feature.jpg", root)));
+    assert.ok(existsSync(new URL("public/cabeus-realistic-moon.png", root)));
     assert.match(brand, /editorialMoonHero: "\/apollo-11-full-moon-nasa\.jpg"/);
-    assert.match(earthriseBackdrop, /artemis-ii-earthrise-feature\.jpg/);
-    assert.match(earthriseBackdrop, /NASA \/ Artemis II \/ ART002-E-009288/);
-    assert.match(earthriseBackdrop, /Artemis II Earthrise/);
-    assert.match(earthriseBackdrop, /Home above the lunar horizon\./);
-    assert.match(earthriseBackdrop, /object-contain/);
-    assert.match(homepage, /<ArtemisEarthriseBackdrop \/>/);
-    assert.match(homepage, /md:grid-cols-/);
+    assert.match(moonBackdrop, /cabeus-realistic-moon\.png/);
+    assert.match(moonBackdrop, /Apollo 11 geography reference \/ Cabeus rendering/);
+    assert.match(moonBackdrop, /translate-x-\[48%\]/);
+    assert.match(homepage, /<RealisticMoonBackdrop \/>/);
     assert.match(homepage, /bg-cabeus-paper/);
     assert.match(homepage, /text-cabeus-ink/);
     assert.match(backdrop, /NASA \/ Apollo 11 \/ AS11-44-6667/);
