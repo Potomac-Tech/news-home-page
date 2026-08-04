@@ -1620,7 +1620,10 @@ test("the Council hero invites leaders into the Explorer application flow", () =
         "The Cabeus Council unites the leaders securing, building,",
         "and financing the lunar economy (and beyond).",
         'href="/request-access"',
-        ">\n                        Apply\n                    </Link>",
+        "Apply",
+        'src="/artemis-ii-earthrise-feature.jpg"',
+        "Earth rising above the lunar horizon during NASA's Artemis II mission",
+        "NASA / Artemis II / ART002-E-009288",
     ], "Council hero application call to action");
     assert.doesNotMatch(
         pricing,
