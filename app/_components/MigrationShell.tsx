@@ -18,7 +18,8 @@ const primaryNavItems: Array<{
     label: string;
 }> = [
     { href: "/", label: "Home Base" },
-    { href: "/pricing", label: "Council" },
+    { href: "/archives", label: "News" },
+    { href: "/pricing", label: "Cabeus Council" },
 ];
 
 const conveningNavItems = [
@@ -111,11 +112,23 @@ export function MigrationShell({ children }: { children: ReactNode }) {
                             Menu
                         </summary>
                         <nav aria-label="Mobile navigation" className="grid border-t border-cabeus-line pb-3">
-                            {[...primaryNavItems, ...conveningNavItems].map((item) => (
+                            {primaryNavItems.map((item) => (
                                 <Link
                                     key={item.href}
                                     href={item.href}
                                     className="border-b border-cabeus-line px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
+                                >
+                                    {item.label}
+                                </Link>
+                            ))}
+                            <p className="border-b border-cabeus-line px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-bronze">
+                                Events
+                            </p>
+                            {conveningNavItems.map((item) => (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    className="border-b border-cabeus-line px-1 py-3 pl-4 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
                                 >
                                     {item.label}
                                 </Link>

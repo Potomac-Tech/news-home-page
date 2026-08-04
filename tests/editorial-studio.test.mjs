@@ -39,6 +39,10 @@ const kevinEmailMigration = readFileSync(
     "supabase/migrations/20260730204321_add_kevin_cirilli_author_email.sql",
     "utf8"
 );
+const jacobAuthorMigration = readFileSync(
+    "supabase/migrations/20260804160652_add_jacob_matthews_author_profile.sql",
+    "utf8"
+);
 
 test("editorial studio uses the existing editor and admin authorization boundary", () => {
     assert.match(studioPage, /requireEditorialStaff\("\/studio"\)/);
@@ -206,6 +210,7 @@ test("editorial media, scalable dashboard, and author pages are wired", () => {
     assert.match(authorPage, /primary_author_id/);
     assert.match(authorPage, /Articles by/);
     assert.match(authorPage, /bg-cabeus-paper text-cabeus-ink/);
+    assert.match(authorPage, /avatarUrl[\s\S]*\? "grid md:grid-cols-\[15rem_minmax\(0,1fr\)\] md:items-start"[\s\S]*: "block"/);
     assert.match(authorsPage, /bg-cabeus-paper text-cabeus-ink/);
     assert.doesNotMatch(authorPage, /text-white|text-potomac-cream/);
     assert.doesNotMatch(authorsPage, /text-white|text-potomac-cream/);
@@ -233,6 +238,14 @@ test("Kevin Cirilli author profile exposes a valid email contact", () => {
     assert.match(authorPage, /sameAs: profileLinks/);
 });
 
+test("Jacob Matthews has an active linked author profile", () => {
+    assert.match(jacobAuthorMigration, /display_name = 'Jacob Matthews'/);
+    assert.match(jacobAuthorMigration, /'jacob-matthews'/);
+    assert.match(jacobAuthorMigration, /Potomac Database Systems/);
+    assert.match(jacobAuthorMigration, /mailto:jake@potomacdb\.com/);
+    assert.match(jacobAuthorMigration, /is_active = true/);
+});
+
 test("article sections and carousel positions are editor controlled", () => {
     for (const slug of [
         "news",
@@ -250,7 +263,12 @@ test("article sections and carousel positions are editor controlled", () => {
     assert.match(archivesPage, /loadEditorialArchive/);
     assert.match(editorialArchive, /editorial_article_tags/);
     assert.match(editorialArchiveList, /articles\.map/);
-    assert.match(archivesPage, /section=\$\{item\.slug\}/);
+    assert.match(archivesPage, /displayMode="news"/);
+    assert.match(archivesPage, /Cabeus Explorer is the permanent record of the Moon \(and beyond\)\./);
+    assert.doesNotMatch(archivesPage, /Archive sections|editorialSections/);
+    assert.match(editorialArchive, /authorName/);
+    assert.match(editorialArchive, /authorSlug/);
+    assert.match(editorialArchiveList, /By \{article\.authorName\}/);
     assert.match(sectionMigration, /carousel_position between 1 and 5/);
     assert.match(sectionMigration, /set_editorial_article_carousel_position/);
     assert.match(carouselControl, /Carousel position for/);

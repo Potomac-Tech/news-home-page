@@ -348,7 +348,8 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
     ], "Nexus member navigation");
     assertIncludes(migrationShell, [
         '{ href: "/", label: "Home Base" }',
-        '{ href: "/pricing", label: "Council" }',
+        '{ href: "/archives", label: "News" }',
+        '{ href: "/pricing", label: "Cabeus Council" }',
         'label: "Space Investment Forum"',
         'label: "Space Industrialist Week"',
     ], "primary publication navigation");
@@ -395,16 +396,17 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
         'event.key === "Escape"',
         "aria-expanded={open}",
         'type="button"',
-    ], "hover and keyboard Convenings navigation");
+        "Events",
+    ], "hover and keyboard Events navigation");
     assert.doesNotMatch(
         migrationShell,
         /<details className="group relative">[\s\S]*?<summary[^>]*>[\s\S]*?Convenings/,
-        "desktop Convenings navigation must not persist through a details toggle"
+        "desktop Events navigation must not persist through a details toggle"
     );
     assert.doesNotMatch(
         conveningsMenu,
         /top-full mt-5/,
-        "Convenings dropdown must not have a non-hoverable margin gap"
+        "Events dropdown must not have a non-hoverable margin gap"
     );
     assertIncludes(routeScaffold, [
         'primaryHref.startsWith("/api/")',

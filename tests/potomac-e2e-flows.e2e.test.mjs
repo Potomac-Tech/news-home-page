@@ -317,21 +317,21 @@ test("Council and protected Meridian flows preserve the approved access path", {
     }
 });
 
-test("Convenings opens on hover and never persists after pointer exit", { timeout: 60000 }, async () => {
+test("Events opens on hover and never persists after pointer exit", { timeout: 60000 }, async () => {
     const { page, consoleMessages } = await newPage();
 
     try {
         await page.setViewportSize({ width: 1280, height: 800 });
         await page.goto(baseUrl, { waitUntil: "domcontentloaded" });
 
-        const trigger = page.getByRole("button", { name: "Convenings", exact: true });
+        const trigger = page.getByRole("button", { name: "Events", exact: true });
         const menuItem = page.getByRole("menuitem", {
             name: "Space Industrialist Week",
             exact: true,
         });
         const homeLink = page.getByRole("link", { name: "Home Base", exact: true });
 
-        await assertVisibleText(page, "Convenings");
+        await assertVisibleText(page, "Events");
         assert.equal(await menuItem.isVisible(), false);
 
         await trigger.hover();

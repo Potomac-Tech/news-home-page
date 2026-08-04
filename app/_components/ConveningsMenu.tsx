@@ -36,12 +36,12 @@ export function ConveningsMenu({
                 type="button"
                 aria-haspopup="menu"
                 aria-expanded={open}
-                aria-controls="convenings-menu"
+                aria-controls="events-menu"
                 onMouseDown={(event) => event.preventDefault()}
                 onFocus={() => setOpen(true)}
                 className="font-sans text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-cabeus-ink transition hover:text-cabeus-gold"
             >
-                Convenings
+                Events
             </button>
             <div
                 className={`absolute left-1/2 top-full w-64 -translate-x-1/2 pt-5 transition duration-150 ${
@@ -51,7 +51,7 @@ export function ConveningsMenu({
                 }`}
             >
                 <div
-                    id="convenings-menu"
+                    id="events-menu"
                     role="menu"
                     aria-hidden={!open}
                     className="border border-cabeus-line bg-cabeus-paper p-2 shadow-xl"

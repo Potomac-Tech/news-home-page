@@ -5,10 +5,12 @@ export function EditorialArchiveList({
     articles,
     sectionLabel,
     emptyTitle = "Archive awaiting reports",
+    displayMode = "indexed",
 }: {
     articles: ArchiveArticle[];
     sectionLabel: string;
     emptyTitle?: string;
+    displayMode?: "indexed" | "news";
 }) {
     if (!articles.length) {
         return (
@@ -26,28 +28,36 @@ export function EditorialArchiveList({
             {articles.map((article, index) => (
                 <article
                     key={article.id}
-                    className="grid gap-5 py-7 md:grid-cols-[5rem_minmax(0,1fr)_minmax(15rem,24rem)] md:items-center"
+                    className={`grid gap-5 py-7 md:items-center ${
+                        displayMode === "news"
+                            ? "md:grid-cols-[minmax(0,1fr)_minmax(15rem,24rem)]"
+                            : "md:grid-cols-[5rem_minmax(0,1fr)_minmax(15rem,24rem)]"
+                    }`}
                 >
-                    <div className="font-mono">
-                        <span className="block text-3xl text-cabeus-bronze">
-                            {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <time className="mt-2 block text-[0.62rem] uppercase text-cabeus-muted">
-                            {new Date(article.publishedAt).toLocaleDateString("en-US", {
-                                month: "short",
-                                day: "2-digit",
-                                year: "numeric",
-                            })}
-                        </time>
-                    </div>
-                    <div>
-                        <div className="flex flex-wrap gap-2 font-mono text-[0.6rem] font-bold uppercase">
-                            <span className="text-cabeus-bronze">{sectionLabel}</span>
-                            {article.isFeatured ? (
-                                <span className="text-cabeus-muted">Homepage featured</span>
-                            ) : null}
+                    {displayMode === "indexed" ? (
+                        <div className="font-mono">
+                            <span className="block text-3xl text-cabeus-bronze">
+                                {String(index + 1).padStart(2, "0")}
+                            </span>
+                            <time className="mt-2 block text-[0.62rem] uppercase text-cabeus-muted">
+                                {new Date(article.publishedAt).toLocaleDateString("en-US", {
+                                    month: "short",
+                                    day: "2-digit",
+                                    year: "numeric",
+                                })}
+                            </time>
                         </div>
-                        <h2 className="mt-3 max-w-3xl font-serif text-3xl font-medium leading-tight text-cabeus-ink md:text-4xl">
+                    ) : null}
+                    <div>
+                        {displayMode === "indexed" ? (
+                            <div className="flex flex-wrap gap-2 font-mono text-[0.6rem] font-bold uppercase">
+                                <span className="text-cabeus-bronze">{sectionLabel}</span>
+                                {article.isFeatured ? (
+                                    <span className="text-cabeus-muted">Homepage featured</span>
+                                ) : null}
+                            </div>
+                        ) : null}
+                        <h2 className={`${displayMode === "indexed" ? "mt-3" : ""} max-w-3xl font-serif text-3xl font-medium leading-tight text-cabeus-ink md:text-4xl`}>
                             <Link href={article.href} className="hover:text-cabeus-bronze">
                                 {article.title}
                             </Link>
@@ -55,12 +65,34 @@ export function EditorialArchiveList({
                         <p className="mt-3 max-w-3xl text-sm leading-6 text-cabeus-muted">
                             {article.summary}
                         </p>
-                        <Link
-                            href={article.href}
-                            className="mt-4 inline-block border-b border-cabeus-gold pb-1 font-mono text-xs font-bold uppercase text-cabeus-ink"
-                        >
-                            Full story &#8594;
-                        </Link>
+                        {displayMode === "news" ? (
+                            <div className="mt-5 font-mono text-[0.68rem] font-bold uppercase">
+                                {article.authorSlug ? (
+                                    <Link
+                                        href={`/authors/${article.authorSlug}`}
+                                        className="inline-block border-b border-cabeus-gold pb-1 text-cabeus-ink hover:text-cabeus-bronze"
+                                    >
+                                        By {article.authorName}
+                                    </Link>
+                                ) : (
+                                    <span className="text-cabeus-ink">By {article.authorName}</span>
+                                )}
+                                <time className="mt-2 block text-[0.62rem] text-cabeus-muted">
+                                    {new Date(article.publishedAt).toLocaleDateString("en-US", {
+                                        month: "long",
+                                        day: "numeric",
+                                        year: "numeric",
+                                    })}
+                                </time>
+                            </div>
+                        ) : (
+                            <Link
+                                href={article.href}
+                                className="mt-4 inline-block border-b border-cabeus-gold pb-1 font-mono text-xs font-bold uppercase text-cabeus-ink"
+                            >
+                                Full story &#8594;
+                            </Link>
+                        )}
                     </div>
                     {article.imageUrl ? (
                         <img

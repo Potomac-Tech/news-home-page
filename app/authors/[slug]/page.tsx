@@ -72,7 +72,11 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
                 dangerouslySetInnerHTML={{ __html: jsonLdScript(authorJsonLd) }}
             />
             <header className="border-b border-cabeus-line">
-                <div className="mx-auto grid w-full max-w-[92rem] gap-8 px-5 py-12 md:grid-cols-[15rem_minmax(0,1fr)] md:items-start md:px-10 md:py-20 lg:gap-14">
+                <div className={`mx-auto w-full max-w-[92rem] gap-8 px-5 py-12 md:px-10 md:py-20 lg:gap-14 ${
+                    avatarUrl
+                        ? "grid md:grid-cols-[15rem_minmax(0,1fr)] md:items-start"
+                        : "block"
+                }`}>
                     {avatarUrl ? (
                         <img
                             src={avatarUrl}

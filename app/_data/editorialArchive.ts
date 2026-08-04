@@ -13,6 +13,8 @@ export type ArchiveArticle = {
     imageAlt: string;
     publishedAt: string;
     isFeatured: boolean;
+    authorName: string;
+    authorSlug: string | null;
 };
 
 export async function loadEditorialArchive(
@@ -36,7 +38,7 @@ export async function loadEditorialArchive(
 
     const { data, error } = await supabase
         .from("editorial_articles")
-        .select("id,slug,title,public_summary,dek,hero_image_url,hero_image_alt,published_at,carousel_position")
+        .select("id,slug,title,public_summary,dek,hero_image_url,hero_image_alt,published_at,carousel_position,primary_author_id")
         .in("id", articleTags.map((articleTag) => articleTag.article_id))
         .eq("status", "published")
         .not("primary_author_id", "is", null)
@@ -45,17 +47,39 @@ export async function loadEditorialArchive(
         .limit(250);
     if (error) throw new Error(error.message);
 
-    return (data ?? []).map((article) => ({
-        id: article.id,
-        href: `/news/${article.slug}`,
-        title: article.title,
-        summary:
-            article.public_summary
-            ?? article.dek
-            ?? "Published Cabeus Explorer intelligence.",
-        imageUrl: article.hero_image_url,
-        imageAlt: article.hero_image_alt ?? "",
-        publishedAt: article.published_at,
-        isFeatured: article.carousel_position !== null,
-    }));
+    const authorIds = Array.from(new Set(
+        (data ?? [])
+            .map((article) => article.primary_author_id)
+            .filter((id): id is string => Boolean(id))
+    ));
+    const { data: authors, error: authorsError } = authorIds.length
+        ? await supabase
+            .from("editorial_authors")
+            .select("id,display_name,slug")
+            .in("id", authorIds)
+            .eq("is_active", true)
+        : { data: [], error: null };
+    if (authorsError) throw new Error(authorsError.message);
+    const authorsById = new Map(
+        (authors ?? []).map((author) => [author.id, author])
+    );
+
+    return (data ?? []).map((article) => {
+        const author = authorsById.get(article.primary_author_id!);
+        return {
+            id: article.id,
+            href: `/news/${article.slug}`,
+            title: article.title,
+            summary:
+                article.public_summary
+                ?? article.dek
+                ?? "Published Cabeus Explorer intelligence.",
+            imageUrl: article.hero_image_url,
+            imageAlt: article.hero_image_alt ?? "",
+            publishedAt: article.published_at,
+            isFeatured: article.carousel_position !== null,
+            authorName: author?.display_name ?? "Cabeus Explorer",
+            authorSlug: author?.slug ?? null,
+        };
+    });
 }
