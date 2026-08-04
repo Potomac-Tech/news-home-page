@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
     absoluteSiteUrl,
     jsonLdScript,
@@ -509,12 +508,6 @@ export default async function DatasetsPage() {
                             requirements. Raw paid datasets remain behind
                             member workflows.
                         </p>
-                        <Link
-                            href="/member/marketplace"
-                            className="mt-5 inline-flex rounded border border-potomac-gold/50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Marketplace
-                        </Link>
                     </aside>
                 </div>
 

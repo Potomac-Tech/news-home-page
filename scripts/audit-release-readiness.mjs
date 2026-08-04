@@ -12,7 +12,7 @@ const issues = [];
 
 const routeSpecs = [
     { path: "/", kind: "public" },
-    { path: "/terminal", kind: "public" },
+    { path: "/terminal", kind: "hidden" },
     { path: "/search", kind: "public" },
     { path: "/news", kind: "public", expectedPath: "/" },
     { path: "/datasets", kind: "public" },
@@ -167,7 +167,7 @@ async function checkRenderedRoutes() {
             if (seriousViolations.length) pageIssues.push(`Accessibility: ${seriousViolations.map((violation) => `${violation.id} (${violation.nodes.length}) targets ${violation.nodes.slice(0, 4).map((node) => node.target.join(" ")).join("; ")}`).join(", ")}.`);
             if (spec.kind.includes("enterprise") && anchors.some((anchor) => /^mailto:/i.test(anchor.href))) pageIssues.push("Cabeus Council route exposes a mailto workflow.");
             if (spec.kind.includes("enterprise") && /\bCabeus Council\s+(?:checkout|invoice|payment)|(?:checkout|invoice|payment)\s+for\s+Cabeus Council\b/i.test(bodyText)) pageIssues.push("Cabeus Council route exposes a self-serve payment workflow.");
-            if (spec.kind === "hidden" && finalUrl.pathname !== "/terminal") pageIssues.push(`Hidden route ended at ${finalUrl.pathname} instead of /terminal.`);
+            if (spec.kind === "hidden" && finalUrl.pathname !== "/") pageIssues.push(`Hidden route ended at ${finalUrl.pathname} instead of /.`);
             if (spec.kind.includes("gated") && !["/request-access", "/account/profile/complete"].includes(finalUrl.pathname)) pageIssues.push(`Anonymous gated route ended at ${finalUrl.pathname}.`);
             const expectedPath = spec.expectedPath ?? requested.pathname;
             if (spec.kind !== "hidden" && !spec.kind.includes("gated") && finalUrl.pathname !== expectedPath) pageIssues.push(`Public route ended at ${finalUrl.pathname} instead of ${expectedPath}.`);

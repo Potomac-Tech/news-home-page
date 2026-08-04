@@ -4,7 +4,7 @@ import { isHiddenLaunchPath } from "./app/_data/launchVisibility";
 
 export async function middleware(request: NextRequest) {
     if (isHiddenLaunchPath(request.nextUrl.pathname)) {
-        return NextResponse.redirect(new URL("/terminal", request.url), 307);
+        return NextResponse.redirect(new URL("/", request.url), 307);
     }
     return updateSession(request);
 }

@@ -8,6 +8,7 @@ export const hiddenLaunchModuleIds = new Set([
 ]);
 
 export const hiddenLaunchPathPrefixes = [
+    "/terminal",
     "/spacecraft",
     "/missions",
     "/companies",

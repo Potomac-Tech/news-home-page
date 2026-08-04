@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { safeReturnPath } from "../../../../lib/auth/profile-completion";
 import { createClient } from "../../../../lib/supabase/server";
+import { createServiceClient } from "../../../../lib/supabase/service";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +34,7 @@ function jsonError(error: string, status: number) {
 
 export async function POST(request: Request) {
     const supabase = await createClient();
+    const admin = createServiceClient();
     const body = (await request.json().catch(() => null)) as { email?: unknown } | null;
     const email = normalizeEmail(body?.email);
 
@@ -46,7 +48,7 @@ export async function POST(request: Request) {
     }
 
     const normalizedEmailHash = await emailHash(email);
-    const { data: claimData, error: claimError } = await supabase.rpc(
+    const { data: claimData, error: claimError } = await admin.rpc(
         "claim_email_verification_resend",
         { p_email_hash: normalizedEmailHash }
     );
@@ -86,7 +88,7 @@ export async function POST(request: Request) {
     });
 
     const outcome = resendError ? "failed" : "sent";
-    const { error: completionError } = await supabase.rpc(
+    const { error: completionError } = await admin.rpc(
         "complete_email_verification_resend",
         {
             p_event_id: claim.event_id,

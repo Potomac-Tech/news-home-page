@@ -12,7 +12,7 @@ import {
     resendFreePlanConfigurationError,
     type ResendQuotaClaim,
 } from "../lib/email/resend-quota";
-import { createClient } from "../lib/supabase/server";
+import { createServiceClient } from "../lib/supabase/service";
 
 type Product = "pathfinder" | "source";
 type Submission = {
@@ -65,7 +65,7 @@ export async function submitStrategicInquiry(formData: FormData) {
     const formType = `${product}_inquiry` as OperationalEmailFormType;
     const sender = getOperationalEmailSender();
     const recipient = getOperationalEmailRecipient(formType);
-    const supabase = await createClient();
+    const supabase = createServiceClient();
     const { data, error } = await supabase.rpc("submit_strategic_product_inquiry", {
         p_product: product,
         p_contact_name: contactName,
