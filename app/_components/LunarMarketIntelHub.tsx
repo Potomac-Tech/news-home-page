@@ -48,7 +48,7 @@ function tierLabel(value: string) {
     }
 
     if (value === "command") {
-        return "Command";
+        return "Cabeus Council";
     }
 
     return "Public";
@@ -149,7 +149,7 @@ function WatchlistHook({ locked }: { locked: boolean }) {
             </p>
             <p className="mt-2 text-xs leading-5 text-potomac-cream/55">
                 {locked
-                    ? "Saving this record is reserved for Scout and Command watchlists."
+                    ? "Saving this record is reserved for Scout and Cabeus Council watchlists."
                     : "Save/remove actions will attach here when the watchlist schema lands."}
             </p>
         </div>
@@ -167,7 +167,7 @@ function UpgradePrompt({ mode }: { mode: LunarMarketMode }) {
             </h2>
             <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
                 Public previews show structure and source posture. Scout and
-                Command members unlock live opportunity rows, policy-risk
+                Cabeus Council members unlock live opportunity rows, policy-risk
                 notes, detail pages, citations, and watchlist-ready monitoring.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
@@ -181,7 +181,7 @@ function UpgradePrompt({ mode }: { mode: LunarMarketMode }) {
                     href="/command"
                     className="rounded border border-potomac-gold/50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                 >
-                    Command access
+                    Cabeus Council access
                 </Link>
             </div>
         </section>
@@ -280,7 +280,7 @@ function RecordCard({
                     </h3>
                     <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
                         {locked
-                            ? "Scout or Command access unlocks the analyst relevance note for this record."
+                            ? "Scout or Cabeus Council access unlocks the analyst relevance note for this record."
                             : record.lunarRelevance}
                     </p>
                     {record.mode === "procurement" ? (

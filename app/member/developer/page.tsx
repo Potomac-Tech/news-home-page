@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
     title: "Developer Portal",
     description:
-        "Scout and Command API keys, endpoint catalog, usage logs, webhooks, and export jobs.",
+        "Scout and Cabeus Council API keys, endpoint catalog, usage logs, webhooks, and export jobs.",
 };
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -68,7 +68,7 @@ function ConfigGate() {
                         API keys, usage logs, webhook subscriptions, and export
                         jobs are paid-member records. Set the Cabeus Explorer public
                         Supabase environment variables and sign in with Scout or
-                        Command access.
+                        Cabeus Council access.
                     </p>
                     <Link
                         href="/pricing"
@@ -91,7 +91,7 @@ function LockedGate() {
                         Developer portal
                     </p>
                     <h1 className="mt-4 font-serif text-4xl leading-tight text-white">
-                        Scout or Command access is required.
+                        Scout or Cabeus Council access is required.
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Explorer members can read eligible intelligence, while
@@ -219,7 +219,7 @@ function EndpointCard({ endpoint }: { endpoint: DeveloperEndpoint }) {
             </div>
             <p className="mt-3 text-[0.65rem] uppercase tracking-[0.12em] text-potomac-cream/40">
                 {endpoint.quotaWeight} quota units | {endpoint.responseFormat}
-                {endpoint.includesCommandData ? " | Command data" : ""}
+                {endpoint.includesCommandData ? " | Cabeus Council data" : ""}
             </p>
         </article>
     );
@@ -235,6 +235,12 @@ function EndpointCatalog({ endpoints }: { endpoints: DeveloperEndpoint[] }) {
                 <h2 className="mt-2 font-serif text-3xl text-white">
                     Versioned intelligence APIs
                 </h2>
+                <Link
+                    href="/docs/developer-api"
+                    className="mt-3 inline-flex text-xs font-bold uppercase tracking-[0.14em] text-potomac-gold hover:text-potomac-cream"
+                >
+                    Developer API reference
+                </Link>
             </div>
             <div className="mt-5 grid gap-4">
                 {endpoints.map((endpoint) => (
@@ -331,7 +337,7 @@ function WebhooksPanel({
             <h2 className="font-serif text-2xl text-white">Webhooks</h2>
             {!canUseWebhooks ? (
                 <p className="mt-3 rounded border border-potomac-gold/30 p-3 text-sm leading-6 text-potomac-cream/70">
-                    Webhook subscriptions are available for Command accounts.
+                    Webhook subscriptions are available for Cabeus Council accounts.
                     Scout users can still use API keys and export jobs.
                 </p>
             ) : null}
@@ -416,8 +422,11 @@ export default async function DeveloperPortalPage() {
         nextPath: "/member/developer",
     });
 
-    if (access.state === "signed_out") {
+    if (access.state === "signed_out" || access.state === "email_unverified") {
         redirect(access.loginHref);
+    }
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        redirect(access.profileHref);
     }
 
     if (!access.canUseDeveloperPlatform || !access.userId) {
@@ -439,7 +448,7 @@ export default async function DeveloperPortalPage() {
                 <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
                     <div>
                         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-potomac-gold">
-                            Scout and Command infrastructure
+                            Scout and Cabeus Council infrastructure
                         </p>
                         <h1 className="font-serif text-4xl leading-tight text-white md:text-6xl">
                             Developer Portal

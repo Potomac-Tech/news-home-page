@@ -1,17 +1,19 @@
 import { createClient } from "../supabase/server";
+import { getProfileGateContext, type ProfileGateState } from "./profile-completion";
 
 export type RfqAccessContext = {
     canUseRfqs: boolean;
     canModerateRfqs: boolean;
-    state: "signed_out" | "signed_in_locked" | "authorized";
+    state: Exclude<ProfileGateState, "ready"> | "signed_in_locked" | "authorized";
     userId: string | null;
     roleId: string | null;
     loginHref: string;
+    profileHref: string | null;
 };
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
-const rfqMemberRoles = ["scout", "command_user"];
+const rfqMemberRoles = ["scout", "meridian"];
 const rfqStaffRoles = ["moderator", "analyst", "admin"];
 
 export async function getRfqAccessContext({
@@ -21,20 +23,19 @@ export async function getRfqAccessContext({
     supabase: SupabaseServerClient;
     nextPath: string;
 }): Promise<RfqAccessContext> {
-    const loginHref = `/auth/login?next=${encodeURIComponent(nextPath)}`;
-    const { data, error } = await supabase.auth.getClaims();
-    const userId = data?.claims?.sub;
-
-    if (error || !userId) {
+    const profileGate = await getProfileGateContext({ supabase, nextPath });
+    if (profileGate.state !== "ready") {
         return {
             canUseRfqs: false,
             canModerateRfqs: false,
-            state: "signed_out",
-            userId: null,
+            state: profileGate.state,
+            userId: profileGate.userId,
             roleId: null,
-            loginHref,
+            loginHref: profileGate.loginHref,
+            profileHref: profileGate.profileHref,
         };
     }
+    const userId = profileGate.userId;
 
     const { data: rolesData, error: roleError } = await supabase
         .from("member_role_assignments")
@@ -61,7 +62,8 @@ export async function getRfqAccessContext({
             state: "signed_in_locked",
             userId,
             roleId: null,
-            loginHref,
+            loginHref: profileGate.loginHref,
+            profileHref: null,
         };
     }
 
@@ -71,7 +73,8 @@ export async function getRfqAccessContext({
         state: "authorized",
         userId,
         roleId,
-        loginHref,
+        loginHref: profileGate.loginHref,
+        profileHref: null,
     };
 }
 
@@ -80,7 +83,7 @@ export async function requireRfqAccess(nextPath = "/member/rfqs") {
     const access = await getRfqAccessContext({ supabase, nextPath });
 
     if (access.state !== "authorized" || !access.userId) {
-        throw new Error("Scout or Command RFQ access is required.");
+        throw new Error("Scout or Cabeus Council RFQ access is required.");
     }
 
     return {

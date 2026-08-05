@@ -98,7 +98,7 @@ function ConfigGate() {
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Uploads require Cabeus Explorer Supabase Storage and a signed-in
-                        Scout or Command member. Configure the public Supabase
+                        Scout or Cabeus Council member. Configure the public Supabase
                         environment variables before testing this flow locally.
                     </p>
                     <Link
@@ -122,11 +122,11 @@ function LockedGate() {
                         Experimental test data
                     </p>
                     <h1 className="mt-4 font-serif text-4xl leading-tight text-white">
-                        Scout or Command access is required.
+                        Scout or Cabeus Council access is required.
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Earth test data uploads are reserved for paid Scout
-                        members, Command organization users, and authorized
+                        members, Cabeus Council organization users, and authorized
                         staff because files may contain sensitive experimental
                         context.
                     </p>
@@ -141,7 +141,7 @@ function LockedGate() {
                             href="/command"
                             className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                         >
-                            Command access
+                            Cabeus Council access
                         </Link>
                     </div>
                 </div>
@@ -315,8 +315,11 @@ export default async function ExperimentalTestDataPage() {
         nextPath: "/member/test-data",
     });
 
-    if (access.state === "signed_out") {
+    if (access.state === "signed_out" || access.state === "email_unverified") {
         redirect(access.loginHref);
+    }
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        redirect(access.profileHref);
     }
 
     if (!access.canUploadTestData) {
@@ -359,8 +362,8 @@ export default async function ExperimentalTestDataPage() {
     const datasetOptions = ((datasetsResult.data ??
         []) as CompareDatasetOption[]).filter(
         (dataset) =>
-            dataset.access_tier_required !== "command" ||
-            access.roleId === "command_user" ||
+            dataset.access_tier_required !== "meridian" ||
+            access.roleId === "meridian" ||
             access.roleId === "admin"
     );
     const uploadOptions = uploads
@@ -379,7 +382,7 @@ export default async function ExperimentalTestDataPage() {
                 <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
                     <div>
                         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-potomac-gold">
-                            Scout and Command intelligence
+                            Scout and Cabeus Council intelligence
                         </p>
                         <h1 className="font-serif text-4xl leading-tight text-white md:text-6xl">
                             Experimental Test Data

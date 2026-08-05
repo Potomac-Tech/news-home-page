@@ -69,7 +69,7 @@ function tierLabel(value: string) {
     }
 
     if (value === "command") {
-        return "Command";
+        return "Cabeus Council";
     }
 
     return "Public";
@@ -305,7 +305,7 @@ function MissionCard({
                         {preview.hiddenDetailCount > 0 ? (
                             <p className="mt-3 text-xs text-potomac-cream/50">
                                 {preview.hiddenDetailCount} object or payload
-                                details require Explorer, Scout, or Command
+                                details require Explorer, Scout, or Cabeus Council
                                 access.
                             </p>
                         ) : null}
@@ -367,7 +367,7 @@ export function LunarMissionTracker({
                             <p className="mt-4 max-w-3xl text-sm leading-6 text-potomac-cream/55">
                                 Public rows show source-backed summaries.
                                 Explorer members unlock deeper object and status
-                                context; Scout and Command tiers unlock richer
+                                context; Scout and Cabeus Council tiers unlock richer
                                 payload, citation, and export-ready detail as
                                 the dataset matures.
                             </p>

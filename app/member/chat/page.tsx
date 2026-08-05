@@ -86,8 +86,8 @@ function profileDetail(profile: Profile | undefined) {
 }
 
 function tierLabel(value: string) {
-    if (value === "command") {
-        return "Command";
+    if (value === "meridian") {
+        return "Cabeus Council";
     }
 
     return value === "scout" ? "Scout" : "Explorer";
@@ -160,7 +160,7 @@ function LockedGate() {
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Direct conversations are available to approved Explorer,
-                        Scout, and Command members after account review.
+                        Scout, and Cabeus Council members after account review.
                     </p>
                     <Link
                         href="/apply"
@@ -726,8 +726,11 @@ export default async function MemberChatPage({
         nextPath: "/member/chat",
     });
 
-    if (access.state === "signed_out") {
+    if (access.state === "signed_out" || access.state === "email_unverified") {
         redirect(access.loginHref);
+    }
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        redirect(access.profileHref);
     }
 
     if (!access.canUseMemberChat || !access.userId) {

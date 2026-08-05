@@ -45,7 +45,7 @@ function statusLabel(value: string | null | undefined) {
 }
 
 function tierLabel(value: string) {
-    return value === "command" ? "Command" : "Scout";
+    return value === "meridian" ? "Cabeus Council" : "Scout";
 }
 
 function formatDate(value: string | null | undefined) {
@@ -122,7 +122,7 @@ function ConfigGate() {
                         Marketplace request and offer records are paid-member
                         data and are not rendered from local fallback data.
                         Configure the Cabeus Explorer Supabase public environment
-                        variables and sign in with Scout or Command access.
+                        variables and sign in with Scout or Cabeus Council access.
                     </p>
                     <Link
                         href="/apply"
@@ -145,12 +145,12 @@ function LockedGate() {
                         Data marketplace
                     </p>
                     <h1 className="mt-4 font-serif text-4xl leading-tight text-white">
-                        Scout or Command access is required.
+                        Scout or Cabeus Council access is required.
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Data requests, dataset offers, source evidence, and
                         extraction confidence are reserved for paid Scout
-                        members, Command organization users, and authorized
+                        members, Cabeus Council organization users, and authorized
                         staff.
                     </p>
                     <div className="mt-6 flex flex-wrap gap-3">
@@ -164,7 +164,7 @@ function LockedGate() {
                             href="/command"
                             className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                         >
-                            Command access
+                            Cabeus Council access
                         </Link>
                     </div>
                 </div>
@@ -562,8 +562,11 @@ export default async function DataMarketplacePage() {
         nextPath: "/member/marketplace",
     });
 
-    if (access.state === "signed_out") {
+    if (access.state === "signed_out" || access.state === "email_unverified") {
         redirect(access.loginHref);
+    }
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        redirect(access.profileHref);
     }
 
     if (!access.canReadDataMarketplace) {
@@ -587,7 +590,7 @@ export default async function DataMarketplacePage() {
     const commandOnlyListings = [
         ...dashboard.requests,
         ...dashboard.offers,
-    ].filter((listing) => listing.access_tier_required === "command").length;
+    ].filter((listing) => listing.access_tier_required === "meridian").length;
     const highConfidenceListings = [
         ...dashboard.requests,
         ...dashboard.offers,
@@ -599,7 +602,7 @@ export default async function DataMarketplacePage() {
                 <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
                     <div>
                         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-potomac-gold">
-                            Scout and Command intelligence
+                            Scout and Cabeus Council intelligence
                         </p>
                         <h1 className="font-serif text-4xl leading-tight text-white md:text-6xl">
                             Data Marketplace
@@ -620,7 +623,7 @@ export default async function DataMarketplacePage() {
                         <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
                             Listings are filtered by Supabase RLS before this
                             page renders. Scout users see Scout-eligible
-                            records; Command users also see Command-only
+                            records; Cabeus Council users also see Cabeus Council-only
                             records.
                         </p>
                         <Link
@@ -651,7 +654,7 @@ export default async function DataMarketplacePage() {
                     <Metric
                         label="Confidence"
                         value={String(highConfidenceListings)}
-                        detail={`${commandOnlyListings} Command-only`}
+                        detail={`${commandOnlyListings} Cabeus Council-only`}
                     />
                 </dl>
 

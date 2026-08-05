@@ -18,11 +18,13 @@ export type SponsorAdUnit = {
     label: string;
     sponsorName: string;
     sponsorWebsiteUrl?: string;
+    ctaLabel?: string;
     campaignName: string;
     creativeUrl?: string;
     creativeAltText: string;
     note: string;
     isDirectSold: boolean;
+    expiresAt?: string;
 };
 
 type PlacementRow = {
@@ -63,65 +65,92 @@ type SponsorRow = {
     website_url: string | null;
 };
 
+export const fallbackPromotionalContentReviewedAt =
+    "2026-07-11T00:00:00.000Z";
+
 const fallbackSponsorUnits: Record<string, SponsorAdUnit> = {
     [sponsorPlacementKeys.homepageLeadRail]: {
         placementKey: sponsorPlacementKeys.homepageLeadRail,
-        placementName: "Briefing sponsor",
+        placementName: "UDRI house ad",
         surface: "Homepage lead rail",
-        label: "Sponsor",
-        sponsorName: "Cabeus Explorer partner briefing",
-        campaignName: "Reserved partner slot",
-        creativeAltText: "Cabeus Explorer partner briefing placement",
-        note: "Premium direct-sold placement beside the public headline feed.",
+        label: "House ad",
+        sponsorName: "UDRI radioisotope power systems briefing",
+        sponsorWebsiteUrl: "/request-access?source=udri-house-ad",
+        ctaLabel: "Learn more",
+        campaignName: "Approved house campaign",
+        creativeUrl: "https://i.ytimg.com/vi/WSLxeLhlth4/maxresdefault.jpg",
+        creativeAltText: "UDRI lunar power briefing",
+        note: "Learn more about lunar radioisotope power work through Cabeus Explorer access.",
         isDirectSold: false,
+        expiresAt: "2026-08-10T00:00:00.000Z",
     },
     [sponsorPlacementKeys.marketModuleBand]: {
         placementKey: sponsorPlacementKeys.marketModuleBand,
-        placementName: "Market module sponsor",
+        placementName: "Potomac Pathfinder CTA",
         surface: "Markets band",
-        label: "Partner slot",
-        sponsorName: "Lunar markets sponsor",
-        campaignName: "Reserved partner slot",
-        creativeAltText: "Lunar markets partner placement",
-        note: "Reserved for finance, infrastructure, and mission-services sponsors.",
+        label: "Pathfinder",
+        sponsorName: "Find the landing site",
+        sponsorWebsiteUrl: "/pathfinder/inquire?source=homepage-pathfinder-cta",
+        ctaLabel: "Ask about Pathfinder",
+        campaignName: "Approved product CTA",
+        creativeUrl: "/hardware-pathfinder-05122026.png",
+        creativeAltText: "Potomac Pathfinder hardware CTA",
+        note: "An impact-emplaced lunar sensor that survives hard landing independent of a lander and finds the best landing sites.",
         isDirectSold: false,
+        expiresAt: "2026-08-10T00:00:00.000Z",
     },
     [sponsorPlacementKeys.articleSidebar]: {
         placementKey: sponsorPlacementKeys.articleSidebar,
-        placementName: "Article sponsor",
+        placementName: "Potomac Source CTA",
         surface: "Public article sidebar",
-        label: "Sponsor",
-        sponsorName: "Public article partner",
-        campaignName: "Reserved partner slot",
-        creativeAltText: "Public article partner placement",
-        note: "Reserved for sponsors supporting public lunar intelligence coverage.",
+        label: "Source",
+        sponsorName: "Deliver data for building",
+        sponsorWebsiteUrl: "/source/inquire?source=article-source-cta",
+        ctaLabel: "Ask about Source",
+        campaignName: "Approved product CTA",
+        creativeUrl: "/hardware-source-10162025.png",
+        creativeAltText: "Potomac Source data CTA",
+        note: "A persistent lunar garage and rover designed for at least one year of operation to fully characterize the site in preparation for construction.",
         isDirectSold: false,
+        expiresAt: "2026-08-10T00:00:00.000Z",
     },
     [sponsorPlacementKeys.eventSidebar]: {
         placementKey: sponsorPlacementKeys.eventSidebar,
-        placementName: "Event calendar sponsor",
+        placementName: "UDRI event house ad",
         surface: "Public event sidebar",
-        label: "Sponsor",
-        sponsorName: "Event intelligence partner",
-        campaignName: "Reserved partner slot",
-        creativeAltText: "Event intelligence partner placement",
-        note: "Reserved for conferences, launch services, and lunar infrastructure partners.",
+        label: "House ad",
+        sponsorName: "UDRI lunar systems briefing",
+        sponsorWebsiteUrl: "/request-access?source=udri-event-house-ad",
+        ctaLabel: "Learn more",
+        campaignName: "Approved house campaign",
+        creativeUrl: "https://i.ytimg.com/vi/WSLxeLhlth4/maxresdefault.jpg",
+        creativeAltText: "UDRI lunar systems briefing",
+        note: "Open an account request for UDRI-related lunar systems briefing access.",
         isDirectSold: false,
+        expiresAt: "2026-08-10T00:00:00.000Z",
     },
 };
 
 function genericFallbackUnit(placementKey: string): SponsorAdUnit {
     return {
         placementKey,
-        placementName: "Sponsor placement",
+        placementName: "Source-backed empty state",
         surface: "Public surface",
-        label: "Partner slot",
-        sponsorName: "Cabeus Explorer partner",
-        campaignName: "Reserved partner slot",
-        creativeAltText: "Cabeus Explorer partner placement",
-        note: "Public sponsor placement reserved for approved campaigns.",
+        label: "Reviewed placement",
+        sponsorName: "No approved campaign live",
+        campaignName: "Source-backed empty state",
+        creativeAltText: "No approved campaign is live for this placement",
+        note: "This placement is intentionally empty until an approved source-backed campaign is active.",
         isDirectSold: false,
     };
+}
+
+function activeFallbackUnit(placementKey: string, now: Date) {
+    const fallback =
+        fallbackSponsorUnits[placementKey] ?? genericFallbackUnit(placementKey);
+    return fallback.expiresAt && new Date(fallback.expiresAt) <= now
+        ? genericFallbackUnit(placementKey)
+        : fallback;
 }
 
 function withTrackingUrl(url: string | null, utmCampaign: string | null) {
@@ -180,22 +209,25 @@ function directUnit({
             campaignPlacement.utm_campaign
         ),
         campaignName: campaign.name,
+        ctaLabel: "Learn more",
         creativeUrl: campaignPlacement.creative_url ?? undefined,
         creativeAltText:
             campaignPlacement.creative_alt_text ??
             `${sponsor.name} sponsor creative`,
         note: placement.description,
         isDirectSold: true,
+        expiresAt: `${campaignPlacement.ends_at}T23:59:59.999Z`,
     };
 }
 
 export async function loadSponsorUnits(placementKeys: string[]) {
     const requestedPlacementKeys = [...new Set(placementKeys)];
-    const todayIsoDate = new Date().toISOString().slice(0, 10);
+    const now = new Date();
+    const todayIsoDate = now.toISOString().slice(0, 10);
     const fallbackUnits = new Map(
         requestedPlacementKeys.map((placementKey) => [
             placementKey,
-            fallbackSponsorUnits[placementKey] ?? genericFallbackUnit(placementKey),
+            activeFallbackUnit(placementKey, now),
         ])
     );
 

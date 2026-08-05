@@ -6,14 +6,14 @@ ref `xlpkdoeldtlhearqajat`.
 
 ## Route
 
-- `/member/marketplace`: protected Scout/Command marketplace page.
+- `/member/marketplace`: protected Scout/Cabeus Council marketplace page.
 - Entry point: `/member` includes a Data marketplace link beside the economy
   dashboard and summit tracker.
 
 ## Access Model
 
 The page uses Supabase Auth claims and normalized `member_role_assignments`.
-Scout users, Command users, editors, analysts, and admins can enter the route.
+Scout users, Cabeus Council users, editors, analysts, and admins can enter the route.
 Signed-out users are redirected to login, and approved Explorer/member-only
 users see a paid-access gate.
 
@@ -21,7 +21,7 @@ Marketplace row visibility is still enforced by the RLS policies from Task 034:
 
 - Scout users can read approved, published Scout-tier requests, offers, and
   source evidence.
-- Command users can also read approved, published Command-tier records.
+- Cabeus Council users can also read approved, published Cabeus Council-tier records.
 - Authorized staff can inspect published records through the same UI while
   operational management remains outside this task.
 
@@ -42,6 +42,6 @@ mission/location/instrument metadata, analyst rationale, and source evidence.
 
 ## Verification Notes
 
-Live Scout/Command read verification requires configured Potomac Supabase public
+Live Scout/Cabeus Council read verification requires configured Potomac Supabase public
 environment variables, the Task 034 migration applied to the canonical project,
-and a signed-in Scout or Command test user.
+and a signed-in Scout or Cabeus Council test user.

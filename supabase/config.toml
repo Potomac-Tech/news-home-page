@@ -1,0 +1,7 @@
+project_id = "news-home-page"
+
+[functions.ingest-usaspending-contract-awards]
+verify_jwt = false
+
+[functions.ingest-alpha-vantage-stock-quotes]
+verify_jwt = false

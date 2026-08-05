@@ -144,7 +144,7 @@ function EventTypeSelect({
 }
 
 function AccessTierSelect({
-    defaultValue = "member",
+    defaultValue = "explorer",
 }: {
     defaultValue?: string;
 }) {
@@ -154,9 +154,9 @@ function AccessTierSelect({
             defaultValue={defaultValue}
             className={inputClass}
         >
-            <option value="member">Member</option>
+            <option value="explorer">Explorer</option>
             <option value="scout">Scout</option>
-            <option value="command">Command</option>
+            <option value="meridian">Cabeus Council</option>
         </select>
     );
 }
@@ -199,7 +199,7 @@ function EventFormFields({
             <div>
                 <FieldLabel>Access tier</FieldLabel>
                 <AccessTierSelect
-                    defaultValue={event?.access_tier_required ?? "member"}
+                    defaultValue={event?.access_tier_required ?? "explorer"}
                 />
             </div>
             <div>

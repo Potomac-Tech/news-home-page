@@ -1,26 +1,27 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import {
     type EventAccessTier,
     type EventCalendarDetails,
     type EventCalendarRecord,
     type EventSourceLink,
-    fallbackEvents,
     publicEventTeasers,
 } from "../_data/events";
 import {
     absoluteSiteUrl,
     jsonLdScript,
     organizationJsonLd,
-    siteConfig,
 } from "../_data/site";
 import { createClient } from "../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+import { allowLocalContentFallbacks } from "../_data/contentFallbacks";
 import {
     getEventAccessContext,
     type EventAccessContext,
 } from "../../lib/auth/event-access";
 import { SponsorUnit } from "../_components/SponsorUnit";
+import { publicTierName } from "../_data/tiers";
 import {
     loadSponsorUnits,
     sponsorPlacementKeys,
@@ -28,21 +29,11 @@ import {
 
 export const dynamic = "force-dynamic";
 
+const allConveningsPageVisible = false;
+
 export const metadata: Metadata = {
-    title: "Events",
-    description:
-        "Public Cabeus Explorer event calendar with member-only details for lunar conferences, summits, and workshops.",
-    alternates: {
-        canonical: "/events",
-    },
-    openGraph: {
-        title: "Events | Cabeus Explorer",
-        description:
-            "Public Cabeus Explorer event calendar with member-only details for lunar conferences, summits, and workshops.",
-        url: absoluteSiteUrl("/events"),
-        siteName: siteConfig.name,
-        type: "website",
-    },
+    title: "Page not found",
+    robots: { index: false, follow: false },
 };
 
 type EventRow = {
@@ -83,7 +74,8 @@ const anonymousAccess: EventAccessContext = {
     state: "signed_out",
     userId: null,
     roleId: null,
-    loginHref: "/auth/login?next=%2Fevents",
+    loginHref: "/request-access?next=%2Fevents",
+    profileHref: null,
 };
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -97,15 +89,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 });
 
 function accessTierLabel(tier: EventAccessTier) {
-    if (tier === "command") {
-        return "Command";
-    }
-
-    if (tier === "scout") {
-        return "Scout";
-    }
-
-    return "Member";
+    return publicTierName(tier);
 }
 
 function eventTypeLabel(value: string) {
@@ -126,6 +110,10 @@ function formatDate(value: string) {
 }
 
 function formatDateRange(event: EventCalendarRecord) {
+    if (event.dateLabel) {
+        return event.dateLabel;
+    }
+
     const startsAt = formatDate(event.startsAt);
 
     if (!event.endsAt) {
@@ -142,11 +130,11 @@ function formatDateRange(event: EventCalendarRecord) {
 }
 
 function normalizeTier(value: string | null | undefined): EventAccessTier {
-    if (value === "command" || value === "scout") {
+    if (value === "meridian" || value === "scout") {
         return value;
     }
 
-    return "member";
+    return "explorer";
 }
 
 function parseStringArray(value: unknown) {
@@ -220,7 +208,7 @@ function mapEvent(
 async function loadEvents(): Promise<LoadedEvents> {
     if (!hasPotomacSupabasePublicConfig()) {
         return {
-            events: publicEventTeasers(),
+            events: allowLocalContentFallbacks() ? publicEventTeasers() : [],
             access: anonymousAccess,
         };
     }
@@ -228,7 +216,7 @@ async function loadEvents(): Promise<LoadedEvents> {
     const supabase = await createClient();
     const access = await getEventAccessContext({
         supabase,
-        tier: "member",
+        tier: "explorer",
         nextPath: "/events",
     });
 
@@ -244,7 +232,7 @@ async function loadEvents(): Promise<LoadedEvents> {
 
     if (error || !data?.length) {
         return {
-            events: publicEventTeasers(),
+            events: [],
             access,
         };
     }
@@ -252,7 +240,7 @@ async function loadEvents(): Promise<LoadedEvents> {
     const eventIds = ((data ?? []) as EventRow[]).map((event) => event.id);
     let detailsByEventId = new Map<string, EventCalendarDetails>();
 
-    if (eventIds.length && access.state !== "signed_out") {
+    if (eventIds.length && access.state === "authorized") {
         const { data: detailData, error: detailError } = await supabase
             .from("event_calendar_event_details")
             .select(
@@ -306,6 +294,14 @@ function MemberGate({
                         className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                     >
                         Sign in
+                    </Link>
+                ) : null}
+                {access.state === "profile_incomplete" && access.profileHref ? (
+                    <Link
+                        href={access.profileHref}
+                        className="rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
+                    >
+                        Complete profile
                     </Link>
                 ) : null}
                 <Link
@@ -395,6 +391,10 @@ function MemberDetails({ details }: { details: EventCalendarDetails }) {
 }
 
 export default async function EventsPage() {
+    if (!allConveningsPageVisible) {
+        notFound();
+    }
+
     const [{ events, access }, sponsorUnits] = await Promise.all([
         loadEvents(),
         loadSponsorUnits([sponsorPlacementKeys.eventSidebar]),
@@ -466,18 +466,32 @@ export default async function EventsPage() {
                                 details table for approved roles only.
                             </p>
                             <Link
-                                href="/apply"
+                                href="/request-access"
                                 className="mt-6 inline-flex rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                             >
-                                Apply for Member access
+                                Request Explorer access
                             </Link>
                         </section>
                     </aside>
                 </div>
 
                 <div className="mt-12 space-y-6">
+                    {!events.length ? (
+                        <section className="border border-potomac-regolith/25 bg-potomac-primary/65 p-6">
+                            <h2 className="font-serif text-2xl uppercase text-white">
+                                No approved events are published
+                            </h2>
+                            <p className="mt-3 max-w-2xl text-sm leading-6 text-potomac-cream/70">
+                                The calendar will return when event dates, locations,
+                                sources, and editorial approval are complete.
+                            </p>
+                        </section>
+                    ) : null}
                     {events.map((event) => (
-                        <article key={event.slug} className="glass-card rounded p-6">
+                        <article id={event.slug} key={event.slug} className="glass-card scroll-mt-40 rounded p-6">
+                            {event.slug === "space-industrialist-week-2026" ? (
+                                <span id="cabeus-games" className="relative -top-40 block" aria-hidden="true" />
+                            ) : null}
                             <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                                 <div>
                                     <div className="flex flex-wrap gap-3 text-xs font-bold uppercase tracking-[0.14em] text-potomac-cream/50">

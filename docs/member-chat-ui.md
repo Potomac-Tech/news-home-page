@@ -1,7 +1,7 @@
 # Member Chat UI
 
 Task 047 adds the first direct member-to-member chat surface for approved
-Explorer, Scout, and Command members.
+Explorer, Scout, and Cabeus Council members.
 
 ## Member Surface
 

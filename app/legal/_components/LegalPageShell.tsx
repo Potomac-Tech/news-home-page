@@ -21,70 +21,95 @@ export function LegalPageShell({
     children?: React.ReactNode;
 }) {
     return (
-        <section className="bg-grid-pattern">
-            <div className="mx-auto grid min-h-[calc(100vh-9rem)] w-full max-w-7xl gap-10 px-4 py-16 md:px-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
-                <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.22em] text-potomac-gold">
-                        {eyebrow}
-                    </p>
-                    <h1 className="mt-4 font-serif text-4xl leading-tight text-white md:text-6xl">
-                        {title}
-                    </h1>
-                    <p className="mt-6 max-w-3xl text-lg leading-8 text-potomac-cream/80">
+        <div className="min-h-screen bg-cabeus-paper text-cabeus-ink">
+            <header className="border-b border-cabeus-line">
+                <div className="mx-auto grid w-full max-w-[92rem] gap-8 px-5 py-14 md:px-10 md:py-20 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
+                    <div>
+                        <p className="brand-kicker">{eyebrow}</p>
+                        <h1 className="mt-5 font-serif text-6xl font-medium leading-[0.9] md:text-8xl">
+                            {title}
+                        </h1>
+                    </div>
+                    <p className="max-w-3xl text-base leading-8 text-cabeus-muted md:text-lg">
                         {description}
                     </p>
-                    <div className="mt-10 grid gap-5">
-                        {sections.map((section) => (
+                </div>
+            </header>
+
+            <div className="mx-auto grid w-full max-w-[92rem] lg:grid-cols-[19rem_minmax(0,1fr)]">
+                <aside className="border-b border-cabeus-line bg-cabeus-smoke px-5 py-10 md:px-10 lg:border-b-0 lg:border-r lg:px-8 lg:py-14">
+                    <div className="lg:sticky lg:top-32">
+                        <p className="brand-kicker">Trust center</p>
+                        <nav
+                            className="mt-6 border-t border-cabeus-line"
+                            aria-label="Trust pages"
+                        >
+                            {trustRoutes.map((route) => (
+                                <Link
+                                    key={route.href}
+                                    href={route.href}
+                                    className="flex items-center justify-between gap-4 border-b border-cabeus-line py-4 text-sm text-cabeus-muted transition hover:text-cabeus-ink"
+                                >
+                                    <span>{route.label}</span>
+                                    <span aria-hidden="true" className="font-mono text-cabeus-bronze">
+                                        &#8594;
+                                    </span>
+                                </Link>
+                            ))}
+                        </nav>
+                        <p className="mt-8 text-xs leading-6 text-cabeus-muted">
+                            For support, privacy, billing, accessibility, or safety
+                            requests, contact{" "}
+                            <a
+                                href={`mailto:${supportEmail}`}
+                                className="break-words border-b border-cabeus-gold text-cabeus-ink transition hover:text-cabeus-bronze"
+                            >
+                                {supportEmail}
+                            </a>
+                            .
+                        </p>
+                    </div>
+                </aside>
+
+                <main className="px-5 py-6 md:px-10 md:py-10 lg:px-14 lg:py-12">
+                    <div className="border-t border-cabeus-line">
+                        {sections.map((section, index) => (
                             <article
                                 key={section.title}
-                                className="rounded border border-white/10 p-5"
+                                className="grid gap-5 border-b border-cabeus-line py-9 md:grid-cols-[4rem_minmax(0,1fr)] md:py-12"
                             >
-                                <h2 className="font-serif text-2xl text-white">
-                                    {section.title}
-                                </h2>
-                                <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
-                                    {section.body}
+                                <p className="font-mono text-[0.65rem] font-bold uppercase text-cabeus-bronze">
+                                    {String(index + 1).padStart(2, "0")}
                                 </p>
-                                {section.bullets ? (
-                                    <ul className="mt-4 grid gap-2 text-sm leading-6 text-potomac-cream/65">
-                                        {section.bullets.map((bullet) => (
-                                            <li key={bullet}>{bullet}</li>
-                                        ))}
-                                    </ul>
-                                ) : null}
+                                <div>
+                                    <h2 className="font-serif text-3xl font-medium leading-tight md:text-4xl">
+                                        {section.title}
+                                    </h2>
+                                    <p className="mt-4 max-w-3xl text-sm leading-7 text-cabeus-muted md:text-base md:leading-8">
+                                        {section.body}
+                                    </p>
+                                    {section.bullets ? (
+                                        <ul className="mt-5 grid max-w-3xl gap-3 text-sm leading-7 text-cabeus-muted md:text-base">
+                                            {section.bullets.map((bullet) => (
+                                                <li
+                                                    key={bullet}
+                                                    className="grid grid-cols-[1rem_1fr] gap-3"
+                                                >
+                                                    <span aria-hidden="true" className="text-cabeus-bronze">
+                                                        /
+                                                    </span>
+                                                    <span>{bullet}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : null}
+                                </div>
                             </article>
                         ))}
                     </div>
-                    {children ? <div className="mt-8">{children}</div> : null}
-                </div>
-                <aside className="glass-card h-fit rounded p-5">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
-                        Trust center
-                    </p>
-                    <nav className="mt-4 grid gap-2" aria-label="Trust pages">
-                        {trustRoutes.map((route) => (
-                            <Link
-                                key={route.href}
-                                href={route.href}
-                                className="rounded border border-white/10 p-3 text-sm text-potomac-cream/70 transition hover:border-potomac-gold hover:text-potomac-gold"
-                            >
-                                {route.label}
-                            </Link>
-                        ))}
-                    </nav>
-                    <p className="mt-5 text-xs leading-5 text-potomac-cream/50">
-                        For support, privacy, billing, accessibility, or safety
-                        requests, contact{" "}
-                        <a
-                            href={`mailto:${supportEmail}`}
-                            className="text-potomac-gold"
-                        >
-                            {supportEmail}
-                        </a>
-                        .
-                    </p>
-                </aside>
+                    {children ? <div className="mt-10">{children}</div> : null}
+                </main>
             </div>
-        </section>
+        </div>
     );
 }

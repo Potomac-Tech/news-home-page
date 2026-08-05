@@ -45,9 +45,17 @@ export async function POST(request: Request) {
         return jsonError("Sign in before uploading test data.", 401);
     }
 
+    if (access.state === "email_unverified") {
+        return jsonError("Verify your email before uploading test data.", 403);
+    }
+
+    if (access.state === "profile_incomplete") {
+        return jsonError("Complete your profile before uploading test data.", 403);
+    }
+
     if (!access.canUploadTestData || !access.userId) {
         return jsonError(
-            "Scout or Command access is required for test data uploads.",
+            "Scout or Cabeus Council access is required for test data uploads.",
             403
         );
     }

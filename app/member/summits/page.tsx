@@ -154,7 +154,7 @@ function LockedGate() {
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Internal summit plans and past-event summaries are
-                        reserved for approved Explorer, Scout, and Command
+                        reserved for approved Explorer, Scout, and Cabeus Council
                         members.
                     </p>
                     <Link
@@ -275,12 +275,15 @@ export default async function MemberSummitsPage() {
     const supabase = await createClient();
     const access = await getEventAccessContext({
         supabase,
-        tier: "member",
+        tier: "explorer",
         nextPath: "/member/summits",
     });
 
-    if (access.state === "signed_out") {
+    if (access.state === "signed_out" || access.state === "email_unverified") {
         redirect(access.loginHref);
+    }
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        redirect(access.profileHref);
     }
 
     if (!access.canReadEventDetails) {

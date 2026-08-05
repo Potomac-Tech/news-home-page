@@ -1,4 +1,4 @@
-# Explorer, Scout, and Command Tier Packaging
+# Explorer, Scout, and Cabeus Council Tier Packaging
 
 Task 052 defines the product tier model and access-control notes for the
 Potomac lunar industry terminal.
@@ -9,7 +9,7 @@ Potomac lunar industry terminal.
 | --- | --- | --- | --- |
 | Explorer | `member` role and `membership_tier = 'member'` | Free after manual approval | Individual readers and community members |
 | Scout | `scout` role and `membership_tier = 'scout'` | Self-serve annual Stripe subscription at `$25,000/user/year` | Professional users and small teams |
-| Command | `command_user` role and `membership_tier = 'command'` | Organization-level manual sales/admin approval | Enterprises, agencies, and institutional teams |
+| Cabeus Council | `command_user` role and `membership_tier = 'command'` | Organization-level manual sales/admin approval | Enterprises, agencies, and institutional teams |
 
 The user-facing noun remains "member" for approved people across all tiers.
 "Explorer" is the free approved base tier, not a replacement for the member
@@ -33,34 +33,34 @@ Scout:
 - Failed, canceled, or deleted subscriptions should move the entitlement out of
   active status and revoke the effective Scout gate.
 
-Command:
+Cabeus Council:
 
-- Prospects use the Command interest workflow.
-- Staff review, sell, approve, and provision Command manually.
+- Prospects use the Cabeus Council interest workflow.
+- Staff review, sell, approve, and provision Cabeus Council manually.
 - Access is organization-scoped through an active organization, active
-  organization membership, organization-scoped Command entitlement, and
+  organization membership, organization-scoped Cabeus Council entitlement, and
   `command_user` role assignment for covered users.
 - Organization admins manage seats and billing-contact context through the
   organization portal.
 
 ## Included Features
 
-| Capability | Public | Explorer | Scout | Command |
+| Capability | Public | Explorer | Scout | Cabeus Council |
 | --- | --- | --- | --- | --- |
 | Public article teaser, citations, metadata, sitemap coverage | Yes | Yes | Yes | Yes |
 | Full gated article bodies | No | Yes | Yes | Yes |
 | Member chat | No | Yes | Yes | Yes |
 | Moderated member forums | No | Yes | Yes | Yes |
 | Event details where marked member-gated | Teaser only | Yes | Yes | Yes |
-| Lunar datasets with public/demo release states | Public subset | Explorer subset | Scout subset | Command subset |
+| Lunar datasets with public/demo release states | Public subset | Explorer subset | Scout subset | Cabeus Council subset |
 | Data marketplace | No | Upgrade gate | Yes | Yes |
 | Economy dashboard and paid downloads | No | Upgrade gate | Yes | Yes |
 | Experimental test data uploads/comparisons | No | Upgrade gate | Yes | Yes |
 | RFQ posting, browsing, and responses | No | Upgrade gate | Yes | Yes |
 | Watchlists, saved searches, advanced alerts | No | Future upgrade gate | Planned | Planned |
 | CSV/PDF exports, API access, webhooks | No | No | Planned | Planned with higher limits |
-| Command-exclusive intelligence allocation | No | No | No | Yes |
-| Command perks and analyst/service delivery tracking | No | No | No | Yes |
+| Cabeus Council-exclusive intelligence allocation | No | No | No | Yes |
+| Cabeus Council perks and analyst/service delivery tracking | No | No | No | Yes |
 
 ## Initial Limits
 
@@ -80,12 +80,12 @@ Scout:
 - Paid exports, API keys, webhooks, watchlists, saved searches, and alerts
   should enforce per-user usage limits when implemented.
 
-Command:
+Cabeus Council:
 
 - Seat access is organization-scoped and manually provisioned.
 - Organization admins can view organization members, seats, billing contact
   context, and active entitlements.
-- Command-only data products may include exclusivity windows, allocation limits,
+- Cabeus Council-only data products may include exclusivity windows, allocation limits,
   service obligations, sponsorship benefits, and analyst support commitments.
 
 ## Upgrade Paths
@@ -102,15 +102,15 @@ Explorer to Scout:
 - Stripe Checkout must run server-side and only for eligible approved members.
 - The Stripe webhook is the source of truth for activating Scout entitlement.
 
-Explorer or Scout to Command:
+Explorer or Scout to Cabeus Council:
 
 - Use `/command`.
 - Staff handle sales qualification, organization creation, seat assignment, and
   organization-level entitlement activation manually.
-- Command access should not be self-serve until a separate enterprise billing
+- Cabeus Council access should not be self-serve until a separate enterprise billing
   workflow is explicitly designed.
 
-Command seat changes:
+Cabeus Council seat changes:
 
 - Organization admins and staff manage membership through the organization/admin
   workflows.
@@ -125,7 +125,7 @@ Command seat changes:
 - Explorer gates should accept the active `member`, `scout`, and
   `command_user` roles.
 - Scout gates should accept active `scout` and `command_user` roles.
-- Command gates should accept active `command_user` roles and, where needed,
+- Cabeus Council gates should accept active `command_user` roles and, where needed,
   active organization membership/organization admin checks.
 - Staff gates should remain explicit by function and role. Common staff roles
   are `editor`, `analyst`, `moderator`, and `admin`.
@@ -145,8 +145,8 @@ Use tier names when describing package, price, entitlement, and gates:
 
 - "Explorer access is free after approval"
 - "Scout is `$25,000/user/year`"
-- "Command is organization-level"
-- "Scout and Command users can access RFQs"
+- "Cabeus Council is organization-level"
+- "Scout and Cabeus Council users can access RFQs"
 
 Existing database enum values and roles may keep `member` as the Explorer
 mapping. Renaming those values is unnecessary and would create avoidable

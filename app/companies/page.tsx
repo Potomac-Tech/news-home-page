@@ -13,6 +13,7 @@ import {
     loadLunarCompanies,
     type LunarCompanyRecord,
 } from "../_data/lunarCompanies";
+import { tierConfig } from "../_data/tiers";
 
 export const metadata: Metadata = {
     title: "Lunar Companies",
@@ -110,7 +111,9 @@ function gatedLabel(company: LunarCompanyRecord) {
         (item) => item.visibilityTier === "command"
     );
 
-    return commandOnly ? "Command detail" : "Scout detail";
+    return commandOnly
+        ? `${tierConfig.enterprise.publicName} detail`
+        : "Scout detail";
 }
 
 function CompanyCard({
@@ -220,7 +223,7 @@ function CompanyCard({
                             Watchlist hook
                         </p>
                         <p className="mt-2 text-xs leading-5 text-potomac-cream/55">
-                            Scout and Command watchlists will attach to this
+                            Scout and {tierConfig.enterprise.publicName} watchlists will attach to this
                             company profile when saved-work controls land.
                         </p>
                     </div>
@@ -452,22 +455,22 @@ export default async function CompaniesPage({
                         <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
                             Public visitors can inspect profile teasers and
                             source posture. Explorer members see member-level
-                            context. Scout and Command users unlock financial
+                            context. Scout and {tierConfig.enterprise.publicName} users unlock financial
                             metrics, contracts, comparison attributes, and
                             watchlist-ready records where RLS allows.
                         </p>
                         <div className="mt-5 flex flex-wrap gap-3">
                             <Link
-                                href="/pricing"
+                                href="/upgrade?tier=scout&source=companies&content=company-directory&object=financials&next=%2Fcompanies"
                                 className="rounded bg-potomac-gold px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                             >
-                                Compare tiers
+                                View upgrade paths
                             </Link>
                             <Link
-                                href="/command"
+                                href="/upgrade?tier=meridian&source=companies&content=company-directory&object=financials&next=%2Fcompanies"
                                 className="rounded border border-potomac-gold/50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                             >
-                                Command access
+                                {tierConfig.enterprise.publicName} access
                             </Link>
                         </div>
                     </section>

@@ -9,7 +9,7 @@ export type TerminalModule = {
     section: "News" | "Missions" | "Markets" | "Workspace";
 };
 
-export const terminalModules: TerminalModule[] = [
+const allTerminalModules: TerminalModule[] = [
     {
         id: "news",
         label: "Lunar news",
@@ -20,10 +20,10 @@ export const terminalModules: TerminalModule[] = [
     },
     {
         id: "launches",
-        label: "Launches",
-        href: "/launches",
-        summary: "Upcoming lunar launch windows, vehicles, operators, and status.",
-        status: "live",
+        label: "Launches & Missions",
+        href: "/tracker/launches",
+        summary: "Verified-account weekly global and lunar launch and mission operations.",
+        status: "member",
         section: "Missions",
     },
     {
@@ -33,6 +33,14 @@ export const terminalModules: TerminalModule[] = [
         summary: "Lunar spacecraft, landers, payloads, satellites, and phases.",
         status: "live",
         section: "Missions",
+    },
+    {
+        id: "contract-awards",
+        label: "New Contract Awards",
+        href: "/tracker/contracts",
+        summary: "Reviewed space and lunar contract awards with cited value evidence.",
+        status: "member",
+        section: "Markets",
     },
     {
         id: "procurement",
@@ -78,7 +86,7 @@ export const terminalModules: TerminalModule[] = [
         id: "marketplace",
         label: "Marketplace",
         href: "/member/marketplace",
-        summary: "Scout and Command data requests, offers, and source evidence.",
+        summary: "Scout and Cabeus Council data requests, offers, and source evidence.",
         status: "scout",
         section: "Markets",
     },
@@ -110,7 +118,7 @@ export const terminalModules: TerminalModule[] = [
         id: "saved-work",
         label: "Saved work",
         href: "/member/saved-work",
-        summary: "Scout and Command watchlists, searches, reading list, and defaults.",
+        summary: "Scout and Cabeus Council watchlists, searches, reading list, and defaults.",
         status: "scout",
         section: "Workspace",
     },
@@ -132,6 +140,10 @@ export const terminalModules: TerminalModule[] = [
     },
 ];
 
+export const terminalModules = allTerminalModules.filter(
+    (module) => !hiddenLaunchModuleIds.has(module.id) && module.id !== "events"
+);
+
 export const terminalHeaderItems = terminalModules.filter((module) =>
     [
         "news",
@@ -141,7 +153,6 @@ export const terminalHeaderItems = terminalModules.filter((module) =>
         "regulatory",
         "companies",
         "datasets",
-        "events",
     ].includes(module.id)
 );
 
@@ -160,3 +171,4 @@ export function terminalStatusLabel(status: TerminalModuleStatus) {
 
     return "Planned";
 }
+import { hiddenLaunchModuleIds } from "./launchVisibility";

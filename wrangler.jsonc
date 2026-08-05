@@ -4,11 +4,63 @@
     "main": ".open-next/worker.js",
     "compatibility_date": "2026-07-06",
     "compatibility_flags": ["nodejs_compat"],
+    "routes": [
+        {
+            "pattern": "www.cabeusexplorer.com",
+            "custom_domain": true
+        },
+        {
+            "pattern": "cabeusexplorer.com",
+            "custom_domain": true
+        }
+    ],
     "assets": {
         "directory": ".open-next/assets",
         "binding": "ASSETS"
     },
     "observability": {
-        "enabled": true
+        "enabled": true,
+        "logs": {
+            "enabled": true,
+            "head_sampling_rate": 0.01
+        },
+        "traces": {
+            "enabled": true,
+            "head_sampling_rate": 0.01
+        }
+    },
+    "env": {
+        "local": {
+            "services": [
+                {
+                    "binding": "CABEUS_TERMINAL_API",
+                    "service": "cabeus-terminal-api-local"
+                }
+            ]
+        },
+        "preview": {
+            "services": [
+                {
+                    "binding": "CABEUS_TERMINAL_API",
+                    "service": "cabeus-terminal-api-preview"
+                }
+            ]
+        },
+        "staging": {
+            "services": [
+                {
+                    "binding": "CABEUS_TERMINAL_API",
+                    "service": "cabeus-terminal-api-staging"
+                }
+            ]
+        },
+        "production": {
+            "services": [
+                {
+                    "binding": "CABEUS_TERMINAL_API",
+                    "service": "cabeus-terminal-api-production"
+                }
+            ]
+        }
     }
 }

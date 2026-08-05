@@ -1,12 +1,19 @@
 import { liveExternalChannelUrls } from "./channels";
 
+const publicSiteUrl = (
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    "https://www.cabeusexplorer.com"
+).replace(/\/+$/, "");
+
 export const siteConfig = {
     name: "Cabeus Explorer",
     legalName: "Potomac Database Systems",
-    url: "https://potomacdb.com",
+    url: publicSiteUrl,
     description:
-        "Lunar industrial intelligence, market signals, readiness tools, and member-gated context for builders of the lunar economy.",
-    logoPath: "/cabeus-lunar-industrial-hero.png",
+        "Trusted intelligence, proprietary data, and strategic context for leaders shaping the new space age.",
+    logoPath: "/cabeus-moon-editorial-hero.png",
+    publisherEmail: "info@potomacdb.com",
+    publisherLocation: "Washington, DC, United States",
 } as const;
 
 export function absoluteSiteUrl(pathOrUrl: string) {
@@ -28,6 +35,13 @@ export function organizationJsonLd() {
         name: siteConfig.legalName,
         url: siteConfig.url,
         logo: absoluteSiteUrl(siteConfig.logoPath),
+        email: siteConfig.publisherEmail,
+        address: {
+            "@type": "PostalAddress",
+            addressLocality: "Washington",
+            addressRegion: "DC",
+            addressCountry: "US",
+        },
         sameAs: liveExternalChannelUrls,
     };
 }

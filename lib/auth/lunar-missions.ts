@@ -1,12 +1,22 @@
 import { createClient } from "../supabase/server";
+import { getProfileGateContext } from "./profile-completion";
 
 export type LunarMissionAccess = {
-    state: "anonymous" | "explorer" | "scout" | "command" | "staff";
+    state:
+        | "anonymous"
+        | "email_unverified"
+        | "profile_incomplete"
+        | "explorer"
+        | "scout"
+        | "command"
+        | "staff";
     canReadMemberDetails: boolean;
     canReadScoutDetails: boolean;
     canReadCommandDetails: boolean;
     userId: string | null;
     roleId: string | null;
+    loginHref: string;
+    profileHref: string | null;
 };
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
@@ -15,20 +25,20 @@ const rolePriority = [
     "admin",
     "analyst",
     "editor",
-    "command_user",
+    "meridian",
     "scout",
-    "member",
+    "explorer",
 ];
 
 export async function getLunarMissionAccess({
     supabase,
+    nextPath = "/member/missions",
 }: {
     supabase: SupabaseServerClient;
+    nextPath?: string;
 }): Promise<LunarMissionAccess> {
-    const { data, error } = await supabase.auth.getClaims();
-    const userId = data?.claims?.sub;
-
-    if (error || !userId) {
+    const profileGate = await getProfileGateContext({ supabase, nextPath });
+    if (profileGate.state === "signed_out") {
         return {
             state: "anonymous",
             canReadMemberDetails: false,
@@ -36,8 +46,23 @@ export async function getLunarMissionAccess({
             canReadCommandDetails: false,
             userId: null,
             roleId: null,
+            loginHref: profileGate.loginHref,
+            profileHref: null,
         };
     }
+    if (profileGate.state !== "ready") {
+        return {
+            state: profileGate.state,
+            canReadMemberDetails: false,
+            canReadScoutDetails: false,
+            canReadCommandDetails: false,
+            userId: profileGate.userId,
+            roleId: null,
+            loginHref: profileGate.loginHref,
+            profileHref: profileGate.profileHref,
+        };
+    }
+    const userId = profileGate.userId;
 
     const { data: roles, error: roleError } = await supabase
         .from("member_role_assignments")
@@ -63,10 +88,12 @@ export async function getLunarMissionAccess({
             canReadCommandDetails: true,
             userId,
             roleId,
+            loginHref: profileGate.loginHref,
+            profileHref: null,
         };
     }
 
-    if (roleId === "command_user") {
+    if (roleId === "meridian") {
         return {
             state: "command",
             canReadMemberDetails: true,
@@ -74,6 +101,8 @@ export async function getLunarMissionAccess({
             canReadCommandDetails: true,
             userId,
             roleId,
+            loginHref: profileGate.loginHref,
+            profileHref: null,
         };
     }
 
@@ -85,10 +114,12 @@ export async function getLunarMissionAccess({
             canReadCommandDetails: false,
             userId,
             roleId,
+            loginHref: profileGate.loginHref,
+            profileHref: null,
         };
     }
 
-    if (roleId === "member") {
+    if (roleId === "explorer") {
         return {
             state: "explorer",
             canReadMemberDetails: true,
@@ -96,6 +127,8 @@ export async function getLunarMissionAccess({
             canReadCommandDetails: false,
             userId,
             roleId,
+            loginHref: profileGate.loginHref,
+            profileHref: null,
         };
     }
 
@@ -106,5 +139,7 @@ export async function getLunarMissionAccess({
         canReadCommandDetails: false,
         userId,
         roleId: null,
+        loginHref: profileGate.loginHref,
+        profileHref: null,
     };
 }

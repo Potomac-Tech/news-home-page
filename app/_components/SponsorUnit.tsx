@@ -11,14 +11,14 @@ function CreativeFrame({ unit }: { unit: SponsorAdUnit }) {
             <img
                 src={unit.creativeUrl}
                 alt={unit.creativeAltText}
-                className="h-28 w-full rounded object-cover"
+                className="h-28 w-full object-cover"
             />
         );
     }
 
     return (
-        <div className="flex h-28 items-center justify-center rounded border border-potomac-gold/25 bg-black/25 px-4 text-center">
-            <span className="font-serif text-2xl leading-tight text-white">
+        <div className="flex h-28 items-center justify-center border border-cabeus-line bg-cabeus-smoke px-4 text-center">
+            <span className="font-serif text-2xl leading-tight text-cabeus-ink">
                 {unit.sponsorName}
             </span>
         </div>
@@ -28,37 +28,45 @@ function CreativeFrame({ unit }: { unit: SponsorAdUnit }) {
 export function SponsorUnit({ unit, variant = "compact" }: SponsorUnitProps) {
     const content = (
         <>
+            <p className="mb-3 font-mono text-[0.58rem] font-bold uppercase text-cabeus-muted">
+                {unit.isDirectSold ? "Sponsored content" : "Publisher promotion"}
+            </p>
             <div className="flex items-start justify-between gap-4">
                 <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold">
+                    <p className="font-mono text-xs font-bold uppercase text-cabeus-bronze">
                         {unit.label}
                     </p>
-                    <h3 className="mt-3 font-serif text-xl leading-snug text-white">
+                    <h3 className="mt-3 font-serif text-2xl leading-snug text-cabeus-ink">
                         {unit.sponsorName}
                     </h3>
                 </div>
-                <span className="shrink-0 rounded border border-white/15 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-potomac-cream/55">
-                    {unit.isDirectSold ? "Active" : "Reserved"}
+                <span className="shrink-0 border border-cabeus-line px-3 py-1 font-mono text-[0.62rem] font-bold uppercase text-cabeus-muted">
+                    {unit.isDirectSold ? "Active" : "Approved"}
                 </span>
             </div>
             <div className="mt-4">
                 <CreativeFrame unit={unit} />
             </div>
-            <p className="mt-4 text-xs uppercase tracking-[0.12em] text-potomac-cream/45">
+            <p className="mt-4 font-mono text-xs uppercase text-cabeus-muted">
                 {unit.surface}
             </p>
-            <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
+            <p className="mt-3 text-sm leading-6 text-cabeus-muted">
                 {unit.note}
             </p>
-            <p className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-potomac-cream/50">
+            <p className="mt-4 font-mono text-xs font-bold uppercase text-cabeus-muted">
                 {unit.campaignName}
             </p>
+            {unit.sponsorWebsiteUrl && unit.ctaLabel ? (
+                <span className="brand-button brand-button-outline mt-5 inline-flex">
+                    {unit.ctaLabel}
+                </span>
+            ) : null}
         </>
     );
     const className =
         variant === "wide"
-            ? "glass-card rounded p-5 md:grid md:grid-cols-[18rem_1fr] md:items-center md:gap-6"
-            : "glass-card rounded p-5";
+            ? "border border-cabeus-line bg-cabeus-paper p-5 md:grid md:grid-cols-[18rem_1fr] md:items-center md:gap-6"
+            : "border border-cabeus-line bg-cabeus-paper p-5";
 
     if (unit.sponsorWebsiteUrl) {
         return (
@@ -70,7 +78,7 @@ export function SponsorUnit({ unit, variant = "compact" }: SponsorUnitProps) {
                         ? "noopener noreferrer sponsored"
                         : "sponsored"
                 }
-                className={`${className} block transition hover:border-potomac-gold/55 hover:bg-white/[0.04]`}
+                className={`${className} block transition hover:border-cabeus-gold`}
             >
                 {content}
             </a>

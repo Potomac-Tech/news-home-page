@@ -522,7 +522,7 @@ export function companyTierLabel(tier: LunarCompanyTier) {
     }
 
     if (tier === "command") {
-        return "Command";
+        return "Cabeus Council";
     }
 
     return "Public";

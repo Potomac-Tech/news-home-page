@@ -19,7 +19,7 @@ export default function TermsPage() {
             sections={[
                 {
                     title: "Membership And Access",
-                    body: "Explorer access is manually approved, Scout is a paid individual tier, and Command is organization-level access approved through sales and administration. Access can be limited, suspended, or revoked when required for security, payment, policy, or misuse reasons.",
+                    body: "Explorer access is manually approved, Scout is a paid individual tier, and Cabeus Council is organization-level access approved through sales and administration. Access can be limited, suspended, or revoked when required for security, payment, policy, or misuse reasons.",
                 },
                 {
                     title: "Intelligence Content",
@@ -31,11 +31,11 @@ export default function TermsPage() {
                 },
                 {
                     title: "Paid Features",
-                    body: "Scout and Command features can include exports, API access, webhooks, alerts, RFQs, marketplace workflows, and higher limits. Quotas, availability, and delivery methods may change as the product matures.",
+                    body: "Scout and Cabeus Council features can include exports, API access, webhooks, alerts, RFQs, marketplace workflows, and higher limits. Quotas, availability, and delivery methods may change as the product matures.",
                 },
                 {
                     title: "Contact",
-                    body: "Questions about these terms, billing, or enterprise access should go through the support and Command contact paths linked from the trust center.",
+                    body: "Questions about these terms, billing, or enterprise access should go through the support and Cabeus Council contact paths linked from the trust center.",
                 },
             ]}
         />

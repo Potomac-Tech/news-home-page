@@ -102,10 +102,7 @@ async function expectNoFrameworkOverlay(page, consoleMessages) {
         consoleMessages.filter(
             (message) =>
                 !message.includes("Download the React DevTools") &&
-                !message.includes("404") &&
-                !message.includes(
-                    "upgrade-insecure-requests' is ignored when delivered in a report-only policy"
-                )
+                !message.includes("404")
         ),
         []
     );
@@ -130,6 +127,7 @@ before(async () => {
     const serverEnv = {
         ...process.env,
         NEXT_TELEMETRY_DISABLED: "1",
+        POTOMAC_E2E_CONTENT_FALLBACKS: "1",
         NEXT_PUBLIC_SUPABASE_URL: "https://xlpkdoeldtlhearqajat.supabase.co",
         NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "e2e-placeholder-key",
     };
@@ -178,18 +176,21 @@ after(async () => {
     }
 });
 
-test("public article teaser shows citations and member-gated full story", { timeout: 60000 }, async () => {
+test("public article teaser omits article promotions and preserves the member gate", { timeout: 60000 }, async () => {
     const { page, consoleMessages } = await newPage();
 
     try {
-        await page.goto(`${baseUrl}/news/vipc-grant-winner`, {
+        await page.goto(`${baseUrl}/news/clps-2-lunar-logistics-market`, {
             waitUntil: "domcontentloaded",
         });
 
-        assert.match(await page.title(), /VIPC Launch Grant/i);
-        await assertVisibleText(page, "Public summary");
-        await assertVisibleText(page, "Public intro");
-        await assertVisibleText(page, "Source Citations");
+        assert.match(await page.title(), /CLPS 2\.0 points toward/i);
+        assert.equal(await page.getByText(/^Public summary$/i).count(), 0);
+        assert.equal(await page.getByText(/^Public intro$/i).count(), 0);
+        assert.equal(await page.getByText("Source Citations", { exact: true }).count(), 0);
+        assert.equal(await page.getByText("Access Path", { exact: true }).count(), 0);
+        assert.equal(await page.getByText("Publisher promotion", { exact: true }).count(), 0);
+        assert.equal(await page.getByText("Sponsored content", { exact: true }).count(), 0);
         await assertVisibleText(
             page,
             "Full analysis is reserved for approved members."
@@ -199,7 +200,7 @@ test("public article teaser shows citations and member-gated full story", { time
             .getByRole("article")
             .getByRole("link", { name: /^Sign in$/i })
             .click();
-        await page.waitForURL(/\/auth\/login\?next=%2Fnews%2Fvipc-grant-winner/);
+        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fnews%2Fclps-2-lunar-logistics-market/);
         await assertVisibleText(page, "Sign in");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
@@ -211,7 +212,7 @@ test("Explorer article unlock journey redirects signed-out readers to login", { 
     const { page, consoleMessages } = await newPage();
 
     try {
-        await page.goto(`${baseUrl}/news/vipc-grant-winner`, {
+        await page.goto(`${baseUrl}/news/clps-2-lunar-logistics-market`, {
             waitUntil: "domcontentloaded",
         });
 
@@ -219,7 +220,7 @@ test("Explorer article unlock journey redirects signed-out readers to login", { 
             .getByRole("article")
             .getByRole("link", { name: /^Sign in$/i })
             .click();
-        await page.waitForURL(/\/auth\/login\?next=%2Fnews%2Fvipc-grant-winner/);
+        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fnews%2Fclps-2-lunar-logistics-market/);
         await assertVisibleText(page, "Sign in");
         await assertVisibleText(page, "Magic link");
         await assertVisibleText(page, "Password");
@@ -237,9 +238,10 @@ test("Scout dashboard path is browser-reachable and protected", { timeout: 60000
             waitUntil: "domcontentloaded",
         });
 
-        await page.waitForURL(/\/auth\/login\?next=%2Fmember%2Fdeveloper/);
+        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fmember%2Fdeveloper/);
         await assertVisibleText(page, "Sign in");
-        await assertVisibleText(page, "Member access");
+        await assertVisibleText(page, "Sign in to Cabeus Explorer");
+        await assertVisibleText(page, "Use a secure email link or your password");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
         await closePage(page);
@@ -248,21 +250,21 @@ test("Scout dashboard path is browser-reachable and protected", { timeout: 60000
 
 test("chat, forums, and RFQs expose their access gates without blank screens", { timeout: 60000 }, async () => {
     const routes = [
-        ["/member/chat", "Member access"],
-        ["/member/forums", "Member access"],
-        ["/member/rfqs", "Member access"],
+        "/member/chat",
+        "/member/forums",
+        "/member/rfqs",
     ];
 
-    for (const [route, detail] of routes) {
+    for (const route of routes) {
         const { page, consoleMessages } = await newPage();
 
         try {
             await page.goto(`${baseUrl}${route}`, {
                 waitUntil: "domcontentloaded",
             });
-            await page.waitForURL(/\/auth\/login\?next=%2Fmember%2F/);
+            await page.waitForURL(/\/request-access\?tab=signin&next=%2Fmember%2F/);
             await assertVisibleText(page, "Sign in");
-            await assertVisibleText(page, detail);
+            await assertVisibleText(page, "Sign in to Cabeus Explorer");
             await expectNoFrameworkOverlay(page, consoleMessages);
         } finally {
             await closePage(page);
@@ -270,55 +272,81 @@ test("chat, forums, and RFQs expose their access gates without blank screens", {
     }
 });
 
-test("lunar terminal navigation exposes the core intelligence modules", { timeout: 60000 }, async () => {
+test("Intelligence page and module routes remain hidden", { timeout: 60000 }, async () => {
     const { page, consoleMessages } = await newPage();
 
     try {
         await page.goto(`${baseUrl}/terminal`, { waitUntil: "domcontentloaded" });
 
-        await assertVisibleText(page, "Cabeus Explorer lunar industry terminal");
-        await assertVisibleText(page, "Lunar industry terminal");
-        await assertVisibleText(page, "Launches");
-        await assertVisibleText(page, "Spacecraft and landers");
-        await assertVisibleText(page, "Companies");
-        await assertVisibleText(page, "Marketplace");
+        assert.equal(page.url(), `${baseUrl}/terminal`);
+        await assertVisibleText(page, "Page not found");
 
-        await page
-            .getByRole("link", { name: /Spacecraft and landers/i })
-            .first()
-            .click();
-        await page.waitForURL(/\/spacecraft/);
-        await assertVisibleText(page, "Lunar spacecraft");
+        await page.goto(`${baseUrl}/terminal/diligence`, { waitUntil: "domcontentloaded" });
+        assert.equal(page.url(), `${baseUrl}/terminal/diligence`);
+        await assertVisibleText(page, "Page not found");
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
         await closePage(page);
     }
 });
 
-test("Command public and admin flows render the request path and admin protection", { timeout: 60000 }, async () => {
+test("Council and protected Cabeus Council flows preserve the approved access path", { timeout: 60000 }, async () => {
     const { page, consoleMessages } = await newPage();
 
     try {
-        await page.goto(`${baseUrl}/command`, { waitUntil: "domcontentloaded" });
-        await assertVisibleText(page, "Command Access");
-        await assertVisibleText(page, "Request Command access");
+        await page.goto(`${baseUrl}/pricing`, { waitUntil: "domcontentloaded" });
+        await assertVisibleText(page, "We choose to go to the Moon");
+        await assertVisibleText(page, "Apply");
+        assert.equal(await page.getByText("Access comparison", { exact: true }).count(), 0);
+        assert.equal(await page.getByText("Request Cabeus Council", { exact: true }).count(), 0);
 
-        await page.getByLabel("Contact name").fill("Automation Reviewer");
-        await page.getByLabel("Contact email").fill("reviewer@example.com");
-        await page.getByLabel("Organization").fill("Potomac Automation");
-        await page.getByLabel("Title").fill("Program Lead");
-        await page.getByLabel("Estimated seats").fill("12");
-        await page
-            .getByLabel("Mission need")
-            .fill("Validate Command request intake.");
+        await page.goto(`${baseUrl}/command`, { waitUntil: "domcontentloaded" });
+        await page.waitForURL(/\/request-access\?tab=signin&next=%2Fcommand/);
+        await assertVisibleText(page, "Sign in");
 
         await page.goto(`${baseUrl}/admin/command`, {
             waitUntil: "domcontentloaded",
         });
         await page.waitForURL(
-            /\/auth\/login\?next=(%2F|\/)admin(%2F|\/)applications/
+            /\/request-access\?tab=signin&next=(%2F|\/)admin(%2F|\/)applications/
         );
         await assertVisibleText(page, "Sign in");
+        await expectNoFrameworkOverlay(page, consoleMessages);
+    } finally {
+        await closePage(page);
+    }
+});
+
+test("Events opens on hover and never persists after pointer exit", { timeout: 60000 }, async () => {
+    const { page, consoleMessages } = await newPage();
+
+    try {
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await page.goto(baseUrl, { waitUntil: "domcontentloaded" });
+
+        const trigger = page.getByRole("button", { name: "Events", exact: true });
+        const menuItem = page.getByRole("menuitem", {
+            name: "Space Industrialist Week",
+            exact: true,
+        });
+        const homeLink = page.getByRole("link", { name: "Home Base", exact: true });
+
+        await assertVisibleText(page, "Events");
+        assert.equal(await menuItem.isVisible(), false);
+
+        await trigger.hover();
+        assert.equal(await menuItem.isVisible(), true);
+
+        await menuItem.hover();
+        assert.equal(await menuItem.isVisible(), true);
+
+        await homeLink.hover();
+        assert.equal(await menuItem.isVisible(), false);
+
+        await trigger.hover();
+        await trigger.click();
+        await homeLink.hover();
+        assert.equal(await menuItem.isVisible(), false);
         await expectNoFrameworkOverlay(page, consoleMessages);
     } finally {
         await closePage(page);

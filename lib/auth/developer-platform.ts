@@ -1,25 +1,27 @@
 import { createClient } from "../supabase/server";
+import { getProfileGateContext, type ProfileGateState } from "./profile-completion";
 
 export type DeveloperPlatformAccessContext = {
     canUseDeveloperPlatform: boolean;
     canUseWebhooks: boolean;
-    state: "signed_out" | "signed_in_locked" | "authorized";
+    state: Exclude<ProfileGateState, "ready"> | "signed_in_locked" | "authorized";
     userId: string | null;
     roleId: string | null;
     tier: "scout" | "command" | "staff";
     loginHref: string;
+    profileHref: string | null;
 };
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
-const developerRoles = ["admin", "analyst", "editor", "command_user", "scout"];
+const developerRoles = ["admin", "analyst", "editor", "meridian", "scout"];
 
 function tierFromRole(roleId: string | null): DeveloperPlatformAccessContext["tier"] {
     if (roleId === "admin" || roleId === "analyst" || roleId === "editor") {
         return "staff";
     }
 
-    if (roleId === "command_user") {
+    if (roleId === "meridian") {
         return "command";
     }
 
@@ -33,21 +35,20 @@ export async function getDeveloperPlatformAccessContext({
     supabase: SupabaseServerClient;
     nextPath: string;
 }): Promise<DeveloperPlatformAccessContext> {
-    const loginHref = `/auth/login?next=${encodeURIComponent(nextPath)}`;
-    const { data, error } = await supabase.auth.getClaims();
-    const userId = data?.claims?.sub;
-
-    if (error || !userId) {
+    const profileGate = await getProfileGateContext({ supabase, nextPath });
+    if (profileGate.state !== "ready") {
         return {
             canUseDeveloperPlatform: false,
             canUseWebhooks: false,
-            state: "signed_out",
-            userId: null,
+            state: profileGate.state,
+            userId: profileGate.userId,
             roleId: null,
             tier: "scout",
-            loginHref,
+            loginHref: profileGate.loginHref,
+            profileHref: profileGate.profileHref,
         };
     }
+    const userId = profileGate.userId;
 
     const { data: rolesData, error: roleError } = await supabase
         .from("member_role_assignments")
@@ -73,7 +74,8 @@ export async function getDeveloperPlatformAccessContext({
             userId,
             roleId: null,
             tier: "scout",
-            loginHref,
+            loginHref: profileGate.loginHref,
+            profileHref: null,
         };
     }
 
@@ -86,6 +88,7 @@ export async function getDeveloperPlatformAccessContext({
         userId,
         roleId,
         tier,
-        loginHref,
+        loginHref: profileGate.loginHref,
+        profileHref: null,
     };
 }

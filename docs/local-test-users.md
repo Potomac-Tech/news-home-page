@@ -11,10 +11,10 @@ credentials in production.
 | --- | --- | --- | --- |
 | Explorer | `explorer.test@potomac.local` | `PotomacTest123!` | `member` |
 | Scout | `scout.test@potomac.local` | `PotomacTest123!` | `member`, `scout` |
-| Command | `command.test@potomac.local` | `PotomacTest123!` | `member`, `command_user`, `org_admin` scoped to `potomac-command-test` |
+| Cabeus Council | `command.test@potomac.local` | `PotomacTest123!` | `member`, `command_user`, `org_admin` scoped to `potomac-command-test` |
 | Staff | `staff.test@potomac.local` | `PotomacTest123!` | `member`, `editor`, `analyst`, `admin` |
 
-The seed also creates `Potomac Command Test Organization`, an active Command
+The seed also creates `Potomac Cabeus Council Test Organization`, an active Cabeus Council
 organization entitlement, a Scout user entitlement, approved member profiles,
 and audit events.
 

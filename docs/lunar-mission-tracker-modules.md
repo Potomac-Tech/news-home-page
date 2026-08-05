@@ -15,7 +15,7 @@ terminal.
   mission objects, payloads/instruments, citations, source freshness, quality,
   and tier labels.
 - `/member/missions` is the signed-in member tracker entry point. It uses the
-  normalized member roles to unlock Explorer, Scout, Command, and staff detail
+  normalized member roles to unlock Explorer, Scout, Cabeus Council, and staff detail
   levels when the Potomac Supabase environment is configured.
 
 ## Data Access
@@ -41,7 +41,7 @@ project URL through the shared config guard.
   summaries, and locked-detail prompts.
 - Explorer members can read member-level object and status context.
 - Scout members can read Scout-level payload and object details.
-- Command users and staff are treated as the highest read tier for tracker
+- Cabeus Council users and staff are treated as the highest read tier for tracker
   detail pages.
 
 When Supabase credentials are unavailable, public tracker routes render local
@@ -74,4 +74,4 @@ configuration file.
 
 Live Supabase tracker reads and role-gated detail unlocking were not exercised
 because no Potomac Supabase publishable key, applied reachable schema, or seeded
-Explorer/Scout/Command/staff test users were available in this session.
+Explorer/Scout/Cabeus Council/staff test users were available in this session.

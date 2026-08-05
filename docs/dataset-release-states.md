@@ -5,7 +5,7 @@ catalog.
 
 ## Release States
 
-- `command_exclusive`: Command-only access is represented for at least one year
+- `command_exclusive`: Cabeus Council-only access is represented for at least one year
   after the exclusive access start timestamp.
 - `scout_delayed`: A public demo or catalog teaser can be visible before a
   later Scout release date.

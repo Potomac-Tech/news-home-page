@@ -16,7 +16,7 @@ project ref `xlpkdoeldtlhearqajat`.
   rationale, tier gates, and publication state.
 - `public.data_market_source_documents`: reviewed source records with citations,
   publisher, URL, license notes, confidence labels, retrieval dates, and
-  extraction-run linkage, plus Scout/Command tier visibility.
+  extraction-run linkage, plus Scout/Cabeus Council tier visibility.
 - `public.data_market_request_sources` and
   `public.data_market_offer_sources`: citation/evidence joins that connect each
   request or offer to one or more source documents with relationship type,
@@ -32,8 +32,8 @@ project ref `xlpkdoeldtlhearqajat`.
 All tables have RLS enabled. The migration explicitly revokes anonymous access
 and grants authenticated/service access subject to RLS.
 
-Scout and Command users can read approved, published request/offer listings and
-approved source evidence at their tier. Command-only listings require the
+Scout and Cabeus Council users can read approved, published request/offer listings and
+approved source evidence at their tier. Cabeus Council-only listings require the
 `command_user` role. Editors, analysts, and admins can read operational records;
 analysts and admins can manage extraction, source, listing, citation, and audit
 records. Authorization uses normalized `member_role_assignments` through

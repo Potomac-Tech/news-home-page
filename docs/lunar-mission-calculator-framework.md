@@ -36,8 +36,8 @@ Calculator definitions use `visibility_tier`:
 
 - `public` calculators can be discovered publicly after publication.
 - `explorer` calculators require approved Explorer membership or higher.
-- `scout` calculators require Scout, Command, or staff access.
-- `command` calculators require Command or staff access.
+- `scout` calculators require Scout, Cabeus Council, or staff access.
+- `command` calculators require Cabeus Council or staff access.
 
 Saved runs use `minimum_saved_run_tier`, which defaults to Scout. Members can
 see their own saved runs, organization members can see organization-scoped
@@ -81,4 +81,4 @@ saved-run, grant, RLS, and policy structures.
 
 Live migration application and RLS behavior still need the broader historical
 migrations applied to the canonical Supabase project, real runtime keys, and
-seeded Explorer, Scout, Command, organization, and staff test users.
+seeded Explorer, Scout, Cabeus Council, organization, and staff test users.

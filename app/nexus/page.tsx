@@ -4,7 +4,7 @@ import { RouteScaffold } from "../_components/RouteScaffold";
 export const metadata: Metadata = {
     title: "Nexus",
     description:
-        "Cabeus Explorer Nexus route for future member dashboard access status and deep links.",
+        "Member access to the Cabeus Explorer Nexus lunar mapping and analysis tool.",
     alternates: {
         canonical: "/nexus",
     },
@@ -14,10 +14,10 @@ export default function NexusPage() {
     return (
         <RouteScaffold
             title="Cabeus Explorer Nexus"
-            description="The Nexus route is ready for member dashboard access status and a safe deep-link path to the existing Nexus experience."
-            status="Route preserved"
-            primaryHref="/news"
-            primaryLabel="Latest news"
+            description="Approved Explorer, Scout, and Cabeus Council members can open Nexus with their existing Cabeus Explorer identity."
+            status="Member tool"
+            primaryHref="/api/member/nexus/handoff"
+            primaryLabel="Open Nexus"
         />
     );
 }

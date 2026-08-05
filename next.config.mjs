@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
+    experimental: {
+        serverActions: {
+            // Leave room for multipart metadata around the 50 MB per-file limit.
+            bodySizeLimit: "100mb",
+        },
+    },
     async headers() {
         const securityHeaders = [
             {
@@ -13,7 +19,7 @@ const nextConfig = {
             },
             {
                 key: "X-Frame-Options",
-                value: "DENY",
+                value: "SAMEORIGIN",
             },
             {
                 key: "Referrer-Policy",
@@ -32,19 +38,20 @@ const nextConfig = {
                 value: "on",
             },
             {
-                key: "Content-Security-Policy-Report-Only",
+                key: "Content-Security-Policy",
                 value: [
                     "default-src 'self'",
                     "base-uri 'self'",
-                    "frame-ancestors 'none'",
+                    "frame-ancestors 'self'",
                     "object-src 'none'",
                     "img-src 'self' data: https:",
-                    "font-src 'self' data:",
-                    "connect-src 'self' https://*.supabase.co https://api.stripe.com",
-                    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",
-                    "style-src 'self' 'unsafe-inline'",
+                    "media-src 'self' https://*.supabase.co",
+                    "frame-src 'self' https://www.youtube-nocookie.com",
+                    "font-src 'self' data: https://fonts.gstatic.com",
+                    "connect-src 'self' https://*.supabase.co https://api.stripe.com https://cloudflareinsights.com",
+                    "script-src 'self' 'unsafe-inline' https://js.stripe.com https://static.cloudflareinsights.com",
+                    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
                     "form-action 'self'",
-                    "upgrade-insecure-requests",
                 ].join("; "),
             },
         ];
@@ -53,6 +60,15 @@ const nextConfig = {
             {
                 source: "/(.*)",
                 headers: securityHeaders,
+            },
+            {
+                source: "/api/member/nexus/handoff",
+                headers: [
+                    {
+                        key: "Referrer-Policy",
+                        value: "no-referrer",
+                    },
+                ],
             },
         ];
     },

@@ -14,11 +14,11 @@ supabase/migrations/20260623121852_member_access_schema.sql
 | --- | --- |
 | `member_profiles` | One profile per Supabase Auth user, including pending/approved/rejected/suspended status. |
 | `membership_applications` | Free Member applications with pending, approved, rejected, and withdrawn review states. |
-| `organizations` | Organization records for Command prospects and active Command customers. |
+| `organizations` | Organization records for Cabeus Council prospects and active Cabeus Council customers. |
 | `organization_members` | Organization seats, members, and org-admin assignments. |
-| `app_roles` | Normalized role catalog for pending applicants, Members, Scout users, Command users, org admins, editors, analysts, and admins. |
+| `app_roles` | Normalized role catalog for pending applicants, Members, Scout users, Cabeus Council users, org admins, editors, analysts, and admins. |
 | `member_role_assignments` | User role grants, optionally scoped to an organization. |
-| `entitlements` | User-level Scout and organization-level Command entitlements with status, timing, Stripe references, and audit metadata. |
+| `entitlements` | User-level Scout and organization-level Cabeus Council entitlements with status, timing, Stripe references, and audit metadata. |
 | `access_audit_events` | Access and review history for membership, role, organization, and entitlement changes. |
 
 ## Access Model Coverage
@@ -26,13 +26,13 @@ supabase/migrations/20260623121852_member_access_schema.sql
 - Pending applicants: `membership_applications.status = 'pending'` plus the `pending_applicant` role.
 - Approved Members: `member_profiles.status = 'approved'` plus the `member` role.
 - Scout users: user-scoped `entitlements.tier = 'scout'` plus the `scout` role.
-- Command organizations: organization-scoped `entitlements.tier = 'command'` and active organization records.
+- Cabeus Council organizations: organization-scoped `entitlements.tier = 'command'` and active organization records.
 - Organization admins: `organization_members.role = 'org_admin'` plus the `org_admin` role.
 - Staff roles: `editor`, `analyst`, and `admin` role records are seeded for later policy work.
 
 See `docs/tier-packaging-and-gates.md` for the canonical product packaging
 model: Explorer maps to the existing approved `member` role, Scout is the
-self-serve `$25,000/user/year` paid tier, and Command is the manual
+self-serve `$25,000/user/year` paid tier, and Cabeus Council is the manual
 organization-level enterprise tier. The user-facing noun "member" remains valid
 for approved people across all tiers.
 

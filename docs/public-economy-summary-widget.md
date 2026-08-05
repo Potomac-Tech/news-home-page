@@ -17,7 +17,7 @@ The homepage `Markets And Models` section now includes a public widget with:
 - Calls to action for methodology access and related briefs.
 
 The widget does not expose the analyst-only assumption or source tables. Those
-remain in `/admin/economy` for staff and in future Scout/Command dashboards.
+remain in `/admin/economy` for staff and in future Scout/Cabeus Council dashboards.
 
 ## Data Source
 

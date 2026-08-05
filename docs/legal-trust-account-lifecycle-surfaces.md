@@ -18,12 +18,12 @@ intelligence platform.
 ## Account Lifecycle
 
 `/account/delete` provides a deletion request flow with a mailto support action
-and a checklist covering account email, Command organization context, Scout
+and a checklist covering account email, Cabeus Council organization context, Scout
 billing cancellation, export review, and secret-safe support behavior.
 
 The account center now links cookie preferences, account deletion, and data
 safety alongside sign-in, member workspace, organization, pricing, application,
-and Command paths.
+and Cabeus Council paths.
 
 ## Consent Controls
 

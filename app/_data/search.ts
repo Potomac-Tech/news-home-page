@@ -1,7 +1,17 @@
 import { createClient } from "../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+import { publicTierName, tierConfig } from "./tiers";
+import { isHiddenLaunchPath } from "./launchVisibility";
+import { allowLocalContentFallbacks } from "./contentFallbacks";
 
-export type SearchTier = "public" | "explorer" | "scout" | "command" | "staff";
+function isHiddenPublicPath(path: string) {
+    return isHiddenLaunchPath(path)
+        || path === "/events"
+        || path === "/terminal"
+        || path.startsWith("/terminal/");
+}
+
+export type SearchTier = "public" | "explorer" | "scout" | "meridian" | "staff";
 
 export type SearchResultKind =
     | "article"
@@ -54,53 +64,48 @@ export const searchScopes = [
     { value: "all", label: "All" },
     { value: "article", label: "Articles" },
     { value: "event", label: "Events" },
-    { value: "company", label: "Companies" },
-    { value: "lunar_mission", label: "Missions" },
     { value: "dataset", label: "Datasets" },
-    { value: "data_request", label: "Requests" },
-    { value: "data_offer", label: "Offers" },
     { value: "job", label: "Jobs" },
-    { value: "procurement", label: "Procurement" },
-    { value: "regulatory_record", label: "Regulatory" },
     { value: "methodology_source", label: "Methodology" },
     { value: "dashboard_module", label: "Modules" },
     { value: "calculator", label: "Calculators" },
 ] as const;
 
-const fallbackSearchResults: SearchResult[] = [
+const allFallbackSearchResults: SearchResult[] = [
     {
-        id: "terminal",
-        kind: "dashboard_module",
-        title: "Lunar Intelligence Terminal",
-        eyebrow: "Dashboard module",
+        id: "space-investment-forum-article",
+        kind: "article",
+        title: "Space Investment Forum convenes leaders in capital, industry, and national security",
+        eyebrow: "Upcoming event",
         summary:
-            "Command-center overview for lunar news, missions, companies, procurements, regulatory watch, datasets, calculators, and alerts.",
-        snippet: "Jump to the main lunar industry terminal.",
-        href: "/terminal",
+            "Preview of the July 21 invitation-only forum hosted by Potomac Database Systems and Meet the Future in Washington.",
+        snippet:
+            "The agenda spans Artemis, cislunar infrastructure, defense, workforce, capital allocation, and data intelligence.",
+        href: "/news/potomac-space-investment-forum-2026",
         tier: "public",
         confidenceLabel: "high",
-        freshnessAt: "2026-07-02T00:02:32.000Z",
+        freshnessAt: "2026-07-19T12:00:00.000Z",
         isPinned: true,
-        sourceCount: 0,
-        keywords: ["terminal", "dashboard", "lunar intelligence"],
+        sourceCount: 1,
+        keywords: ["Space Investment Forum", "Potomac", "MTF", "Jim Bridenstine", "Damon Feltman", "Cosmos Club"],
         isFallback: true,
     },
     {
-        id: "vipc-article",
+        id: "lunar-delivery-awards-article",
         kind: "article",
-        title: "Cabeus Explorer selected as VIPC Launch Grant winner",
+        title: "NASA commits nearly $600 million to four more lunar deliveries",
         eyebrow: "News",
         summary:
-            "Public brief on the VIPC milestone and Cabeus Explorer's lunar data infrastructure roadmap.",
+            "Market analysis of NASA's new awards to Astrobotic, Firefly Aerospace, and Intuitive Machines.",
         snippet:
-            "Members receive deeper context on data acquisition, delivery, and gated intelligence coverage.",
-        href: "/news/vipc-grant-winner",
+            "Members receive deeper context on revenue exposure, follow-on procurements, and strategic lunar infrastructure demand.",
+        href: "/news/nasa-lunar-delivery-awards-2028",
         tier: "public",
-        confidenceLabel: "medium",
-        freshnessAt: "2026-05-18T12:00:00.000Z",
+        confidenceLabel: "high",
+        freshnessAt: "2026-06-30T12:00:00.000Z",
         isPinned: true,
-        sourceCount: 3,
-        keywords: ["news", "VIPC", "grant", "source"],
+        sourceCount: 1,
+        keywords: ["news", "NASA", "CLPS", "Astrobotic", "Firefly", "Intuitive Machines"],
         isFallback: true,
     },
     {
@@ -121,20 +126,38 @@ const fallbackSearchResults: SearchResult[] = [
         isFallback: true,
     },
     {
+        id: "space-industrialist-week-2026",
+        kind: "event",
+        title: "Space Industrialist Week",
+        eyebrow: "September 2026 | Save the date",
+        summary:
+            "A new gathering for leading figures across the space and lunar industries, featuring the inaugural Cabeus Games.",
+        snippet:
+            "Dates, venue, participants, and attendance information will be announced as details are confirmed.",
+        href: "/space-industrialist-week",
+        tier: "public",
+        confidenceLabel: "medium",
+        freshnessAt: "2026-07-19T16:00:00.000Z",
+        isPinned: true,
+        sourceCount: 1,
+        keywords: ["Space Industrialist Week", "Cabeus Games", "September", "lunar industry", "space industry"],
+        isFallback: true,
+    },
+    {
         id: "missions",
         kind: "lunar_mission",
-        title: "Launch and Spacecraft Tracker",
-        eyebrow: "Missions",
+        title: "Launches & Missions",
+        eyebrow: "Launches & Missions",
         summary:
             "Lunar launches, spacecraft, landers, payloads, and satellites with status and source freshness.",
         snippet: "Includes Artemis, CLPS, lunar spacecraft, landers, satellites, and payloads.",
-        href: "/launches",
-        tier: "explorer",
+        href: "/tracker/launches",
+        tier: "public",
         confidenceLabel: "medium",
         freshnessAt: "2026-06-30T12:00:00.000Z",
         isPinned: true,
         sourceCount: 1,
-        keywords: ["launches", "spacecraft", "landers", "satellites", "CLPS"],
+        keywords: ["launches", "missions", "spacecraft", "landers", "satellites", "CLPS"],
         isFallback: true,
     },
     {
@@ -152,6 +175,22 @@ const fallbackSearchResults: SearchResult[] = [
         isPinned: false,
         sourceCount: 3,
         keywords: ["companies", "profiles", "CLPS", "comparison"],
+        isFallback: true,
+    },
+    {
+        id: "contract-awards",
+        kind: "procurement",
+        title: "New Contract Awards",
+        eyebrow: "Contract Awards",
+        summary: "Reviewed space and lunar contract awards with customers, vendors, dates, confidence, and citations.",
+        snippet: "Directly relevant contract awards with tier-controlled value evidence.",
+        href: "/tracker/contracts",
+        tier: "public",
+        confidenceLabel: "high",
+        freshnessAt: "2026-07-13T08:10:06.779Z",
+        isPinned: true,
+        sourceCount: 3,
+        keywords: ["contracts", "awards", "procurement", "lunar", "space"],
         isFallback: true,
     },
     {
@@ -212,7 +251,7 @@ const fallbackSearchResults: SearchResult[] = [
         eyebrow: "Scout workspace",
         summary:
             "Paid data-market records for lunar data requests, data offers, evidence, and extraction-backed intelligence.",
-        snippet: "Scout and Command users can browse source-backed marketplace records.",
+        snippet: `Scout and ${tierConfig.enterprise.publicName} users can browse source-backed marketplace records.`,
         href: "/member/marketplace",
         tier: "scout",
         confidenceLabel: "experimental",
@@ -276,7 +315,11 @@ const fallbackSearchResults: SearchResult[] = [
     },
 ];
 
-export const fallbackCommandEntries: CommandPaletteEntry[] = [
+const fallbackSearchResults = allFallbackSearchResults.filter(
+    (result) => !isHiddenPublicPath(result.href)
+);
+
+const allFallbackCommandEntries: CommandPaletteEntry[] = [
     {
         id: "open-search",
         label: "Open search",
@@ -343,11 +386,15 @@ export const fallbackCommandEntries: CommandPaletteEntry[] = [
     },
 ];
 
+export const fallbackCommandEntries = allFallbackCommandEntries.filter(
+    (entry) => !isHiddenPublicPath(entry.href)
+);
+
 const tierRank: Record<SearchTier, number> = {
     public: 0,
     explorer: 1,
     scout: 2,
-    command: 3,
+    meridian: 3,
     staff: 4,
 };
 
@@ -355,7 +402,7 @@ export function tierLabel(tier: SearchTier) {
     if (tier === "public") return "Public";
     if (tier === "explorer") return "Explorer+";
     if (tier === "scout") return "Scout+";
-    if (tier === "command") return "Command";
+    if (tier === "meridian") return publicTierName(tier);
     return "Staff";
 }
 
@@ -403,7 +450,7 @@ function mapTier(value: string | null | undefined): SearchTier {
         value === "public" ||
         value === "explorer" ||
         value === "scout" ||
-        value === "command" ||
+        value === "meridian" ||
         value === "staff"
     ) {
         return value;
@@ -415,28 +462,41 @@ function mapTier(value: string | null | undefined): SearchTier {
 export async function loadSearchResults({
     supabase,
     limit = 80,
+    publicOnly = false,
 }: {
     supabase?: SupabaseServerClient;
     limit?: number;
+    publicOnly?: boolean;
 } = {}): Promise<SearchResult[]> {
     if (!hasPotomacSupabasePublicConfig() || !supabase) {
-        return fallbackSearchResults;
+        if (!allowLocalContentFallbacks()) {
+            return [];
+        }
+        return publicOnly
+            ? fallbackSearchResults.filter((result) => result.tier === "public")
+            : fallbackSearchResults;
     }
 
     try {
-        const { data, error } = await supabase
+        let query = supabase
             .from("intelligence_search_records")
             .select(
                 "id,source_kind,title,eyebrow,summary,snippet,route_path,visibility_tier,confidence_label,freshness_at,is_admin_pinned,source_count,keywords,metadata"
             )
             .eq("publication_status", "published")
-            .eq("is_search_enabled", true)
+            .eq("is_search_enabled", true);
+
+        if (publicOnly) {
+            query = query.eq("visibility_tier", "public");
+        }
+
+        const { data, error } = await query
             .order("is_admin_pinned", { ascending: false })
             .order("result_rank", { ascending: true })
             .limit(limit);
 
         if (error || !data?.length) {
-            return fallbackSearchResults;
+            return [];
         }
 
         return (data as Array<{
@@ -454,7 +514,7 @@ export async function loadSearchResults({
             source_count: number | null;
             keywords: string[] | null;
             metadata: Record<string, unknown> | null;
-        }>).map((row) => ({
+        }>).filter((row) => !isHiddenPublicPath(row.route_path)).map((row) => ({
             id: row.id,
             kind: row.source_kind,
             title: row.title,
@@ -472,32 +532,45 @@ export async function loadSearchResults({
             isFallback: false,
         }));
     } catch {
-        return fallbackSearchResults;
+        return [];
     }
 }
 
 export async function loadCommandPaletteEntries({
     supabase,
+    publicOnly = false,
 }: {
     supabase?: SupabaseServerClient;
+    publicOnly?: boolean;
 } = {}): Promise<CommandPaletteEntry[]> {
     if (!hasPotomacSupabasePublicConfig() || !supabase) {
-        return fallbackCommandEntries;
+        if (!allowLocalContentFallbacks()) {
+            return [];
+        }
+        return publicOnly
+            ? fallbackCommandEntries.filter((entry) => entry.tier === "public")
+            : fallbackCommandEntries;
     }
 
     try {
-        const { data, error } = await supabase
+        let query = supabase
             .from("intelligence_command_entries")
             .select(
                 "id,label,description,route_path,keyboard_shortcut,section_label,keywords,visibility_tier,is_admin_pinned"
             )
-            .eq("publication_status", "published")
+            .eq("publication_status", "published");
+
+        if (publicOnly) {
+            query = query.eq("visibility_tier", "public");
+        }
+
+        const { data, error } = await query
             .order("is_admin_pinned", { ascending: false })
             .order("admin_pin_rank", { ascending: true, nullsFirst: false })
             .limit(40);
 
         if (error || !data?.length) {
-            return fallbackCommandEntries;
+            return [];
         }
 
         return (data as Array<{
@@ -510,7 +583,7 @@ export async function loadCommandPaletteEntries({
             keywords: string[] | null;
             visibility_tier: string | null;
             is_admin_pinned: boolean;
-        }>).map((row) => ({
+        }>).filter((row) => !isHiddenPublicPath(row.route_path)).map((row) => ({
             id: row.id,
             label: row.label,
             description: row.description ?? "",
@@ -522,7 +595,7 @@ export async function loadCommandPaletteEntries({
             keywords: row.keywords ?? [],
         }));
     } catch {
-        return fallbackCommandEntries;
+        return [];
     }
 }
 

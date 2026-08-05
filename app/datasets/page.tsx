@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
     absoluteSiteUrl,
     jsonLdScript,
@@ -11,6 +10,7 @@ import {
     type DatasetCatalogSource,
     loadDatasetCatalog,
 } from "../_data/datasets";
+import { publicTierName } from "../_data/tiers";
 
 export const dynamic = "force-dynamic";
 
@@ -54,7 +54,7 @@ function tierLabel(value: string | null) {
         return "Public";
     }
 
-    return value === "command" ? "Command" : statusLabel(value);
+    return publicTierName(value);
 }
 
 function formatDate(value: string | null | undefined) {
@@ -91,7 +91,7 @@ function kindLabel(value: string) {
 
 function releaseStateLabel(value: string) {
     if (value === "command_exclusive") {
-        return "Command-exclusive";
+        return "Cabeus Council-exclusive";
     }
 
     if (value === "scout_delayed") {
@@ -508,12 +508,6 @@ export default async function DatasetsPage() {
                             requirements. Raw paid datasets remain behind
                             member workflows.
                         </p>
-                        <Link
-                            href="/member/marketplace"
-                            className="mt-5 inline-flex rounded border border-potomac-gold/50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
-                        >
-                            Marketplace
-                        </Link>
                     </aside>
                 </div>
 

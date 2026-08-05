@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { requireEditorialStaff } from "../../../lib/auth/editorial";
 import {
-    createArticleDraft,
+    createArticleDraft as createArticleDraftWithResult,
     publishArticle,
-    updateArticleDraft,
+    updateArticleDraft as updateArticleDraftWithResult,
 } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +12,16 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
     title: "Editorial CMS",
 };
+
+async function createArticleDraft(formData: FormData) {
+    "use server";
+    await createArticleDraftWithResult(formData);
+}
+
+async function updateArticleDraft(formData: FormData) {
+    "use server";
+    await updateArticleDraftWithResult(formData);
+}
 
 type Article = {
     id: string;
@@ -50,7 +61,7 @@ function statusLabel(value: string) {
 }
 
 function AccessTierSelect({
-    defaultValue = "member",
+    defaultValue = "explorer",
 }: {
     defaultValue?: string;
 }) {
@@ -60,9 +71,9 @@ function AccessTierSelect({
             defaultValue={defaultValue}
             className="w-full rounded border border-white/15 bg-black/30 px-4 py-3 text-sm text-white outline-none transition focus:border-potomac-gold"
         >
-            <option value="member">Member</option>
+            <option value="explorer">Explorer</option>
             <option value="scout">Scout</option>
-            <option value="command">Command</option>
+            <option value="meridian">Cabeus Council</option>
         </select>
     );
 }
@@ -128,6 +139,12 @@ export default async function AdminEditorialPage() {
                         Create drafts, preview public and gated story content,
                         update article metadata, and publish when ready.
                     </p>
+                    <Link
+                        href="/studio"
+                        className="mt-6 inline-flex bg-potomac-gold px-5 py-3 font-mono text-[0.68rem] font-bold uppercase text-potomac-primary"
+                    >
+                        Open newsroom studio
+                    </Link>
                 </div>
 
                 <form action={createArticleDraft} className="glass-card mt-12 rounded p-6">

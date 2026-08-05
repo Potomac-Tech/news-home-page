@@ -13,7 +13,7 @@ summaries.
 
 ## Access Model
 
-- Approved Member, Scout, and Command users can read published summit records.
+- Approved Member, Scout, and Cabeus Council users can read published summit records.
 - Editors, analysts, and admins can read summit records for staff purposes.
 - Editors and admins can create, edit, publish, archive, and update summit
   records.

@@ -1,13 +1,15 @@
 import { createClient } from "../supabase/server";
+import { getProfileGateContext, type ProfileGateState } from "./profile-completion";
 
 export type MemberAlertsAccessContext = {
     canReadAlerts: boolean;
     canManageAlertRules: boolean;
-    state: "signed_out" | "authorized";
+    state: Exclude<ProfileGateState, "ready"> | "authorized";
     userId: string | null;
     roleId: string | null;
     tier: "explorer" | "scout" | "command" | "staff";
     loginHref: string;
+    profileHref: string | null;
 };
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
@@ -16,9 +18,9 @@ const alertRoles = [
     "admin",
     "analyst",
     "editor",
-    "command_user",
+    "meridian",
     "scout",
-    "member",
+    "explorer",
 ];
 
 function tierFromRole(roleId: string | null): MemberAlertsAccessContext["tier"] {
@@ -26,7 +28,7 @@ function tierFromRole(roleId: string | null): MemberAlertsAccessContext["tier"] 
         return "staff";
     }
 
-    if (roleId === "command_user") return "command";
+    if (roleId === "meridian") return "command";
     if (roleId === "scout") return "scout";
 
     return "explorer";
@@ -39,21 +41,20 @@ export async function getMemberAlertsAccessContext({
     supabase: SupabaseServerClient;
     nextPath: string;
 }): Promise<MemberAlertsAccessContext> {
-    const loginHref = `/auth/login?next=${encodeURIComponent(nextPath)}`;
-    const { data, error } = await supabase.auth.getClaims();
-    const userId = data?.claims?.sub;
-
-    if (error || !userId) {
+    const profileGate = await getProfileGateContext({ supabase, nextPath });
+    if (profileGate.state !== "ready") {
         return {
             canReadAlerts: false,
             canManageAlertRules: false,
-            state: "signed_out",
-            userId: null,
+            state: profileGate.state,
+            userId: profileGate.userId,
             roleId: null,
             tier: "explorer",
-            loginHref,
+            loginHref: profileGate.loginHref,
+            profileHref: profileGate.profileHref,
         };
     }
+    const userId = profileGate.userId;
 
     const { data: rolesData, error: roleError } = await supabase
         .from("member_role_assignments")
@@ -69,7 +70,7 @@ export async function getMemberAlertsAccessContext({
     const roles = ((rolesData ?? []) as Array<{ role_id: string }>).map(
         (role) => role.role_id
     );
-    const roleId = alertRoles.find((role) => roles.includes(role)) ?? "member";
+    const roleId = alertRoles.find((role) => roles.includes(role)) ?? "explorer";
     const tier = tierFromRole(roleId);
 
     return {
@@ -80,7 +81,8 @@ export async function getMemberAlertsAccessContext({
         userId,
         roleId,
         tier,
-        loginHref,
+        loginHref: profileGate.loginHref,
+        profileHref: null,
     };
 }
 

@@ -8,17 +8,17 @@ intelligence.
 `supabase/migrations/20260702101257_alerts_center_notifications_freshness.sql`
 adds:
 
-- `member_alert_tier_limits` for Explorer, Scout, Command, and staff rule and
+- `member_alert_tier_limits` for Explorer, Scout, Cabeus Council, and staff rule and
   delivery limits.
 - `member_alert_rules` for watched-object, saved-search, stale-freshness,
-  platform, and Command intelligence alert rules.
+  platform, and Cabeus Council intelligence alert rules.
 - `member_alert_feed_items` for unread badges, feed notices, source freshness,
   stale timestamps, and routed alert summaries.
 - `member_alert_delivery_events` for in-app and email delivery audit state,
   attempts, scheduled/sent timestamps, provider IDs, and failure notes.
 
 All public-schema tables have RLS enabled. Tier limits are public-readable.
-Alert rules are Scout, Command, and staff managed. Feed and delivery rows are
+Alert rules are Scout, Cabeus Council, and staff managed. Feed and delivery rows are
 owner-scoped, with organization-admin and staff review support through private
 authorization helpers.
 
@@ -27,8 +27,8 @@ authorization helpers.
 `/alerts` now renders a member alerts center with:
 
 - unread, urgent, stale, and rule-count badges;
-- tier-aware limit cards for Explorer, Scout, and Command;
-- Scout/Command alert-rule creation and archive controls;
+- tier-aware limit cards for Explorer, Scout, and Cabeus Council;
+- Scout/Cabeus Council alert-rule creation and archive controls;
 - Explorer read-only alert feed behavior;
 - stale-data labels based on `stale_at`;
 - delivery audit rows for in-app and email hooks;

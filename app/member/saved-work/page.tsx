@@ -35,7 +35,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
     title: "Saved Work",
     description:
-        "Scout and Command watchlists, saved searches, reading list, notifications, and terminal defaults.",
+        "Scout and Cabeus Council watchlists, saved searches, reading list, notifications, and terminal defaults.",
 };
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -100,7 +100,7 @@ function ConfigGate() {
                         Watchlists, saved searches, reading-list items, and
                         preference writes use paid-member Supabase tables. Set
                         the Cabeus Explorer public environment variables and sign in
-                        with Scout or Command access.
+                        with Scout or Cabeus Council access.
                     </p>
                     <Link
                         href="/pricing"
@@ -123,7 +123,7 @@ function LockedGate() {
                         Saved work
                     </p>
                     <h1 className="mt-4 font-serif text-4xl leading-tight text-white">
-                        Scout or Command access is required.
+                        Scout or Cabeus Council access is required.
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Explorer members can read public and eligible member
@@ -573,7 +573,7 @@ function ReadingListPanel({ items }: { items: MemberReadingListItem[] }) {
                             name="title"
                             required
                             maxLength={180}
-                            placeholder="VIPC grant brief"
+                            placeholder="Artemis market brief"
                             className={inputClassName}
                         />
                     </Field>
@@ -582,7 +582,7 @@ function ReadingListPanel({ items }: { items: MemberReadingListItem[] }) {
                             name="object_slug"
                             required
                             maxLength={120}
-                            placeholder="vipc-grant-winner"
+                            placeholder="nasa-lunar-delivery-awards-2028"
                             className={inputClassName}
                         />
                     </Field>
@@ -590,7 +590,7 @@ function ReadingListPanel({ items }: { items: MemberReadingListItem[] }) {
                         <input
                             name="route_path"
                             required
-                            placeholder="/news/vipc-grant-winner"
+                            placeholder="/news/nasa-lunar-delivery-awards-2028"
                             className={inputClassName}
                         />
                     </Field>
@@ -701,7 +701,11 @@ function PreferencesPanel({
 
     return (
         <section className="grid gap-5 lg:grid-cols-2">
-            <form action={saveNotificationPreference} className="glass-card rounded p-5">
+            <form
+                id="notification-preferences"
+                action={saveNotificationPreference}
+                className="glass-card scroll-mt-24 rounded p-5"
+            >
                 <h2 className="font-serif text-2xl text-white">
                     Notification Settings
                 </h2>
@@ -910,8 +914,11 @@ export default async function SavedWorkPage() {
         nextPath: "/member/saved-work",
     });
 
-    if (access.state === "signed_out") {
+    if (access.state === "signed_out" || access.state === "email_unverified") {
         redirect(access.loginHref);
+    }
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        redirect(access.profileHref);
     }
 
     if (!access.canUseSavedWork || !access.userId) {
@@ -934,7 +941,7 @@ export default async function SavedWorkPage() {
                 <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
                     <div>
                         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-potomac-gold">
-                            Scout and Command workspace
+                            Scout and Cabeus Council workspace
                         </p>
                         <h1 className="font-serif text-4xl leading-tight text-white md:text-6xl">
                             Saved Work

@@ -1,19 +1,27 @@
 import { redirect } from "next/navigation";
 import { createClient } from "../supabase/server";
+import { getProfileGateContext } from "./profile-completion";
 
 export type EditorialStaffContext = {
     supabase: Awaited<ReturnType<typeof createClient>>;
     userId: string;
 };
 
-export async function requireEditorialStaff(): Promise<EditorialStaffContext> {
+export async function requireEditorialStaff(
+    nextPath = "/admin/editorial"
+): Promise<EditorialStaffContext> {
     const supabase = await createClient();
-    const { data, error } = await supabase.auth.getClaims();
-    const userId = data?.claims?.sub;
-
-    if (error || !userId) {
-        redirect("/auth/login?next=/admin/editorial");
+    const profileGate = await getProfileGateContext({
+        supabase,
+        nextPath,
+    });
+    if (profileGate.state === "signed_out" || profileGate.state === "email_unverified") {
+        redirect(profileGate.loginHref);
     }
+    if (profileGate.state === "profile_incomplete" && profileGate.profileHref) {
+        redirect(profileGate.profileHref);
+    }
+    const userId = profileGate.userId;
 
     const { data: role } = await supabase
         .from("member_role_assignments")

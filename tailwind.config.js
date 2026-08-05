@@ -13,11 +13,20 @@ export default {
                     oxide: "#A34A32",
                     machine: "#6D747D",
                 },
+                cabeus: {
+                    paper: "#F4F1EA",
+                    ink: "#151513",
+                    line: "#D8D2C8",
+                    muted: "#68645E",
+                    gold: "#AF9254",
+                    bronze: "#725A26",
+                    smoke: "#E9E5DE",
+                },
             },
             fontFamily: {
-                sans: ['"Source Sans 3"', "sans-serif"],
-                serif: ['"Oswald"', "Arial Narrow", "sans-serif"],
-                mono: ['"IBM Plex Mono"', "monospace"],
+                sans: ["var(--font-dm-sans)", "sans-serif"],
+                serif: ["var(--font-cormorant)", "Georgia", "serif"],
+                mono: ["var(--font-ibm-plex-mono)", "monospace"],
             },
             backgroundImage: {
                 "grid-pattern":

@@ -12,9 +12,13 @@ export default function robots(): MetadataRoute.Robots {
                 "/auth/",
                 "/member",
                 "/organization",
+                "/terminal",
             ],
         },
-        sitemap: absoluteSiteUrl("/sitemap.xml"),
+        sitemap: [
+            absoluteSiteUrl("/sitemap.xml"),
+            absoluteSiteUrl("/news-sitemap.xml"),
+        ],
         host: siteConfig.url,
     };
 }

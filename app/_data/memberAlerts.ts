@@ -128,9 +128,9 @@ const fallbackFeedItems: MemberAlertFeedItem[] = [
         objectKind: "marketplace_record",
         objectTitle: "Lunar data marketplace",
         routePath: "/member/marketplace",
-        headline: "Command alert hooks are scaffolded",
+        headline: "Cabeus Council alert hooks are scaffolded",
         summary:
-            "Command tier supports higher limits, email delivery audit logs, and future webhook delivery events.",
+            "Cabeus Council tier supports higher limits, email delivery audit logs, and future webhook delivery events.",
         sourceLabel: "Fallback feed",
         severity: "info",
         freshnessAt: "2026-07-02T10:12:57.000Z",

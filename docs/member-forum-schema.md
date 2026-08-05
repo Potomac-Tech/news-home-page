@@ -24,15 +24,15 @@ The migration adds the normalized `moderator` app role and private helper
 functions that avoid user-editable metadata:
 
 - `app_private.can_access_member_forum_tier(...)` maps Explorer, Scout, and
-  Command forum gates to active normalized role assignments.
+  Cabeus Council forum gates to active normalized role assignments.
 - `app_private.can_moderate_member_forums(...)` grants moderation capability to
   `moderator`, `editor`, `analyst`, and `admin`.
 - `app_private.can_access_member_forum(...)` checks active forum visibility.
 - `app_private.can_access_member_forum_topic(...)` checks readable topics.
 
-Explorer members can read and participate in Explorer forums. Scout and Command
-members inherit access to lower tiers. Command-only forums remain limited to
-Command users and staff/moderators.
+Explorer members can read and participate in Explorer forums. Scout and Cabeus Council
+members inherit access to lower tiers. Cabeus Council-only forums remain limited to
+Cabeus Council users and staff/moderators.
 
 ## Safety Coverage
 
@@ -50,6 +50,6 @@ The model supports:
 ## Verification Limit
 
 Live RLS tests require the migration applied to the Potomac Supabase project and
-seeded Explorer, Scout, Command, moderator, analyst, editor, and admin users.
+seeded Explorer, Scout, Cabeus Council, moderator, analyst, editor, and admin users.
 Without those, local verification is limited to build, static search, migration
 inspection, and local Supabase CLI connectivity checks.

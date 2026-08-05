@@ -77,7 +77,7 @@ export async function createAlertRule(formData: FormData) {
         await requireMemberAlertsAccess();
 
     if (!canManageAlertRules) {
-        throw new Error("Scout or Command access is required for alert rules.");
+        throw new Error("Scout or Cabeus Council access is required for alert rules.");
     }
 
     const triggerKind = getRequiredString(formData, "trigger_kind");
@@ -92,7 +92,7 @@ export async function createAlertRule(formData: FormData) {
     }
 
     if (triggerKind === "command_intelligence" && tier !== "command" && tier !== "staff") {
-        throw new Error("Command intelligence alerts require Command access.");
+        throw new Error("Cabeus Council intelligence alerts require Cabeus Council access.");
     }
 
     const objectKind = getObjectKind(formData);
@@ -135,7 +135,7 @@ export async function archiveAlertRule(formData: FormData) {
         await requireMemberAlertsAccess();
 
     if (!canManageAlertRules) {
-        throw new Error("Scout or Command access is required for alert rules.");
+        throw new Error("Scout or Cabeus Council access is required for alert rules.");
     }
 
     const { error } = await supabase

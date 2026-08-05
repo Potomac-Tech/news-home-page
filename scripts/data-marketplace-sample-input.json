@@ -54,7 +54,7 @@
       "coverageStartAt": "2025-03-02T00:00:00.000Z",
       "coverageEndAt": "2025-03-16T00:00:00.000Z",
       "sampleUrl": "https://example.com/sample-lunar-surface-context",
-      "accessTierRequired": "command",
+      "accessTierRequired": "meridian",
       "confidenceLabel": "low",
       "confidenceScore": 52,
       "extractionRationale": "The source suggests a dataset offer candidate but requires analyst review before publication.",

@@ -33,7 +33,7 @@ save topics, add reactions, and insert report/audit records. Authorization uses
 
 Live compose, reply, save, react, report, and moderator-state behavior requires
 the forum migration applied to the Potomac Supabase project plus seeded
-Explorer, Scout, Command, moderator, analyst, editor, and admin users. Without
+Explorer, Scout, Cabeus Council, moderator, analyst, editor, and admin users. Without
 public Supabase keys and test users, verification is limited to local builds,
 static route/action inspection, missing-configuration route rendering, and
 Supabase CLI connectivity checks.

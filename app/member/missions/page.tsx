@@ -27,7 +27,7 @@ function ConfigGate() {
                     <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                         Member mission details are read from the Cabeus Explorer
                         Supabase project. Configure the public environment
-                        variables and sign in with Explorer, Scout, Command, or
+                        variables and sign in with Explorer, Scout, Cabeus Council, or
                         staff access to view gated tracker rows.
                     </p>
                     <div className="mt-6 flex flex-wrap gap-3">
@@ -108,10 +108,17 @@ export default async function MemberMissionsPage({
     }
 
     const supabase = await createClient();
-    const access = await getLunarMissionAccess({ supabase });
+    const access = await getLunarMissionAccess({
+        supabase,
+        nextPath: "/member/missions",
+    });
 
-    if (access.state === "anonymous" && !access.userId) {
-        redirect("/auth/login?next=/member/missions");
+    if (access.state === "anonymous" || access.state === "email_unverified") {
+        redirect(access.loginHref);
+    }
+
+    if (access.state === "profile_incomplete" && access.profileHref) {
+        redirect(access.profileHref);
     }
 
     if (!access.canReadMemberDetails) {
@@ -129,7 +136,7 @@ export default async function MemberMissionsPage({
             mode="member"
             activeFilter={activeFilter}
             title="Member Mission Tracker"
-            description="Explorer, Scout, Command, and staff views for lunar mission status, source freshness, object details, payload records, and mission detail pages."
+            description="Explorer, Scout, Cabeus Council, and staff views for lunar mission status, source freshness, object details, payload records, and mission detail pages."
             showTierNote={false}
         />
     );

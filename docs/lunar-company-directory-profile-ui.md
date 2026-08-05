@@ -41,7 +41,7 @@ helper:
 - Explorer members can see member-tier company context
 - Scout members can see Scout-visible contracts, financial metrics, comparison
   attributes, and watchlist hooks
-- Command members can see Command-visible details where RLS allows
+- Cabeus Council members can see Cabeus Council-visible details where RLS allows
 
 The UI does not grant access itself. Supabase RLS and explicit Data API grants
 remain the source of truth.
@@ -65,4 +65,4 @@ table, source/freshness labels, upgrade prompts, and mobile rendering.
 
 Live Supabase reads and role-gated detail unlocking still require the Task 059
 migration applied to project `xlpkdoeldtlhearqajat`, a publishable key, and
-seeded Explorer, Scout, Command, and staff test users.
+seeded Explorer, Scout, Cabeus Council, and staff test users.

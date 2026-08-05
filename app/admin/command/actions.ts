@@ -76,7 +76,7 @@ function getCommandRequestStatus(formData: FormData) {
             value as (typeof commandRequestStatuses)[number]
         )
     ) {
-        throw new Error("Invalid Command request status.");
+        throw new Error("Invalid Cabeus Council request status.");
     }
 
     return value;
@@ -86,7 +86,7 @@ function getCommandPerkType(formData: FormData) {
     const value = getRequiredString(formData, "perk_type");
 
     if (!commandPerkTypes.includes(value as (typeof commandPerkTypes)[number])) {
-        throw new Error("Invalid Command perk type.");
+        throw new Error("Invalid Cabeus Council perk type.");
     }
 
     return value;
@@ -100,7 +100,7 @@ function getCommandPerkStatus(formData: FormData) {
             value as (typeof commandPerkStatuses)[number]
         )
     ) {
-        throw new Error("Invalid Command perk status.");
+        throw new Error("Invalid Cabeus Council perk status.");
     }
 
     return value;
@@ -114,7 +114,7 @@ function getCommandPerkPriority(formData: FormData) {
             value as (typeof commandPerkPriorities)[number]
         )
     ) {
-        throw new Error("Invalid Command perk priority.");
+        throw new Error("Invalid Cabeus Council perk priority.");
     }
 
     return value;
@@ -136,7 +136,7 @@ async function loadCommandRequest(id: string) {
         .single();
 
     if (error || !data) {
-        throw new Error(error?.message ?? "Command request not found.");
+        throw new Error(error?.message ?? "Cabeus Council request not found.");
     }
 
     return data as CommandInterestRequest;
@@ -165,7 +165,7 @@ export async function updateCommandRequestStatus(formData: FormData) {
     await supabase.from("access_audit_events").insert({
         actor_user_id: userId,
         event_type: "command_interest.status_updated",
-        event_summary: `Updated Command interest request to ${status}.`,
+        event_summary: `Updated Cabeus Council interest request to ${status}.`,
         metadata: {
             request_id: requestId,
             status,
@@ -223,14 +223,14 @@ export async function createCommandPerk(formData: FormData) {
         .single();
 
     if (error || !perk) {
-        throw new Error(error?.message ?? "Command perk not created.");
+        throw new Error(error?.message ?? "Cabeus Council perk not created.");
     }
 
     await supabase.from("access_audit_events").insert({
         actor_user_id: userId,
         organization_id: organizationId,
         event_type: "command_perk.created",
-        event_summary: "Created a Command perk commitment.",
+        event_summary: "Created a Cabeus Council perk commitment.",
         metadata: {
             perk_id: perk.id,
             status,
@@ -287,7 +287,7 @@ export async function updateCommandPerk(formData: FormData) {
         actor_user_id: userId,
         organization_id: organizationId,
         event_type: "command_perk.updated",
-        event_summary: `Updated Command perk status to ${status}.`,
+        event_summary: `Updated Cabeus Council perk status to ${status}.`,
         metadata: {
             perk_id: perkId,
             status,
@@ -325,7 +325,7 @@ export async function grantCommandEntitlement(formData: FormData) {
         .from("entitlements")
         .insert({
             organization_id: organization.id,
-            tier: "command",
+            tier: "meridian",
             status: "active",
             source: "manual_sales",
             starts_at: now,
@@ -363,7 +363,7 @@ export async function grantCommandEntitlement(formData: FormData) {
         actor_user_id: userId,
         organization_id: organization.id,
         event_type: "command_entitlement.granted",
-        event_summary: `Granted Command entitlement to ${request.organization_name}.`,
+        event_summary: `Granted Cabeus Council entitlement to ${request.organization_name}.`,
         metadata: {
             request_id: request.id,
             entitlement_id: entitlement.id,

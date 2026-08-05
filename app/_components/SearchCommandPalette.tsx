@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { publicTierName } from "../_data/tiers";
 
-type SearchTier = "public" | "explorer" | "scout" | "command" | "staff";
+type SearchTier = "public" | "explorer" | "scout" | "meridian" | "staff";
 
 type CommandPaletteEntry = {
     id: string;
@@ -41,7 +42,7 @@ function tierLabel(tier: SearchTier) {
     if (tier === "public") return "Public";
     if (tier === "explorer") return "Explorer+";
     if (tier === "scout") return "Scout+";
-    if (tier === "command") return "Command";
+    if (tier === "meridian") return publicTierName(tier);
     return "Staff";
 }
 
@@ -92,12 +93,12 @@ export function SearchCommandPalette({ entries = [] }: SearchCommandPaletteProps
             <button
                 type="button"
                 onClick={() => setOpen(true)}
-                className="shrink-0 rounded border border-white/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-potomac-cream/70 transition hover:border-potomac-gold hover:text-potomac-gold"
+                className="shrink-0 border border-cabeus-line px-3 py-2 font-sans text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-cabeus-ink transition hover:border-cabeus-ink"
                 aria-haspopup="dialog"
                 aria-expanded={open}
             >
                 Search
-                <span className="ml-2 hidden rounded border border-white/10 px-1.5 py-0.5 text-[0.62rem] text-potomac-cream/45 sm:inline">
+                <span className="ml-2 hidden border border-cabeus-line px-1.5 py-0.5 text-[0.56rem] text-cabeus-muted xl:inline">
                     Ctrl K
                 </span>
             </button>

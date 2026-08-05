@@ -5,6 +5,11 @@ export type PotomacAnalyticsEvent = {
     metadata?: Record<string, string | number | boolean | null>;
 };
 
+const engagementEventNames = new Set([
+    "article_read", "search", "saved_work", "watchlist", "tracker_row",
+    "company_profile_view", "alert", "paid_article", "dataset", "export", "cta_click",
+]);
+
 export type PotomacLogLevel = "info" | "warn" | "error";
 
 export type PotomacOperationalState =
@@ -62,6 +67,17 @@ export function trackAnalyticsEvent(event: PotomacAnalyticsEvent) {
             },
         })
     );
+
+    // Ranking preferences never suppress analytics collection. The server RPC
+    // independently limits persistence to verified, profile-complete members.
+    if (engagementEventNames.has(event.name)) {
+        void fetch("/api/engagement", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            keepalive: true,
+            body: JSON.stringify({ eventType: event.name, route: event.route, metadata: event.metadata ?? {} }),
+        }).catch(() => undefined);
+    }
 }
 
 export function logPlatformEvent({

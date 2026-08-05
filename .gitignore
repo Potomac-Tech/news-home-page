@@ -2,9 +2,12 @@
 **/.next
 **/.open-next
 **/.wrangler
+tsconfig.tsbuildinfo
 **/.env
 **/.env.*
 !**/.env.example
 cloudflare-env.d.ts
 Supabase Token.txt
+Resend API.txt
+Tokens and Keys*.txt
 supabase/.temp/

@@ -6,9 +6,18 @@
     "scripts": {
         "dev": "next dev -p 3001",
         "build": "next build --webpack",
+        "build:next": "next build --webpack",
         "extract:data-marketplace": "node scripts/data-market-extraction-placeholder.mjs",
-        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "test": "node --test tests/potomac-critical-flows.test.mjs",
+        "ingest:weekly-lunar": "node scripts/ingest-weekly-lunar-tracker.mjs",
+        "ingest:contract-awards": "node scripts/ingest-contract-awards.mjs",
+        "test:production-crawl": "node scripts/crawl-production.mjs",
+        "test:quality": "node scripts/audit-production-quality.mjs",
+        "test:content-expiration": "node scripts/check-promotional-expiration.mjs",
+        "test:release": "node scripts/audit-release-readiness.mjs",
+        "test:email-operations": "node scripts/audit-email-operations.mjs && node --test tests/email-release-policy.test.mjs tests/resend-quota-outcomes.test.mjs tests/member-alert-digest-policy.test.mjs",
+        "test:observability-budget": "node --test tests/cloudflare-observability-budget.test.mjs",
+        "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+        "test": "node --test tests/potomac-critical-flows.test.mjs tests/personalization-resolver.test.mjs tests/carousel-membership-resolver.test.mjs tests/weekly-lunar-tracker-schema.test.mjs tests/lunar-tracker-source-registry.test.mjs tests/weekly-lunar-ingestion.test.mjs tests/weekly-launch-tracker-ui.test.mjs tests/tracker-value-disclosure.test.mjs tests/launches-missions-integration.test.mjs tests/homepage-launch-summary.test.mjs tests/lunar-time-display.test.mjs tests/space-stock-ticker.test.mjs tests/google-news-seo.test.mjs tests/alpha-vantage-stock-refresh.test.mjs tests/contract-awards-workflow.test.mjs tests/contract-awards-ui.test.mjs tests/production-alert-evaluator.test.mjs tests/member-alert-digest-policy.test.mjs tests/developer-api-runtime.test.mjs tests/operational-quality-controls.test.mjs tests/production-content-import.test.mjs tests/resend-quota-outcomes.test.mjs tests/email-release-policy.test.mjs tests/editorial-studio.test.mjs tests/spacego-editorial-seeds.test.mjs tests/launch-content-inventory.test.mjs",
         "test:e2e": "npm run build && node --test tests/*.e2e.test.mjs",
         "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
         "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
@@ -16,28 +25,39 @@
         "start": "next start -p 3001"
     },
     "dependencies": {
-        "@opennextjs/cloudflare": "^1.11.1",
+        "@opennextjs/cloudflare": "1.20.2",
         "@supabase/ssr": "^0.12.0",
         "@supabase/supabase-js": "^2.110.0",
-        "next": "^16.2.9",
+        "htmlparser2": "^8.0.2",
+        "mammoth": "1.12.0",
+        "next": "16.3.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "sanitize-html": "2.17.6",
         "stripe": "^22.2.3"
     },
     "devDependencies": {
+        "@axe-core/playwright": "4.12.1",
         "@playwright/test": "^1.61.1",
         "@types/node": "^25.0.3",
         "@types/react": "^18.2.43",
         "@types/react-dom": "^18.2.17",
-        "@typescript-eslint/eslint-plugin": "^6.14.0",
-        "@typescript-eslint/parser": "^6.14.0",
+        "@types/sanitize-html": "^2.16.1",
+        "@typescript-eslint/eslint-plugin": "8.66.0",
+        "@typescript-eslint/parser": "8.66.0",
         "autoprefixer": "^10.4.16",
         "esbuild": "^0.28.1",
-        "eslint": "^8.55.0",
-        "eslint-plugin-react-hooks": "^4.6.0",
-        "postcss": "^8.4.31",
+        "eslint": "9.39.5",
+        "eslint-plugin-react-hooks": "7.1.1",
+        "globals": "17.9.0",
+        "postcss": "8.5.25",
         "tailwindcss": "^3.3.5",
         "typescript": "^5.2.2",
-        "wrangler": "^4.52.0"
+        "wrangler": "4.118.0"
+    },
+    "overrides": {
+        "brace-expansion@2.0.0 - 2.1.3": "2.1.4",
+        "brace-expansion@4.0.0 - 5.0.8": "5.0.9",
+        "undici@7.0.0 - 7.28.0": "7.29.0"
     }
 }

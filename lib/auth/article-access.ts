@@ -1,21 +1,23 @@
 import { createClient } from "../supabase/server";
+import { getProfileGateContext, type ProfileGateState } from "./profile-completion";
 
-export type ArticleAccessTier = "member" | "scout" | "command";
+export type ArticleAccessTier = "explorer" | "scout" | "meridian";
 
 export type ArticleAccessContext = {
     canReadFullStory: boolean;
-    state: "signed_out" | "signed_in_locked" | "authorized";
+    state: Exclude<ProfileGateState, "ready"> | "signed_in_locked" | "authorized";
     userId: string | null;
     roleId: string | null;
     loginHref: string;
+    profileHref: string | null;
 };
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
 const rolesByTier: Record<ArticleAccessTier, string[]> = {
-    member: ["member", "scout", "command_user", "editor", "analyst", "admin"],
-    scout: ["scout", "command_user", "editor", "analyst", "admin"],
-    command: ["command_user", "editor", "analyst", "admin"],
+    explorer: ["explorer", "scout", "meridian", "editor", "analyst", "admin"],
+    scout: ["scout", "meridian", "editor", "analyst", "admin"],
+    meridian: ["meridian", "editor", "analyst", "admin"],
 };
 
 export async function getArticleAccessContext({
@@ -27,19 +29,18 @@ export async function getArticleAccessContext({
     tier: ArticleAccessTier;
     nextPath: string;
 }): Promise<ArticleAccessContext> {
-    const loginHref = `/auth/login?next=${encodeURIComponent(nextPath)}`;
-    const { data, error } = await supabase.auth.getClaims();
-    const userId = data?.claims?.sub;
-
-    if (error || !userId) {
+    const profileGate = await getProfileGateContext({ supabase, nextPath });
+    if (profileGate.state !== "ready") {
         return {
             canReadFullStory: false,
-            state: "signed_out",
-            userId: null,
+            state: profileGate.state,
+            userId: profileGate.userId,
             roleId: null,
-            loginHref,
+            loginHref: profileGate.loginHref,
+            profileHref: profileGate.profileHref,
         };
     }
+    const userId = profileGate.userId;
 
     const { data: role, error: roleError } = await supabase
         .from("member_role_assignments")
@@ -60,7 +61,8 @@ export async function getArticleAccessContext({
             state: "signed_in_locked",
             userId,
             roleId: null,
-            loginHref,
+            loginHref: profileGate.loginHref,
+            profileHref: null,
         };
     }
 
@@ -69,6 +71,7 @@ export async function getArticleAccessContext({
         state: "authorized",
         userId,
         roleId: role.role_id as string,
-        loginHref,
+        loginHref: profileGate.loginHref,
+        profileHref: null,
     };
 }

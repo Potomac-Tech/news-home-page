@@ -10,7 +10,7 @@ import { requireAdmin } from "../../../lib/auth/admin";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-    title: "Command Interest",
+    title: "Cabeus Council Interest",
 };
 
 type CommandRequest = {
@@ -133,7 +133,7 @@ export default async function AdminCommandPage() {
         supabase
             .from("entitlements")
             .select("id,organization_id,organizations(name,slug,status)")
-            .eq("tier", "command")
+            .eq("tier", "meridian")
             .eq("status", "active")
             .order("starts_at", { ascending: false }),
         supabase
@@ -172,14 +172,14 @@ export default async function AdminCommandPage() {
             <div className="mx-auto min-h-[calc(100vh-9rem)] w-full max-w-7xl px-4 py-20 md:px-8">
                 <div className="max-w-3xl">
                     <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-potomac-gold">
-                        Command pipeline
+                        Cabeus Council pipeline
                     </p>
                     <h1 className="font-serif text-4xl leading-tight text-white md:text-6xl">
-                        Command Interest
+                        Cabeus Council Interest
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-potomac-cream/80">
                         Review enterprise interest, track sales status, and
-                        manually grant organization-level Command access after
+                        manually grant organization-level Cabeus Council access after
                         offline approval.
                     </p>
                 </div>
@@ -188,7 +188,7 @@ export default async function AdminCommandPage() {
                     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem]">
                         <div>
                             <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
-                                Command perks
+                                Cabeus Council perks
                             </p>
                             <h2 className="mt-2 font-serif text-3xl text-white">
                                 Service Delivery
@@ -196,7 +196,7 @@ export default async function AdminCommandPage() {
                             <p className="mt-4 text-sm leading-6 text-potomac-cream/70">
                                 Track analyst support, proposal support, mission
                                 briefs, custom alerts, executive perks, and free
-                                sponsorship commitments for active Command
+                                sponsorship commitments for active Cabeus Council
                                 organizations.
                             </p>
                         </div>
@@ -306,7 +306,7 @@ export default async function AdminCommandPage() {
                 <div className="mt-8 space-y-5">
                     {perks.length === 0 ? (
                         <div className="glass-card rounded p-6 text-potomac-cream/80">
-                            No Command perks are being tracked yet.
+                            No Cabeus Council perks are being tracked yet.
                         </div>
                     ) : (
                         perks.map((perk) => (
@@ -539,7 +539,7 @@ export default async function AdminCommandPage() {
                 <div className="mt-12 space-y-6">
                     {requests.length === 0 ? (
                         <div className="glass-card rounded p-6 text-potomac-cream/80">
-                            No Command interest requests.
+                            No Cabeus Council interest requests.
                         </div>
                     ) : (
                         requests.map((request) => (
@@ -638,7 +638,7 @@ export default async function AdminCommandPage() {
                                                 type="submit"
                                                 className="mt-3 w-full rounded bg-potomac-gold px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
                                             >
-                                                Grant Command
+                                                Grant Cabeus Council
                                             </button>
                                         </form>
                                     </div>

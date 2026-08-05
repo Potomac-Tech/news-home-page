@@ -27,7 +27,7 @@ export default function PrivacyPage() {
                 },
                 {
                     title: "Billing And Enterprise Data",
-                    body: "Scout billing is handled through Stripe, and Command access is handled through manual sales and administration. Billing contact, subscription, entitlement, and audit records are used to maintain paid access.",
+                    body: "Scout billing is handled through Stripe, and Cabeus Council access is handled through manual sales and administration. Billing contact, subscription, entitlement, and audit records are used to maintain paid access.",
                 },
                 {
                     title: "Use Of Data",

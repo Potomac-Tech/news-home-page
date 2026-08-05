@@ -2,6 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { requireSponsorStaff } from "../../../lib/auth/sponsors";
+import {
+    CTA_ASSET_BUCKET,
+    readImageDimensions,
+    safeCtaObjectName,
+    validateCtaImageFile,
+    type CtaProduct,
+} from "../../../lib/assets/cta-images";
 
 const sponsorStatuses = ["prospect", "active", "paused", "archived"] as const;
 const placementStatuses = [
@@ -433,6 +440,125 @@ export async function updateCampaignPlacement(formData: FormData) {
     if (error) {
         throw new Error(error.message);
     }
+
+    revalidatePath("/admin/sponsors");
+}
+
+export async function uploadCtaAsset(formData: FormData) {
+    const { supabase, userId } = await requireSponsorStaff();
+    const product = getAllowedValue(
+        formData,
+        "product",
+        ["pathfinder", "source"] as const,
+        "pathfinder",
+        "CTA product"
+    ) as CtaProduct;
+    const file = formData.get("image");
+    if (!(file instanceof File)) {
+        throw new Error("Choose an image to upload.");
+    }
+    validateCtaImageFile(file);
+
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    const { width, height } = readImageDimensions(bytes, file.type);
+    const objectPath = `${product}/${safeCtaObjectName(file.name)}`;
+    const expiresAt = getOptionalTimestamp(formData, "expires_at");
+    const altText = getRequiredString(formData, "alt_text");
+    if (altText.length < 12) {
+        throw new Error("Alt text must contain at least 12 characters.");
+    }
+
+    const { error: uploadError } = await supabase.storage
+        .from(CTA_ASSET_BUCKET)
+        .upload(objectPath, bytes, {
+            contentType: file.type,
+            cacheControl: "3600",
+            upsert: false,
+        });
+    if (uploadError) throw new Error(uploadError.message);
+
+    const { error: assetError } = await supabase.from("cta_assets").insert({
+        product,
+        display_name: getRequiredString(formData, "display_name"),
+        storage_bucket: CTA_ASSET_BUCKET,
+        storage_object_path: objectPath,
+        mime_type: file.type,
+        file_size_bytes: file.size,
+        width_px: width,
+        height_px: height,
+        alt_text: altText,
+        attribution_note: getRequiredString(formData, "attribution_note"),
+        review_status: "draft",
+        expires_at: expiresAt,
+        created_by: userId,
+        updated_by: userId,
+    });
+    if (assetError) {
+        await supabase.storage.from(CTA_ASSET_BUCKET).remove([objectPath]);
+        throw new Error(assetError.message);
+    }
+
+    revalidatePath("/admin/sponsors");
+}
+
+export async function updateCtaAssetReview(formData: FormData) {
+    const { supabase, userId } = await requireSponsorStaff();
+    const assetId = getRequiredString(formData, "asset_id");
+    const reviewStatus = getAllowedValue(
+        formData,
+        "review_status",
+        ["draft", "reviewed", "rejected", "archived"] as const,
+        "draft",
+        "asset review status"
+    );
+    const expiresAt = getOptionalTimestamp(formData, "expires_at");
+    if (reviewStatus === "reviewed" && !expiresAt) {
+        throw new Error("Reviewed CTA assets require an expiration date.");
+    }
+    const { error } = await supabase
+        .from("cta_assets")
+        .update({
+            alt_text: getRequiredString(formData, "alt_text"),
+            attribution_note: getRequiredString(formData, "attribution_note"),
+            expires_at: expiresAt,
+            review_status: reviewStatus,
+            reviewed_by: reviewStatus === "reviewed" ? userId : null,
+            reviewed_at: reviewStatus === "reviewed" ? new Date().toISOString() : null,
+            updated_by: userId,
+        })
+        .eq("id", assetId);
+    if (error) throw new Error(error.message);
+
+    revalidatePath("/admin/sponsors");
+}
+
+export async function selectCtaAsset(formData: FormData) {
+    const { supabase, userId } = await requireSponsorStaff();
+    const campaignPlacementId = getRequiredString(formData, "campaign_placement_id");
+    const assetId = getRequiredString(formData, "asset_id");
+    const { data: asset, error: assetError } = await supabase
+        .from("cta_assets")
+        .select("storage_bucket,storage_object_path,repo_fallback_url,alt_text,review_status,expires_at")
+        .eq("id", assetId)
+        .eq("review_status", "reviewed")
+        .maybeSingle();
+    if (assetError || !asset) throw new Error(assetError?.message ?? "Reviewed CTA asset not found.");
+    if (asset.expires_at && new Date(asset.expires_at) <= new Date()) {
+        throw new Error("Expired CTA assets cannot be selected.");
+    }
+
+    const creativeUrl = asset.storage_object_path
+        ? `/api/cta-assets/${assetId}`
+        : asset.repo_fallback_url;
+    const { error } = await supabase
+        .from("sponsor_campaign_placements")
+        .update({
+            creative_url: creativeUrl,
+            creative_alt_text: asset.alt_text,
+            updated_by: userId,
+        })
+        .eq("id", campaignPlacementId);
+    if (error) throw new Error(error.message);
 
     revalidatePath("/admin/sponsors");
 }

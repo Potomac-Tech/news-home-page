@@ -30,14 +30,29 @@ export const currentRoutes = [
         note: "CMS-backed feed route.",
     },
     {
-        href: "/events",
-        source: "app/events/page.tsx",
-        note: "Public event calendar with teaser fields and member-gated event details.",
+        href: "/space-industrialist-week",
+        source: "app/space-industrialist-week/page.tsx",
+        note: "Branded Space Industrialist Week program and invitation route.",
+    },
+    {
+        href: "/space-investment-forum",
+        source: "app/space-investment-forum/page.tsx",
+        note: "Space Investment Forum recap and coverage route.",
     },
     {
         href: "/datasets",
         source: "app/datasets/page.tsx",
         note: "Public dataset catalog with NASA/science archives, Cabeus Explorer proprietary entries, source metadata, availability, tier, sample, and demo indicators.",
+    },
+    {
+        href: "/tracker/launches",
+        source: "app/tracker/launches/page.tsx",
+        note: "Verified-profile Launches & Missions weekly tracker with Scout/Cabeus Council tools and RLS-gated values.",
+    },
+    {
+        href: "/tracker/contracts",
+        source: "app/tracker/contracts/page.tsx",
+        note: "Public-safe and verified-profile New Contract Awards tracker with RLS-gated values, citations, and review metadata.",
     },
     {
         href: "/member/summits",
@@ -50,8 +65,33 @@ export const currentRoutes = [
         note: "Staff-only sponsor, placement, campaign, discount, and reporting workflow.",
     },
     {
-        href: "/news/vipc-grant-winner",
+        href: "/admin/content",
+        source: "app/admin/content/page.tsx",
+        note: "Staff-only production content submission, approval, asset, and deployment-readiness workflow.",
+    },
+    {
+        href: "/admin/carousel",
+        source: "app/admin/carousel/page.tsx",
+        note: "Staff-only homepage carousel inventory, ranking, preview, publication, and expiration workflow.",
+    },
+    {
+        href: "/news/potomac-space-investment-forum-2026",
         source: "app/news/[slug]/page.tsx",
-        note: "Migrated article route in the production Next.js app.",
+        note: "Upcoming Space Investment Forum preview with official invitation artwork and member-gated context.",
+    },
+    {
+        href: "/news/nasa-lunar-delivery-awards-2028",
+        source: "app/news/[slug]/page.tsx",
+        note: "Market and strategic analysis of NASA's 2028 commercial lunar delivery awards.",
+    },
+    {
+        href: "/news/artemis-iii-starlink-optical-relay",
+        source: "app/news/[slug]/page.tsx",
+        note: "Strategic analysis of commercial optical communications in the Artemis architecture.",
+    },
+    {
+        href: "/news/artemis-iii-hardware-stacking",
+        source: "app/news/[slug]/page.tsx",
+        note: "Program and supply-chain analysis of Artemis III hardware stacking.",
     },
 ] as const;

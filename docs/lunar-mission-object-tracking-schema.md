@@ -19,7 +19,7 @@ The migration `20260630231101_lunar_mission_object_tracking.sql` models:
 ## Access Model
 
 Rows carry `publication_status` and `visibility_tier` fields. Public rows can be
-published for anonymous teaser/catalog access. Explorer, Scout, and Command rows
+published for anonymous teaser/catalog access. Explorer, Scout, and Cabeus Council rows
 use the existing normalized role assignments through
 `app_private.can_access_lunar_tracking_tier(...)`.
 
@@ -41,4 +41,4 @@ schema settings before relying on client reads.
 Static checks can confirm the migration structure, grants, policies, and helper
 function references. Live RLS behavior requires an applied schema in project
 `xlpkdoeldtlhearqajat`, Potomac Supabase credentials, and seeded public,
-Explorer, Scout, Command, and staff test users.
+Explorer, Scout, Cabeus Council, and staff test users.

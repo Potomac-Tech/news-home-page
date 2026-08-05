@@ -15,9 +15,9 @@ summits, workshops, briefings, and roundtables.
 ## Access Model
 
 - Anonymous and signed-in users can read published event teaser rows.
-- Approved Member, Scout, and Command users can read details for Member-gated
+- Approved Member, Scout, and Cabeus Council users can read details for Member-gated
   events.
-- Scout and Command gates are represented for future paid event use.
+- Scout and Cabeus Council gates are represented for future paid event use.
 - Editors and admins can create, edit, and publish event records.
 - Analysts can read staff event records and gated details, but not edit them.
 

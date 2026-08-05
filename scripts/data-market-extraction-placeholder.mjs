@@ -71,7 +71,7 @@ function optionalNumber(value, fallback = null) {
 function tier(value) {
     const normalized = optionalString(value) ?? "scout";
 
-    if (normalized !== "scout" && normalized !== "command") {
+    if (normalized !== "scout" && normalized !== "meridian") {
         throw new Error(`Invalid access tier: ${normalized}`);
     }
 

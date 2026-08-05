@@ -15,6 +15,18 @@ export function RouteScaffold({
     primaryHref = "/news",
     primaryLabel = "View news",
 }: RouteScaffoldProps) {
+    const primaryClassName =
+        "rounded bg-potomac-gold px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream";
+    const primaryLink = primaryHref.startsWith("/api/") ? (
+        <a href={primaryHref} className={primaryClassName}>
+            {primaryLabel}
+        </a>
+    ) : (
+        <Link href={primaryHref} className={primaryClassName}>
+            {primaryLabel}
+        </Link>
+    );
+
     return (
         <section className="bg-grid-pattern">
             <div className="mx-auto flex min-h-[calc(100vh-9rem)] w-full max-w-7xl flex-col justify-center px-4 py-20 md:px-8">
@@ -29,12 +41,7 @@ export function RouteScaffold({
                         {description}
                     </p>
                     <div className="mt-10 flex flex-wrap gap-4">
-                        <Link
-                            href={primaryHref}
-                            className="rounded bg-potomac-gold px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-primary transition hover:bg-potomac-cream"
-                        >
-                            {primaryLabel}
-                        </Link>
+                        {primaryLink}
                         <Link
                             href="/"
                             className="rounded border border-potomac-gold/50 px-6 py-3 text-sm font-bold uppercase tracking-[0.18em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"

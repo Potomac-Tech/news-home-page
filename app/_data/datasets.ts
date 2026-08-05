@@ -1,7 +1,8 @@
 import { createClient } from "../../lib/supabase/server";
 import { hasPotomacSupabasePublicConfig } from "../../lib/supabase/config";
+import { allowLocalContentFallbacks } from "./contentFallbacks";
 
-export type DatasetAccessTier = "member" | "scout" | "command" | null;
+export type DatasetAccessTier = "explorer" | "scout" | "meridian" | null;
 
 export type DatasetCatalogSource = {
     id: string;
@@ -130,7 +131,7 @@ const sourceColumns = [
 
 const fallbackRetrievedAt = "2026-06-29T13:00:00.000Z";
 
-export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
+const allFallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
     {
         id: "fallback-nasa-pds-lunar-ode",
         dataset_key: "nasa-pds-lunar-ode",
@@ -431,13 +432,13 @@ export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         availability_state: "upcoming",
         availability_note:
             "Cataloged before full dataset release; current public preview is limited to methodology summaries.",
-        access_tier_required: "command",
+        access_tier_required: "meridian",
         is_sample_available: false,
         sample_url: null,
         is_demo_available: true,
         demo_url: "https://potomacdb.com/member/economy",
         sample_note:
-            "Scout and Command users can review the connected methodology dashboard after sign-in.",
+            "Scout and Cabeus Council users can review the connected methodology dashboard after sign-in.",
         coverage_start_at: null,
         coverage_end_at: null,
         geography_scope: "Lunar economy benchmarks",
@@ -464,7 +465,7 @@ export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         scout_release_at: "2027-06-29T13:00:00.000Z",
         public_release_at: null,
         release_state_note:
-            "Command-exclusive benchmark pack for the first year after cataloged collection; Scout access begins after the exclusivity window.",
+            "Cabeus Council-exclusive benchmark pack for the first year after cataloged collection; Scout access begins after the exclusivity window.",
         unavailable_reason: null,
         isFallback: true,
         sources: [
@@ -498,11 +499,11 @@ export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
         dataset_kind: "potomac_proprietary",
         provider_name: "Potomac Database Systems",
         owner_name: "Potomac Database Systems",
-        collection_name: "Command intelligence",
+        collection_name: "Cabeus Council intelligence",
         availability_state: "restricted",
         availability_note:
-            "Unavailable until collection rights, review workflow, and Command allocation are approved.",
-        access_tier_required: "command",
+            "Unavailable until collection rights, review workflow, and Cabeus Council allocation are approved.",
+        access_tier_required: "meridian",
         is_sample_available: false,
         sample_url: null,
         is_demo_available: false,
@@ -562,6 +563,10 @@ export const fallbackDatasetCatalogEntries: DatasetCatalogEntry[] = [
     },
 ];
 
+export const fallbackDatasetCatalogEntries = allFallbackDatasetCatalogEntries.filter(
+    (entry) => entry.dataset_kind === "public_science"
+);
+
 function groupSourcesByDataset(sources: DatasetCatalogSource[]) {
     const groups = new Map<string, DatasetCatalogSource[]>();
 
@@ -598,7 +603,9 @@ async function loadDatasetSources(
 
 export async function loadDatasetCatalog(): Promise<DatasetCatalogEntry[]> {
     if (!hasPotomacSupabasePublicConfig()) {
-        return fallbackDatasetCatalogEntries;
+        return allowLocalContentFallbacks()
+            ? fallbackDatasetCatalogEntries
+            : [];
     }
 
     try {
@@ -612,7 +619,7 @@ export async function loadDatasetCatalog(): Promise<DatasetCatalogEntry[]> {
             .limit(48);
 
         if (error || !data?.length) {
-            return fallbackDatasetCatalogEntries;
+            return [];
         }
 
         const entryRows = (data ?? []) as unknown as DatasetCatalogEntryRow[];
@@ -628,6 +635,6 @@ export async function loadDatasetCatalog(): Promise<DatasetCatalogEntry[]> {
             isFallback: false,
         }));
     } catch {
-        return fallbackDatasetCatalogEntries;
+        return [];
     }
 }

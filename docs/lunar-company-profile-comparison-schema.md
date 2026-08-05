@@ -38,8 +38,8 @@ Rows use `publication_status` and `visibility_tier` fields:
 
 - `public` rows are readable publicly after publication.
 - `member` rows are readable by approved Explorer members and higher.
-- `scout` rows are readable by Scout, Command, and staff roles.
-- `command` rows are readable by Command and staff roles.
+- `scout` rows are readable by Scout, Cabeus Council, and staff roles.
+- `command` rows are readable by Cabeus Council and staff roles.
 - Editors, analysts, and admins can manage profile records.
 
 Authorization uses the existing normalized role model through private helper
@@ -77,4 +77,4 @@ freshness, confidence, review, grant, RLS, and policy structures.
 
 Live migration application and RLS behavior still need a reachable local or
 remote Supabase database with canonical `xlpkdoeldtlhearqajat` credentials and
-seeded public, Explorer, Scout, Command, and staff test users.
+seeded public, Explorer, Scout, Cabeus Council, and staff test users.

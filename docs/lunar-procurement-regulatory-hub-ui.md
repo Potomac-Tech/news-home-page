@@ -14,7 +14,7 @@ regulatory intelligence.
 - `/regulatory/[slug]` renders regulatory detail, compliance guidance, risk
   notes, policy milestones, citations, and the watchlist attachment point.
 - `/member/procurement` gives signed-in members a combined procurement and
-  regulatory workspace with Scout/Command access messaging.
+  regulatory workspace with Scout/Cabeus Council access messaging.
 
 ## Data Flow
 
@@ -28,7 +28,7 @@ configuration is available:
 - `lunar_intel_source_citations`
 
 The loader validates access through normalized role assignments, not
-user-editable metadata. Scout, Command, analyst, editor, and admin users request
+user-editable metadata. Scout, Cabeus Council, analyst, editor, and admin users request
 paid records; anonymous and Explorer users get public records only. Row Level
 Security still decides which rows are returned.
 
@@ -48,7 +48,7 @@ for the saved-work schema, ownership model, and notification preferences.
 
 ## Verification Notes
 
-Live Scout/Command reads require the canonical Supabase project
+Live Scout/Cabeus Council reads require the canonical Supabase project
 `xlpkdoeldtlhearqajat`, the Task 057 migration applied to a reachable database,
-and seeded Scout/Command/staff users. Without those credentials, verification
+and seeded Scout/Cabeus Council/staff users. Without those credentials, verification
 covers the fallback route behavior and build safety.

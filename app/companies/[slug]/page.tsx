@@ -85,7 +85,7 @@ function Metric({
     );
 }
 
-function LockedPanel({ tier }: { tier: LunarCompanyTier }) {
+function LockedPanel({ tier, slug }: { tier: LunarCompanyTier; slug: string }) {
     return (
         <section className="glass-card rounded p-6">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-potomac-gold">
@@ -95,22 +95,22 @@ function LockedPanel({ tier }: { tier: LunarCompanyTier }) {
                 Company intelligence is gated.
             </h2>
             <p className="mt-3 text-sm leading-6 text-potomac-cream/70">
-                Scout and Command users can unlock contract, financial,
+                Scout and Cabeus Council users can unlock contract, financial,
                 relationship, and comparison details where the underlying
                 source rights and RLS policies allow access.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
                 <Link
-                    href="/pricing"
+                    href={`/upgrade?tier=scout&source=company-profile&content=company&object=${encodeURIComponent(slug)}&next=${encodeURIComponent(`/companies/${slug}`)}`}
                     className="rounded bg-potomac-gold px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-primary transition hover:bg-potomac-cream"
                 >
-                    Compare tiers
+                    View upgrade paths
                 </Link>
                 <Link
-                    href="/command"
+                    href={`/upgrade?tier=meridian&source=company-profile&content=company&object=${encodeURIComponent(slug)}&next=${encodeURIComponent(`/companies/${slug}`)}`}
                     className="rounded border border-potomac-gold/50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-potomac-gold transition hover:border-potomac-gold hover:bg-white/5"
                 >
-                    Command access
+                    Cabeus Council access
                 </Link>
             </div>
         </section>
@@ -615,7 +615,7 @@ export default async function CompanyDetailPage({
                             ) : null}
                         </section>
                     ) : (
-                        <LockedPanel tier={company.visibilityTier} />
+                        <LockedPanel tier={company.visibilityTier} slug={company.slug} />
                     )}
 
                     <CompanyDetails company={company} access={accessFlags} />

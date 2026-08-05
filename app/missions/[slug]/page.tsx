@@ -58,7 +58,7 @@ function tierLabel(value: string) {
     }
 
     if (value === "command") {
-        return "Command";
+        return "Cabeus Council";
     }
 
     return "Public";

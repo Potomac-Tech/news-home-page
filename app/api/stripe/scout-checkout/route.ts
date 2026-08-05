@@ -4,18 +4,38 @@ import {
     createStripeClient,
     getScoutPriceId,
 } from "../../../../lib/stripe/server";
+import { getProfileGateContext, safeReturnPath } from "../../../../lib/auth/profile-completion";
 
 const SCOUT_ANNUAL_PRICE_USD = 25000;
 
 export async function POST(request: Request) {
+    const body = await request.json().catch(() => ({}));
+    const returnUrl = safeReturnPath(
+        typeof body?.return_url === "string" ? body.return_url : null,
+        "/member"
+    );
     const supabase = await createClient();
-    const { data: claimsData, error: claimsError } =
-        await supabase.auth.getClaims();
-    const userId = claimsData?.claims?.sub;
+    const profileGate = await getProfileGateContext({ supabase, nextPath: `/upgrade?next=${encodeURIComponent(returnUrl)}` });
 
-    if (claimsError || !userId) {
+    if (profileGate.state === "email_unverified") {
+        return NextResponse.json(
+            { error: "Verify your email before starting Scout checkout." },
+            { status: 403 }
+        );
+    }
+
+    if (profileGate.state === "profile_incomplete") {
+        return NextResponse.json(
+            { error: "Complete your profile before starting Scout checkout." },
+            { status: 403 }
+        );
+    }
+
+    if (profileGate.state !== "ready") {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = profileGate.userId;
+    const { data: claimsData } = await supabase.auth.getClaims();
 
     const { data: profile, error: profileError } = await supabase
         .from("member_profiles")
@@ -63,7 +83,7 @@ export async function POST(request: Request) {
     const stripe = createStripeClient();
     const priceId = getScoutPriceId();
     const origin = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(request.url).origin;
-    const claimsEmail = claimsData.claims.email;
+    const claimsEmail = claimsData?.claims.email;
     const customerEmail =
         profile.email ??
         (typeof claimsEmail === "string" ? claimsEmail : undefined);
@@ -78,8 +98,8 @@ export async function POST(request: Request) {
         ],
         customer_email: customerEmail,
         client_reference_id: userId,
-        success_url: `${origin}/member?checkout=scout_success&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${origin}/member?checkout=scout_cancelled`,
+        success_url: `${origin}${returnUrl}?checkout=scout_success&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}${returnUrl}?checkout=scout_cancelled`,
         metadata: {
             user_id: userId,
             tier: "scout",

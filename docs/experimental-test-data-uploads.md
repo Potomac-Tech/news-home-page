@@ -1,10 +1,10 @@
 # Experimental Test Data Uploads
 
-Task 042 adds the first Scout/Command upload flow for Earth test data.
+Task 042 adds the first Scout/Cabeus Council upload flow for Earth test data.
 
 ## Member Surface
 
-- `/member/test-data`: protected route for Scout users, Command users, and
+- `/member/test-data`: protected route for Scout users, Cabeus Council users, and
   authorized staff.
 - Explorer-only members see a paid-access gate.
 - Signed-out users are redirected through Supabase Auth.
@@ -86,5 +86,5 @@ Live upload verification requires:
   `xlpkdoeldtlhearqajat`
 - applied migrations `20260630030304_experimental_test_data_uploads.sql` and
   `20260630030735_experimental_test_data_comparisons.sql`
-- signed-in Scout or Command test user
+- signed-in Scout or Cabeus Council test user
 - Supabase Storage enabled for the private bucket
