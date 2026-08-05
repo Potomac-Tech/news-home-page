@@ -6,10 +6,10 @@ post-deploy checks pass against the production Cloudflare URL.
 
 ## Release Record
 
-- Production URL: `https://cabeus-explorer.jake-249.workers.dev/`
+- Production URL: `https://www.cabeusexplorer.com/`
 - Canonical Supabase project: `xlpkdoeldtlhearqajat`
-- Release commit reviewed: `1d27be8`
-- Cloudflare version reviewed: `058700a5-b4ce-44f0-b582-77c2d680f15e`
+- Release commit reviewed: launch commit in repository history
+- Cloudflare version reviewed: `e40000da-77f4-4bb7-8c22-6b2ec789ec01`
 - Previous known-good commit: `c8f3fd7`
 - Previous known-good Cloudflare version: `7ec4fd12-01a0-4f2f-a8e3-309912cc6c9a`
 - Release review date/time (UTC): `2026-07-29T12:45:38Z`
@@ -91,9 +91,9 @@ npm run build
 Run against production:
 
 ```powershell
-$env:RELEASE_AUDIT_BASE_URL='https://cabeus-explorer.jake-249.workers.dev/'
+$env:RELEASE_AUDIT_BASE_URL='https://www.cabeusexplorer.com/'
 npm run test:release
-$env:QUALITY_BASE_URL='https://cabeus-explorer.jake-249.workers.dev/'
+$env:QUALITY_BASE_URL='https://www.cabeusexplorer.com/'
 $env:QUALITY_ROUTES='/,/news,/request-access,/upgrade,/tracker/launches,/tracker/contracts,/pricing,/account/profile/complete'
 npm run test:quality
 npm run test:production-crawl

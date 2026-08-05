@@ -2,7 +2,7 @@ import { liveExternalChannelUrls } from "./channels";
 
 const publicSiteUrl = (
     process.env.NEXT_PUBLIC_SITE_URL ??
-    "https://cabeus-explorer.jake-249.workers.dev"
+    "https://www.cabeusexplorer.com"
 ).replace(/\/+$/, "");
 
 export const siteConfig = {

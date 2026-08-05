@@ -2,8 +2,8 @@
 
 ## Entry points
 
-- Editor login: `https://cabeus-explorer.jake-249.workers.dev/studio/login`
-- Signed-in workspace: `https://cabeus-explorer.jake-249.workers.dev/studio`
+- Editor login: `https://www.cabeusexplorer.com/studio/login`
+- Signed-in workspace: `https://www.cabeusexplorer.com/studio`
 
 Only active `editor` and `admin` role assignments can open the workspace. Other
 authenticated members are returned to the member area by the shared editorial

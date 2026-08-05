@@ -2,11 +2,12 @@ import { chromium } from "@playwright/test";
 import { mkdir, writeFile } from "node:fs/promises";
 
 const baseUrl = new URL(
-    process.env.CRAWL_BASE_URL ?? "https://cabeus-explorer.jake-249.workers.dev/"
+    process.env.CRAWL_BASE_URL ?? "https://www.cabeusexplorer.com/"
 );
 const edgeExecutable =
     process.env.PLAYWRIGHT_EXECUTABLE_PATH ??
     "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
+const hostResolverRules = process.env.CRAWL_HOST_RESOLVER_RULES?.trim();
 const maxPages = Number(process.env.CRAWL_MAX_PAGES ?? 60);
 const issues = [];
 const visited = new Set();
@@ -49,13 +50,14 @@ function enqueue(href) {
 function isSafeButton(button) {
     const text = button.text.trim().toLowerCase();
     const type = (button.type ?? "button").toLowerCase();
-    const blocked = /delete|send|submit|request|apply|upgrade|checkout|resend|save|create|post|report|block/;
+    const blocked = /delete|send|submit|request|apply|upgrade|checkout|resend|save|create|post|report|block|pause/;
     return type !== "submit" && !blocked.test(text);
 }
 
 const browser = await chromium.launch({
     executablePath: edgeExecutable,
     headless: true,
+    args: hostResolverRules ? [`--host-resolver-rules=${hostResolverRules}`] : [],
 });
 const context = await browser.newContext();
 const page = await context.newPage();

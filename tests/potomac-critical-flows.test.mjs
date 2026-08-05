@@ -437,6 +437,13 @@ test("Nexus handoff maps approved Cabeus memberships without client role escalat
     );
 });
 
+test("production CSP permits the Cloudflare Web Analytics beacon", () => {
+    const nextConfig = read("next.config.mjs");
+
+    assert.match(nextConfig, /script-src[^\n]*https:\/\/static\.cloudflareinsights\.com/);
+    assert.match(nextConfig, /connect-src[^\n]*https:\/\/cloudflareinsights\.com/);
+});
+
 test("the dedicated Cabeus Games page remains hidden from public discovery", () => {
     const gamesPage = read("app/cabeus-games/page.tsx");
     const migrationShell = read("app/_components/MigrationShell.tsx");

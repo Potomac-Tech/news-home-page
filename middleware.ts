@@ -3,6 +3,13 @@ import { updateSession } from "./lib/supabase/proxy";
 import { isHiddenLaunchPath } from "./app/_data/launchVisibility";
 
 export async function middleware(request: NextRequest) {
+    if (request.nextUrl.hostname === "cabeusexplorer.com") {
+        const canonicalUrl = request.nextUrl.clone();
+        canonicalUrl.hostname = "www.cabeusexplorer.com";
+        canonicalUrl.protocol = "https:";
+        canonicalUrl.port = "";
+        return NextResponse.redirect(canonicalUrl, 308);
+    }
     if (isHiddenLaunchPath(request.nextUrl.pathname)) {
         return NextResponse.redirect(new URL("/", request.url), 307);
     }

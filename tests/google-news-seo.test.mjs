@@ -43,7 +43,18 @@ test("article pages expose complete NewsArticle signals and visible timestamps",
     assert.match(article, /canonical:\s*canonical/);
     assert.match(article, /absoluteSiteUrl\(`\/news\/\$\{article\.slug\}`\)/);
     assert.match(site, /process\.env\.NEXT_PUBLIC_SITE_URL/);
-    assert.match(site, /https:\/\/cabeus-explorer\.jake-249\.workers\.dev/);
+    assert.match(site, /https:\/\/www\.cabeusexplorer\.com/);
+});
+
+test("production routing uses www as the canonical launch host", () => {
+    const middleware = read("middleware.ts");
+    const wrangler = read("wrangler.jsonc");
+
+    assert.match(middleware, /request\.nextUrl\.hostname === "cabeusexplorer\.com"/);
+    assert.match(middleware, /canonicalUrl\.hostname = "www\.cabeusexplorer\.com"/);
+    assert.match(middleware, /NextResponse\.redirect\(canonicalUrl, 308\)/);
+    assert.match(wrangler, /"pattern": "www\.cabeusexplorer\.com"[\s\S]*?"custom_domain": true/);
+    assert.match(wrangler, /"pattern": "cabeusexplorer\.com"[\s\S]*?"custom_domain": true/);
 });
 
 test("publisher transparency pages and disclosures are public and discoverable", () => {

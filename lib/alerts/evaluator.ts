@@ -548,7 +548,7 @@ async function deliverQueuedEmails(
     if (error) throw new Error(`email queue: ${error.message}`);
     const queued = (data ?? []) as QueuedDelivery[];
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "")
-        ?? "https://cabeus-explorer.jake-249.workers.dev";
+        ?? "https://www.cabeusexplorer.com";
     const preferenceUrl = `${baseUrl}/member/saved-work#notification-preferences`;
     const immediate = queued.filter((item) => item.metadata?.delivery_mode === "immediate");
     for (const delivery of immediate) {

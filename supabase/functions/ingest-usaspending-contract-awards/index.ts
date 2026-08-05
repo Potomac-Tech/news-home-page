@@ -1,5 +1,5 @@
 const USA_SPENDING_URL = "https://api.usaspending.gov/api/v2/search/spending_by_award/";
-const INGESTION_URL = "https://cabeus-explorer.jake-249.workers.dev/api/internal/trackers/ingest";
+const INGESTION_URL = "https://www.cabeusexplorer.com/api/internal/trackers/ingest";
 
 declare const Deno: {
     env: { get(name: string): string | undefined };

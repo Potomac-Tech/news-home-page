@@ -32,7 +32,7 @@ List routes accept `limit` (maximum 100) and `offset` query parameters.
 ## Export example
 
 ```bash
-curl -X POST https://cabeus-explorer.jake-249.workers.dev/api/v1/exports \
+curl -X POST https://www.cabeusexplorer.com/api/v1/exports \
   -H "Authorization: Bearer $CABEUS_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"name":"Current lunar missions","source":"lunar_missions","format":"csv"}'
