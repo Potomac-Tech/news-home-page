@@ -13,7 +13,6 @@ export const metadata: Metadata = {
 };
 
 const partnerWordmarks = [
-    { name: "Meet the Future", src: "/partner-mtf.png", dark: true },
     { name: "Space Force Association", src: "/partner-sfa.png", dark: true },
     { name: "Quantum Space", src: "/partner-quantum-space.svg", dark: true },
     { name: "Potomac Database Systems", src: "/Potomac Logo Transparent.png", dark: false },
@@ -141,7 +140,7 @@ export default async function SpaceInvestmentForumPage() {
                 <div className="mx-auto w-full max-w-[92rem] px-5 py-14 md:px-10 md:py-20">
                     <p className="brand-kicker">Presented in partnership with</p>
                     <div
-                        className="mt-7 grid border-y border-cabeus-line sm:grid-cols-2 lg:grid-cols-5"
+                        className="mt-7 grid border-y border-cabeus-line sm:grid-cols-2 lg:grid-cols-4"
                         aria-label="Space Investment Forum sponsor logos"
                     >
                         {partnerWordmarks.map((partner, index) => (
