@@ -26,7 +26,7 @@ function canvasBlob(canvas: HTMLCanvasElement) {
 }
 
 async function renderDerivative(
-    bitmap: ImageBitmap,
+    source: CanvasImageSource,
     sourceWidth: number,
     sourceHeight: number,
     maxWidth: number
@@ -41,8 +41,29 @@ async function renderDerivative(
     if (!context) throw new Error("The browser could not prepare this image.");
     context.imageSmoothingEnabled = true;
     context.imageSmoothingQuality = "high";
-    context.drawImage(bitmap, 0, 0, width, height);
+    context.drawImage(source, 0, 0, width, height);
     return { blob: await canvasBlob(canvas), width, height };
+}
+
+async function loadImage(file: File) {
+    const objectUrl = URL.createObjectURL(file);
+    const image = new Image();
+    try {
+        await new Promise<void>((resolve, reject) => {
+            image.onload = () => resolve();
+            image.onerror = () => reject(new Error("The browser could not decode this image."));
+            image.src = objectUrl;
+        });
+        return {
+            source: image,
+            width: image.naturalWidth,
+            height: image.naturalHeight,
+            close: () => URL.revokeObjectURL(objectUrl),
+        };
+    } catch (error) {
+        URL.revokeObjectURL(objectUrl);
+        throw error;
+    }
 }
 
 export async function prepareEditorialMedia(file: File): Promise<PreparedEditorialMedia> {
@@ -50,10 +71,12 @@ export async function prepareEditorialMedia(file: File): Promise<PreparedEditori
         return { primary: file, thumbnail: null, original: null, width: null, height: null };
     }
 
-    const bitmap = await createImageBitmap(file);
+    // HTMLImageElement handles camera JPEG metadata more reliably than
+    // createImageBitmap, which can stall indefinitely on some large files.
+    const image = await loadImage(file);
     try {
-        const article = await renderDerivative(bitmap, bitmap.width, bitmap.height, articleMaxWidth);
-        const thumbnail = await renderDerivative(bitmap, bitmap.width, bitmap.height, thumbnailMaxWidth);
+        const article = await renderDerivative(image.source, image.width, image.height, articleMaxWidth);
+        const thumbnail = await renderDerivative(image.source, image.width, image.height, thumbnailMaxWidth);
         return {
             primary: new File([article.blob], derivativeName(file.name, "article"), { type: "image/webp" }),
             thumbnail: new File([thumbnail.blob], derivativeName(file.name, "thumbnail"), { type: "image/webp" }),
@@ -62,7 +85,7 @@ export async function prepareEditorialMedia(file: File): Promise<PreparedEditori
             height: article.height,
         };
     } finally {
-        bitmap.close();
+        image.close();
     }
 }
 
