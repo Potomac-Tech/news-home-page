@@ -1585,8 +1585,8 @@ test("homepage carousel UI rotates accessibly and fails closed without approved 
         'aria-roledescription="carousel"',
         'aria-roledescription="slide"',
         'aria-label="Top lunar intelligence stories"',
-        'aria-hidden={index !== activeIndex}',
-        'inert={index !== activeIndex ? true : undefined}',
+        'key={active.id}',
+        'aria-label={`${activeIndex + 1} of ${count}`}',
         'role="tablist"',
         'aria-selected={index === activeIndex}',
         'event.key === "ArrowLeft"',
@@ -1602,11 +1602,12 @@ test("homepage carousel UI rotates accessibly and fails closed without approved 
         'sizes="(min-width: 1024px) 55vw, 100vw"',
         "lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]",
         "text-[clamp(2.4rem,3.7vw,4rem)]",
-        'loading={index === 0 ? "eager" : "lazy"}',
-        'className={index === activeIndex ? "block" : "hidden"}',
+        'loading="eager"',
+        'src={active.visualAssetUrl}',
         "border-t border-cabeus-line",
         "sm:flex-row",
     ], "accessible rotating carousel");
+    assert.doesNotMatch(component, /slides\.map\(\(slide, index\) => \(\s*<article/);
     assert.doesNotMatch(component, /min-h-\[70rem\]|lg:min-h-\[760px\]|absolute bottom-4/);
     assertIncludes(homepage, [
         "loadHomepageCarousel",

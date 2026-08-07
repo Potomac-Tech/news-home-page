@@ -56,15 +56,11 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
             }}
             className="bg-cabeus-paper outline-none"
         >
-            {slides.map((slide, index) => (
-                <article
-                    key={slide.id}
-                    aria-roledescription="slide"
-                    aria-label={`${index + 1} of ${count}`}
-                    aria-hidden={index !== activeIndex}
-                    inert={index !== activeIndex ? true : undefined}
-                    className={index === activeIndex ? "block" : "hidden"}
-                >
+            <article
+                key={active.id}
+                aria-roledescription="slide"
+                aria-label={`${activeIndex + 1} of ${count}`}
+            >
                     <div className="pb-8 pt-6 md:pb-10 md:pt-8">
                         <p className="brand-kicker">
                             Latest intelligence
@@ -72,39 +68,40 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                         <div className="mt-5 grid min-w-0 gap-7 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-12">
                             <div className="flex min-h-full min-w-0 flex-col">
                                 <Link
-                                    href={slide.ctaRoute}
-                                    onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel_headline", slideId: slide.id } })}
+                                    href={active.ctaRoute}
+                                    onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel_headline", slideId: active.id } })}
                                     className="group max-w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabeus-gold"
                                 >
                                     <h2 className="text-balance font-serif text-[clamp(2.4rem,3.7vw,4rem)] font-medium leading-[0.94] text-cabeus-ink group-hover:underline">
-                                        {slide.title}
+                                        {active.title}
                                     </h2>
                                 </Link>
                                 <div className="brand-rule mt-7 w-28" />
                                 <Link
-                                    href={slide.ctaRoute}
-                                    aria-label={`Read ${slide.title}`}
-                                    onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel_subhead", slideId: slide.id } })}
+                                    href={active.ctaRoute}
+                                    aria-label={`Read ${active.title}`}
+                                    onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel_subhead", slideId: active.id } })}
                                     className="mt-6 max-w-xl text-base leading-7 text-cabeus-muted hover:text-cabeus-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabeus-gold md:text-lg md:leading-8"
                                 >
-                                    {slide.summary}
+                                    {active.summary}
                                 </Link>
                             </div>
                             <Link
-                                href={slide.ctaRoute}
-                                aria-label={`Read ${slide.title}`}
-                                onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel_image", slideId: slide.id } })}
+                                href={active.ctaRoute}
+                                aria-label={`Read ${active.title}`}
+                                onClick={() => trackAnalyticsEvent({ name: "cta_click", route: "/", metadata: { placement: "homepage_carousel_image", slideId: active.id } })}
                                 className="block min-w-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cabeus-gold"
                             >
                                 <img
-                                    src={slide.visualAssetUrl}
-                                    alt={slide.visualAssetAlt}
-                                    loading={index === 0 ? "eager" : "lazy"}
-                                    fetchPriority={index === 0 ? "high" : "auto"}
+                                    src={active.visualAssetUrl}
+                                    alt={active.visualAssetAlt}
+                                    loading="eager"
+                                    fetchPriority={activeIndex === 0 ? "high" : "auto"}
+                                    decoding="async"
                                     sizes="(min-width: 1024px) 55vw, 100vw"
                                     className={`aspect-[16/10] min-w-0 max-h-[31rem] w-full bg-cabeus-smoke ${
-                                        slide.visualAssetUrl.includes("space-investment-forum")
-                                        || slide.visualAssetUrl.includes("/editorial-media/")
+                                        active.visualAssetUrl.includes("space-investment-forum")
+                                        || active.visualAssetUrl.includes("/editorial-media/")
                                             ? "object-contain object-top"
                                             : "object-cover"
                                     }`}
@@ -112,8 +109,7 @@ export function HomepageCarousel({ slides }: { slides: HomepageCarouselSlide[] }
                             </Link>
                         </div>
                     </div>
-                </article>
-            ))}
+            </article>
 
             <div className="flex flex-col items-start justify-between gap-3 border-t border-cabeus-line py-4 sm:flex-row sm:items-center">
                 <div className="flex items-center gap-2" role="tablist" aria-label="Choose story">

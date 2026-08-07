@@ -38,7 +38,7 @@ export async function loadEditorialArchive(
 
     const { data, error } = await supabase
         .from("editorial_articles")
-        .select("id,slug,title,public_summary,dek,hero_image_url,hero_image_alt,published_at,carousel_position,primary_author_id")
+        .select("id,slug,title,public_summary,dek,hero_image_url,hero_thumbnail_url,hero_image_alt,published_at,carousel_position,primary_author_id")
         .in("id", articleTags.map((articleTag) => articleTag.article_id))
         .eq("status", "published")
         .not("primary_author_id", "is", null)
@@ -74,7 +74,7 @@ export async function loadEditorialArchive(
                 article.public_summary
                 ?? article.dek
                 ?? "Published Cabeus Explorer intelligence.",
-            imageUrl: article.hero_image_url,
+            imageUrl: article.hero_thumbnail_url ?? article.hero_image_url,
             imageAlt: article.hero_image_alt ?? "",
             publishedAt: article.published_at,
             isFeatured: article.carousel_position !== null,

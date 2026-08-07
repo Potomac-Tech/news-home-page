@@ -7,7 +7,8 @@ import {
     storeSourceDocument,
 } from "../../../lib/editorial/source-documents";
 import {
-    mediaFilesFrom,
+    mediaUploadsFrom,
+    replaceImageDerivatives,
     storeMediaAssets,
     storeYouTubeAsset,
 } from "../../../lib/editorial/media-assets";
@@ -179,7 +180,7 @@ async function promoteFirstImageToHero(
 ) {
     const { data: image, error: imageError } = await supabase
         .from("editorial_media_assets")
-        .select("public_url,alt_text")
+        .select("public_url,thumbnail_url,alt_text")
         .eq("article_id", articleId)
         .eq("media_type", "image")
         .order("sort_order")
@@ -192,6 +193,7 @@ async function promoteFirstImageToHero(
         .from("editorial_articles")
         .update({
             hero_image_url: image.public_url,
+            hero_thumbnail_url: image.thumbnail_url ?? image.public_url,
             hero_image_alt: image.alt_text || "Article photograph",
             updated_by: userId,
         })
@@ -205,14 +207,14 @@ export async function uploadArticleMedia(formData: FormData) {
         editorialNextPath(formData)
     );
     const articleId = getRequiredString(formData, "article_id");
-    const files = mediaFilesFrom(formData);
-    if (!files.length) throw new Error("Select at least one media file.");
+    const uploads = mediaUploadsFrom(formData);
+    if (!uploads.length) throw new Error("Select at least one media file.");
 
     const uploadedMedia = await storeMediaAssets({
         supabase,
         userId,
         articleId,
-        files,
+        uploads,
         altText: getOptionalString(formData, "media_alt_text"),
         caption: getOptionalString(formData, "media_caption"),
     });
@@ -231,6 +233,66 @@ export async function uploadArticleMedia(formData: FormData) {
     revalidatePath(`/studio/preview/${articleId}`);
     revalidatePath("/news/[slug]", "page");
     return { articleId, uploadedMedia };
+}
+
+export async function optimizeArticleImage(formData: FormData) {
+    const { supabase, userId } = await requireEditorialStaff(editorialNextPath(formData));
+    const articleId = getRequiredString(formData, "article_id");
+    const assetId = getRequiredString(formData, "asset_id");
+    const upload = mediaUploadsFrom(formData)[0];
+    if (!upload) throw new Error("Select an image to optimize.");
+
+    const optimized = await replaceImageDerivatives({ supabase, userId, articleId, assetId, upload });
+    const { data: asset, error: assetError } = await supabase
+        .from("editorial_media_assets")
+        .select("thumbnail_url")
+        .eq("id", assetId)
+        .single();
+    if (assetError || !asset) throw new Error(assetError?.message ?? "Optimized thumbnail was not found.");
+
+    const { error: articleError } = await supabase
+        .from("editorial_articles")
+        .update({
+            hero_image_url: optimized.publicUrl,
+            hero_thumbnail_url: asset.thumbnail_url,
+            updated_by: userId,
+        })
+        .eq("id", articleId)
+        .eq("hero_image_url", optimized.previousPublicUrl);
+    if (articleError) throw new Error(articleError.message);
+
+    const { data: body, error: bodyError } = await supabase
+        .from("editorial_article_bodies")
+        .select("body_markdown")
+        .eq("article_id", articleId)
+        .maybeSingle();
+    if (bodyError) throw new Error(bodyError.message);
+    if (body?.body_markdown?.includes(optimized.previousPublicUrl)) {
+        const { error } = await supabase
+            .from("editorial_article_bodies")
+            .update({
+                body_markdown: body.body_markdown.replaceAll(
+                    optimized.previousPublicUrl,
+                    optimized.publicUrl
+                ),
+                updated_by: userId,
+            })
+            .eq("article_id", articleId);
+        if (error) throw new Error(error.message);
+    }
+
+    const { error: previewResetError } = await supabase
+        .from("editorial_preview_approvals")
+        .delete()
+        .eq("article_id", articleId);
+    if (previewResetError) throw new Error(previewResetError.message);
+
+    revalidatePath("/");
+    revalidatePath("/news");
+    revalidatePath("/studio");
+    revalidatePath("/studio/dashboard");
+    revalidatePath(`/studio/preview/${articleId}`);
+    return optimized;
 }
 
 export async function addYouTubeArticleMedia(formData: FormData) {
@@ -272,7 +334,7 @@ export async function setArticleHeroMedia(formData: FormData) {
 
     const { data: asset, error: assetError } = await supabase
         .from("editorial_media_assets")
-        .select("id,public_url,media_type,alt_text")
+        .select("id,public_url,thumbnail_url,media_type,alt_text")
         .eq("id", assetId)
         .eq("article_id", articleId)
         .single();
@@ -287,6 +349,7 @@ export async function setArticleHeroMedia(formData: FormData) {
         .from("editorial_articles")
         .update({
             hero_image_url: asset.public_url,
+            hero_thumbnail_url: asset.thumbnail_url ?? asset.public_url,
             hero_image_alt: asset.alt_text || "Article photograph",
             updated_by: userId,
         })
@@ -320,7 +383,7 @@ export async function createArticleDraft(formData: FormData) {
         getRequiredString(formData, "body_markdown")
     );
     const sourceDocument = sourceDocumentFrom(formData);
-    const mediaFiles = mediaFilesFrom(formData);
+    const mediaUploads = mediaUploadsFrom(formData);
     const sectionTags = sectionTagsFrom(formData);
     const primaryAuthorId = await resolvePrimaryAuthorId(supabase, formData);
 
@@ -382,12 +445,12 @@ export async function createArticleDraft(formData: FormData) {
     }
 
     let uploadedMedia: Awaited<ReturnType<typeof storeMediaAssets>> = [];
-    if (mediaFiles.length) {
+    if (mediaUploads.length) {
         uploadedMedia = await storeMediaAssets({
             supabase,
             userId,
             articleId: article.id,
-            files: mediaFiles,
+            uploads: mediaUploads,
             altText: getOptionalString(formData, "media_alt_text"),
             caption: getOptionalString(formData, "media_caption"),
         });
@@ -416,7 +479,7 @@ export async function updateArticleDraft(formData: FormData) {
         getRequiredString(formData, "body_markdown")
     );
     const sourceDocument = sourceDocumentFrom(formData);
-    const mediaFiles = mediaFilesFrom(formData);
+    const mediaUploads = mediaUploadsFrom(formData);
     const sectionTags = formData.has("section_tags")
         ? sectionTagsFrom(formData)
         : null;
@@ -488,12 +551,12 @@ export async function updateArticleDraft(formData: FormData) {
     }
 
     let uploadedMedia: Awaited<ReturnType<typeof storeMediaAssets>> = [];
-    if (mediaFiles.length) {
+    if (mediaUploads.length) {
         uploadedMedia = await storeMediaAssets({
             supabase,
             userId,
             articleId: article.id,
-            files: mediaFiles,
+            uploads: mediaUploads,
             altText: getOptionalString(formData, "media_alt_text"),
             caption: getOptionalString(formData, "media_caption"),
         });
@@ -732,7 +795,7 @@ export async function removeArticleMedia(formData: FormData) {
 
     const { data: asset, error: assetError } = await supabase
         .from("editorial_media_assets")
-        .select("storage_bucket,storage_object_path,public_url,hosting_provider")
+        .select("storage_bucket,storage_object_path,thumbnail_storage_object_path,original_storage_object_path,public_url,hosting_provider")
         .eq("id", assetId)
         .eq("article_id", articleId)
         .single();
@@ -745,9 +808,14 @@ export async function removeArticleMedia(formData: FormData) {
         && asset.storage_bucket
         && asset.storage_object_path
     ) {
+        const paths = [
+            asset.storage_object_path,
+            asset.thumbnail_storage_object_path,
+            asset.original_storage_object_path,
+        ].filter((path): path is string => Boolean(path));
         const { error: storageError } = await supabase.storage
             .from(asset.storage_bucket)
-            .remove([asset.storage_object_path]);
+            .remove(paths);
         if (storageError) throw new Error(storageError.message);
     }
 
@@ -762,6 +830,7 @@ export async function removeArticleMedia(formData: FormData) {
         .from("editorial_articles")
         .update({
             hero_image_url: null,
+            hero_thumbnail_url: null,
             hero_image_alt: null,
         })
         .eq("id", articleId)

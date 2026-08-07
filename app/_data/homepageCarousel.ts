@@ -142,7 +142,7 @@ export async function loadHomepageCarousel(
     if (manualArticleIds.length) {
         const { data: linkedArticles, error: linkedArticleError } = await supabase
             .from("editorial_articles")
-            .select("id,slug,title,public_summary,dek,hero_image_url,hero_image_alt,published_at")
+            .select("id,slug,title,public_summary,dek,hero_image_url,hero_thumbnail_url,hero_image_alt,published_at")
             .in("id", manualArticleIds)
             .eq("status", "published");
         if (linkedArticleError) throw new Error(linkedArticleError.message);
@@ -158,8 +158,10 @@ export async function loadHomepageCarousel(
                 ...slide,
                 title: String(article.title),
                 summary: String(article.public_summary ?? article.dek ?? slide.summary),
-                visualAssetUrl: typeof article.hero_image_url === "string"
-                    ? article.hero_image_url
+                visualAssetUrl: typeof article.hero_thumbnail_url === "string"
+                    ? article.hero_thumbnail_url
+                    : typeof article.hero_image_url === "string"
+                      ? article.hero_image_url
                     : slide.visualAssetUrl,
                 visualAssetAlt: typeof article.hero_image_alt === "string"
                     ? article.hero_image_alt
@@ -173,7 +175,7 @@ export async function loadHomepageCarousel(
     const articleIds = new Set(manual.flatMap((slide) => slide.articleId ?? []));
     const { data: articles, error: articleError } = await supabase
         .from("editorial_articles")
-        .select("id,slug,title,public_summary,hero_image_url,hero_image_alt,published_at,carousel_position")
+        .select("id,slug,title,public_summary,hero_image_url,hero_thumbnail_url,hero_image_alt,published_at,carousel_position")
         .eq("status", "published")
         .not("primary_author_id", "is", null)
         .not("carousel_position", "is", null)
@@ -190,8 +192,10 @@ export async function loadHomepageCarousel(
             slideType: "anonymous_teaser",
             title: String(article.title),
             summary: String(article.public_summary),
-            visualAssetUrl: typeof article.hero_image_url === "string"
-                ? article.hero_image_url
+            visualAssetUrl: typeof article.hero_thumbnail_url === "string"
+                ? article.hero_thumbnail_url
+                : typeof article.hero_image_url === "string"
+                  ? article.hero_image_url
                 : potomacBrand.assets.cabeusHero,
             visualAssetAlt: typeof article.hero_image_alt === "string"
                 ? article.hero_image_alt
