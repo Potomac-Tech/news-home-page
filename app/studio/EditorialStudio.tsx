@@ -27,7 +27,10 @@ import {
     CABEUS_YOUTUBE_CHANNEL_URL,
     YOUTUBE_UPLOAD_URL,
 } from "../../lib/editorial/youtube";
-import { prepareEditorialMediaFormData } from "../../lib/editorial/client-image-derivatives";
+import {
+    prepareEditorialMediaFormData,
+    prepareRenderedEditorialMediaFormData,
+} from "../../lib/editorial/client-image-derivatives";
 
 export type StudioArticle = {
     id: string;
@@ -656,8 +659,20 @@ export function EditorialStudio({
             formData.set("studio_context", "studio");
             formData.set("article_id", draft.id);
             formData.set("asset_id", asset.id);
-            formData.set("story_media", new File([blob], "legacy-editorial-image", { type: blob.type || "image/jpeg" }));
-            await prepareEditorialMediaFormData(formData, [asset.publicUrl]);
+            const legacyFile = new File(
+                [blob],
+                "legacy-editorial-image",
+                { type: blob.type || "image/jpeg" }
+            );
+            const renderedImage = Array.from(document.images).find((image) =>
+                image.getAttribute("src")?.startsWith(asset.publicUrl)
+            );
+            if (renderedImage?.complete && renderedImage.naturalWidth) {
+                await prepareRenderedEditorialMediaFormData(formData, legacyFile, renderedImage);
+            } else {
+                formData.set("story_media", legacyFile);
+                await prepareEditorialMediaFormData(formData, [asset.publicUrl]);
+            }
             const optimized = await optimizeArticleImage(formData);
             replaceBodyHtml(bodyHtmlRef.current.replaceAll(asset.publicUrl, optimized.publicUrl));
             setDraft((current) => ({

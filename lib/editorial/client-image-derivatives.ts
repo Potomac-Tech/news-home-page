@@ -81,18 +81,42 @@ export async function prepareEditorialMedia(
     // createImageBitmap, which can stall indefinitely on some large files.
     const image = await loadImage(file, sourceUrl);
     try {
-        const article = await renderDerivative(image.source, image.width, image.height, articleMaxWidth);
-        const thumbnail = await renderDerivative(image.source, image.width, image.height, thumbnailMaxWidth);
-        return {
-            primary: new File([article.blob], derivativeName(file.name, "article"), { type: "image/webp" }),
-            thumbnail: new File([thumbnail.blob], derivativeName(file.name, "thumbnail"), { type: "image/webp" }),
-            original: file,
-            width: article.width,
-            height: article.height,
-        };
+        return await prepareEditorialImage(file, image.source, image.width, image.height);
     } finally {
         image.close();
     }
+}
+
+async function prepareEditorialImage(
+    file: File,
+    source: CanvasImageSource,
+    sourceWidth: number,
+    sourceHeight: number
+): Promise<PreparedEditorialMedia> {
+    const article = await renderDerivative(source, sourceWidth, sourceHeight, articleMaxWidth);
+    const thumbnail = await renderDerivative(source, sourceWidth, sourceHeight, thumbnailMaxWidth);
+    return {
+        primary: new File([article.blob], derivativeName(file.name, "article"), { type: "image/webp" }),
+        thumbnail: new File([thumbnail.blob], derivativeName(file.name, "thumbnail"), { type: "image/webp" }),
+        original: file,
+        width: article.width,
+        height: article.height,
+    };
+}
+
+export async function prepareEditorialMediaFromImage(file: File, image: HTMLImageElement) {
+    if (!image.complete || !image.naturalWidth || !image.naturalHeight) {
+        throw new Error("The displayed image is not ready to optimize.");
+    }
+    return prepareEditorialImage(file, image, image.naturalWidth, image.naturalHeight);
+}
+
+function setPreparedMedia(formData: FormData, media: PreparedEditorialMedia, index: number) {
+    formData.set(`story_media_${index}`, media.primary);
+    if (media.thumbnail) formData.set(`story_media_thumbnail_${index}`, media.thumbnail);
+    if (media.original) formData.set(`story_media_original_${index}`, media.original);
+    if (media.width) formData.set(`story_media_width_${index}`, String(media.width));
+    if (media.height) formData.set(`story_media_height_${index}`, String(media.height));
 }
 
 export async function prepareEditorialMediaFormData(
@@ -109,12 +133,16 @@ export async function prepareEditorialMediaFormData(
     const prepared = await Promise.all(
         files.map((file, index) => prepareEditorialMedia(file, sourceUrls[index]))
     );
-    prepared.forEach((media, index) => {
-        formData.set(`story_media_${index}`, media.primary);
-        if (media.thumbnail) formData.set(`story_media_thumbnail_${index}`, media.thumbnail);
-        if (media.original) formData.set(`story_media_original_${index}`, media.original);
-        if (media.width) formData.set(`story_media_width_${index}`, String(media.width));
-        if (media.height) formData.set(`story_media_height_${index}`, String(media.height));
-    });
+    prepared.forEach((media, index) => setPreparedMedia(formData, media, index));
     return prepared.length;
+}
+
+export async function prepareRenderedEditorialMediaFormData(
+    formData: FormData,
+    file: File,
+    image: HTMLImageElement
+) {
+    formData.delete("story_media");
+    formData.set("media_upload_count", "1");
+    setPreparedMedia(formData, await prepareEditorialMediaFromImage(file, image), 0);
 }
