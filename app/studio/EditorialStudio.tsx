@@ -657,7 +657,7 @@ export function EditorialStudio({
             formData.set("article_id", draft.id);
             formData.set("asset_id", asset.id);
             formData.set("story_media", new File([blob], "legacy-editorial-image", { type: blob.type || "image/jpeg" }));
-            await prepareEditorialMediaFormData(formData);
+            await prepareEditorialMediaFormData(formData, [asset.publicUrl]);
             const optimized = await optimizeArticleImage(formData);
             replaceBodyHtml(bodyHtmlRef.current.replaceAll(asset.publicUrl, optimized.publicUrl));
             setDraft((current) => ({

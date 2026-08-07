@@ -45,8 +45,9 @@ async function renderDerivative(
     return { blob: await canvasBlob(canvas), width, height };
 }
 
-async function loadImage(file: File) {
-    const objectUrl = URL.createObjectURL(file);
+async function loadImage(file: File, sourceUrl?: string) {
+    const ownsObjectUrl = !sourceUrl;
+    const objectUrl = sourceUrl ?? URL.createObjectURL(file);
     const image = new Image();
     try {
         await new Promise<void>((resolve, reject) => {
@@ -58,22 +59,27 @@ async function loadImage(file: File) {
             source: image,
             width: image.naturalWidth,
             height: image.naturalHeight,
-            close: () => URL.revokeObjectURL(objectUrl),
+            close: () => {
+                if (ownsObjectUrl) URL.revokeObjectURL(objectUrl);
+            },
         };
     } catch (error) {
-        URL.revokeObjectURL(objectUrl);
+        if (ownsObjectUrl) URL.revokeObjectURL(objectUrl);
         throw error;
     }
 }
 
-export async function prepareEditorialMedia(file: File): Promise<PreparedEditorialMedia> {
+export async function prepareEditorialMedia(
+    file: File,
+    sourceUrl?: string
+): Promise<PreparedEditorialMedia> {
     if (!file.type.startsWith("image/") || file.type === "image/gif") {
         return { primary: file, thumbnail: null, original: null, width: null, height: null };
     }
 
     // HTMLImageElement handles camera JPEG metadata more reliably than
     // createImageBitmap, which can stall indefinitely on some large files.
-    const image = await loadImage(file);
+    const image = await loadImage(file, sourceUrl);
     try {
         const article = await renderDerivative(image.source, image.width, image.height, articleMaxWidth);
         const thumbnail = await renderDerivative(image.source, image.width, image.height, thumbnailMaxWidth);
@@ -89,7 +95,10 @@ export async function prepareEditorialMedia(file: File): Promise<PreparedEditori
     }
 }
 
-export async function prepareEditorialMediaFormData(formData: FormData) {
+export async function prepareEditorialMediaFormData(
+    formData: FormData,
+    sourceUrls: string[] = []
+) {
     const files = formData
         .getAll("story_media")
         .filter((value): value is File => value instanceof File && value.size > 0);
@@ -97,7 +106,9 @@ export async function prepareEditorialMediaFormData(formData: FormData) {
 
     formData.delete("story_media");
     formData.set("media_upload_count", String(files.length));
-    const prepared = await Promise.all(files.map(prepareEditorialMedia));
+    const prepared = await Promise.all(
+        files.map((file, index) => prepareEditorialMedia(file, sourceUrls[index]))
+    );
     prepared.forEach((media, index) => {
         formData.set(`story_media_${index}`, media.primary);
         if (media.thumbnail) formData.set(`story_media_thumbnail_${index}`, media.thumbnail);
