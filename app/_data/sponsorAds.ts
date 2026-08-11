@@ -65,71 +65,7 @@ type SponsorRow = {
     website_url: string | null;
 };
 
-export const fallbackPromotionalContentReviewedAt =
-    "2026-07-11T00:00:00.000Z";
-
-const fallbackSponsorUnits: Record<string, SponsorAdUnit> = {
-    [sponsorPlacementKeys.homepageLeadRail]: {
-        placementKey: sponsorPlacementKeys.homepageLeadRail,
-        placementName: "UDRI house ad",
-        surface: "Homepage lead rail",
-        label: "House ad",
-        sponsorName: "UDRI radioisotope power systems briefing",
-        sponsorWebsiteUrl: "/request-access?source=udri-house-ad",
-        ctaLabel: "Learn more",
-        campaignName: "Approved house campaign",
-        creativeUrl: "https://i.ytimg.com/vi/WSLxeLhlth4/maxresdefault.jpg",
-        creativeAltText: "UDRI lunar power briefing",
-        note: "Learn more about lunar radioisotope power work through Cabeus Explorer access.",
-        isDirectSold: false,
-        expiresAt: "2026-08-10T00:00:00.000Z",
-    },
-    [sponsorPlacementKeys.marketModuleBand]: {
-        placementKey: sponsorPlacementKeys.marketModuleBand,
-        placementName: "Potomac Pathfinder CTA",
-        surface: "Markets band",
-        label: "Pathfinder",
-        sponsorName: "Find the landing site",
-        sponsorWebsiteUrl: "/pathfinder/inquire?source=homepage-pathfinder-cta",
-        ctaLabel: "Ask about Pathfinder",
-        campaignName: "Approved product CTA",
-        creativeUrl: "/hardware-pathfinder-05122026.png",
-        creativeAltText: "Potomac Pathfinder hardware CTA",
-        note: "An impact-emplaced lunar sensor that survives hard landing independent of a lander and finds the best landing sites.",
-        isDirectSold: false,
-        expiresAt: "2026-08-10T00:00:00.000Z",
-    },
-    [sponsorPlacementKeys.articleSidebar]: {
-        placementKey: sponsorPlacementKeys.articleSidebar,
-        placementName: "Potomac Source CTA",
-        surface: "Public article sidebar",
-        label: "Source",
-        sponsorName: "Deliver data for building",
-        sponsorWebsiteUrl: "/source/inquire?source=article-source-cta",
-        ctaLabel: "Ask about Source",
-        campaignName: "Approved product CTA",
-        creativeUrl: "/hardware-source-10162025.png",
-        creativeAltText: "Potomac Source data CTA",
-        note: "A persistent lunar garage and rover designed for at least one year of operation to fully characterize the site in preparation for construction.",
-        isDirectSold: false,
-        expiresAt: "2026-08-10T00:00:00.000Z",
-    },
-    [sponsorPlacementKeys.eventSidebar]: {
-        placementKey: sponsorPlacementKeys.eventSidebar,
-        placementName: "UDRI event house ad",
-        surface: "Public event sidebar",
-        label: "House ad",
-        sponsorName: "UDRI lunar systems briefing",
-        sponsorWebsiteUrl: "/request-access?source=udri-event-house-ad",
-        ctaLabel: "Learn more",
-        campaignName: "Approved house campaign",
-        creativeUrl: "https://i.ytimg.com/vi/WSLxeLhlth4/maxresdefault.jpg",
-        creativeAltText: "UDRI lunar systems briefing",
-        note: "Open an account request for UDRI-related lunar systems briefing access.",
-        isDirectSold: false,
-        expiresAt: "2026-08-10T00:00:00.000Z",
-    },
-};
+const fallbackSponsorUnits: Record<string, SponsorAdUnit> = {};
 
 function genericFallbackUnit(placementKey: string): SponsorAdUnit {
     return {

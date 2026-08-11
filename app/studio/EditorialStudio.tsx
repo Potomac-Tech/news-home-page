@@ -15,6 +15,7 @@ import {
 import {
     addYouTubeArticleMedia,
     createArticleDraft,
+    optimizeArticleImage,
     removeArticleMedia,
     setArticleHeroMedia,
     uploadArticleMedia,
@@ -26,6 +27,10 @@ import {
     CABEUS_YOUTUBE_CHANNEL_URL,
     YOUTUBE_UPLOAD_URL,
 } from "../../lib/editorial/youtube";
+import {
+    prepareEditorialMediaFormData,
+    prepareRenderedEditorialMediaFormData,
+} from "../../lib/editorial/client-image-derivatives";
 
 export type StudioArticle = {
     id: string;
@@ -60,6 +65,7 @@ export type StudioArticle = {
         sourceUrl: string;
         altText: string;
         caption: string;
+        isOptimized?: boolean;
     }>;
 };
 
@@ -157,6 +163,7 @@ function MediaAssetEditor({
     onRemove,
     onPlace,
     onUseAsThumbnail,
+    onOptimize,
     isThumbnail,
 }: {
     asset: StudioArticle["mediaAssets"][number];
@@ -168,6 +175,7 @@ function MediaAssetEditor({
         placement: "start" | "cursor" | "end"
     ) => void;
     onUseAsThumbnail: (assetId: string) => Promise<void>;
+    onOptimize: (asset: StudioArticle["mediaAssets"][number]) => Promise<void>;
     isThumbnail: boolean;
 }) {
     const [altText, setAltText] = useState(asset.altText);
@@ -270,14 +278,28 @@ function MediaAssetEditor({
                 </p>
             </fieldset>
             {asset.mediaType === "image" ? (
-                <button
-                    type="button"
-                    disabled={disabled || isThumbnail}
-                    onClick={() => void onUseAsThumbnail(asset.id)}
-                    className="mt-2 w-full border border-cabeus-gold px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-cabeus-bronze disabled:opacity-55"
-                >
-                    {isThumbnail ? "Main-page thumbnail" : "Use as thumbnail"}
-                </button>
+                <>
+                    {!asset.isOptimized ? (
+                        <button
+                            type="button"
+                            disabled={disabled}
+                            onClick={() => void onOptimize(asset)}
+                            className="mt-2 w-full bg-cabeus-bronze px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-white disabled:opacity-55"
+                        >
+                            Optimize legacy image
+                        </button>
+                    ) : (
+                        <p className="mt-2 font-mono text-[0.54rem] font-bold uppercase text-cabeus-bronze">Optimized article + thumbnail</p>
+                    )}
+                    <button
+                        type="button"
+                        disabled={disabled || isThumbnail}
+                        onClick={() => void onUseAsThumbnail(asset.id)}
+                        className="mt-2 w-full border border-cabeus-gold px-3 py-2 font-mono text-[0.58rem] font-bold uppercase text-cabeus-bronze disabled:opacity-55"
+                    >
+                        {isThumbnail ? "Main-page thumbnail" : "Use as thumbnail"}
+                    </button>
+                </>
             ) : null}
             <button
                 type="button"
@@ -519,6 +541,10 @@ export function EditorialStudio({
         try {
             syncBodyFromEditor();
             formData.set("body_markdown", bodyHtmlRef.current);
+            if (formData.getAll("story_media").some((value) => value instanceof File && value.size > 0)) {
+                setSaveStatus("Optimizing images...");
+                await prepareEditorialMediaFormData(formData);
+            }
             const result = await action(formData);
             setSelectedId(result.articleId);
             setDraft((current) => ({
@@ -621,6 +647,52 @@ export function EditorialStudio({
         }
     }
 
+    async function optimizeLegacyImage(asset: StudioArticle["mediaAssets"][number]) {
+        if (draft.id === "new" || asset.mediaType !== "image" || asset.isOptimized) return;
+        setIsSaving(true);
+        setSaveStatus("Downloading and optimizing legacy image...");
+        try {
+            const response = await fetch(asset.publicUrl, { credentials: "same-origin" });
+            if (!response.ok) throw new Error("The existing image could not be downloaded.");
+            const blob = await response.blob();
+            const formData = new FormData();
+            formData.set("studio_context", "studio");
+            formData.set("article_id", draft.id);
+            formData.set("asset_id", asset.id);
+            const legacyFile = new File(
+                [blob],
+                "legacy-editorial-image",
+                { type: blob.type || "image/jpeg" }
+            );
+            const renderedImage = Array.from(document.images).find((image) =>
+                image.getAttribute("src")?.startsWith(asset.publicUrl)
+            );
+            if (renderedImage?.complete && renderedImage.naturalWidth) {
+                await prepareRenderedEditorialMediaFormData(formData, legacyFile, renderedImage);
+            } else {
+                formData.set("story_media", legacyFile);
+                await prepareEditorialMediaFormData(formData, [asset.publicUrl]);
+            }
+            const optimized = await optimizeArticleImage(formData);
+            replaceBodyHtml(bodyHtmlRef.current.replaceAll(asset.publicUrl, optimized.publicUrl));
+            setDraft((current) => ({
+                ...current,
+                heroImageUrl: current.heroImageUrl === asset.publicUrl
+                    ? optimized.publicUrl
+                    : current.heroImageUrl,
+                mediaAssets: current.mediaAssets.map((item) =>
+                    item.id === asset.id ? { ...item, ...optimized, isOptimized: true } : item
+                ),
+            }));
+            setSaveStatus("Legacy image optimized for article and listing use.");
+            router.refresh();
+        } catch (error) {
+            setSaveStatus(error instanceof Error ? error.message : "Image optimization failed.");
+        } finally {
+            setIsSaving(false);
+        }
+    }
+
     async function uploadMediaImmediately(
         files: FileList | File[] | null,
         insertAtSelection = insertUploadedMediaRef.current
@@ -643,6 +715,10 @@ export function EditorialStudio({
         formData.set("media_caption", mediaCaption);
         selectedFiles.forEach((file) => formData.append("story_media", file));
         try {
+            if (selectedFiles.some((file) => file.type.startsWith("image/") && file.type !== "image/gif")) {
+                setSaveStatus("Optimizing images...");
+            }
+            await prepareEditorialMediaFormData(formData);
             const result = await uploadArticleMedia(formData);
             setDraft((current) => ({
                 ...current,
@@ -1148,7 +1224,7 @@ export function EditorialStudio({
                                             className={inputClass}
                                             onChange={(event) => void uploadMediaImmediately(event.target.files)}
                                         />
-                                        <span className="mt-2 block text-[0.58rem] text-cabeus-muted">JPG, PNG, WebP, GIF, MP4, WebM, MOV, or M4V. 50 MB maximum per file.</span>
+                                        <span className="mt-2 block text-[0.58rem] text-cabeus-muted">JPG, PNG, and WebP images are automatically optimized for article and thumbnail use. GIF, MP4, WebM, MOV, and M4V retain their original format. 50 MB maximum per file.</span>
                                         <span className="mt-1 block text-[0.58rem] text-cabeus-muted">After upload, drag media into the story, use Insert at cursor, and choose one image as the main-page thumbnail.</span>
                                         {selectedMediaNames.length ? (
                                             <span className="mt-2 block normal-case text-cabeus-ink">
@@ -1234,6 +1310,7 @@ export function EditorialStudio({
                                                 onRemove={removeMedia}
                                                 onPlace={placeMedia}
                                                 onUseAsThumbnail={useAsThumbnail}
+                                                onOptimize={optimizeLegacyImage}
                                                 isThumbnail={asset.publicUrl === draft.heroImageUrl}
                                             />
                                         ))}

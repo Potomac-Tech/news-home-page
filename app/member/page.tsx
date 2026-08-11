@@ -193,9 +193,11 @@ export default async function MemberPage() {
                             >
                                 Reset password
                             </Link>
-                            <Link href="/auth/logout" prefetch={false} className="brand-button inline-flex">
-                                Sign out
-                            </Link>
+                            <form action="/auth/logout" method="post">
+                                <button type="submit" className="brand-button inline-flex w-full justify-center">
+                                    Sign out
+                                </button>
+                            </form>
                         </div>
                     </aside>
                 </div>

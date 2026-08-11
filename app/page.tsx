@@ -53,6 +53,7 @@ type EditorialArticleRow = {
     public_teaser_markdown: string | null;
     access_tier_required: string | null;
     hero_image_url: string | null;
+    hero_thumbnail_url: string | null;
     hero_image_alt: string | null;
     published_at: string | null;
 };
@@ -106,7 +107,7 @@ async function getHomepageStories(): Promise<HomeStory[]> {
         const { data, error } = await supabase
             .from("editorial_articles")
             .select(
-                "id,slug,title,primary_author_id,dek,public_summary,public_teaser_markdown,access_tier_required,hero_image_url,hero_image_alt,published_at"
+                "id,slug,title,primary_author_id,dek,public_summary,public_teaser_markdown,access_tier_required,hero_image_url,hero_thumbnail_url,hero_image_alt,published_at"
             )
             .eq("status", "published")
             .not("primary_author_id", "is", null)
@@ -122,7 +123,7 @@ async function getHomepageStories(): Promise<HomeStory[]> {
         const [{ data: media }, { data: authors }] = await Promise.all([
             supabase
                 .from("editorial_media_assets")
-                .select("article_id,public_url,alt_text,media_type,sort_order")
+                .select("article_id,public_url,thumbnail_url,alt_text,media_type,sort_order")
                 .in("article_id", articleRows.map((article) => article.id))
                 .eq("media_type", "image")
                 .order("sort_order"),
@@ -141,7 +142,7 @@ async function getHomepageStories(): Promise<HomeStory[]> {
         for (const asset of media ?? []) {
             if (!firstImageByArticle.has(asset.article_id)) {
                 firstImageByArticle.set(asset.article_id, {
-                    url: asset.public_url,
+                    url: asset.thumbnail_url ?? asset.public_url,
                     alt: asset.alt_text ?? "Article photograph",
                 });
             }
@@ -167,7 +168,7 @@ async function getHomepageStories(): Promise<HomeStory[]> {
                 accessTier: normalizeAccessTier(article.access_tier_required),
                 sourceLabel: author?.display_name ?? "Cabeus Explorer",
                 authorSlug: author?.slug,
-                imageUrl: article.hero_image_url ?? firstImageByArticle.get(article.id)?.url,
+                imageUrl: article.hero_thumbnail_url ?? article.hero_image_url ?? firstImageByArticle.get(article.id)?.url,
                 imageAlt: article.hero_image_alt ?? firstImageByArticle.get(article.id)?.alt,
             };
         });
@@ -252,6 +253,9 @@ function StoryCard({ story }: { story: HomeStory }) {
                 <img
                     src={story.imageUrl}
                     alt={story.imageAlt ?? ""}
+                    loading="lazy"
+                    decoding="async"
+                    sizes="(min-width: 768px) 33vw, 100vw"
                     className="mt-6 aspect-[16/10] w-full bg-cabeus-smoke object-cover"
                 />
             ) : null}

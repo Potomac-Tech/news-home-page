@@ -72,6 +72,7 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
     const updatePasswordPage = read("app/account/update-password/page.tsx");
     const logoutRoute = read("app/auth/logout/route.ts");
     const memberPage = read("app/member/page.tsx");
+    const migrationShell = read("app/_components/MigrationShell.tsx");
     const middleware = read("middleware.ts");
 
     assertIncludes(loginPage + loginForm + requestAccessPage + requestAccessClient, [
@@ -107,12 +108,10 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
         ],
         "dedicated password recovery destination"
     );
-    assertIncludes(logoutRoute, ["signOut", "/auth/login"], "logout route");
-    assert.match(
-        memberPage,
-        /href="\/auth\/logout"\s+prefetch=\{false\}/,
-        "logout navigation must not prefetch a session-revoking GET"
-    );
+    assertIncludes(logoutRoute, ["export async function POST", "signOut", "/auth/login", "303"], "logout route");
+    assert.doesNotMatch(logoutRoute, /export async function GET/);
+    assert.match(memberPage + migrationShell, /action="\/auth\/logout"\s+method="post"/);
+    assert.doesNotMatch(memberPage + migrationShell, /href="\/auth\/logout"/);
     assertIncludes(middleware, ["updateSession", "matcher"], "session middleware");
 });
 
@@ -1305,10 +1304,11 @@ test("Pathfinder and Source CTA assets require review before private storage del
         ".download(",
         "X-Content-Type-Options",
     ], "reviewed CTA asset delivery");
-    assertIncludes(sponsorAds, [
-        "/hardware-pathfinder-05122026.png",
-        "/hardware-source-10162025.png",
-    ], "reviewed CTA repository fallbacks");
+    assert.doesNotMatch(
+        sponsorAds,
+        /hardware-pathfinder-05122026\.png|hardware-source-10162025\.png/,
+        "expired CTA assets must not remain as repository fallbacks"
+    );
 });
 
 test("editorial headlines use story-specific imagery instead of product screenshots", () => {
@@ -1385,10 +1385,11 @@ test("strategic product inquiries persist and audit before quota-aware Resend de
         "Deliver data for building",
         'product="source"',
     ], "Source inquiry page");
-    assertIncludes(sponsorAds, [
-        "/request-access?source=udri-house-ad",
-        "/request-access?source=udri-event-house-ad",
-    ], "UDRI account handoff");
+    assert.doesNotMatch(
+        sponsorAds,
+        /udri-house-ad|udri-event-house-ad/,
+        "expired UDRI house ads must not remain active fallbacks"
+    );
     assertIncludes(requestAccess, [
         'const isSignIn = requestedTab === "signin"',
         "{!isSignIn ? (",
@@ -1403,20 +1404,20 @@ test("public sponsor and social surfaces use only approved CTA content", () => {
     const channels = read("app/_data/channels.ts");
 
     assertIncludes(sponsorData + sponsorUnit, [
-        "https://i.ytimg.com/vi/WSLxeLhlth4/maxresdefault.jpg",
-        'label: "House ad"',
+        'label: "Sponsor"',
         'ctaLabel: "Learn more"',
-        "/request-access?source=udri-house-ad",
-        "/request-access?source=udri-event-house-ad",
-        "Find the landing site",
-        "An impact-emplaced lunar sensor that survives hard landing independent of a lander and finds the best landing sites.",
-        "/hardware-pathfinder-05122026.png",
-        "/pathfinder/inquire?source=homepage-pathfinder-cta",
-        "Deliver data for building",
-        "A persistent lunar garage and rover designed for at least one year of operation to fully characterize the site in preparation for construction.",
-        "/hardware-source-10162025.png",
-        "/source/inquire?source=article-source-cta",
+        "sponsor_campaign_placements",
+        '.eq("status", "live")',
+        '.gte("ends_at", todayIsoDate)',
+        "creative_url",
+        "genericFallbackUnit",
+        "No approved campaign live",
     ], "approved strategic CTA surfaces");
+    assert.doesNotMatch(
+        sponsorData,
+        /udri-house-ad|udri-event-house-ad|homepage-pathfinder-cta|article-source-cta/,
+        "expired strategic fallbacks must not remain public"
+    );
     assertIncludes(channels, [
         'id: "substack"',
         'id: "podcast"',
@@ -1502,7 +1503,6 @@ test("promotional content expires across publishing, loaders, and scheduled main
         "Public reads active published content assets",
     ], "promotional expiration enforcement");
     assertIncludes(sponsorData + contentLoader + contentRoute + ctaActions, [
-        "fallbackPromotionalContentReviewedAt",
         "expiresAt",
         "activeFallbackUnit",
         '.gt("expires_at", timestamp)',
@@ -1510,11 +1510,12 @@ test("promotional content expires across publishing, loaders, and scheduled main
         "Reviewed CTA assets require an expiration date.",
     ], "application expiration enforcement");
     assertIncludes(releaseCheck, [
-        "All four reviewed strategic fallback units require expiration",
+        "Every fallback promotion requires an expiration date",
         "Promotional fallback expired",
         "exceeds the 30-day window",
         "must suppress expired content",
     ], "promotional release gate");
+    assert.doesNotMatch(sponsorData, /2026-08-10T00:00:00\.000Z/);
 });
 
 test("homepage carousel inventory is audited, gated, ranked, and auto-filled from CMS", () => {
@@ -1585,8 +1586,8 @@ test("homepage carousel UI rotates accessibly and fails closed without approved 
         'aria-roledescription="carousel"',
         'aria-roledescription="slide"',
         'aria-label="Top lunar intelligence stories"',
-        'aria-hidden={index !== activeIndex}',
-        'inert={index !== activeIndex ? true : undefined}',
+        'key={active.id}',
+        'aria-label={`${activeIndex + 1} of ${count}`}',
         'role="tablist"',
         'aria-selected={index === activeIndex}',
         'event.key === "ArrowLeft"',
@@ -1602,11 +1603,12 @@ test("homepage carousel UI rotates accessibly and fails closed without approved 
         'sizes="(min-width: 1024px) 55vw, 100vw"',
         "lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]",
         "text-[clamp(2.4rem,3.7vw,4rem)]",
-        'loading={index === 0 ? "eager" : "lazy"}',
-        'className={index === activeIndex ? "block" : "hidden"}',
+        'loading="eager"',
+        'src={active.visualAssetUrl}',
         "border-t border-cabeus-line",
         "sm:flex-row",
     ], "accessible rotating carousel");
+    assert.doesNotMatch(component, /slides\.map\(\(slide, index\) => \(\s*<article/);
     assert.doesNotMatch(component, /min-h-\[70rem\]|lg:min-h-\[760px\]|absolute bottom-4/);
     assertIncludes(homepage, [
         "loadHomepageCarousel",

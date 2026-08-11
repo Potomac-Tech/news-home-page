@@ -7,22 +7,34 @@ const contentLoader = readFileSync(new URL("app/_data/contentSubmissions.ts", ro
 const contentAssetRoute = readFileSync(new URL("app/api/content-assets/[id]/route.ts", root), "utf8");
 const ctaAssetRoute = readFileSync(new URL("app/api/cta-assets/[id]/route.ts", root), "utf8");
 
-const reviewedAt = sponsorSource.match(
-    /fallbackPromotionalContentReviewedAt\s*=\s*\n?\s*"([^"]+)"/
-)?.[1];
-assert.ok(reviewedAt, "Fallback promotional review timestamp is required.");
-const reviewedTime = new Date(reviewedAt).getTime();
-const expirationValues = [...sponsorSource.matchAll(/expiresAt:\s*"([^"]+)"/g)].map(
+const fallbackBlock = sponsorSource.match(
+    /const fallbackSponsorUnits:[\s\S]*?=\s*\{([\s\S]*?)\n\};/
+)?.[1] ?? "";
+const fallbackCount = [...fallbackBlock.matchAll(/placementKey:/g)].length;
+const expirationValues = [...fallbackBlock.matchAll(/expiresAt:\s*"([^"]+)"/g)].map(
     (match) => match[1]
 );
-assert.equal(expirationValues.length, 4, "All four reviewed strategic fallback units require expiration.");
-for (const value of expirationValues) {
-    const expiration = new Date(value).getTime();
-    assert.ok(expiration > Date.now(), `Promotional fallback expired: ${value}`);
-    assert.ok(
-        expiration <= reviewedTime + 30 * 86_400_000,
-        `Promotional fallback exceeds the 30-day window: ${value}`
-    );
+assert.equal(
+    expirationValues.length,
+    fallbackCount,
+    "Every fallback promotion requires an expiration date."
+);
+
+if (fallbackCount > 0) {
+    const reviewedAt = sponsorSource.match(
+        /fallbackPromotionalContentReviewedAt\s*=\s*\n?\s*"([^"]+)"/
+    )?.[1];
+    assert.ok(reviewedAt, "Fallback promotional review timestamp is required.");
+    const reviewedTime = new Date(reviewedAt).getTime();
+
+    for (const value of expirationValues) {
+        const expiration = new Date(value).getTime();
+        assert.ok(expiration > Date.now(), `Promotional fallback expired: ${value}`);
+        assert.ok(
+            expiration <= reviewedTime + 30 * 86_400_000,
+            `Promotional fallback exceeds the 30-day window: ${value}`
+        );
+    }
 }
 
 for (const [label, source] of [

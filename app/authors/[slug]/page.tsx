@@ -18,7 +18,7 @@ async function loadAuthor(slug: string) {
     if (!author) return null;
     const { data: articles, error: articlesError } = await supabase
         .from("editorial_articles")
-        .select("id,title,slug,public_summary,published_at,hero_image_url")
+        .select("id,title,slug,public_summary,published_at,hero_image_url,hero_thumbnail_url")
         .eq("primary_author_id", author.id)
         .eq("status", "published")
         .lte("published_at", new Date().toISOString())
@@ -136,7 +136,16 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
                                 <p className="mt-3 line-clamp-3 max-w-3xl text-sm leading-6 text-cabeus-muted">{article.public_summary}</p>
                                 <span className="mt-4 inline-block border-b border-cabeus-gold pb-1 font-mono text-xs font-bold uppercase text-cabeus-ink">Full story &#8594;</span>
                             </div>
-                            {article.hero_image_url ? <img src={article.hero_image_url} alt="" className="aspect-video w-full border border-cabeus-line bg-cabeus-smoke object-cover object-top" /> : null}
+                            {article.hero_thumbnail_url ?? article.hero_image_url ? (
+                                <img
+                                    src={article.hero_thumbnail_url ?? article.hero_image_url}
+                                    alt=""
+                                    loading="lazy"
+                                    decoding="async"
+                                    sizes="(min-width: 768px) 24rem, 100vw"
+                                    className="aspect-video w-full border border-cabeus-line bg-cabeus-smoke object-cover object-top"
+                                />
+                            ) : null}
                         </Link>
                     ))}
                 </div>

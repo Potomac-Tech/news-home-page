@@ -98,6 +98,9 @@ export function EditorialArchiveList({
                         <img
                             src={article.imageUrl}
                             alt={article.imageAlt}
+                            loading="lazy"
+                            decoding="async"
+                            sizes="(min-width: 768px) 24rem, 100vw"
                             className="aspect-video w-full border border-cabeus-line bg-cabeus-smoke object-cover object-top"
                         />
                     ) : (

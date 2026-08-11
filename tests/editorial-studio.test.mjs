@@ -8,6 +8,8 @@ const loginPage = readFileSync("app/studio/login/page.tsx", "utf8");
 const actions = readFileSync("app/admin/editorial/actions.ts", "utf8");
 const sourceDocuments = readFileSync("lib/editorial/source-documents.ts", "utf8");
 const mediaAssets = readFileSync("lib/editorial/media-assets.ts", "utf8");
+const clientImageDerivatives = readFileSync("lib/editorial/client-image-derivatives.ts", "utf8");
+const imageDerivativeMigration = readFileSync("supabase/migrations/20260807103456_add_editorial_image_derivatives.sql", "utf8");
 const migration = readFileSync("supabase/migrations/20260720025828_editorial_studio_source_documents.sql", "utf8");
 const workflowMigration = readFileSync("supabase/migrations/20260727170007_editorial_preview_scheduling_media.sql", "utf8");
 const previewPage = readFileSync("app/studio/preview/[id]/page.tsx", "utf8");
@@ -239,7 +241,25 @@ test("draft editorial media stays private and published media uses the applicati
     assert.match(hardening, /article\.status = 'published'/);
     assert.match(mediaStorage, /`\/api\/editorial-media\/\$\{assetId\}`/);
     assert.match(mediaRoute, /from\("editorial_media_assets"\)/);
-    assert.match(mediaRoute, /\.download\(asset\.storage_object_path\)/);
+    assert.match(mediaRoute, /thumbnail_storage_object_path/);
+    assert.match(mediaRoute, /\.download\(objectPath\)/);
+    assert.match(mediaRoute, /public, max-age=86400, s-maxage=604800/);
+    assert.match(mediaRoute, /private, no-store/);
+});
+
+test("editorial images receive bounded article and listing derivatives", () => {
+    assert.match(clientImageDerivatives, /const articleMaxWidth = 1600/);
+    assert.match(clientImageDerivatives, /const thumbnailMaxWidth = 640/);
+    assert.match(clientImageDerivatives, /image\/webp/);
+    assert.match(clientImageDerivatives, /prepareEditorialMediaFormData/);
+    assert.match(mediaAssets, /thumbnail_storage_object_path/);
+    assert.match(mediaAssets, /original_storage_object_path/);
+    assert.match(mediaAssets, /replaceImageDerivatives/);
+    assert.match(imageDerivativeMigration, /hero_thumbnail_url/);
+    assert.match(imageDerivativeMigration, /storage\.objects\.name in/);
+    assert.match(homepage, /hero_thumbnail_url/);
+    assert.match(editorialArchive, /hero_thumbnail_url/);
+    assert.match(studioUi, /Optimize legacy image/);
 });
 
 test("story entry points and author bylines link to their destinations", () => {

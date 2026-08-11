@@ -39,8 +39,13 @@ function suppliedKey(request: Request) {
     return request.headers.get("x-api-key")?.trim() ?? "";
 }
 
+function requestIdentifier(request: Request) {
+    const supplied = request.headers.get("x-request-id")?.trim() ?? "";
+    return /^[A-Za-z0-9._:-]{1,100}$/.test(supplied) ? supplied : randomUUID();
+}
+
 export async function claimDeveloperRequest(request: Request, endpointKey: string) {
-    const requestId = request.headers.get("x-request-id")?.trim() || randomUUID();
+    const requestId = requestIdentifier(request);
     const rawKey = suppliedKey(request);
     const keyHash = rawKey ? createHash("sha256").update(rawKey).digest("hex") : "";
     const supabase = createServiceClient();

@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
+    poweredByHeader: false,
     experimental: {
         serverActions: {
             // Leave room for multipart metadata around the 50 MB per-file limit.
@@ -16,6 +17,10 @@ const nextConfig = {
             {
                 key: "X-Content-Type-Options",
                 value: "nosniff",
+            },
+            {
+                key: "X-Permitted-Cross-Domain-Policies",
+                value: "none",
             },
             {
                 key: "X-Frame-Options",
@@ -50,6 +55,7 @@ const nextConfig = {
                     "font-src 'self' data: https://fonts.gstatic.com",
                     "connect-src 'self' https://*.supabase.co https://api.stripe.com https://cloudflareinsights.com",
                     "script-src 'self' 'unsafe-inline' https://js.stripe.com https://static.cloudflareinsights.com",
+                    "script-src-attr 'none'",
                     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
                     "form-action 'self'",
                 ].join("; "),
