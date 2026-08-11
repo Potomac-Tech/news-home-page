@@ -1304,10 +1304,11 @@ test("Pathfinder and Source CTA assets require review before private storage del
         ".download(",
         "X-Content-Type-Options",
     ], "reviewed CTA asset delivery");
-    assertIncludes(sponsorAds, [
-        "/hardware-pathfinder-05122026.png",
-        "/hardware-source-10162025.png",
-    ], "reviewed CTA repository fallbacks");
+    assert.doesNotMatch(
+        sponsorAds,
+        /hardware-pathfinder-05122026\.png|hardware-source-10162025\.png/,
+        "expired CTA assets must not remain as repository fallbacks"
+    );
 });
 
 test("editorial headlines use story-specific imagery instead of product screenshots", () => {
@@ -1384,10 +1385,11 @@ test("strategic product inquiries persist and audit before quota-aware Resend de
         "Deliver data for building",
         'product="source"',
     ], "Source inquiry page");
-    assertIncludes(sponsorAds, [
-        "/request-access?source=udri-house-ad",
-        "/request-access?source=udri-event-house-ad",
-    ], "UDRI account handoff");
+    assert.doesNotMatch(
+        sponsorAds,
+        /udri-house-ad|udri-event-house-ad/,
+        "expired UDRI house ads must not remain active fallbacks"
+    );
     assertIncludes(requestAccess, [
         'const isSignIn = requestedTab === "signin"',
         "{!isSignIn ? (",
@@ -1402,20 +1404,20 @@ test("public sponsor and social surfaces use only approved CTA content", () => {
     const channels = read("app/_data/channels.ts");
 
     assertIncludes(sponsorData + sponsorUnit, [
-        "https://i.ytimg.com/vi/WSLxeLhlth4/maxresdefault.jpg",
-        'label: "House ad"',
+        'label: "Sponsor"',
         'ctaLabel: "Learn more"',
-        "/request-access?source=udri-house-ad",
-        "/request-access?source=udri-event-house-ad",
-        "Find the landing site",
-        "An impact-emplaced lunar sensor that survives hard landing independent of a lander and finds the best landing sites.",
-        "/hardware-pathfinder-05122026.png",
-        "/pathfinder/inquire?source=homepage-pathfinder-cta",
-        "Deliver data for building",
-        "A persistent lunar garage and rover designed for at least one year of operation to fully characterize the site in preparation for construction.",
-        "/hardware-source-10162025.png",
-        "/source/inquire?source=article-source-cta",
+        "sponsor_campaign_placements",
+        '.eq("status", "live")',
+        '.gte("ends_at", todayIsoDate)',
+        "creative_url",
+        "genericFallbackUnit",
+        "No approved campaign live",
     ], "approved strategic CTA surfaces");
+    assert.doesNotMatch(
+        sponsorData,
+        /udri-house-ad|udri-event-house-ad|homepage-pathfinder-cta|article-source-cta/,
+        "expired strategic fallbacks must not remain public"
+    );
     assertIncludes(channels, [
         'id: "substack"',
         'id: "podcast"',
@@ -1501,7 +1503,6 @@ test("promotional content expires across publishing, loaders, and scheduled main
         "Public reads active published content assets",
     ], "promotional expiration enforcement");
     assertIncludes(sponsorData + contentLoader + contentRoute + ctaActions, [
-        "fallbackPromotionalContentReviewedAt",
         "expiresAt",
         "activeFallbackUnit",
         '.gt("expires_at", timestamp)',
@@ -1509,11 +1510,12 @@ test("promotional content expires across publishing, loaders, and scheduled main
         "Reviewed CTA assets require an expiration date.",
     ], "application expiration enforcement");
     assertIncludes(releaseCheck, [
-        "All four reviewed strategic fallback units require expiration",
+        "Every fallback promotion requires an expiration date",
         "Promotional fallback expired",
         "exceeds the 30-day window",
         "must suppress expired content",
     ], "promotional release gate");
+    assert.doesNotMatch(sponsorData, /2026-08-10T00:00:00\.000Z/);
 });
 
 test("homepage carousel inventory is audited, gated, ranked, and auto-filled from CMS", () => {
