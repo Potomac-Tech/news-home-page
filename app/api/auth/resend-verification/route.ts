@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { safeReturnPath } from "../../../../lib/auth/profile-completion";
 import { createClient } from "../../../../lib/supabase/server";
 import { createServiceClient } from "../../../../lib/supabase/service";
+import { trustedRequestOrigin } from "../../../../lib/http/request-origin";
 
 export const dynamic = "force-dynamic";
 
@@ -76,7 +77,7 @@ export async function POST(request: Request) {
 
     const requestUrl = new URL(request.url);
     const nextPath = safeReturnPath(requestUrl.searchParams.get("next"));
-    const callbackUrl = new URL("/auth/callback", requestUrl.origin);
+    const callbackUrl = new URL("/auth/callback", trustedRequestOrigin(requestUrl));
     callbackUrl.searchParams.set("next", nextPath);
 
     const { error: resendError } = await supabase.auth.resend({

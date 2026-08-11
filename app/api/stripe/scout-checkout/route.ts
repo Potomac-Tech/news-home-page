@@ -5,6 +5,7 @@ import {
     getScoutPriceId,
 } from "../../../../lib/stripe/server";
 import { getProfileGateContext, safeReturnPath } from "../../../../lib/auth/profile-completion";
+import { trustedRequestOrigin } from "../../../../lib/http/request-origin";
 
 const SCOUT_ANNUAL_PRICE_USD = 25000;
 
@@ -82,7 +83,7 @@ export async function POST(request: Request) {
 
     const stripe = createStripeClient();
     const priceId = getScoutPriceId();
-    const origin = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(request.url).origin;
+    const origin = trustedRequestOrigin(request.url);
     const claimsEmail = claimsData?.claims.email;
     const customerEmail =
         profile.email ??

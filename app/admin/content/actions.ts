@@ -33,6 +33,18 @@ function optional(formData: FormData, key: string) {
     return String(formData.get(key) ?? "").trim() || null;
 }
 
+function destination(formData: FormData) {
+    const value = optional(formData, "destination_url");
+    if (!value) return null;
+    if (value.startsWith("/") && !value.startsWith("//")) return value;
+
+    const url = new URL(value);
+    if (url.protocol !== "https:") {
+        throw new Error("Destination URLs must use HTTPS or a local site path.");
+    }
+    return url.toString();
+}
+
 function allowed<T extends readonly string[]>(formData: FormData, key: string, values: T) {
     const value = required(formData, key);
     if (!values.includes(value)) throw new Error(`Invalid ${key}.`);
@@ -101,7 +113,7 @@ export async function createContentSubmission(formData: FormData) {
         content_type: contentType,
         title: required(formData, "title"),
         body_copy: required(formData, "body_copy"),
-        destination_url: optional(formData, "destination_url"),
+        destination_url: destination(formData),
         citation_urls: citations(formData),
         source_note: required(formData, "source_note"),
         content_origin: allowed(formData, "content_origin", origins),

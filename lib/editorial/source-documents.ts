@@ -46,6 +46,18 @@ export async function storeSourceDocument({
 
     const objectPath = `${userId}/${articleId}/${crypto.randomUUID()}-${safeFileName(file.name)}`;
     const bytes = new Uint8Array(await file.arrayBuffer());
+    if (
+        bytes.length < 4 ||
+        bytes[0] !== 0x50 ||
+        bytes[1] !== 0x4b ||
+        !(
+            (bytes[2] === 0x03 && bytes[3] === 0x04) ||
+            (bytes[2] === 0x05 && bytes[3] === 0x06) ||
+            (bytes[2] === 0x07 && bytes[3] === 0x08)
+        )
+    ) {
+        throw new Error("Source document contents do not match the .docx format.");
+    }
     const { error: uploadError } = await supabase.storage
         .from(bucket)
         .upload(objectPath, bytes, {

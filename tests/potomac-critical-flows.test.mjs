@@ -72,6 +72,7 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
     const updatePasswordPage = read("app/account/update-password/page.tsx");
     const logoutRoute = read("app/auth/logout/route.ts");
     const memberPage = read("app/member/page.tsx");
+    const migrationShell = read("app/_components/MigrationShell.tsx");
     const middleware = read("middleware.ts");
 
     assertIncludes(loginPage + loginForm + requestAccessPage + requestAccessClient, [
@@ -107,12 +108,10 @@ test("auth routes and proxy preserve Supabase login/session/logout behavior", ()
         ],
         "dedicated password recovery destination"
     );
-    assertIncludes(logoutRoute, ["signOut", "/auth/login"], "logout route");
-    assert.match(
-        memberPage,
-        /href="\/auth\/logout"\s+prefetch=\{false\}/,
-        "logout navigation must not prefetch a session-revoking GET"
-    );
+    assertIncludes(logoutRoute, ["export async function POST", "signOut", "/auth/login", "303"], "logout route");
+    assert.doesNotMatch(logoutRoute, /export async function GET/);
+    assert.match(memberPage + migrationShell, /action="\/auth\/logout"\s+method="post"/);
+    assert.doesNotMatch(memberPage + migrationShell, /href="\/auth\/logout"/);
     assertIncludes(middleware, ["updateSession", "matcher"], "session middleware");
 });
 

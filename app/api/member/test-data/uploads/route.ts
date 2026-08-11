@@ -94,6 +94,23 @@ export async function POST(request: Request) {
         );
     }
 
+    const header = new Uint8Array(await file.slice(0, 4096).arrayBuffer());
+    if (
+        format === "xlsx" &&
+        !(
+            header[0] === 0x50 &&
+            header[1] === 0x4b &&
+            ((header[2] === 0x03 && header[3] === 0x04) ||
+                (header[2] === 0x05 && header[3] === 0x06) ||
+                (header[2] === 0x07 && header[3] === 0x08))
+        )
+    ) {
+        return jsonError("The file contents do not match the XLSX format.");
+    }
+    if (format === "csv" && header.includes(0)) {
+        return jsonError("CSV uploads must contain plain text data.");
+    }
+
     const safeFilename = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
     const objectPath = `${access.userId}/${Date.now()}-${crypto.randomUUID()}-${safeFilename}`;
     const uploadResult = await supabase.storage

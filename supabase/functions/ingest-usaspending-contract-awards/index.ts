@@ -1,3 +1,5 @@
+import { ingestionSecretMatches, methodNotAllowed } from "../_shared/ingestion-auth.ts";
+
 const USA_SPENDING_URL = "https://api.usaspending.gov/api/v2/search/spending_by_award/";
 const INGESTION_URL = "https://www.cabeusexplorer.com/api/internal/trackers/ingest";
 
@@ -7,8 +9,9 @@ declare const Deno: {
 };
 
 Deno.serve(async (request) => {
+    if (request.method !== "POST") return methodNotAllowed();
     const secret = Deno.env.get("TRACKER_INGESTION_SECRET")?.trim();
-    if (!secret || request.headers.get("x-ingestion-secret") !== secret) {
+    if (!(await ingestionSecretMatches(request.headers.get("x-ingestion-secret"), secret))) {
         return Response.json({ error: "Unauthorized." }, { status: 401 });
     }
 

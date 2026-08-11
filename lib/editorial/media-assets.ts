@@ -14,6 +14,40 @@ const allowedMimeTypes = new Set([
     "video/x-m4v",
 ]);
 
+function hasPrefix(bytes: Uint8Array, expected: readonly number[], offset = 0) {
+    return expected.every((value, index) => bytes[offset + index] === value);
+}
+
+function hasExpectedMediaSignature(mimeType: string, bytes: Uint8Array) {
+    switch (mimeType) {
+        case "image/jpeg":
+            return hasPrefix(bytes, [0xff, 0xd8, 0xff]);
+        case "image/png":
+            return hasPrefix(bytes, [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+        case "image/webp":
+            return hasPrefix(bytes, [0x52, 0x49, 0x46, 0x46])
+                && hasPrefix(bytes, [0x57, 0x45, 0x42, 0x50], 8);
+        case "image/gif":
+            return hasPrefix(bytes, [0x47, 0x49, 0x46, 0x38, 0x37, 0x61])
+                || hasPrefix(bytes, [0x47, 0x49, 0x46, 0x38, 0x39, 0x61]);
+        case "video/webm":
+            return hasPrefix(bytes, [0x1a, 0x45, 0xdf, 0xa3]);
+        case "video/mp4":
+        case "video/quicktime":
+        case "video/x-m4v":
+            return hasPrefix(bytes, [0x66, 0x74, 0x79, 0x70], 4);
+        default:
+            return false;
+    }
+}
+
+async function assertMediaSignature(file: File) {
+    const header = new Uint8Array(await file.slice(0, 16).arrayBuffer());
+    if (!hasExpectedMediaSignature(file.type, header)) {
+        throw new Error(`${file.name} does not match its declared image or video format.`);
+    }
+}
+
 type EditorialSupabaseClient = Awaited<
     ReturnType<typeof requireEditorialStaff>
 >["supabase"];
@@ -111,10 +145,12 @@ export async function storeMediaAssets({
         if (file.size <= 0 || file.size > maxMediaBytes) {
             throw new Error(`${file.name} must be between 1 byte and 50 MB.`);
         }
+        await assertMediaSignature(file);
 
-        if (thumbnail && (thumbnail.type !== "image/webp" || thumbnail.size > maxMediaBytes)) {
+        if (thumbnail && (thumbnail.type !== "image/webp" || thumbnail.size <= 0 || thumbnail.size > maxMediaBytes)) {
             throw new Error(`${file.name} has an invalid thumbnail derivative.`);
         }
+        if (thumbnail) await assertMediaSignature(thumbnail);
         if (original && (original.size <= 0 || original.size > maxMediaBytes)) {
             throw new Error(`${file.name} has an invalid original file size.`);
         }
@@ -224,6 +260,10 @@ export async function replaceImageDerivatives({
     if (!upload.thumbnail || !upload.width || !upload.height || upload.file.type !== "image/webp") {
         throw new Error("A WebP article image and thumbnail are required.");
     }
+    await Promise.all([
+        assertMediaSignature(upload.file),
+        assertMediaSignature(upload.thumbnail),
+    ]);
     const { data: existing, error: existingError } = await supabase
         .from("editorial_media_assets")
         .select("storage_bucket,storage_object_path,original_storage_object_path,thumbnail_storage_object_path,public_url,original_file_name,size_bytes,original_size_bytes,alt_text,caption")

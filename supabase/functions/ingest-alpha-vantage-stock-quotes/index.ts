@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2.110.0";
+import { ingestionSecretMatches, methodNotAllowed } from "../_shared/ingestion-auth.ts";
 
 const ALPHA_VANTAGE_URL = "https://www.alphavantage.co/query";
 const BATCH_SIZE = 5;
@@ -81,8 +82,9 @@ async function fetchQuote(symbol: string, apiKey: string) {
 }
 
 Deno.serve(async (request) => {
+    if (request.method !== "POST") return methodNotAllowed();
     const ingestionSecret = Deno.env.get("ALPHA_VANTAGE_INGESTION_SECRET")?.trim();
-    if (!ingestionSecret || request.headers.get("x-ingestion-secret") !== ingestionSecret) {
+    if (!(await ingestionSecretMatches(request.headers.get("x-ingestion-secret"), ingestionSecret))) {
         return Response.json({ error: "Unauthorized." }, { status: 401 });
     }
 

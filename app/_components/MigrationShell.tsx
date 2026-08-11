@@ -72,13 +72,14 @@ async function MemberAwareAccountActions({ mobile = false }: { mobile?: boolean 
     if (mobile) {
         return signedIn ? (
             <>
-                <Link
-                    href="/auth/logout"
-                    prefetch={false}
-                    className="border-t border-cabeus-line px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
-                >
-                    Sign out
-                </Link>
+                <form action="/auth/logout" method="post" className="border-t border-cabeus-line">
+                    <button
+                        type="submit"
+                        className="w-full px-1 py-3 text-left font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
+                    >
+                        Sign out
+                    </button>
+                </form>
                 <Link
                     href="/member"
                     className="px-1 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-cabeus-ink"
@@ -106,9 +107,11 @@ async function MemberAwareAccountActions({ mobile = false }: { mobile?: boolean 
 
     return signedIn ? (
         <>
-            <Link href="/auth/logout" prefetch={false} className="brand-button brand-button-outline hidden sm:inline-flex">
-                Sign out
-            </Link>
+            <form action="/auth/logout" method="post" className="hidden sm:block">
+                <button type="submit" className="brand-button brand-button-outline inline-flex">
+                    Sign out
+                </button>
+            </form>
             <Link href="/member" className="brand-button hidden md:inline-flex">
                 Account
             </Link>
